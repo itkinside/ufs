@@ -1,0 +1,103 @@
+The accounting model
+====================
+
+
+Account groups
+--------------
+
+Account groups are basically bars. It is used for grouping the bars own
+accounts and the accounts of the bar's members.
+
+In addition to its name it has two integer fields, warn_limit and block_limit,
+which can be used to warn and block accounts if their balance is below the
+given limit.
+
+
+User Accounts
+-------------
+
+- User accounts have an owner (e.g. a real person).
+- The name should be the name of the owner or another nickname to be shown
+  (e.g. on the krysselist).
+- Type is 'Liability' for all user accounts. Liability is credit owed to the
+  owner.
+- Active is a flag indicating if the owner still is an active member of the
+  bar.
+- The balance method gives the accounts balance at any time.
+
+
+Bar Accounts
+------------
+
+- Bar accounts do not have an owner, but belongs to a bar, defined by its
+  account group.
+- Most bars will at least have the two accounts 'Bank' and 'Cash'. Other
+  accounts may be 'Income', 'Expense', 'Inventory' and 'Result'.
+- With regard to account type, 'Bank', 'Cash', and 'Inventory' is 'Asset'
+  accounts, 'Income' is an 'Income' account, 'Expense' is an 'Expense' account.
+  See Wikipedia_ for more information on this.
+- Owner is NULL for all bar accounts.
+- Active is a flag indicating if the account is still in use. E.g. if a bar
+  changes it's real world bank account number, one would maybe create a new
+  account for it and deactivate the old one.
+
+.. _Wikipedia: http://en.wikipedia.org/wiki/Account
+
+
+Transaction between person and the person's account (deposit and withdrawal)
+----------------------------------------------------------------------------
+
+If from field is NULL and to field a person's account, it is a deposit from the
+person to the person's account.
+
+If from field is a person's account and the to field is NULL, it is a
+withdrawal from the person's account to the person.
+
+A transaction with NULL in both to and from has no meaning and will be refused
+by the models save() method.
+
+A person is not allowed to deposit or withdraw from another person's account.
+To deposit to another person's account, deposit to you own account and make a
+transfer to the other person's account.
+
+All users can register deposits and withdrawals, but the payed date will not be
+set before the bar admin has approved the transaction and if necessary
+transfered the money in the real world. E.g. a user can request a withdrawal by
+registering it himself.
+
+
+Transaction from account to account within an account group
+----------------------------------------------------------
+
+All persons can transfer money to all other persons with the same parent (e.g.
+within the same bar). The bar admin does not have to approve this.
+
+When a person buys anything from a bar the corresponding sum will be registered
+as a transaction between the person's account and the bar's sale account.
+
+
+Transaction from account to account in another account group
+------------------------------------------------------------
+
+An admin can transfer money, end-to-end, from accounts in his own account group
+to accounts in other account groups, typically to the 'Bank' or 'Cash'
+accounts.
+
+One one side, each user can check what he has spent at every other bar between
+two settlements.
+
+On the other side, the bars are not interested in what persons the payment
+comes from, only that a bar has payed, so in the views we want combine payments
+by account groups.
+
+
+Settlement
+----------
+
+Settlement is an optional part of an transaction to group a set of
+transactions. It is intended for BSF and similar settlements between bars
+(account groups). Its only field is a date.
+
+
+:Authors: Stein Magnus Jodal, Thomas Adamcik
+:Version: 2007-06-24-1

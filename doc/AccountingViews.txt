@@ -1,0 +1,97 @@
+The accounting views
+====================
+
+
+First time login
+----------------
+
+1. Authentication is done externally with Kerberos and HTTP Basic Auth.
+2. If the µFS views see a REMOTE_USER which does not exist as a User object, it
+   should be created, and the user redirected to a page saying:
+
+	"A µFS user was just created for you. Please ask your bar administrator
+	to create a bar account for you and connect the account with your
+	user."
+
+
+After login when account is assigned
+------------------------------------
+
+- If user is connected with multiple accounts, ask user to select an account.
+  Goto URL: /itkufs/(?P<account_group_slug>\w+)/(?P<username>\w+)/
+- If admin for the group, also point to the account group page.
+  Goto URL: /itkufs/(?P<account_group_slug>\w+)/
+
+
+Main account view
+-----------------
+
+- A menu with actions which can be performed by the user.
+- If administrator and transactions are pending approval, say so.
+- A paginated list with recent transactions involving the user.
+
+
+Transfer money view
+-------------------
+
+Really a variant of the administrator's register transaction.
+
+- Select deposit, withdrawal or transfer.
+- If deposit, show fields for amount and details.
+- If withdrawal, show fields for amount and details (e.g. payment details).
+- If transfer, show fields for recipient, amount and details.
+- In all cases, submit to the same context aware view.
+
+
+Get ``krysseliste'' view
+------------------------
+
+1. Select internal or external ``krysseliste'' from the menu.
+   Goto URL: /itkufs/(?P<account_group_slug>\w+)/list/internal/
+   Goto URL: /itkufs/(?P<account_group_slug>\w+)/list/external/
+2. Show HTML/CSS formatted list.
+3. Print it.
+
+
+Admin: Approve transaction view
+-------------------------------
+
+1. List all transactions which are not payed.
+2. Select all transactions you want to mark as payed.
+3. Submit and profit!
+
+
+Admin: Register transaction view
+--------------------------------
+
+1. Enter from, to, amount, and payed (default true).
+2. Optionally enter details and settlement.
+3. Submit and profit!
+
+
+Admin: Register settlement (BSF)
+--------------------------------
+
+1. Create a new, or select existing, settlement with date.
+2. Select a external account and payment/claim.
+3. Submit.
+4. If payment, register amount to transfer from each account in
+   administrator's account group
+5. If claim, register amount received in cash or claimed transfered to
+   bank account.
+6. Submit and profit!
+7. Repeat for other account groups, selecting the same settlement.
+
+Later, when the claim is received from external account, mark transaction as
+payed in the approve transaction view.
+
+
+Admin: View group balance
+-------------------------
+
+Show a standard accounting balance sheet with:
+
+- Assets: bank, cash, claims, (inventory)
+- Liabilities: user accounts, debts
+- Equity: result
+
