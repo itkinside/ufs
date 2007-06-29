@@ -1,0 +1,107 @@
+body {
+	background: #698aaa;
+	color: black;
+	font-family: Sans-serif;
+	margin: 0;
+}
+
+h1 {
+	height: 80px; /* Hack! */
+	margin: 0;
+	margin-bottom: 0.5em;
+	vertical-align: middle;
+}
+
+a {
+	background: transparent;
+	color: black;
+}
+img {
+	border: none;
+}
+
+/* Page container */
+#container {
+	background: white;
+	margin: 0 auto;
+	max-width: 60em;
+	padding: 1em;
+}
+
+/* Drop-down menu */
+#menu {
+	/* Hack to make menu seem to fill width of container */
+	background: #eee;
+	/* Text height + menu top/bottom padding */
+	padding-bottom: 1.6em;
+}
+#menu a {
+	background: #eee;
+	color: black;
+
+	/* Make links fill li */
+	display: block;
+	height: 100%;
+	width: 100%;
+
+	font-weight: bolder;
+	padding: 0.3em;
+	text-decoration: none;
+}
+#menu a:hover {
+	background: #ddd;
+}
+#menu .admin a {
+	background: #eee;
+	color: #a10000;
+}
+#menu .admin a:hover {
+	background: #ddd;
+}
+#menu ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+#menu li {
+	float: left;
+	position: relative;
+	width: 8em;
+}
+#menu li li {
+	width: 7.4em; /* #menu li width minus left/right padding */
+}
+#menu li ul {
+	display: none;
+	position: absolute;
+	top: 1.6em; /* Should be same as #menu padding-bottom */
+	left: 0;
+}
+#menu li > ul {
+	/* Reset position for non-IE */
+	top: auto;
+	left: auto;
+}
+#menu li:hover ul,
+#menu li.over ul /* The over class is an IE-hack */
+{
+	display: block;
+}
+
+/* Main content block */
+#content {
+	/* Get clear of the floating menu */
+	clear: left;
+	margin: 0.5em 0;
+}
+
+/* Footer block */
+#footer {
+	border-top: 1px solid #aaa;
+	font-size: smaller;
+	padding-top: 0.5em;
+}
+#footer span {
+	font-weight: bold;
+	padding: 0 0.5em;
+}

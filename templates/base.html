@@ -1,0 +1,73 @@
+{% load webdesign %}
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>ITK Microfinance System</title>
+        <link rel="stylesheet" type="text/css" href="{% url media "style/base.css" %}" />
+        <script type="text/javascript" src="{% url media "js/menu.js" %}"></script>
+</head>
+
+<body onload="menulist">
+
+<div id="container">
+
+<h1><img src="{% url media "images/logo.png" %}"
+alt="ITK Microfinance System" width="80" height="80" />
+{% block title %}ITK Microfinance System{% endblock %}</h1>
+
+<div id="menu">
+{% block menu %}
+<ul id="menulist">
+    <li><a href="#">My account</a></li>
+    <li><a href="#">Transfer</a>
+        <ul>
+            <li><a href="#">Deposit</a></li>
+            <li><a href="#">Withdrawal</a></li>
+            <li><a href="#">Transfer</a></li>
+        </ul>
+    </li>
+    <li><a href="#">Print lists</a>
+        <ul>
+            <li><a href="#">Internal</a></li>
+            <li><a href="#">External</a></li>
+        </ul>
+    </li>
+{% if admin %}
+    <li class="admin"><a href="#">Transactions</a>
+        <ul>
+            <li><a href="#">Approve</a></li>
+            <li><a href="#">Register</a></li>
+        </ul>
+    </li>
+    <li class="admin"><a href="#">Settlements</a></li>
+    <li class="admin"><a href="#">Balance</a></li>
+{% endif %}
+</ul>
+{% endblock %}
+</div>
+
+<div id="content">
+{% block content %}
+{% lorem 3 p %}
+{% endblock %}
+</div>
+
+<div id="footer">
+{% block footer %}
+ITK Microfinance System (µFS) v1.0-pre
+<span>&gt;&gt;</span>
+Help? <a href="mailto:itk-ufs@samfundet.no">itk-ufs@samfundet.no</a>
+{% endblock %}
+</div>
+
+</div>
+
+</body>
+
+</html>

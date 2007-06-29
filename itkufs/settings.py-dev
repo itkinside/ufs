@@ -28,8 +28,8 @@ LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = (
-	'django.contrib.auth.backends.ModelBackend',
-	'itkufs.kerberos.models.SettingsBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    'itkufs.kerberos.models.SettingsBackend',
 )
 
 # Absolute path to the directory that holds media.
@@ -73,10 +73,11 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.admin',
+    'django.contrib.webdesign',
     'itkufs.accounting',
     'itkufs.inventory',
 )
