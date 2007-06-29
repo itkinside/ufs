@@ -30,10 +30,11 @@ img {
 
 /* Drop-down menu */
 #menu {
-	/* Hack to make menu seem to fill width of container */
-	background: #eee;
-	/* Text height + menu top/bottom padding */
-	padding-bottom: 1.6em;
+	background: #eee; /* Hack to fill width of menu with color */
+	margin-left: -1em;
+	margin-right: -1em;
+	padding-left: 1em;
+	padding-bottom: 1.6em; /* Text height + menu top/bottom padding */
 }
 #menu a {
 	background: #eee;
