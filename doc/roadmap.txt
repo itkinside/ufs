@@ -1,50 +1,56 @@
 ITK µFS Roadmap
 ===============
 
-Version 1
----------
+Version 1: Accounting
+---------------------
 
 :Scheduled release date: June 2007
 
 Version 1 requirements:
 
-- Entities of types: people, accounts, bars, and events (see alternative A).
+- Entities of types: users, accounts, account groups, transactions, and
+  settlements.
 - Support transactions between two entities.
 - Allow a transaction to be registered before it is payed, so it is possible to
   owe money.
 - Enable a person to see transactions to and from his account.
 - Enable a person to transfer money from his account to another persons
   account.
-- Enable an admin to register transactions of the following types:
+- Enable an administrator to register transactions of the following types:
   - from person to the persons account (deposit)
   - from account to the account owner (withdrawal)
   - from account to account (transfer)
-  - from account to (internal or external) bar (payment)
-  - from bar to account (repay expenses)
+  - from user account to (internal or external) bar account (payment)
+  - from bar account to user account (repay expenses)
 - Enable all users to print new ``krysselister'', both for internal and
   external use.
 
-Alternative A:
-
-- Add events such as BSF-s, dinners, trips and cinema visits as a concept
-  seperate of entity.
-- Support to connect multiple transactions with an event, e.g. add an event
-  'Hyttetur 2007-09' and withdraw 200 NOK from all attendees.
+For details, please refer to doc/AccountingModel.txt and
+doc/AccountingViews.txt.
 
 
-Version 2
----------
+Version 2: Inventory
+--------------------
 
 :Scheduled release date: July 2007
 
 Version 2 ideas:
 
 - Support inventory
-  - When adding items to inventory, let admin add purchasing price.
-  - Suggest profit and selling price, but let the admin decide himself.
+  - When adding items to inventory, let administrator add purchasing price.
+  - Suggest profit and selling price, but let the administrator decide himself.
   - Inventory counting with date, items, amount, and total value.
+  - Let users register receipts and give the user a tracking number to put on
+    the receipt.
+  - Let administrators approve receipts registered by users and add receipts himself
+    too.
 - Other suggestions?
+
+Please document the inventory application in doc/InventoryModel.txt and
+doc/InventoryViews.txt before implementing them, and document needed changes to
+the accounting application in the files mentioned under `Version 1:
+Accounting`_.
 
 
 :Authors: Stein Magnus Jodal, Thomas Adamcik
-:Version: 2007-06-23-1
+:Version: 2007-06-29-1
