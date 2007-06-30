@@ -40,11 +40,14 @@ class Account(models.Model):
     type = models.CharField(maxlength=2, choices=ACCOUNT_TYPE, default='Li')
     owner = models.ForeignKey(User, null=True, blank=True)
     active = models.BooleanField(default=True)
+    ignore_block_limit = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
 
     def balance(self):
+        """Returns account balance"""
+
         balance = 0
 
         for t in self.from_transactions.filter(payed__isnull=False):
@@ -58,11 +61,20 @@ class Account(models.Model):
 
         return balance
 
-    def user_account(self):
+    def is_user_account(self):
+        """Returns true if a user account"""
+
         if self.owner:
             return True
         else:
             return False
+
+    def is_blocked(self):
+        """Returns true if user account balance is below group block limit"""
+
+        if not is_user_account(self) or self.ignore_block_limit:
+            return False
+        return balance(self) < self.group.block_limit
 
     class Admin:
         fields = (
