@@ -6,6 +6,7 @@ body {
 	margin: 0;
 }
 
+/* Headers */
 h1 {
 	/* background: ...; */ /* Defined in template, as logo url is needed */
 	font-size: 2em;
@@ -15,17 +16,22 @@ h1 {
 }
 h2 {
 	font-size: 1.4em;
-	margin: 0.5em 0;
+	margin: 0.7em 0;
 }
 h3 {
 	font-size: 1.2em;
-	margin: 0.5em 0;
+	margin: 0.7em 0;
 }
 
+/* Block elements */
 p {
-	margin: 0.5em 0;
+	margin: 0.7em 0;
+}
+table {
+	margin: 0.7em 0;
 }
 
+/* Inline elements */
 a {
 	background: transparent;
 	color: black;
@@ -38,6 +44,7 @@ em {
 #container {
 	background: white;
 	margin: 0 auto;
+	min-width: 740px;
 	max-width: 60em;
 	padding: 1em;
 }
@@ -105,6 +112,7 @@ em {
 	border-top: 1px solid #aaa;
 	font-size: smaller;
 	padding-top: 0.5em;
+	margin-top: 0.7em;
 }
 #footer span {
 	font-weight: bold;
