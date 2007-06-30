@@ -7,27 +7,27 @@ urlpatterns = patterns('',
         account_list, name='account-list'),
 
     # My account
-    url(r'^(?P<account_group>[0-9a-z_-]+)/(?P<account>\w+)/(?P<page>\d*)$',
+    url(r'^(?P<group>[0-9a-z_-]+)/(?P<account>[0-9a-z_-]+)/(?P<page>\d*)$',
         account_summary, name='account-summary'),
-    url(r'(?P<account_group>[0-9a-z_-]+)/(?P<account>\d+)/deposit/$',
+    url(r'(?P<group>[0-9a-z_-]+)/(?P<account>[0-9a-z_-]+)/deposit/$',
         transfer, {'transfer_type': 'deposit'}, name='account-deposit'),
-    url(r'(?P<account_group>[0-9a-z_-]+)/(?P<account>\d+)/withdraw/$',
+    url(r'(?P<group>[0-9a-z_-]+)/(?P<account>[0-9a-z_-]+)/withdraw/$',
         transfer, {'transfer_type': 'withdraw'}, name='account-withdraw'),
-    url(r'(?P<account_group>[0-9a-z_-]+)/(?P<account>\d+)/transfer/$',
+    url(r'(?P<group>[0-9a-z_-]+)/(?P<account>[0-9a-z_-]+)/transfer/$',
         transfer, {'transfer_type': 'transfer'}, name='account-transfer'),
 
     # Print lists
-    url(r'(?P<account_group>[0-9a-z_-]+)/list/$',
+    url(r'(?P<group>[0-9a-z_-]+)/list/$',
         list, name='list-select'),
-    url(r'(?P<account_group>[0-9a-z_-]+)/list/internal/$',
+    url(r'(?P<group>[0-9a-z_-]+)/list/internal/$',
         list, {'list_type': 'internal'}, name='list-internal'),
-    url(r'(?P<account_group>[0-9a-z_-]+)/list/external/$',
+    url(r'(?P<group>[0-9a-z_-]+)/list/external/$',
         list, {'list_type': 'external'}, name='list-external'),
 
 
     # Admin: Account group summary
-    url(r'^(?P<account_group>[0-9a-z_-]+)/$',
-        account_group_summary, name='account-group-summary'),
+    url(r'^(?P<group>[0-9a-z_-]+)/$',
+        group_summary, name='group-summary'),
 
     # Admin: Transactions
     # FIXME

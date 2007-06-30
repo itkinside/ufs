@@ -19,19 +19,19 @@ def account_list(request):
                               {'account': account,
                                'admin': admin})
 
-def account_group_summary(request, account_group):
+def group_summary(request, group):
     """Shows a summery for the account group"""
 
     # FIXME
     return account_list(request)
 
-def account_summary(request, account_group, account, page='1'):
+def account_summary(request, group, account, page='1'):
     """A paginated list with recent transactions involving the user"""
 
     # FIXME: Check that user is owner of account or admin of account group
 
     try:
-        account = Account.objects.get(id=account)
+        account = Account.objects.get(slug=account)
     except Account.DoesNotExist:
         raise Http404
 
@@ -55,13 +55,13 @@ def account_summary(request, account_group, account, page='1'):
                        },
                        template_object_name='transaction')
 
-def transfer(request, account_group, account, transfer_type=None):
+def transfer(request, group, account, transfer_type=None):
     """Deposit, withdraw or transfer money"""
 
     # FIXME
     return account_list(request)
 
-def list(request, account_group, list_type=None):
+def list(request, group, list_type=None):
     """Print internal and external lists"""
 
     # FIXME
