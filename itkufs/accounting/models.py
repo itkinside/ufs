@@ -135,5 +135,5 @@ class Transaction(models.Model):
         list_filter = ['from_account', 'to_account', 'settlement']
 
     class Meta:
-        ordering = ['payed']
+        ordering = ['registered', 'payed']
 

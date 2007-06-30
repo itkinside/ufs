@@ -8,29 +8,35 @@
 {% if transactions %}
 <table class="tablelist">
     <tr>
+        <th>Registered</th>
         <th>Payed</th>
         <th>From</th>
         <th>To</th>
         <th>Amount</th>
         <th>Details</th>
     </tr>
-{% for t in transactions %}
+    {% for t in transactions %}
     <tr>
+        <td>{{ t.registered|date:"Y-m-d" }}</td>
+        {% if t.payed %}
         <td>{{ t.payed|date:"Y-m-d" }}</td>
-{% if t.from_account %}
+        {% else %}
+        <td><em>Pending</em></td>
+        {% endif %}
+        {% if t.from_account %}
         <td>{{ t.from_account.name }}</td>
-{% else %}
+        {% else %}
         <td><em>Deposit</em></td>
-{% endif %}
-{% if t.to_account %}
+        {% endif %}
+        {% if t.to_account %}
         <td>{{ t.to_account.name }}</td>
-{% else %}
+        {% else %}
         <td><em>Withdrawal</em></td>
-{% endif %}
+        {% endif %}
         <td>{{ t.amount }}</td>
         <td>{{ t.details }}</td>
     </tr>
-{% endfor %}
+    {% endfor %}
 </table>
 {% else %}
 <p>No transactions found.</p>
