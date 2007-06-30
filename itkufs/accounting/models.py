@@ -72,9 +72,9 @@ class Account(models.Model):
     def is_blocked(self):
         """Returns true if user account balance is below group block limit"""
 
-        if not is_user_account(self) or self.ignore_block_limit:
+        if not self.is_user_account() or self.ignore_block_limit:
             return False
-        return balance(self) < self.group.block_limit
+        return self.balance() < self.group.block_limit
 
     class Admin:
         fields = (
