@@ -1,0 +1,39 @@
+{% extends "accounting/base.html" %}
+
+{% block content %}
+<h2>My Account</h2>
+
+<h3>Recent transactions</h3>
+
+{% if transactions %}
+<table class="tablelist">
+    <tr>
+        <th>Payed</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Amount</th>
+        <th>Details</th>
+    </tr>
+{% for t in transactions %}
+    <tr>
+        <td>{{ t.payed|date:"Y-m-d" }}</td>
+{% if t.from_account %}
+        <td>{{ t.from_account.name }}</td>
+{% else %}
+        <td><em>Deposit</em></td>
+{% endif %}
+{% if t.to_account %}
+        <td>{{ t.to_account.name }}</td>
+{% else %}
+        <td><em>Withdrawal</em></td>
+{% endif %}
+        <td>{{ t.amount }}</td>
+        <td>{{ t.details }}</td>
+    </tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No transactions found.</p>
+{% endif %}
+
+{% endblock %}
