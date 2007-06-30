@@ -122,3 +122,14 @@ em {
 	border: 1px solid gray;
 	padding: 0.3em;
 }
+
+/* Alignment */
+.align_left {
+	text-align: left;
+}
+.align_center {
+	text-align: center;
+}
+.align_right {
+	text-align: right;
+}
