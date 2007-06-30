@@ -3,9 +3,20 @@
 {% block content %}
 <h2>My Account</h2>
 
-<h3>Recent transactions</h3>
+{% if transaction_list %}
 
-{% if transactions %}
+{% if is_paginated %}
+<p>
+    {% if has_previous %}
+    <a href="{% url account-summary account.group.slug,account.id,previous %}">&lt;&lt; Previous</a> |
+    {% endif %}
+    {{ hits }} hits
+    {% if has_next %}
+    | <a href="{% url account-summary account.group.slug,account.id,next %}">Next &gt;&gt;</a>
+    {% endif %}
+</p>
+{% endif %}
+
 <table class="tablelist">
     <tr>
         <th>Registered</th>
@@ -15,7 +26,7 @@
         <th>Amount</th>
         <th>Details</th>
     </tr>
-    {% for t in transactions %}
+    {% for t in transaction_list %}
     <tr>
         <td>{{ t.registered|date:"Y-m-d" }}</td>
         {% if t.payed %}
@@ -38,6 +49,19 @@
     </tr>
     {% endfor %}
 </table>
+
+{% if is_paginated %}
+<p>
+    {% if has_previous %}
+    <a href="{% url account-summary account.group.slug,account.id,previous %}">&lt;&lt; Previous</a> |
+    {% endif %}
+    {{ hits }} hits
+    {% if has_next %}
+    | <a href="{% url account-summary account.group.slug,account.id,next %}">Next &gt;&gt;</a>
+    {% endif %}
+</p>
+{% endif %}
+
 {% else %}
 <p>No transactions found.</p>
 {% endif %}

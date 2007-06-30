@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
+from django.views.generic.list_detail import object_list
 
 from itkufs.accounting.models import *
 
@@ -24,8 +25,10 @@ def account_group_summary(request, account_group):
     # FIXME
     return account_list(request)
 
-def account_summary(request, account_group, account):
+def account_summary(request, account_group, account, page='1'):
     """A paginated list with recent transactions involving the user"""
+
+    # FIXME: Check that user is owner of account or admin of account group
 
     try:
         account = Account.objects.get(id=account, type='Li')
@@ -37,10 +40,16 @@ def account_summary(request, account_group, account):
     transactions = Transaction.objects.filter(
         Q(from_account=account) | Q(to_account=account))
 
-    return render_to_response('accounting/account_summary.html',
-                              {'account': account,
-                               'admin': admin,
-                               'transactions': transactions})
+    return object_list(request, transactions,
+                       paginate_by=20,
+                       page=page,
+                       allow_empty=True,
+                       template_name='accounting/account_summary.html',
+                       extra_context={
+                            'account': account,
+                            'admin': admin,
+                       },
+                       template_object_name='transaction')
 
 def transfer(request, account_group, account, transfer_type=None):
     """Deposit, withdraw or transfer money"""
