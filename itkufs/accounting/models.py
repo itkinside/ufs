@@ -94,8 +94,10 @@ class Settlement(models.Model):
         ordering = ['date']
 
 class InvalidTransaction(Exception):
+    def __init__(self, value):
+        self.value = value
     def __str__(self):
-        return 'Invalid transaction'
+        return 'Invalid transaction: %s' % str(self.value)
 
 class Transaction(models.Model):
     from_account = models.ForeignKey(Account, null=True, blank=True,
