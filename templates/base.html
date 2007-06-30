@@ -8,7 +8,7 @@
 
 <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>ITK Microfinance System</title>
+        <title>ITK Microfinance System - {% block title %}Foo Bar{% endblock %}</title>
         <link rel="stylesheet" type="text/css"
             href="http://yui.yahooapis.com/2.2.2/build/reset/reset-min.css" />
         <link rel="stylesheet" type="text/css"
@@ -23,7 +23,7 @@
 
 <h1 style="background: url({% url media "images/logo.png" %}) top right no-repeat;">
 ITK Microfinance System<br />
-{% block title %}Foo Bar{% endblock %}</h1>
+{% block header %}Foo Bar{% endblock %}</h1>
 
 <div id="menu">
 {% block menu %}

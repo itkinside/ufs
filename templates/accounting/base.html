@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
+{% block title %}{{ account.group.name }}{% endblock %}
+{% block header %}{{ account.group.name }}{% endblock %}
+
 {% block menu %}
 <ul id="menulist">
     <li><a href="{% url account-summary account.group.slug,account.id %}">My account</a>
