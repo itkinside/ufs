@@ -30,6 +30,9 @@ a {
 	background: transparent;
 	color: black;
 }
+em {
+	font-style: italic;
+}
 
 /* Page container */
 #container {
@@ -106,4 +109,16 @@ a {
 #footer span {
 	font-weight: bold;
 	padding: 0 0.5em;
+}
+
+/* Tables */
+.tablelist th {
+	background: #ddd;
+	border: 1px solid gray;
+	padding: 0.3em;
+	font-weight: bolder;
+}
+.tablelist td {
+	border: 1px solid gray;
+	padding: 0.3em;
 }
