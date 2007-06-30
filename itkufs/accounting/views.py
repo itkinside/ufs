@@ -31,7 +31,7 @@ def account_list(request):
     """Lists the users account groups and accounts, including admin accounts"""
 
      # FIXME: Dev hack
-    user = User.objects.get(username='jodal')
+    user = User.objects.get(username='klette')
     set_session_object(request, 'user', user)
 
     user = get_session_object(request, 'user')
@@ -107,6 +107,10 @@ def transfer(request, group, account, transfer_type=None):
 
 def list(request, group, list_type=None):
     """Print internal and external lists"""
+    username = 'klette'
+    user = User.objects.get(username=username)
+    account = user.account_set.all()[0]
+    admin = account.group.admins.filter(username=username).count()
 
     user = get_session_object(request, 'user')
     if not user:
@@ -114,4 +118,6 @@ def list(request, group, list_type=None):
         return HttpResponseForbidden('Forbidden')
 
     # FIXME
-    return account_list(request)
+    return render_to_response('accounting/internal_list.html',
+                                {'group': account_group,
+                                 'admin': admin})

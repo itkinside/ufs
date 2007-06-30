@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 from itkufs.accounting.views import *
+from itkufs.accounting.list_view import *
 
 urlpatterns = patterns('',
     # Account list
@@ -26,6 +27,9 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/list/external/$',
         list, {'list_type': 'external'}, name='list-external'),
 
+    url(r'(?P<account_group>[0-9a-z_-]+)/list/(?P<listtype>[0-9a-z]+)/pdf/$',
+        generate_pdf, name='list-pdf'),
+    
 
     # Admin: Account group summary
     url(r'^(?P<group>[0-9a-z_-]+)/$',
