@@ -1,23 +1,34 @@
 body {
-	background: #698aaa;
+	background: #96B7D6;
 	color: black;
 	font-family: Sans-serif;
+	font-size: 90%;
 	margin: 0;
 }
 
 h1 {
-	height: 80px; /* Hack! */
-	margin: 0;
-	margin-bottom: 0.5em;
-	vertical-align: middle;
+	/* background: ...; */ /* Defined in template, as logo url is needed */
+	font-size: 2em;
+	height: 80px; /* Height of background logo */
+	line-height: 40px; /* Half of height */
+	margin: 0 0 0.5em 0;
+}
+h2 {
+	font-size: 1.4em;
+	margin: 0.5em 0;
+}
+h3 {
+	font-size: 1.2em;
+	margin: 0.5em 0;
+}
+
+p {
+	margin: 0.5em 0;
 }
 
 a {
 	background: transparent;
 	color: black;
-}
-img {
-	border: none;
 }
 
 /* Page container */
@@ -30,14 +41,14 @@ img {
 
 /* Drop-down menu */
 #menu {
-	background: #eee; /* Hack to fill width of menu with color */
+	background: #ddd; /* To fill width of menu with color */
 	margin-left: -1em;
 	margin-right: -1em;
 	padding-left: 1em;
-	padding-bottom: 1.6em; /* Text height + menu top/bottom padding */
+	height: 1.85em; /* Text height + menu top/bottom padding */
 }
 #menu a {
-	background: #eee;
+	background: #ddd;
 	color: black;
 
 	/* Make links fill li */
@@ -45,19 +56,18 @@ img {
 	height: 100%;
 	width: 100%;
 
-	font-weight: bolder;
-	padding: 0.3em;
+	padding: 0.3em 0.5em;
 	text-decoration: none;
 }
 #menu a:hover {
-	background: #ddd;
+	background: #ccc;
 }
 #menu .admin a {
-	background: #eee;
+	background: #ddd;
 	color: #a10000;
 }
 #menu .admin a:hover {
-	background: #ddd;
+	background: #ccc;
 }
 #menu ul {
 	list-style: none;
@@ -66,22 +76,13 @@ img {
 }
 #menu li {
 	float: left;
+	margin-right: 1em;
 	position: relative;
 	width: 8em;
-}
-#menu li li {
-	width: 7.4em; /* #menu li width minus left/right padding */
 }
 #menu li ul {
 	display: none;
 	position: absolute;
-	top: 1.6em; /* Should be same as #menu padding-bottom */
-	left: 0;
-}
-#menu li > ul {
-	/* Reset position for non-IE */
-	top: auto;
-	left: auto;
 }
 #menu li:hover ul,
 #menu li.over ul /* The over class is an IE-hack */
