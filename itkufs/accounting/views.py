@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.db.models import Q
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 
 from itkufs.accounting.models import *
@@ -24,10 +25,22 @@ def account_group_summary(request, account_group):
     return account_list(request)
 
 def account_summary(request, account_group, account):
-    """Shows a summary for the account"""
+    """A paginated list with recent transactions involving the user"""
 
-    # FIXME
-    return account_list(request)
+    try:
+        account = Account.objects.get(id=account, type='Li')
+    except Account.DoesNotExist:
+        raise Http404
+
+    admin = account.group.admins.filter(username=account.owner.username).count()
+
+    transactions = Transaction.objects.filter(
+        Q(from_account=account) | Q(to_account=account))
+
+    return render_to_response('accounting/account_summary.html',
+                              {'account': account,
+                               'admin': admin,
+                               'transactions': transactions})
 
 def transfer(request, account_group, account, transfer_type=None):
     """Deposit, withdraw or transfer money"""
