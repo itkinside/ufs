@@ -2,12 +2,11 @@
 
 {% block menu %}
 <ul id="menulist">
-    <li><a href="{% url account-summary account.group.slug,account.id %}">My account</a></li>
-    <li><a href="{% url transfer-select account.group.slug,account.id %}">Transfer</a>
+    <li><a href="{% url account-summary account.group.slug,account.id %}">My account</a>
         <ul>
-            <li><a href="{% url transfer-deposit account.group.slug,account.id %}">Deposit</a></li>
-            <li><a href="{% url transfer-withdraw account.group.slug,account.id %}">Withdrawal</a></li>
-            <li><a href="{% url transfer-transfer account.group.slug,account.id %}">Transfer</a></li>
+            <li><a href="{% url account-deposit account.group.slug,account.id %}">Deposit</a></li>
+            <li><a href="{% url account-withdraw account.group.slug,account.id %}">Withdrawal</a></li>
+            <li><a href="{% url account-transfer account.group.slug,account.id %}">Transfer</a></li>
         </ul>
     </li>
     <li><a href="{% url list-select account.group.slug %}">Print lists</a>
