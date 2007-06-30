@@ -134,6 +134,9 @@ class Transaction(models.Model):
         if self.amount < 0:
             raise InvalidTransaction, 'Amount is negative.'
 
+        if self.amount == 0:
+            raise InvalidTransaction, 'Amount is zero.'
+
         if self.from_account == self.to_account:
             raise InvalidTransaction, 'Giving yourself money?'
 
