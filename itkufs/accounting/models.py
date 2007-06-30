@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 
 class AccountGroup(models.Model):
     name = models.CharField(maxlength=100)
-    slug = models.SlugField(prepopulate_from=['name'], unique=True)
+    slug = models.SlugField(prepopulate_from=['name'], unique=True,
+        help_text='A shortname used in URLs etc.')
     warn_limit = models.IntegerField(null=True, blank=True)
     block_limit = models.IntegerField(null=True, blank=True)
     admins = models.ManyToManyField(User, null=True, blank=True)
@@ -15,9 +16,9 @@ class AccountGroup(models.Model):
         models.Model.save(self)
         # Create default accounts
         if not self.account_set.count():
-            bank = Account(name='Bank', group=self, type='As')
+            bank = Account(name='Bank', slug='bank', group=self, type='As')
             bank.save()
-            cash = Account(name='Cash', group=self, type='As')
+            cash = Account(name='Cash', slug='cash', group=self, type='As')
             cash.save()
 
     class Admin:
@@ -36,6 +37,8 @@ class Account(models.Model):
     ]
 
     name = models.CharField(maxlength=100)
+    slug = models.SlugField(prepopulate_from=['name'],
+        help_text='A shortname used in URLs etc.')
     group = models.ForeignKey(AccountGroup)
     type = models.CharField(maxlength=2, choices=ACCOUNT_TYPE, default='Li')
     owner = models.ForeignKey(User, null=True, blank=True)
@@ -79,7 +82,7 @@ class Account(models.Model):
     class Admin:
         fields = (
             (None,
-                {'fields': ('name', 'group', 'owner')}),
+                {'fields': ('name', 'slug', 'group', 'owner')}),
             ('Advanced options', {
                 'classes': 'collapse',
                 'fields' : ('type', 'active')}),
@@ -92,6 +95,7 @@ class Account(models.Model):
 
     class Meta:
         ordering = ['group', 'name']
+        unique_together = (('slug', 'group'),)
 
 class Settlement(models.Model):
     date = models.DateField()
