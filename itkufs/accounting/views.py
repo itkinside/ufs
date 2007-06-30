@@ -38,7 +38,7 @@ def account_summary(request, account_group, account, page='1'):
     admin = account.group.admins.filter(username=account.owner.username).count()
 
     transactions = Transaction.objects.filter(
-        Q(from_account=account) | Q(to_account=account))
+        Q(from_account=account) | Q(to_account=account)).order_by('-registered')
 
     return object_list(request, transactions,
                        paginate_by=20,
