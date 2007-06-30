@@ -117,10 +117,13 @@ class Transaction(models.Model):
                                      self.to_account)
 
     def save(self):
+        if self.amount < 0:
+            raise InvalidTransaction, 'Amount is negative.'
+
         if self.from_account or self.to_account:
             models.Model.save(self)
         else:
-            raise InvalidTransaction
+            raise InvalidTransaction, 'Only to or from can be null, not both.'
 
     class Admin:
         list_display = ['amount', 'from_account', 'to_account', 'settlement']
