@@ -13,11 +13,11 @@ def account_list(request):
     username = 'jodal'
     user = User.objects.get(username=username)
     account = user.account_set.all()[0]
-    admin = account.group.admins.filter(username=username).count()
+    is_admin = account.group.admins.filter(username=username).count()
 
     return render_to_response('accounting/base.html',
                               {'account': account,
-                               'admin': admin})
+                               'is_admin': is_admin})
 
 def group_summary(request, group):
     """Shows a summery for the account group"""
@@ -37,9 +37,9 @@ def account_summary(request, group, account, page='1'):
 
     # FIXME: Use username from request to check admin status
     if account.owner:
-        admin = account.group.admins.filter(username=account.owner.username).count()
+        is_admin = account.group.admins.filter(username=account.owner.username).count()
     else:
-        admin = False
+        is_admin = False
 
     transactions = Transaction.objects.filter(
         Q(from_account=account) | Q(to_account=account)).order_by('-registered')
@@ -51,7 +51,7 @@ def account_summary(request, group, account, page='1'):
                        template_name='accounting/account_summary.html',
                        extra_context={
                             'account': account,
-                            'admin': admin,
+                            'is_admin': is_admin,
                        },
                        template_object_name='transaction')
 
