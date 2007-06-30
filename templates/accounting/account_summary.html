@@ -90,7 +90,12 @@
         <td class="align_right">{{ t.amount|stringformat:"0.2f" }}</td>
         {% endifequal %}
 
-        <td>{{ t.details }}</td>
+        <td>
+            {% if t.settlement %}
+            {{ t.settlement.date|date:"Y-m-d" }}
+            {% endif %}
+            {{ t.details }}
+        </td>
     </tr>
     {% endfor %}
 </table>
