@@ -3,6 +3,8 @@
 {% block content %}
 <h2>My Account</h2>
 
+<p>Your account balance is {{ account.balance|stringformat:"0.2f" }}.</p>
+
 {% if transaction_list %}
 
 {% if is_paginated %}
