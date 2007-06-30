@@ -75,9 +75,17 @@
             {% endif %}
         {% else %}
             {% ifequal t.from_account.id account.id %}
+                {% if admin %}
+            To <a href="{% url account-summary t.to_account.group.slug,t.to_account.slug %}">{{ t.to_account.name }}</a>
+                {% else %}
             To {{ t.to_account.name }}
+                {% endif %}
             {% else %}
+                {% if admin %}
+            From <a href="{% url account-summary t.from_account.group.slug,t.from_account.slug %}">{{ t.from_account.name }}</a>
+                {% else %}
             From {{ t.from_account.name }}
+                {% endif %}
             {% endifequal %}
         {% endif %}
         </td>
