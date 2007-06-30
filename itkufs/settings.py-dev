@@ -68,7 +68,7 @@ ROOT_URLCONF = 'itkufs.urls'
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates".
     # Always use forward slashes, even on Windows.
-    '/home/cassarossa/itk/felles/bzr/itkufs/templates', # dev
+    '/home/cassarossa/itk/felles/bzr/itkufs/itkufs/templates/', # dev
     #'/var/www/samfundet.no/itk/ufs/templates/'. # prod
 )
 
