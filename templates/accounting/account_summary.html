@@ -23,9 +23,9 @@
     <tr>
         <th>Registered</th>
         <th>Payed</th>
-        <th>From</th>
-        <th>To</th>
-        <th>Amount</th>
+        <th>Type</th>
+        <th>Out</th>
+        <th>In</th>
         <th>Details</th>
     </tr>
     {% for t in transaction_list %}
@@ -36,17 +36,31 @@
         {% else %}
         <td><em>Pending</em></td>
         {% endif %}
-        {% if t.from_account %}
-        <td>{{ t.from_account.name }}</td>
+
+        <td>
+        {% if not t.from_account or not t.to_account %}
+            {% if not t.from_account %}
+            <em>Deposit</em>
+            {% else %}
+            <em>Withdrawal</em>
+            {% endif %}
         {% else %}
-        <td><em>Deposit</em></td>
+            {% ifequal t.from_account.id account.id %}
+            To {{ t.to_account.name }}
+            {% else %}
+            From {{ t.from_account.name }}
+            {% endifequal %}
         {% endif %}
-        {% if t.to_account %}
-        <td>{{ t.to_account.name }}</td>
-        {% else %}
-        <td><em>Withdrawal</em></td>
-        {% endif %}
+        </td>
+
+        {% ifequal t.from_account.id account.id %}
         <td class="align_right">{{ t.amount|stringformat:"0.2f" }}</td>
+        <td></td>
+        {% else %}
+        <td></td>
+        <td class="align_right">{{ t.amount|stringformat:"0.2f" }}</td>
+        {% endifequal %}
+
         <td>{{ t.details }}</td>
     </tr>
     {% endfor %}
