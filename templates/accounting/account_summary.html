@@ -1,9 +1,38 @@
 {% extends "accounting/base.html" %}
 
 {% block content %}
-<h2>My Account</h2>
+<h2>Account summary for {{ account.name }}</h2>
 
-<p>Your account balance is {{ account.balance|stringformat:"0.2f" }}.</p>
+<table class="tabledetails">
+    <tr>
+        <th>Balance</th>
+        <td>{{ account.balance|stringformat:"0.2f" }}</td>
+    </tr>
+
+    <tr>
+        <th>Group</th>
+        <td><a href="{% url account-group-summary account.group.slug %}">{{ account.group.name }}</a></td>
+    </tr>
+
+    <tr>
+    {% if account.owner %}
+        <th>Owner</th>
+        <td>
+            <a href="mailto:{{ account.owner.email }}">{{ account.owner.username }}</a>
+        </td>
+    {% else %}
+        <th>Type</th>
+        <td>{{ account.get_type_display }}</td>
+    {% endif %}
+    </tr>
+
+    <tr>
+        <th>Active</th>
+        <td>{{ account.active|yesno:"Yes,No" }}</td>
+    </tr>
+</table>
+
+<h3>Transactions</h3>
 
 {% if transaction_list %}
 

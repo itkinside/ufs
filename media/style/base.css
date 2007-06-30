@@ -120,13 +120,13 @@ em {
 }
 
 /* Tables */
-.tablelist th {
+.tablelist th, .tabledetails th {
 	background: #ddd;
 	border: 1px solid gray;
 	padding: 0.3em;
 	font-weight: bolder;
 }
-.tablelist td {
+.tablelist td, .tabledetails td {
 	border: 1px solid gray;
 	padding: 0.3em;
 }
