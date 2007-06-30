@@ -3,8 +3,8 @@ from django.conf import settings
 
 urlpatterns = patterns('',
     (r'^ufs/admin/', include('django.contrib.admin.urls')),
-    (r'^ufs/accounting/', include('itkufs.accounting.urls')),
     (r'^ufs/inventory/', include('itkufs.inventory.urls')),
+    (r'^ufs/', include('itkufs.accounting.urls')),
 )
 
 if settings.DEBUG:
