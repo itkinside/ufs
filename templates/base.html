@@ -28,30 +28,14 @@ ITK Microfinance System<br />
 <div id="menu">
 {% block menu %}
 <ul id="menulist">
-    <li><a href="#">My account</a></li>
-    <li><a href="#">Transfer</a>
+    <li><a href="#">Top-level 1</a>
         <ul>
-            <li><a href="#">Deposit</a></li>
-            <li><a href="#">Withdrawal</a></li>
-            <li><a href="#">Transfer</a></li>
+            <li><a href="#">Sub-level A</a></li>
+            <li><a href="#">Sub-level B</a></li>
         </ul>
     </li>
-    <li><a href="#">Print lists</a>
-        <ul>
-            <li><a href="#">Internal</a></li>
-            <li><a href="#">External</a></li>
-        </ul>
-    </li>
-{% if admin %}
-    <li class="admin"><a href="#">Transactions</a>
-        <ul>
-            <li><a href="#">Approve</a></li>
-            <li><a href="#">Register</a></li>
-        </ul>
-    </li>
-    <li class="admin"><a href="#">Settlements</a></li>
-    <li class="admin"><a href="#">Balance</a></li>
-{% endif %}
+    <li><a href="#">Top-level 2</a></li>
+    <li class="admin"><a href="#">Top-level 3</a></li>
 </ul>
 {% endblock %}
 </div>
