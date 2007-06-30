@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.conf import settings
 
 class SettingsBackend:
     def authenticate(self, username=None, password=None):
@@ -8,9 +9,8 @@ class SettingsBackend:
             try:
                 user = User.objects.get(username=username)
             except User.DoesNotExist:
-                user = User(username=username, password=None)
-                user.is_staff = False
-                user.is_superuser = False
+                email = '%s@%s' % (username, settings.MAIL_DOMAIN)
+                user = User(username=username, password=None, email=email)
                 user.save()
             return user
         return None

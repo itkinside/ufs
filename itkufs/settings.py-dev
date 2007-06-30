@@ -81,3 +81,5 @@ INSTALLED_APPS = (
     'itkufs.accounting',
     'itkufs.inventory',
 )
+
+MAIL_DOMAIN = 'samfundet.no'
