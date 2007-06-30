@@ -31,11 +31,15 @@ def account_summary(request, account_group, account, page='1'):
     # FIXME: Check that user is owner of account or admin of account group
 
     try:
-        account = Account.objects.get(id=account, type='Li')
+        account = Account.objects.get(id=account)
     except Account.DoesNotExist:
         raise Http404
 
-    admin = account.group.admins.filter(username=account.owner.username).count()
+    # FIXME: Use username from request to check admin status
+    if account.owner:
+        admin = account.group.admins.filter(username=account.owner.username).count()
+    else:
+        admin = False
 
     transactions = Transaction.objects.filter(
         Q(from_account=account) | Q(to_account=account)).order_by('-registered')
