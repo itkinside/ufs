@@ -55,7 +55,7 @@ What format is this README written in?
 This README is written in reStructuredText. Please write all documentation for
 this project in the `rST format`_.
 
-.. _rST format: http://docutils.sourceforge.net/docs/user/rst/quickref.html
+... _rST format: http://docutils.sourceforge.net/docs/user/rst/quickref.html
 
 
 :Authors: Stein Magnus Jodal
