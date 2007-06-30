@@ -5,11 +5,11 @@
 
 {% block menu %}
 <ul id="menulist">
-    <li><a href="{% url account-summary account.group.slug,account.id %}">My account</a>
+    <li><a href="{% url account-summary account.group.slug,account.slug %}">My account</a>
         <ul>
-            <li><a href="{% url account-deposit account.group.slug,account.id %}">Deposit</a></li>
-            <li><a href="{% url account-withdraw account.group.slug,account.id %}">Withdrawal</a></li>
-            <li><a href="{% url account-transfer account.group.slug,account.id %}">Transfer</a></li>
+            <li><a href="{% url account-deposit account.group.slug,account.slug %}">Deposit</a></li>
+            <li><a href="{% url account-withdraw account.group.slug,account.slug %}">Withdrawal</a></li>
+            <li><a href="{% url account-transfer account.group.slug,account.slug %}">Transfer</a></li>
         </ul>
     </li>
     <li><a href="{% url list-select account.group.slug %}">Print lists</a>
@@ -21,11 +21,11 @@
 {% if admin %}
     <li class="admin"><a href="#">Transactions</a>
         <ul>
+            <li><a href="#">Settlement</a></li>
             <li><a href="#">Approve</a></li>
             <li><a href="#">Register</a></li>
         </ul>
     </li>
-    <li class="admin"><a href="#">Settlements</a></li>
     <li class="admin"><a href="#">Balance</a></li>
 {% endif %}
 </ul>

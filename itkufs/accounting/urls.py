@@ -7,8 +7,10 @@ urlpatterns = patterns('',
         account_list, name='account-list'),
 
     # My account
-    url(r'^(?P<group>[0-9a-z_-]+)/(?P<account>[0-9a-z_-]+)/(?P<page>\d*)$',
+    url(r'^(?P<group>[0-9a-z_-]+)/(?P<account>[0-9a-z_-]+)/$',
         account_summary, name='account-summary'),
+    url(r'^(?P<group>[0-9a-z_-]+)/(?P<account>[0-9a-z_-]+)/(?P<page>\d+)$',
+        account_summary, name='account-summary-page'),
     url(r'(?P<group>[0-9a-z_-]+)/(?P<account>[0-9a-z_-]+)/deposit/$',
         transfer, {'transfer_type': 'deposit'}, name='account-deposit'),
     url(r'(?P<group>[0-9a-z_-]+)/(?P<account>[0-9a-z_-]+)/withdraw/$',

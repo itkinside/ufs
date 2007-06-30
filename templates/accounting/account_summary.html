@@ -39,11 +39,11 @@
 {% if is_paginated %}
 <p>
     {% if has_previous %}
-    <a href="{% url account-summary account.group.slug,account.id,previous %}">&lt;&lt; Previous</a> |
+    <a href="{% url account-summary-page account.group.slug,account.id,previous %}">&lt;&lt; Previous</a> |
     {% endif %}
     {{ hits }} hits
     {% if has_next %}
-    | <a href="{% url account-summary account.group.slug,account.id,next %}">Next &gt;&gt;</a>
+    | <a href="{% url account-summary-page account.group.slug,account.id,next %}">Next &gt;&gt;</a>
     {% endif %}
 </p>
 {% endif %}
@@ -103,11 +103,11 @@
 {% if is_paginated %}
 <p>
     {% if has_previous %}
-    <a href="{% url account-summary account.group.slug,account.id,previous %}">&lt;&lt; Previous</a> |
+    <a href="{% url account-summary-page account.group.slug,account.id,previous %}">&lt;&lt; Previous</a> |
     {% endif %}
     {{ hits }} hits
     {% if has_next %}
-    | <a href="{% url account-summary account.group.slug,account.id,next %}">Next &gt;&gt;</a>
+    | <a href="{% url account-summary-page account.group.slug,account.id,next %}">Next &gt;&gt;</a>
     {% endif %}
 </p>
 {% endif %}
