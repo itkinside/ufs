@@ -29,7 +29,7 @@
         <th>Details</th>
     </tr>
     {% for t in transaction_list %}
-    <tr>
+    <tr{% if not t.payed %} class="pending"{% endif %}>
         <td>{{ t.registered|date:"Y-m-d" }}</td>
         {% if t.payed %}
         <td>{{ t.payed|date:"Y-m-d" }}</td>

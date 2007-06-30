@@ -141,3 +141,14 @@ em {
 .align_right {
 	text-align: right;
 }
+
+/* Colorization */
+.pending {
+	color: gray;
+}
+.warning {
+	color: #df8713;
+}
+.error {
+	color: red;
+}
