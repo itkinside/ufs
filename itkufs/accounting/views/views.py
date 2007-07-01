@@ -132,11 +132,24 @@ def account_summary(request, group, account, page='1'):
 def transfer(request, group, account, transfer_type=None):
     """Deposit, withdraw or transfer money"""
 
-    my_user = get_session_object(request, 'my_user')
-    if not my_user:
+    my_user = get_session_object(request, 'user')
+    my_account = get_session_object(request, 'account')
+    if not my_user or not my_account:
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
 
-    # FIXME
-    return test_view(request)
+    # Get account object
+    try:
+        account = Account.objects.get(slug=account)
+    except Account.DoesNotExist:
+        raise Http404
 
+    if account.group.admins.filter(id=my_user.id).count():
+        is_admin = True
+    else:
+        is_admin = False
+
+    return render_to_response('accounting/transfer.html',
+                              {'my_account': my_account,
+                               'is_admin': is_admin,
+                               'account': account})
