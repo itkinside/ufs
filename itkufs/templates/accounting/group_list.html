@@ -18,7 +18,7 @@ create an account for you and connect the account with your user.</p>
     </tr>
     {% for account, is_admin in accounts %}
     <tr>
-        <td><a href="{% url group-summary account.group.slug %}">{{ account.group.name }}</a></td>
+        <td>{{ account.group.name }}</td>
         <td><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.name }}</a></td>
         <td>{{ is_admin|yesno:"Yes,No" }}</td>
     </tr>

@@ -44,27 +44,28 @@ def group_list(request):
     user = User.objects.get(username='jodal')
     set_session_object(request, 'user', user)
 
-    user = get_session_object(request, 'user')
-    if not user:
+    my_user = get_session_object(request, 'user')
+    if not my_user:
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
 
     # Build account struct
     accounts = []
-    for account in user.account_set.all().order_by('group', 'name'):
+    for account in my_user.account_set.all().order_by('group', 'name'):
         is_admin = bool(account.group.admins.filter(
-            username=user.username).count())
+            username=my_user.username).count())
         accounts.append((account, is_admin))
 
     return render_to_response('accounting/group_list.html',
-                              {'user': user,
-                              'accounts': accounts})
+                              {'my_user': my_user,
+                               'accounts': accounts})
 
 def group_summary(request, group):
     """Account group summary and paginated list of accounts"""
 
-    user = get_session_object(request, 'user')
-    if not user:
+    my_user = get_session_object(request, 'user')
+    my_account = get_session_object(request, 'account')
+    if not my_account:
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
 
@@ -74,20 +75,21 @@ def group_summary(request, group):
     except AccountGroup.DoesNotExist:
         raise Http404
 
-    if group.admins.filter(id=user.id).count():
+    if group.admins.filter(id=my_user.id).count():
         is_admin = True
     else:
         is_admin = False
 
     return render_to_response('accounting/group_summary.html',
-                              {'group': group,
-                               'is_admin': is_admin})
+                              {'my_account': my_account,
+                               'is_admin': is_admin,
+                               'group': group})
 
 def account_summary(request, group, account, page='1'):
     """Account details and a paginated list with recent transactions involving the user"""
 
-    user = get_session_object(request, 'user')
-    if not user:
+    my_user = get_session_object(request, 'user')
+    if not my_user:
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
 
@@ -97,10 +99,16 @@ def account_summary(request, group, account, page='1'):
     except Account.DoesNotExist:
         raise Http404
 
+    # Save account in session
+    my_account = get_session_object(request, 'account')
+    if not my_account:
+        # FIXME: For now, we only save account selection the first time
+        set_session_object(request, 'account', account)
+
     # Check that user is owner of account or admin of account group
-    if account.group.admins.filter(id=user.id).count():
+    if account.group.admins.filter(id=my_user.id).count():
         is_admin = True
-    elif user.id == acount.owner.id:
+    elif user.id == account.owner.id:
         is_admin = False
     else:
         return HttpResponseForbidden('Forbidden')
@@ -115,16 +123,17 @@ def account_summary(request, group, account, page='1'):
                        allow_empty=True,
                        template_name='accounting/account_summary.html',
                        extra_context={
-                            'account': account,
+                            'my_account': my_account,
                             'is_admin': is_admin,
+                            'account': account,
                        },
                        template_object_name='transaction')
 
 def transfer(request, group, account, transfer_type=None):
     """Deposit, withdraw or transfer money"""
 
-    user = get_session_object(request, 'user')
-    if not user:
+    my_user = get_session_object(request, 'my_user')
+    if not my_user:
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
 

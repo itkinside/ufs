@@ -1,23 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}{{ account.group.name }}{% endblock %}
-{% block header %}{{ account.group.name }}{% endblock %}
+{% block title %}{{ my_account.group.name }}{% endblock %}
+{% block header %}{{ my_account.group.name }}{% endblock %}
 
 {% block menu %}
 <ul id="menulist">
-    <li><a href="{% url account-summary account.group.slug,account.slug %}">My account</a>
+    <li><a href="{% url account-summary my_account.group.slug,my_account.slug %}">My account</a>
         <ul>
-            <li><a href="{% url account-deposit account.group.slug,account.slug %}">Deposit</a></li>
-            <li><a href="{% url account-withdraw account.group.slug,account.slug %}">Withdrawal</a></li>
-            <li><a href="{% url account-transfer account.group.slug,account.slug %}">Transfer</a></li>
+            <li><a href="{% url account-deposit my_account.group.slug,my_account.slug %}">Deposit</a></li>
+            <li><a href="{% url account-withdraw my_account.group.slug,my_account.slug %}">Withdrawal</a></li>
+            <li><a href="{% url account-transfer my_account.group.slug,my_account.slug %}">Transfer</a></li>
         </ul>
     </li>
-    <li><a href="{% url list-select account.group.slug %}">Print lists</a>
-        <ul>
-            <li><a href="{% url list-internal account.group.slug %}">Internal</a></li>
-            <li><a href="{% url list-external account.group.slug %}">External</a></li>
-        </ul>
-    </li>
+    <li><a href="{% url group-summary my_account.group.slug %}">My group</a></li>
 {% if is_admin %}
     <li class="admin"><a href="#">Transactions</a>
         <ul>
