@@ -56,7 +56,7 @@ em {
 #menu {
 	background: #ddd; /* To fill width of menu with color */
 	margin: 0 -1em;
-	padding:0  1em;
+	padding: 0 1em;
 	height: 1.7em; /* Text height + menu top/bottom padding */
 	border-bottom: 0.2em solid #eee;
 	border-top: 0.2em solid #eee;
