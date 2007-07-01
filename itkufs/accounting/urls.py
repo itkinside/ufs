@@ -1,11 +1,11 @@
 from django.conf.urls.defaults import *
-from itkufs.accounting.views import *
-from itkufs.accounting.list_view import *
+from itkufs.accounting.views.views import *
+from itkufs.accounting.views.pdf import *
 
 urlpatterns = patterns('',
     # Account list
     url(r'^$',
-        account_list, name='account-list'),
+        group_list, name='group-list'),
 
     # My account
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/$',
@@ -19,21 +19,11 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/transfer/$',
         transfer, {'transfer_type': 'transfer'}, name='account-transfer'),
 
-    # Print lists
-    url(r'^(?P<group>[0-9a-z_-]+)/list/$',
-        list, name='list-select'),
-    url(r'^(?P<group>[0-9a-z_-]+)/list/internal/$',
-        list, {'list_type': 'internal'}, name='list-internal'),
-    url(r'^(?P<group>[0-9a-z_-]+)/list/external/$',
-        list, {'list_type': 'external'}, name='list-external'),
-
-    url(r'(?P<account_group>[0-9a-z_-]+)/list/(?P<listtype>[0-9a-z]+)/pdf/$',
-        generate_pdf, name='list-pdf'),
-    
-
-    # Admin: Account group summary
+    # My group
     url(r'^(?P<group>[0-9a-z_-]+)/$',
         group_summary, name='group-summary'),
+    url(r'^(?P<group>[0-9a-z_-]+)/list/internal/pdf/$',
+        generate_pdf, {'list_type': 'internal'}, name='list-pdf'),
 
     # Admin: Transactions
     # FIXME

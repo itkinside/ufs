@@ -1,0 +1,30 @@
+{% extends "accounting/base.html" %}
+
+{% block menu %}{% endblock %}
+
+{% block content %}
+<h2>Accounts for user {{ user.username }}</h2>
+
+{% if not accounts %}
+<p>A µFS user was just created for you. Please ask your group administrator to
+create an account for you and connect the account with your user.</p>
+{% else %}
+
+<table class="tablelist">
+    <tr>
+        <th>Group</th>
+        <th>Account</th>
+        <th>Group admin</th>
+    </tr>
+    {% for account, is_admin in accounts %}
+    <tr>
+        <td><a href="{% url group-summary account.group.slug %}">{{ account.group.name }}</a></td>
+        <td><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.name }}</a></td>
+        <td>{{ is_admin|yesno:"Yes,No" }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endif %}
+
+{% endblock %}

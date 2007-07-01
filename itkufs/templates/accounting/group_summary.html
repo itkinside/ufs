@@ -1,0 +1,15 @@
+{% extends "accounting/base.html" %}
+
+{% block title %}{{ group.name }}{% endblock %}
+{% block header %}{{ group.name }}{% endblock %}
+
+{% block content %}
+<h2>Group summary for {{ group.name }}</h2>
+
+<ul>
+    <li>Internal list:
+        <a href="{% url list-pdf group.slug,"internal" %}">PDF</a></li>
+    <li>External list: FIXME</li>
+</ul>
+
+{% endblock %}

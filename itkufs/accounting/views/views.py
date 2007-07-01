@@ -27,11 +27,21 @@ def get_session_object(request, key):
 
 # Views
 
-def account_list(request):
-    """Lists the users account groups and accounts, including admin accounts"""
+def test_view(request):
+    """Temporary test view"""
 
-     # FIXME: Dev hack
-    user = User.objects.get(username='klette')
+    user = get_session_object(request, 'user')
+    if not user:
+        # FIXME: Redirect to login page
+        return HttpResponseForbidden('Forbidden')
+
+    return render_to_response('accounting/base.html', {'user': user})
+
+def group_list(request):
+    """Lists the user's account groups and accounts, including admin accounts"""
+
+    # FIXME: Dev hack
+    user = User.objects.get(username='jodal')
     set_session_object(request, 'user', user)
 
     user = get_session_object(request, 'user')
@@ -39,26 +49,42 @@ def account_list(request):
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
 
-    account = user.account_set.all()[0] # FIXME: Dev hack
-    is_admin = account.group.admins.filter(username=user.username).count()
+    # Build account struct
+    accounts = []
+    for account in user.account_set.all().order_by('group', 'name'):
+        is_admin = bool(account.group.admins.filter(
+            username=user.username).count())
+        accounts.append((account, is_admin))
 
-    return render_to_response('accounting/base.html',
-                              {'account': account,
-                               'is_admin': is_admin})
+    return render_to_response('accounting/group_list.html',
+                              {'user': user,
+                              'accounts': accounts})
 
 def group_summary(request, group):
-    """Shows a summery for the account group"""
+    """Account group summary and paginated list of accounts"""
 
     user = get_session_object(request, 'user')
     if not user:
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
 
-    # FIXME
-    return account_list(request)
+    # Get account group
+    try:
+        group = AccountGroup.objects.get(slug=group)
+    except AccountGroup.DoesNotExist:
+        raise Http404
+
+    if group.admins.filter(id=user.id).count():
+        is_admin = True
+    else:
+        is_admin = False
+
+    return render_to_response('accounting/group_summary.html',
+                              {'group': group,
+                               'is_admin': is_admin})
 
 def account_summary(request, group, account, page='1'):
-    """A paginated list with recent transactions involving the user"""
+    """Account details and a paginated list with recent transactions involving the user"""
 
     user = get_session_object(request, 'user')
     if not user:
@@ -75,7 +101,7 @@ def account_summary(request, group, account, page='1'):
     if account.group.admins.filter(id=user.id).count():
         is_admin = True
     elif user.id == acount.owner.id:
-        pass # Account owner
+        is_admin = False
     else:
         return HttpResponseForbidden('Forbidden')
 
@@ -103,21 +129,5 @@ def transfer(request, group, account, transfer_type=None):
         return HttpResponseForbidden('Forbidden')
 
     # FIXME
-    return account_list(request)
+    return test_view(request)
 
-def list(request, group, list_type=None):
-    """Print internal and external lists"""
-    username = 'klette'
-    user = User.objects.get(username=username)
-    account = user.account_set.all()[0]
-    admin = account.group.admins.filter(username=username).count()
-
-    user = get_session_object(request, 'user')
-    if not user:
-        # FIXME: Redirect to login page
-        return HttpResponseForbidden('Forbidden')
-
-    # FIXME
-    return render_to_response('accounting/internal_list.html',
-                                {'group': account_group,
-                                 'admin': admin})
