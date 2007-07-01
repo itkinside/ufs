@@ -47,15 +47,19 @@ em {
 	min-width: 740px;
 	max-width: 60em;
 	padding: 1em;
+	border-left: 0.5em solid #444;
+	border-right: 0.5em solid #444;
+	border-bottom: 0.5em solid #444;
 }
 
 /* Drop-down menu */
 #menu {
 	background: #ddd; /* To fill width of menu with color */
-	margin-left: -1em;
-	margin-right: -1em;
-	padding-left: 1em;
-	height: 1.85em; /* Text height + menu top/bottom padding */
+	margin: 0 -1em;
+	padding:0  1em;
+	height: 1.7em; /* Text height + menu top/bottom padding */
+	border-bottom: 0.2em solid #eee;
+	border-top: 0.2em solid #eee;
 }
 #menu a {
 	background: #ddd;
