@@ -6,10 +6,50 @@
 {% block content %}
 <h2>Group summary for {{ group.name }}</h2>
 
-<ul>
-    <li>Internal list:
-        <a href="{% url list-pdf group.slug,"internal" %}">PDF</a></li>
-    <li>External list: FIXME</li>
-</ul>
+<table class="tabledetails">
+    <tr>
+        <th>Internal list</th>
+        <td><a href="{% url list-pdf group.slug,"internal" %}">Get PDF</a></td>
+    </tr>
+    <tr>
+        <th>External list</th>
+        <td>*FIXME*</td>
+    </tr>
+    <tr>
+        <th>Warning limit</th>
+        <td>{{ group.warn_limit }}</td>
+    </tr>
+    <tr>
+        <th>Blocking limit</th>
+        <td>{{ group.block_limit }}</td>
+    </tr>
+</table>
+
+{% if is_admin %}
+
+<h3>Accounts</h3>
+
+{% if not group.account_set.count %}
+<p>No accounts found.</p>
+{% else %}
+
+<table class="tablelist">
+    <tr>
+        <th>Account</th>
+        <th>Type</th>
+        <th>Balance</th>
+    </tr>
+{% for account in group.account_set.all %}
+    <tr>
+        <td><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.name }}</a></td>
+        <td>{{ account.get_type_display }}</td>
+        <td class="align_right">{{ account.balance|stringformat:"0.2f" }}</td>
+    </tr>
+{% endfor %}
+</table>
+
+{% endif %}
+
+{% endif %}
 
 {% endblock %}
