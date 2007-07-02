@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response
 from django.views.generic.list_detail import object_list
 
 from itkufs.accounting.models import *
+from itkufs.accounting.forms import *
 
 # Session functions
 
