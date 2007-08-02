@@ -1,8 +1,10 @@
 from cStringIO import StringIO
 from reportlab.pdfgen import canvas
+
 from django.http import HttpResponse
-from accounting.models import *
 from django.contrib.auth.models import User
+
+from itkufs.accounting.models import *
 
 def generate_pdf(request, list_type, group):
 
