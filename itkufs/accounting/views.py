@@ -75,8 +75,7 @@ def group_list(request):
 def group_summary(request, group):
     """Account group summary and paginated list of accounts"""
 
-    my_account = get_session_object(request, 'account')
-    if not request.user.is_authenticated() or not my_account:
+    if not request.user.is_authenticated():
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
 
@@ -93,9 +92,8 @@ def group_summary(request, group):
 
     return render_to_response('accounting/group_summary.html',
                               {
-                                  'my_account': my_account,
-                                  'is_admin': is_admin,
                                   'group': group,
+                                  'is_admin': is_admin,
                               },
                               context_instance=RequestContext(request))
 
@@ -115,10 +113,9 @@ def account_summary(request, group, account, page='1'):
         raise Http404
 
     # Save account in session
-    my_account = get_session_object(request, 'account')
-    if not my_account:
-        # FIXME: For now, we only save account selection the first time
-        set_session_object(request, 'account', account)
+    # FIXME: For now, we only save account selection the first time
+    if not get_session_object(request, 'my_account'):
+        set_session_object(request, 'my_account', account)
 
     # Check that user is owner of account or admin of account group
     if group.admins.filter(id=request.user.id).count():
@@ -139,7 +136,6 @@ def account_summary(request, group, account, page='1'):
                        allow_empty=True,
                        template_name='accounting/account_summary.html',
                        extra_context={
-                            'my_account': my_account,
                             'is_admin': is_admin,
                             'account': account,
                        },
@@ -148,8 +144,7 @@ def account_summary(request, group, account, page='1'):
 def transfer(request, group, account, transfer_type=None):
     """Deposit, withdraw or transfer money"""
 
-    my_account = get_session_object(request, 'account')
-    if not request.user.is_authenticated() or not my_account:
+    if not request.user.is_authenticated():
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
 
@@ -167,7 +162,6 @@ def transfer(request, group, account, transfer_type=None):
 
     return render_to_response('accounting/transfer.html',
                               {
-                                  'my_account': my_account,
                                   'is_admin': is_admin,
                                   'account': account,
                               },

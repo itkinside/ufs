@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}{{ my_account.group.name }}{% endblock %}
-{% block header %}{{ my_account.group.name }}{% endblock %}
+{% block title %}{{ request.session.my_account.group.name }}{% endblock %}
+{% block header %}{{ request.session.my_account.group.name }}{% endblock %}
 
 {% block menu %}
 <ul id="menulist">
-    <li><a href="{% url account-summary my_account.group.slug,my_account.slug %}">My account</a>
+    <li><a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">My account</a>
         <ul>
-            <li><a href="{% url account-deposit my_account.group.slug,my_account.slug %}">Deposit</a></li>
-            <li><a href="{% url account-withdraw my_account.group.slug,my_account.slug %}">Withdrawal</a></li>
-            <li><a href="{% url account-transfer my_account.group.slug,my_account.slug %}">Transfer</a></li>
+            <li><a href="{% url account-deposit request.session.my_account.group.slug,request.session.my_account.slug %}">Deposit</a></li>
+            <li><a href="{% url account-withdraw request.session.my_account.group.slug,request.session.my_account.slug %}">Withdraw</a></li>
+            <li><a href="{% url account-transfer request.session.my_account.group.slug,request.session.my_account.slug %}">Transfer</a></li>
         </ul>
     </li>
-    <li><a href="{% url group-summary my_account.group.slug %}">My group</a></li>
+    <li><a href="{% url group-summary request.session.my_account.group.slug %}">My group</a></li>
 {% if is_admin %}
     <li class="admin"><a href="#">Transactions</a>
         <ul>
