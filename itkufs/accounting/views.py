@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render_to_response
+from django.template import RequestContext
 from django.views.generic.list_detail import object_list
 
 from itkufs.accounting.models import *
@@ -36,7 +37,9 @@ def test_view(request):
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
 
-    return render_to_response('accounting/base.html', {'user': request.user})
+    return render_to_response('accounting/base.html',
+                              {},
+                              context_instance=RequestContext(request))
 
 def group_list(request):
     """Lists the user's account groups and accounts, including admin accounts"""
@@ -64,8 +67,10 @@ def group_list(request):
         return HttpResponseRedirect(url)
 
     return render_to_response('accounting/group_list.html',
-                              {'my_user': request.user,
-                               'accounts': accounts})
+                              {
+                                  'accounts': accounts,
+                              },
+                              context_instance=RequestContext(request))
 
 def group_summary(request, group):
     """Account group summary and paginated list of accounts"""
@@ -87,9 +92,12 @@ def group_summary(request, group):
         is_admin = False
 
     return render_to_response('accounting/group_summary.html',
-                              {'my_account': my_account,
-                               'is_admin': is_admin,
-                               'group': group})
+                              {
+                                  'my_account': my_account,
+                                  'is_admin': is_admin,
+                                  'group': group,
+                              },
+                              context_instance=RequestContext(request))
 
 def account_summary(request, group, account, page='1'):
     """Account details and a paginated list with recent transactions involving the user"""
@@ -124,6 +132,7 @@ def account_summary(request, group, account, page='1'):
     transactions = Transaction.objects.filter(
         Q(from_account=account) | Q(to_account=account)).order_by('-registered')
 
+    # Pass on to generic view
     return object_list(request, transactions,
                        paginate_by=20,
                        page=page,
@@ -157,6 +166,9 @@ def transfer(request, group, account, transfer_type=None):
         is_admin = False
 
     return render_to_response('accounting/transfer.html',
-                              {'my_account': my_account,
-                               'is_admin': is_admin,
-                               'account': account})
+                              {
+                                  'my_account': my_account,
+                                  'is_admin': is_admin,
+                                  'account': account,
+                              },
+                              context_instance=RequestContext(request))
