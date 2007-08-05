@@ -9,7 +9,8 @@ class KerberosBackend:
                 user = User.objects.get(username=username)
             except User.DoesNotExist:
                 email = '%s@%s' % (username, settings.MAIL_DOMAIN)
-                user = User(username=username, password=None, email=email)
+                user = User(username=username, password='In Kerberos')
+                user.email = email
                 user.save()
             return user
         return None
