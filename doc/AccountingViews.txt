@@ -13,7 +13,7 @@ First time login
 	to create a bar account for you and connect the account with your
 	user."
 
-Status: 2. is done.
+Status: All done.
 
 
 After login when account is assigned
@@ -24,7 +24,7 @@ After login when account is assigned
 - If admin for the group, also point to the account group page.
   Goto URL: /itkufs/(?P<account_group_slug>\w+)/
 
-Status: Does not redirect for user with only one account (most users).
+Status: All done.
 
 
 Main account view
