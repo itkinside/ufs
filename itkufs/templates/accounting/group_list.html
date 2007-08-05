@@ -13,14 +13,14 @@ account with your user.</p>
 
 <table class="tablelist">
     <tr>
-        <th>Group</th>
         <th>Account</th>
+        <th>Group</th>
         <th>Group admin</th>
     </tr>
     {% for account, is_admin in accounts %}
     <tr>
-        <td>{{ account.group.name }}</td>
         <td><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.name }}</a></td>
+        <td>{{ account.group.name }}</td>
         <td>{{ is_admin|yesno:"Yes,No" }}</td>
     </tr>
     {% endfor %}

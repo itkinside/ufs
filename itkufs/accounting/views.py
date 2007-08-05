@@ -24,7 +24,7 @@ def group_list(request):
 
     # Build account struct
     accounts = []
-    for account in request.user.account_set.all().order_by('group', 'name'):
+    for account in request.user.account_set.all().order_by('name'):
         is_admin = bool(account.group.admins.filter(
             username=request.user.username).count())
         accounts.append((account, is_admin))
