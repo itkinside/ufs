@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
@@ -31,42 +32,46 @@ def get_session_object(request, key):
 def test_view(request):
     """Temporary test view"""
 
-    user = get_session_object(request, 'user')
-    if not user:
+    if not request.user.is_authenticated():
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
 
-    return render_to_response('accounting/base.html', {'user': user})
+    return render_to_response('accounting/base.html', {'user': request.user})
 
 def group_list(request):
     """Lists the user's account groups and accounts, including admin accounts"""
 
-    # FIXME: Dev hack
-    user = User.objects.get(username='jodal')
-    set_session_object(request, 'user', user)
-
-    my_user = get_session_object(request, 'user')
-    if not my_user:
-        # FIXME: Redirect to login page
-        return HttpResponseForbidden('Forbidden')
+    if not request.user.is_authenticated():
+        user = authenticate(request=request)
+        if user is not None:
+            login(request, user)
+        else:
+            # FIXME: Redirect to login page
+            return HttpResponseForbidden('Forbidden')
 
     # Build account struct
     accounts = []
-    for account in my_user.account_set.all().order_by('group', 'name'):
+    for account in request.user.account_set.all().order_by('group', 'name'):
         is_admin = bool(account.group.admins.filter(
-            username=my_user.username).count())
+            username=request.user.username).count())
         accounts.append((account, is_admin))
 
+    # If only one account, jump directly to account summary
+    if len(accounts) == 1:
+        url = reverse('account-summary',
+                      kwargs={'group': accounts[0][0].group.slug,
+                              'account': accounts[0][0].slug})
+        return HttpResponseRedirect(url)
+
     return render_to_response('accounting/group_list.html',
-                              {'my_user': my_user,
+                              {'my_user': request.user,
                                'accounts': accounts})
 
 def group_summary(request, group):
     """Account group summary and paginated list of accounts"""
 
-    my_user = get_session_object(request, 'user')
     my_account = get_session_object(request, 'account')
-    if not my_account:
+    if not request.user.is_authenticated() or not my_account:
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
 
@@ -76,7 +81,7 @@ def group_summary(request, group):
     except AccountGroup.DoesNotExist:
         raise Http404
 
-    if group.admins.filter(id=my_user.id).count():
+    if group.admins.filter(id=request.user.id).count():
         is_admin = True
     else:
         is_admin = False
@@ -89,10 +94,10 @@ def group_summary(request, group):
 def account_summary(request, group, account, page='1'):
     """Account details and a paginated list with recent transactions involving the user"""
 
-    my_user = get_session_object(request, 'user')
-    if not my_user:
+    if not request.user.is_authenticated():
         # FIXME: Redirect to login page
-        return HttpResponseForbidden('Forbidden')
+        #return HttpResponseForbidden('Forbidden')
+        pass
 
     # Get account object
     try:
@@ -107,9 +112,9 @@ def account_summary(request, group, account, page='1'):
         set_session_object(request, 'account', account)
 
     # Check that user is owner of account or admin of account group
-    if account.group.admins.filter(id=my_user.id).count():
+    if account.group.admins.filter(id=request.user.id).count():
         is_admin = True
-    elif user.id == account.owner.id:
+    elif request.user.id == account.owner.id:
         is_admin = False
     else:
         return HttpResponseForbidden('Forbidden')
@@ -133,9 +138,8 @@ def account_summary(request, group, account, page='1'):
 def transfer(request, group, account, transfer_type=None):
     """Deposit, withdraw or transfer money"""
 
-    my_user = get_session_object(request, 'user')
     my_account = get_session_object(request, 'account')
-    if not my_user or not my_account:
+    if not request.user.is_authenticated() or not my_account:
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
 
@@ -145,7 +149,7 @@ def transfer(request, group, account, transfer_type=None):
     except Account.DoesNotExist:
         raise Http404
 
-    if account.group.admins.filter(id=my_user.id).count():
+    if account.group.admins.filter(id=request.user.id).count():
         is_admin = True
     else:
         is_admin = False
