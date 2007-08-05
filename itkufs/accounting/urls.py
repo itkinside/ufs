@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
-from itkufs.accounting.views.views import *
-from itkufs.accounting.views.pdf import *
+from itkufs.accounting.views import *
+from itkufs.accounting.pdf import *
 
 urlpatterns = patterns('',
     # Account list
