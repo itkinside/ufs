@@ -101,8 +101,9 @@ def account_summary(request, group, account, page='1'):
 
     # Get account object
     try:
-        account = Account.objects.get(slug=account)
-    except Account.DoesNotExist:
+        group = AccountGroup.objects.get(slug=group)
+        account = group.account_set.get(slug=account)
+    except (AccountGroup.DoesNotExist, Account.DoesNotExist):
         raise Http404
 
     # Save account in session
@@ -112,7 +113,7 @@ def account_summary(request, group, account, page='1'):
         set_session_object(request, 'account', account)
 
     # Check that user is owner of account or admin of account group
-    if account.group.admins.filter(id=request.user.id).count():
+    if group.admins.filter(id=request.user.id).count():
         is_admin = True
     elif request.user.id == account.owner.id:
         is_admin = False
@@ -145,11 +146,12 @@ def transfer(request, group, account, transfer_type=None):
 
     # Get account object
     try:
-        account = Account.objects.get(slug=account)
-    except Account.DoesNotExist:
+        group = AccountGroup.objects.get(slug=group)
+        account = group.account_set.get(slug=account)
+    except (AccountGroup.DoesNotExist, Account.DoesNotExist):
         raise Http404
 
-    if account.group.admins.filter(id=request.user.id).count():
+    if group.admins.filter(id=request.user.id).count():
         is_admin = True
     else:
         is_admin = False
