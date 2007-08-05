@@ -80,4 +80,7 @@ INSTALLED_APPS = (
     'itkufs.inventory',
 )
 
+SESSION_COOKIE_NAME = 'itkufs'
+SESSION_COOKIE_SECURE = True
+
 MAIL_DOMAIN = 'samfundet.no'
