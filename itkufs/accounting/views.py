@@ -9,38 +9,6 @@ from django.views.generic.list_detail import object_list
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
 
-# Session functions
-
-def set_session_object(request, key, object):
-    """Add object to session"""
-
-    if not key in request.session:
-        request.session[key] = object
-        return True
-    else:
-        return False
-
-def get_session_object(request, key):
-    """Get object from session"""
-
-    if key in request.session:
-        return request.session[key]
-    else:
-        return None
-
-# Views
-
-def test_view(request):
-    """Temporary test view"""
-
-    if not request.user.is_authenticated():
-        # FIXME: Redirect to login page
-        return HttpResponseForbidden('Forbidden')
-
-    return render_to_response('accounting/base.html',
-                              {},
-                              context_instance=RequestContext(request))
-
 def group_list(request):
     """Lists the user's account groups and accounts, including admin accounts"""
 
@@ -114,8 +82,8 @@ def account_summary(request, group, account, page='1'):
 
     # Save account in session
     # FIXME: For now, we only save account selection the first time
-    if not get_session_object(request, 'my_account'):
-        set_session_object(request, 'my_account', account)
+    if not 'my_account' in request.session:
+        request.session['my_account'] = account
 
     # Check that user is owner of account or admin of account group
     if group.admins.filter(id=request.user.id).count():
