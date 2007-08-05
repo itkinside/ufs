@@ -4,7 +4,7 @@ ITK µFS Roadmap
 Version 1: Accounting
 ---------------------
 
-:Scheduled release date: June 2007
+:Scheduled release date: August 2007
 
 Version 1 requirements:
 
@@ -32,7 +32,7 @@ doc/AccountingViews.txt.
 Version 2: Inventory
 --------------------
 
-:Scheduled release date: July 2007
+:Scheduled release date: September 2007
 
 Version 2 ideas:
 
