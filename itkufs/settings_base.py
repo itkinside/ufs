@@ -1,6 +1,6 @@
 # Django settings for itkufs project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -9,8 +9,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'sqlite3'           # 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
-DATABASE_NAME = 'itkufs.sqlite'             # Or path to database file if using sqlite3.
+DATABASE_ENGINE = ''           # 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
+DATABASE_NAME = ''             # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
@@ -34,8 +34,7 @@ AUTHENTICATION_BACKENDS = (
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/home/cassarossa/itk/felles/bzr/itkufs/media/' # dev
-#MEDIA_ROOT = '/var/www/samfundet.no/itk/ufs/media/' # prod
+MEDIA_ROOT = '/home/cassarossa/itk/felles/itkufs/media/'
 
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"
@@ -68,8 +67,7 @@ ROOT_URLCONF = 'itkufs.urls'
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates".
     # Always use forward slashes, even on Windows.
-    '/home/cassarossa/itk/felles/bzr/itkufs/itkufs/templates/', # dev
-    #'/var/www/samfundet.no/itk/ufs/templates/'. # prod
+    '/home/cassarossa/itk/felles/itkufs/itkufs/templates/',
 )
 
 INSTALLED_APPS = (
