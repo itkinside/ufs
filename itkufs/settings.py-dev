@@ -28,8 +28,8 @@ LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = (
+    'itkufs.kerberos.KerberosBackend',
     'django.contrib.auth.backends.ModelBackend',
-    'itkufs.kerberos.models.SettingsBackend',
 )
 
 # Absolute path to the directory that holds media.
