@@ -1,3 +1,5 @@
+from urlparse import urlparse
+
 from django.contrib.auth import authenticate, login
 from django.core.urlresolvers import reverse
 from django.db.models import Q
@@ -27,8 +29,11 @@ def group_list(request):
             username=request.user.username).count())
         accounts.append((account, is_admin))
 
-    # If only one account, jump directly to account summary
-    if len(accounts) == 1:
+    # If not coming from inside and user only got one account,
+    # jump directly to account summary
+    request_from_inside = ('HTTP_REFERER' in request.META and
+        urlparse(request.META['HTTP_REFERER'])[2].startswith(reverse('group-list')))
+    if len(accounts) == 1 and not request_from_inside:
         url = reverse('account-summary',
                       kwargs={'group': accounts[0][0].group.slug,
                               'account': accounts[0][0].slug})
@@ -81,8 +86,12 @@ def account_summary(request, group, account, page='1'):
         raise Http404
 
     # Save account in session
-    # FIXME: For now, we only save account selection the first time
-    if not 'my_account' in request.session:
+    # I think it's a bit of hack to switch account when the referrer is the
+    # group-list view, but that view is in fact only used for selecting between
+    # your own accounts.
+    request_from_group_list = ('HTTP_REFERER' in request.META and
+        urlparse(request.META['HTTP_REFERER'])[2] == reverse('group-list'))
+    if not 'my_account' in request.session or request_from_group_list:
         request.session['my_account'] = account
 
     # Check that user is owner of account or admin of account group
