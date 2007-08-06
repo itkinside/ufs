@@ -30,11 +30,11 @@ class AccountGroup(models.Model):
 
 class Account(models.Model):
     ACCOUNT_TYPE = [
-        ('As', 'Asset'),
-        ('Li', 'Liability'),
-        ('Eq', 'Equity'),
-        ('In', 'Income'),
-        ('Ex', 'Expense'),
+        ('As', 'Asset'),     # Eiendeler/aktiva
+        ('Li', 'Liability'), # Gjeld/passiva
+        ('Eq', 'Equity'),    # Egenkapital
+        ('In', 'Income'),    # Inntekt
+        ('Ex', 'Expense'),   # Utgift
     ]
 
     name = models.CharField(maxlength=100)
@@ -59,16 +59,27 @@ class Account(models.Model):
         for t in self.to_transactions.filter(payed__isnull=False):
             balance += t.amount
 
-        # For accounting reasons, income is a negative amount
-        if self.type == 'In':
-            balance *= -1
-
         return balance
+
+    def debit_to_increase(self):
+        """Returns true if account type uses debit to increase, false if using
+        credit to increase, and None for 'Equity' accounts, as those can do
+        both."""
+
+        if self.type in ('Li', 'In'):
+            # Credit to increase
+            return False
+        elif self.type == 'Eq':
+            # Depends on capital (credit/false) or drawing (debit/true)
+            return None
+        else:
+            # Debit to increase
+            return True
 
     def is_user_account(self):
         """Returns true if a user account"""
 
-        if self.owner:
+        if self.owner and self.type == 'Li':
             return True
         else:
             return False
@@ -78,7 +89,7 @@ class Account(models.Model):
 
         if not self.is_user_account() or self.ignore_block_limit:
             return False
-        return self.balance() < self.group.block_limit
+        return (-1 * self.balance()) < self.group.block_limit
 
     class Admin:
         fields = (
@@ -118,9 +129,9 @@ class InvalidTransaction(Exception):
         return u'Invalid transaction: %s' % self.value
 
 class Transaction(models.Model):
-    from_account = models.ForeignKey(Account, null=True, blank=True,
+    from_account = models.ForeignKey(Account,
                                      related_name='from_transactions')
-    to_account = models.ForeignKey(Account, null=True, blank=True,
+    to_account = models.ForeignKey(Account,
                                    related_name='to_transactions')
 
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -145,9 +156,6 @@ class Transaction(models.Model):
 
         if self.from_account == self.to_account:
             raise InvalidTransaction, 'Giving yourself money?'
-
-        if not (self.from_account or self.to_account):
-            raise InvalidTransaction, 'Only to or from can be null, not both.'
 
         models.Model.save(self)
 
