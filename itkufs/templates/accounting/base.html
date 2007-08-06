@@ -21,7 +21,7 @@
             <li><a href="#">Register</a></li>
         </ul>
     </li>
-    <li class="admin"><a href="#">Balance</a></li>
+    <li class="admin"><a href="{% url balance request.session.my_account.group.slug %}">Balance</a></li>
 {% endif %}
 </ul>
 {% endblock %}

@@ -75,8 +75,7 @@ def account_summary(request, group, account, page='1'):
 
     if not request.user.is_authenticated():
         # FIXME: Redirect to login page
-        #return HttpResponseForbidden('Forbidden')
-        pass
+        return HttpResponseForbidden('Forbidden')
 
     # Get account object
     try:
@@ -141,5 +140,48 @@ def transfer(request, group, account, transfer_type=None):
                               {
                                   'is_admin': is_admin,
                                   'account': account,
+                              },
+                              context_instance=RequestContext(request))
+
+def balance(request, group):
+    """FIXME"""
+
+    if not request.user.is_authenticated():
+        # FIXME: Redirect to login page
+        return HttpResponseForbidden('Forbidden')
+
+    try:
+        group = AccountGroup.objects.get(slug=group)
+    except AccountGroup.DoesNotExist:
+        raise Http404
+
+    if group.admins.filter(id=request.user.id).count():
+        is_admin = True
+    else:
+        is_admin = False
+
+    # Build balance sheet data struct
+    accounts = {'As': [], 'Li': [], 'Eq': []}
+
+    # Assets
+    for account in group.account_set.filter(type='As'):
+        accounts['As'].append((account.name, account.balance()))
+
+    # Equities
+    for account in group.account_set.filter(type='Eq'):
+        accounts['Eq'].append((account.name, account.balance()))
+
+    # Liabilities, with accumulated data for user accounts
+    for account in group.account_set.filter(type='Li', owner__isnull=True):
+        accounts['Li'].append((account.name, account.balance()))
+    member_balance_sum = sum([a.balance()
+        for a in group.account_set.filter(type='Li', owner__isnull=False)])
+    accounts['Li'].append(('Member liabilities', member_balance_sum))
+
+    return render_to_response('accounting/balance.html',
+                              {
+                                  'is_admin': is_admin,
+                                  'group': group,
+                                  'accounts': accounts,
                               },
                               context_instance=RequestContext(request))

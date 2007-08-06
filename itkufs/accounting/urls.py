@@ -32,5 +32,6 @@ urlpatterns = patterns('',
     # FIXME
 
     # Admin: Balance
-    # FIXME
+    url(r'^(?P<group>[0-9a-z_-]+)/balance/$',
+        balance, name='balance'),
 )
