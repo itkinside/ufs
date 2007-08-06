@@ -129,10 +129,8 @@ class InvalidTransaction(Exception):
         return u'Invalid transaction: %s' % self.value
 
 class Transaction(models.Model):
-    from_account = models.ForeignKey(Account,
-                                     related_name='from_transactions')
-    to_account = models.ForeignKey(Account,
-                                   related_name='to_transactions')
+    from_account = models.ForeignKey(Account, related_name='from_transactions')
+    to_account = models.ForeignKey(Account, related_name='to_transactions')
 
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     details = models.CharField(maxlength=200, blank=True, null=True)
