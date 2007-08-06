@@ -21,8 +21,6 @@ After login when account is assigned
 
 - If user is connected with multiple accounts, ask user to select an account.
   Goto URL: /itkufs/(?P<account_group_slug>\w+)/(?P<username>\w+)/
-- If admin for the group, also point to the account group page.
-  Goto URL: /itkufs/(?P<account_group_slug>\w+)/
 
 Status: All done.
 
