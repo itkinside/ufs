@@ -35,7 +35,8 @@ Bar Accounts
   accounts may be 'Income', 'Expense', 'Inventory' and 'Result'.
 - With regard to account type, 'Bank', 'Cash', and 'Inventory' is 'Asset'
   accounts, 'Income' is an 'Income' account, 'Expense' is an 'Expense' account.
-  See Wikipedia_ for more information on this.
+  'Hyttetur 2007' is a more specific inventory account, and is thus and 'Asset'
+  account. See Wikipedia_ for more information on this.
 - Owner is NULL for all bar accounts.
 - Active is a flag indicating if the account is still in use. E.g. if a bar
   changes it's real world bank account number, one would maybe create a new
@@ -47,30 +48,57 @@ Bar Accounts
 Transaction between person and the person's account (deposit and withdrawal)
 ----------------------------------------------------------------------------
 
-If from field is NULL and to field a person's account, it is a deposit from the
-person to the person's account.
+Deposits:
 
-If from field is a person's account and the to field is NULL, it is a
+OLD: If from field is NULL and to field a person's account, it is a deposit
+from the person to the person's account.
+
+NEW: If from field is a person's account and to field is a bar's bank account,
+it is a deposit from the person to the person's account. Note: This gives that
+a negative amount on a liability account means that the person has money to
+spend. A positive amount means that the person owes the bar money.
+
+
+Withdrawals:
+
+OLD: If from field is a person's account and the to field is NULL, it is a
 withdrawal from the person's account to the person.
 
-A transaction with NULL in both to and from has no meaning and will be refused
-by the models save() method.
+NEW: If from field is a bar's bank account and to field is a person's account,
+it is a withdrawal from the person's account to the person.
+
+
+Null-transactions:
+
+OLD: A transaction with NULL in both to and from has no meaning and will be
+refused by the models save() method.
+
+NEW: Neither from or to allow blank or null, thus this is never a problem.
+
+
+Deposit and withdrawal to/from other persons' accounts:
 
 A person is not allowed to deposit or withdraw from another person's account.
 To deposit to another person's account, deposit to you own account and make a
 transfer to the other person's account.
 
+
+Pending transactions:
+
 All users can register deposits and withdrawals, but the payed date will not be
-set before the bar admin has approved the transaction and if necessary
-transfered the money in the real world. E.g. a user can request a withdrawal by
-registering it himself.
+set before the group admin has approved the transaction and, if necessary,
+transfered the money in the real world.
+
+E.g. a user can request a withdrawal by registering it himself. Then the group
+admin will transfer the money in the real world bank system, and at last
+approve the µFS transaction (that is, set the payed date).
 
 
 Transaction from account to account within an account group
 ----------------------------------------------------------
 
 All persons can transfer money to all other persons with the same parent (e.g.
-within the same bar). The bar admin does not have to approve this.
+within the same bar). The group admin does not have to approve this.
 
 When a person buys anything from a bar the corresponding sum will be registered
 as a transaction between the person's account and the bar's sale account.
@@ -79,16 +107,14 @@ as a transaction between the person's account and the bar's sale account.
 Transaction from account to account in another account group
 ------------------------------------------------------------
 
-An admin can transfer money, end-to-end, from accounts in his own account group
-to accounts in other account groups, typically to the 'Bank' or 'Cash'
-accounts.
+A group admin can transfer money, end-to-end, from accounts in his own account
+group to accounts in other account groups, typically to the 'Bank' or 'Cash'
+accounts. This is usually done as part of a settlement, see below.
 
-One one side, each user can check what he has spent at every other bar between
-two settlements.
-
-On the other side, the bars are not interested in what persons the payment
-comes from, only that a bar has payed, so in the views we want combine payments
-by account groups.
+One the sending side, each user can check what he has spent at every other bar
+between two settlements. On the receiving side, the bars are not interested in
+what persons the payment comes from, only that a bar has payed, so in the views
+we want combine payments by account groups.
 
 
 Settlement
