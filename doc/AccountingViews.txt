@@ -52,10 +52,10 @@ Status: Work in Progress (jodal)
 Get ``krysseliste'' view
 ------------------------
 
-1. Select internal or external ``krysseliste'' from the menu.
+1. Select internal or external ``krysseliste'' from 'My group'.
    Goto URL: /itkufs/(?P<account_group_slug>\w+)/list/internal/
    Goto URL: /itkufs/(?P<account_group_slug>\w+)/list/external/
-2. Show HTML/CSS formatted list.
+2. Show PDF formatted list. (With HTML/CSS row backgrounds is ~impossible.)
 3. Print it.
 
 Status: Work in Progress (klette)
