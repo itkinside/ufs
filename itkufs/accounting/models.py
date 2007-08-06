@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.encoding import smart_unicode
 
 class AccountGroup(models.Model):
     name = models.CharField(maxlength=100)
@@ -9,7 +10,7 @@ class AccountGroup(models.Model):
     block_limit = models.IntegerField(null=True, blank=True)
     admins = models.ManyToManyField(User, null=True, blank=True)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.name
 
     def save(self):
@@ -45,7 +46,7 @@ class Account(models.Model):
     active = models.BooleanField(default=True)
     ignore_block_limit = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.name
 
     def balance(self):
@@ -100,8 +101,8 @@ class Account(models.Model):
 class Settlement(models.Model):
     date = models.DateField()
 
-    def __str__(self):
-        return str(self.date)
+    def __unicode__(self):
+        return smart_unicode(self.date)
 
     class Admin:
         pass
@@ -112,8 +113,9 @@ class Settlement(models.Model):
 class InvalidTransaction(Exception):
     def __init__(self, value):
         self.value = value
-    def __str__(self):
-        return 'Invalid transaction: %s' % str(self.value)
+
+    def __unicode__(self):
+        return u'Invalid transaction: %s' % self.value
 
 class Transaction(models.Model):
     from_account = models.ForeignKey(Account, null=True, blank=True,
@@ -129,10 +131,10 @@ class Transaction(models.Model):
 
     settlement = models.ForeignKey(Settlement, null=True, blank=True)
 
-    def __str__(self):
-        return '%s from %s to %s' % (self.amount,
-                                     self.from_account,
-                                     self.to_account)
+    def __unicode__(self):
+        return u'%s from %s to %s' % (self.amount,
+                                      self.from_account,
+                                      self.to_account)
 
     def save(self):
         if self.amount < 0:
