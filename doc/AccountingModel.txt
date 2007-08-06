@@ -29,20 +29,36 @@ User Accounts
 Bar Accounts
 ------------
 
-- Bar accounts do not have an owner, but belongs to a bar, defined by its
-  account group.
-- Most bars will at least have the two accounts 'Bank' and 'Cash'. Other
-  accounts may be 'Income', 'Expense', 'Inventory' and 'Result'.
-- With regard to account type, 'Bank', 'Cash', and 'Inventory' is 'Asset'
-  accounts, 'Income' is an 'Income' account, 'Expense' is an 'Expense' account.
-  'Hyttetur 2007' is a more specific inventory account, and is thus and 'Asset'
-  account. See Wikipedia_ for more information on this.
-- Owner is NULL for all bar accounts.
-- Active is a flag indicating if the account is still in use. E.g. if a bar
-  changes it's real world bank account number, one would maybe create a new
-  account for it and deactivate the old one.
+Ownership:
+
+Bar accounts do not have an owner, but belongs to a bar, defined by its account
+group. Owner is NULL for all bar accounts.
+
+
+Typical accounts:
+
+Most bars will at least have the two accounts 'Bank' and 'Cash'. Other accounts
+may for example be 'Income', 'Expense', 'Inventory' and 'Result'.
+
+
+Account types:
+
+All accounts got an account type, examples follow:
+- 'Asset': 'Bank', 'Cash', 'Inventory', 'Hyttetur 2007' (debit to increase)
+- 'Liability': 'Supplier Debt', person accounts (credit to increase)
+- 'Equity': 'Capital' (credit to increase), 'Drawing' (debit to increase)
+- 'Income': 'Sales Income', 'Interest Revenues' (credit to increase)
+- 'Expense': 'Supplies Expense', 'Interest Expenses' (debit to increase)
+See Wikipedia_ for more information on this.
 
 .. _Wikipedia: http://en.wikipedia.org/wiki/Account
+
+
+Active account:
+
+Active is a flag indicating if the account is still in use. E.g. if a bar
+changes it's real world bank account number, one would maybe create a new
+account for it and deactivate the old one.
 
 
 Transaction between person and the person's account (deposit and withdrawal)
