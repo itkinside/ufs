@@ -49,6 +49,18 @@ class Account(models.Model):
     def __unicode__(self):
         return self.name
 
+    def debit_to_increase(self):
+        """Returns true if account type uses debit to increase, false if using
+        credit to increase. Will return true for all equity accounts, even if
+        some of those (drawing accounts) may require debit to increase."""
+
+        if self.type in ('Li', 'Eq', 'In'):
+            # Credit to increase
+            return False
+        else:
+            # Debit to increase
+            return True
+
     def balance(self):
         """Returns account balance"""
 
@@ -61,20 +73,14 @@ class Account(models.Model):
 
         return balance
 
-    def debit_to_increase(self):
-        """Returns true if account type uses debit to increase, false if using
-        credit to increase, and None for 'Equity' accounts, as those can do
-        both."""
+    def balance_credit_reversed(self):
+        """Returns account balance. If the account is an credit account, the
+        balance is multiplied with -1."""
 
-        if self.type in ('Li', 'In'):
-            # Credit to increase
-            return False
-        elif self.type == 'Eq':
-            # Depends on capital (credit/false) or drawing (debit/true)
-            return None
+        if not self.debit_to_increase():
+            return -1 * self.balance()
         else:
-            # Debit to increase
-            return True
+            return self.balance()
 
     def is_user_account(self):
         """Returns true if a user account"""
@@ -89,7 +95,7 @@ class Account(models.Model):
 
         if not self.is_user_account() or self.ignore_block_limit:
             return False
-        return (-1 * self.balance()) < self.group.block_limit
+        return self.balance_credit_reversed() < self.group.block_limit
 
     class Admin:
         fields = (
@@ -129,6 +135,7 @@ class InvalidTransaction(Exception):
         return u'Invalid transaction: %s' % self.value
 
 class Transaction(models.Model):
+    # FIXME: Should be renamed to debit and credit
     from_account = models.ForeignKey(Account, related_name='from_transactions')
     to_account = models.ForeignKey(Account, related_name='to_transactions')
 
