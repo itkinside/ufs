@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from urlparse import urlparse
 
 from django.contrib.auth import authenticate, login
@@ -48,6 +49,9 @@ def group_list(request):
 def group_summary(request, group):
     """Account group summary and paginated list of accounts"""
 
+    # FIXME: The list is not paginated
+    # FIXME: The list should be ordered by type, then name
+
     if not request.user.is_authenticated():
         # FIXME: Redirect to login page
         return HttpResponseForbidden('Forbidden')
@@ -71,7 +75,8 @@ def group_summary(request, group):
                               context_instance=RequestContext(request))
 
 def account_summary(request, group, account, page='1'):
-    """Account details and a paginated list with recent transactions involving the user"""
+    """Account details and a paginated list with recent transactions involving
+    the user"""
 
     if not request.user.is_authenticated():
         # FIXME: Redirect to login page
@@ -144,7 +149,7 @@ def transfer(request, group, account, transfer_type=None):
                               context_instance=RequestContext(request))
 
 def balance(request, group):
-    """FIXME"""
+    """Show balance sheet for the group"""
 
     if not request.user.is_authenticated():
         # FIXME: Redirect to login page
@@ -160,28 +165,52 @@ def balance(request, group):
     else:
         is_admin = False
 
-    # Build balance sheet data struct
-    accounts = {'As': [], 'Li': [], 'Eq': []}
+    # Balance sheet data struct
+    accounts = {
+        'As': [], 'AsSum': 0,
+        'Li': [], 'LiSum': 0,
+        'Eq': [], 'EqSum': 0,
+        'LiEqSum': 0,
+    }
 
     # Assets
     for account in group.account_set.filter(type='As'):
-        accounts['As'].append((account.name, account.balance()))
+        balance = account.balance_credit_reversed()
+        accounts['As'].append((account.name, balance))
+        accounts['AsSum'] += balance
+
+    # Liabilities
+    for account in group.account_set.filter(type='Li', owner__isnull=True):
+        balance = account.balance_credit_reversed()
+        accounts['Li'].append((account.name, balance))
+        accounts['LiSum'] += balance
+
+    # Accumulated member accounts liabilities
+    member_balance_sum = sum([a.balance_credit_reversed()
+        for a in group.account_set.filter(type='Li', owner__isnull=False)])
+    accounts['Li'].append(('Member accounts', member_balance_sum))
+    accounts['LiSum'] += member_balance_sum
 
     # Equities
     for account in group.account_set.filter(type='Eq'):
-        accounts['Eq'].append((account.name, account.balance()))
+        balance = account.balance_credit_reversed()
+        accounts['Eq'].append((account.name, balance))
+        accounts['EqSum'] += balance
 
-    # Liabilities, with accumulated data for user accounts
-    for account in group.account_set.filter(type='Li', owner__isnull=True):
-        accounts['Li'].append((account.name, account.balance()))
-    member_balance_sum = sum([a.balance()
-        for a in group.account_set.filter(type='Li', owner__isnull=False)])
-    accounts['Li'].append(('Member liabilities', member_balance_sum))
+    # Total liabilities and equities
+    accounts['LiEqSum'] = accounts['LiSum'] + accounts['EqSum']
+
+    # Current year's net income
+    curr_years_net_income = accounts['AsSum'] - accounts['LiEqSum']
+    accounts['Eq'].append(("Current year's net income", curr_years_net_income))
+    accounts['EqSum'] += curr_years_net_income
+    accounts['LiEqSum'] += curr_years_net_income
 
     return render_to_response('accounting/balance.html',
                               {
                                   'is_admin': is_admin,
                                   'group': group,
+                                  'today': date.today(),
                                   'accounts': accounts,
                               },
                               context_instance=RequestContext(request))

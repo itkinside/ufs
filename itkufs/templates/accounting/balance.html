@@ -1,20 +1,75 @@
 {% extends "accounting/base.html" %}
 
 {% block content %}
-<h2>Balance for {{ group.name }}</h2>
-<p>FIXME: Insert datetime here</p>
-<p>FIXME: Complete balance sheet below</p>
+<h2>Balance sheet for {{ group.name }} at {{ today }}</h2>
+
+<table class="tablecolumn"><tr><td>
 
 <table class="tablelist">
-    <tr><th colspan="2">Assets</th></tr>
-    <tr><td>Bank</td><td>1000</td></tr>
-    <tr><td><em>Total assets</em></th><td><em>1000</em></td></tr>
-    <tr><th colspan="2">Liabilities and equities</th></tr>
-    <tr><th colspan="2">&nbsp;&nbsp;Liabilities</th></tr>
-    <tr><td><em>&nbsp;&nbsp;Total liabilities</em></th><td><em>0</em></td></tr>
-    <tr><th colspan="2">&nbsp;&nbsp;Equities</th></tr>
-    <tr><td><em>&nbsp;&nbsp;Net worth</em></th><td><em>1000</em></td></tr>
-    <tr><td><em>Total liabilites and equities</em></th><td><em>1000</em></td></tr>
+    <tr>
+        <th colspan="2">Assets</th>
+    </tr>
+{% for name, balance in accounts.As %}
+    <tr>
+        <td>&nbsp;&nbsp;{{ name }}</td>
+        <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
+    </tr>
+{% endfor %}
+    <tr>
+        <td><em>Total assets</em></td>
+        <td class="align_right">
+            <em>{{ accounts.AsSum|stringformat:"0.2f" }}</em>
+        </td>
+    </tr>
 </table>
+
+</td><td>
+
+<table class="tablelist">
+    <tr>
+        <th colspan="2">Liabilities and equities</th>
+    </tr>
+
+    <tr>
+        <th colspan="2">&nbsp;&nbsp;Liabilities</th>
+    </tr>
+{% for name, balance in accounts.Li %}
+    <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}</td>
+        <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
+    </tr>
+{% endfor %}
+    <tr>
+        <td><em>&nbsp;&nbsp;Total liabilities</em></td>
+        <td class="align_right">
+            <em>{{ accounts.LiSum|stringformat:"0.2f" }}</em>
+        </td>
+    </tr>
+
+    <tr>
+        <th colspan="2">&nbsp;&nbsp;Equities</th>
+    </tr>
+{% for name, balance in accounts.Eq %}
+    <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}</td>
+        <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
+    </tr>
+{% endfor %}
+    <tr>
+        <td><em>&nbsp;&nbsp;Total equities (Net worth)</em></td>
+        <td class="align_right">
+            <em>{{ accounts.EqSum|stringformat:"0.2f" }}</em>
+        </td>
+    </tr>
+
+    <tr>
+        <td><em>Total liabilities and equities</em></td>
+        <td class="align_right">
+            <em>{{ accounts.LiEqSum|stringformat:"0.2f" }}</em>
+        </td>
+    </tr>
+</table>
+
+</td></tr></table>
 
 {% endblock %}
