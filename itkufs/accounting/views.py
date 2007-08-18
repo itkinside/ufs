@@ -146,7 +146,19 @@ def transfer(request, group, account, transfer_type=None):
     if request.method == 'POST':
         form = AccountTransactionForm(request.POST)
         if form.is_valid():
-            return HttpResponseRedirect(reverse('account_summary'))
+            transaction = Transaction(amount=form.data['amount'],details=form.data['details'])
+
+            if request.POST['type'] == 'deposit':
+                transaction.from_account=account
+                transaction.to_account=group.bank_account
+                transaction.save()
+            elif request.POST['type'] == 'withdraw':
+                transaction.from_account=group.bank_account
+                transaction.to_account=account
+                transaction.save()
+            # FIXME? else that catches invalid transaction type?
+
+            return HttpResponseRedirect(reverse(account_summary, args=[account.group.slug, account.slug]))
 
     return render_to_response('accounting/transfer.html',
                               {
