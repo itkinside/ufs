@@ -168,9 +168,13 @@ em {
 /* forms */
 label {
 	display: block;
+	font-weight: bold;
 }
 input, select, textarea, button {
 	border: 1px solid gray;
+}
+input:focus, select:focus, textarea:focus {
+	background: #FFFFF0;;
 }
 button {
 	background: #DDD;
