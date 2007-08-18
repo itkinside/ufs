@@ -59,10 +59,10 @@ ITK Microfinance System<br />
 
 <div id="footer">
 {% block footer %}
-ITK Microfinance System (µFS) v1.0-alpha <span>&gt;&gt;</span>
-User: <em>{{ user.username }}</em> <span>&gt;&gt;</span>
+ITK Microfinance System (µFS) v1.0-alpha <span>&raquo;</span>
+User: <em>{{ user.username }}</em> <span>&raquo;</span>
 {% if request.session.my_account %}
-<a href="{% url group-list %}">Account</a>: <em><a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">{{ request.session.my_account.name }}</a></em> <span>&gt;&gt;</span>
+<a href="{% url group-list %}">Account</a>: <em><a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">{{ request.session.my_account.name }}</a></em> <span>&raquo;</span>
 {% endif %}
 Help? <a href="mailto:itk-ufs@samfundet.no">itk-ufs@samfundet.no</a>
 {% endblock %}
