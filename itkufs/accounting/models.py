@@ -9,8 +9,12 @@ class AccountGroup(models.Model):
     warn_limit = models.IntegerField(null=True, blank=True)
     block_limit = models.IntegerField(null=True, blank=True)
     admins = models.ManyToManyField(User, null=True, blank=True)
+    bank_account = models.ForeignKey('Account', null=True, blank=True, related_name="foo", editable=False)
+    cash_account = models.ForeignKey('Account', null=True, blank=True, related_name="bar", editable=False)
 
     def __unicode__(self):
+        return self.name
+    def __str__(self):
         return self.name
 
     def save(self):
@@ -21,6 +25,11 @@ class AccountGroup(models.Model):
             bank.save()
             cash = Account(name='Cash', slug='cash', group=self, type='As')
             cash.save()
+
+            self.bank_account = bank;
+            self.cash_account = cash;
+            models.Model.save(self)
+
 
     class Admin:
         pass
