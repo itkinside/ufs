@@ -3,7 +3,7 @@
 {% block content %}
 <h2>{{ type|capfirst }} {% ifequal type 'deposit' %}to{% else %}from{% endifequal %} account &ldquo;{{ account.name }}&rdquo;</h2>
 
-<form method="post">
+<form method="post" action=".">
 {{ form.as_p }}
 <p>
   <input type="hidden" name="type" value="{{type}}" />

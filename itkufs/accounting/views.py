@@ -141,12 +141,19 @@ def transfer(request, group, account, transfer_type=None):
     else:
         is_admin = False
 
+    form = AccountTransactionForm()
+
+    if request.method == 'POST':
+        form = AccountTransactionForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect(reverse('account_summary'))
+
     return render_to_response('accounting/transfer.html',
                               {
                                   'is_admin': is_admin,
                                   'account': account,
                                   'type': transfer_type,
-                                  'form': AccountTransactionForm(),
+                                  'form': form,
                               },
                               context_instance=RequestContext(request))
 

@@ -161,7 +161,7 @@ em {
 .warning {
 	color: #df8713;
 }
-.error {
+.error, .errorlist {
 	color: red;
 }
 
