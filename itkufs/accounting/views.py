@@ -141,10 +141,10 @@ def transfer(request, group, account, transfer_type=None):
     else:
         is_admin = False
 
-    form = AccountTransactionForm()
+    form = TransactionForm()
 
     if request.method == 'POST':
-        form = AccountTransactionForm(request.POST)
+        form = TransactionForm(request.POST)
         if form.is_valid():
             amount = form.data['amount']
             details = form.data['details'].strip()
@@ -154,17 +154,22 @@ def transfer(request, group, account, transfer_type=None):
 
             transaction = Transaction(amount=amount,details=details)
 
-            if request.POST['type'] == 'deposit':
+            if transfer_type == 'deposit':
                 transaction.from_account=account
                 transaction.to_account=group.bank_account
                 transaction.save()
-            elif request.POST['type'] == 'withdraw':
+            elif transfer_type == 'withdraw':
                 transaction.from_account=group.bank_account
                 transaction.to_account=account
                 transaction.save()
-            # FIXME? else that catches invalid transaction type?
 
             return HttpResponseRedirect(reverse(account_summary, args=[account.group.slug, account.slug]))
+
+    if transfer_type == 'transfer':
+        del form.fields['from_account']
+    else:
+        del form.fields['to_account']
+        del form.fields['from_account']
 
     return render_to_response('accounting/transfer.html',
                               {
