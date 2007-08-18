@@ -145,6 +145,8 @@ def transfer(request, group, account, transfer_type=None):
                               {
                                   'is_admin': is_admin,
                                   'account': account,
+                                  'type': transfer_type,
+                                  'form': AccountTransactionForm(),
                               },
                               context_instance=RequestContext(request))
 

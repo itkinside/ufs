@@ -1,8 +1,14 @@
 {% extends "accounting/base.html" %}
 
 {% block content %}
-<h2>Transfer to/from {{ account.name }}</h2>
+<h2>{{ type|capfirst }} {% ifequal type 'deposit' %}to{% else %}from{% endifequal %} account &ldquo;{{ account.name }}&rdquo;</h2>
 
-<p>FIXME</p>
+<form method="post">
+{{ form.as_p }}
+<p>
+  <input type="hidden" name="type" value="{{type}}" />
+  <button>{{ type|capfirst}}</button>
+</p>
+</form>
 
 {% endblock %}

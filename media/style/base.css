@@ -47,9 +47,9 @@ em {
 	min-width: 740px;
 	max-width: 60em;
 	padding: 1em;
-	border-left: 0.5em solid #444;
-	border-right: 0.5em solid #444;
-	border-bottom: 0.5em solid #444;
+	border-left:   5px solid #444;
+	border-right:  5px solid #444;
+	border-bottom: 5px solid #444;
 }
 
 /* Drop-down menu */
@@ -58,8 +58,8 @@ em {
 	margin: 0 -1em;
 	padding: 0 1em;
 	height: 1.7em; /* Text height + menu top/bottom padding */
-	border-bottom: 0.2em solid #eee;
-	border-top: 0.2em solid #eee;
+	border-bottom: 2px solid #eee;
+	border-top:    2px solid #eee;
 }
 #menu a {
 	background: #e6e6e6;
@@ -163,4 +163,15 @@ em {
 }
 .error {
 	color: red;
+}
+
+/* forms */
+label {
+	display: block;
+}
+input, select, textarea, button {
+	border: 1px solid gray;
+}
+button {
+	background: #DDD;
 }
