@@ -162,7 +162,6 @@ class Transaction(models.Model):
                                       self.to_account)
 
     def save(self):
-        # FIXME seem to cause bug instead of getting caught nicely
         if float(self.amount) < 0:
             raise InvalidTransaction, 'Amount is negative.'
 
