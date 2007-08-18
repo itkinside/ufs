@@ -1,0 +1,59 @@
+body {
+	font-size: 12px;
+	padding: 2px;
+}
+h1 {
+	font-size: 150%;
+	font-weight: bolder;
+	float: left;
+}
+
+table {
+	width: 100%;
+	clear: both;
+}
+
+thead th {
+	padding: 2px 5px;
+	font-weight: bolder;
+}
+
+tbody th, tfoot th, td {
+	border: 1px solid gray;
+	padding: 2px;
+}
+
+p.date {
+	float: right;
+}
+
+.even {
+	background: #eee;
+}
+
+.blacklisted {
+	text-decoration: line-through;
+}
+
+.blacklisted td {
+	padding-left:0;
+	padding-right: 0;
+}
+.blacklisted img {
+	vertical-align: middle;
+	height: 12px;
+	width: 100%;
+}
+.name {
+	width: 10em;
+}
+.balance {
+	width: 5em;
+}
+td.balance {
+	text-align: center;
+}
+
+@page {
+	size: landscape;
+}

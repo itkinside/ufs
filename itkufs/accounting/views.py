@@ -253,3 +253,16 @@ def balance(request, group):
                                   'accounts': accounts,
                               },
                               context_instance=RequestContext(request))
+
+def generate_html(request, group, list_type=None):
+    group = AccountGroup.objects.get(slug=group)
+    accounts = Account.objects.filter(group=group)
+
+    print accounts
+
+    return render_to_response('accounting/internal-list.html',
+                              {
+                                  'group': group,
+                                  'accounts': accounts,
+                              },
+                                context_instance=RequestContext(request))

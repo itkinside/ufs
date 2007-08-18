@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{{ group.name }}</title>
+    <link rel="stylesheet" type="text/css" href="{% url media "style/reset-min.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% url media "style/print.css" %}" media="print,screen" />
+  </head>
+  <body>
+   <h1>{{ group.name }}</h1>
+   <p class="date">{% now "Y-m-d" %}</p>
+   <table>
+    <thead
+    <tr>
+      <th class="name">Navn</th>
+      <th class="balance">Saldo</th>
+      <th>Øl</th>
+      <th>Brus</th>
+      <th>10</th>
+      <th>5</th>
+      <th>3</th>
+      <th>1</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for account in accounts %}
+      {% if account.is_user_account %}
+    <tr class="{% cycle even,odd %}{% if account.is_blocked %} blacklisted{% endif %}">
+      <th class="name">{{ account.name }}</th>
+      <td class="balance">{{ account.balance }}</td>
+      {% if not account.is_blocked %}
+      <td/>
+      <td/>
+      <td/>
+      <td/>
+      <td/>
+      <td/>
+      {% else %}
+      <td><img src="{% url media "images/black.png" %}"/></td>
+      <td><img src="{% url media "images/black.png" %}"/></td>
+      <td><img src="{% url media "images/black.png" %}"/></td>
+      <td><img src="{% url media "images/black.png" %}"/></td>
+      <td><img src="{% url media "images/black.png" %}"/></td>
+      <td><img src="{% url media "images/black.png" %}"/></td>
+      {% endif %}
+    </tr>
+      {% endif %}
+    {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr class="blacklisted">
+      <th class="name">Sort</th>
+      <td class="balance">&mdash;</td>
+      <td><img src="{% url media "images/black.png" %}"/></td>
+      <td><img src="{% url media "images/black.png" %}"/></td>
+      <td><img src="{% url media "images/black.png" %}"/></td>
+      <td><img src="{% url media "images/black.png" %}"/></td>
+      <td><img src="{% url media "images/black.png" %}"/></td>
+      <td><img src="{% url media "images/black.png" %}"/></td>
+      </tr>
+    </tfoot>
+   </table>
+
+
+  </body>
+</html>

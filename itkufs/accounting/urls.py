@@ -24,6 +24,8 @@ urlpatterns = patterns('',
         group_summary, name='group-summary'),
     url(r'^(?P<group>[0-9a-z_-]+)/list/internal/pdf/$',
         generate_pdf, {'list_type': 'internal'}, name='list-pdf'),
+    url(r'^(?P<group>[0-9a-z_-]+)/list/internal/html/$',
+        generate_html, {'list_type': 'internal'}, name='list-html'),
 
     # Admin: Transactions
     # FIXME

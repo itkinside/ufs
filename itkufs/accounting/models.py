@@ -112,7 +112,7 @@ class Account(models.Model):
                 {'fields': ('name', 'slug', 'group', 'owner')}),
             ('Advanced options', {
                 'classes': 'collapse',
-                'fields' : ('type', 'active')}),
+                'fields' : ('type', 'active', 'ignore_block_limit')}),
         )
         list_display = ['group', 'name', 'owner', 'balance', 'active']
         list_display_links = ['name']
