@@ -141,13 +141,23 @@ def transfer(request, group, account, transfer_type=None):
     else:
         is_admin = False
 
-    form = TransactionForm()
+    data = None
+    if request.method == 'POST':
+        data = request.POST
+
+    form = TransactionForm(data)
+
+    if transfer_type == 'transfer':
+        del form.fields['from_account']
+    else:
+        del form.fields['to_account']
+        del form.fields['from_account']
 
     if request.method == 'POST':
-        form = TransactionForm(request.POST)
         if form.is_valid():
             amount = form.data['amount']
             details = form.data['details'].strip()
+            to_account = form.data['to_account']
 
             if details == '':
                 details = None
@@ -162,14 +172,13 @@ def transfer(request, group, account, transfer_type=None):
                 transaction.from_account=group.bank_account
                 transaction.to_account=account
                 transaction.save()
+            elif transfer_type == 'transfer':
+                transaction.from_account=account
+                transaction.to_account=Account.objects.get(id=to_account)
+                transaction.payed = datetime.now()
+                transaction.save()
 
             return HttpResponseRedirect(reverse(account_summary, args=[account.group.slug, account.slug]))
-
-    if transfer_type == 'transfer':
-        del form.fields['from_account']
-    else:
-        del form.fields['to_account']
-        del form.fields['from_account']
 
     return render_to_response('accounting/transfer.html',
                               {
