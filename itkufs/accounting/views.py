@@ -146,7 +146,13 @@ def transfer(request, group, account, transfer_type=None):
     if request.method == 'POST':
         form = AccountTransactionForm(request.POST)
         if form.is_valid():
-            transaction = Transaction(amount=form.data['amount'],details=form.data['details'])
+            amount = form.data['amount']
+            details = form.data['details'].strip()
+
+            if details == '':
+                details = None
+
+            transaction = Transaction(amount=amount,details=details)
 
             if request.POST['type'] == 'deposit':
                 transaction.from_account=account
