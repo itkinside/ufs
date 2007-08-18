@@ -17,8 +17,8 @@ for g in AccountGroup.objects.all():
 to_field = GroupedChoiceField(choices=choices, label="To", required=True)
 from_field = GroupedChoiceField(choices=choices, label="From", required=True)
 amount_field = forms.DecimalField(required=True)
-details_field = forms.CharField(widget=forms.widgets.Textarea(attrs={'rows':2}))
-payed_field = forms.DateTimeField(initial=datetime.now().strftime('%Y-%m-%d %H:%M'))
+details_field = forms.CharField(widget=forms.widgets.Textarea(attrs={'rows':2}), required=False)
+payed_field = forms.DateTimeField(initial=datetime.now().strftime('%Y-%m-%d %H:%M'), required=False)
 
 
 class TransactionForm(forms.Form):
