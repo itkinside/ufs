@@ -28,6 +28,12 @@ p.date {
 	float: right;
 }
 
+p img {
+	vertical-align: middle;
+	width: 3em;
+	height: 3px
+}
+
 .even {
 	background: #eee;
 }
