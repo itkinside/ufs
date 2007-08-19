@@ -28,7 +28,10 @@ urlpatterns = patterns('',
         generate_html, {'list_type': 'internal'}, name='list-html'),
 
     # Admin: Transactions
-    # FIXME
+    url(r'^(?P<group>[0-9a-z_-]+)/approve/$',
+        approve, name='approve-transactions'),
+    url(r'^(?P<group>[0-9a-z_-]+)/approve/(?P<page>\d+)/$',
+        approve, name='approve-transactions-page'),
 
     # Admin: Settlements
     # FIXME

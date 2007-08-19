@@ -1,0 +1,68 @@
+{% extends "accounting/base.html" %}
+
+{% block content %}
+<h2>Approve transactions in {{ group.name }}</h2>
+
+{% if not transaction_list %}
+<p>No transactions found.</p>
+{% else %}
+
+{% if is_paginated %}
+<p>
+    {% if has_previous %}
+    <a href="{% url approve-transactions-page group.slug,previous %}">&laquo; Previous</a> |
+    {% endif %}
+    {{ hits }} hits
+    {% if has_next %}
+    | <a href="{% url approve-transactions-page group.slug,next %}">Next &raquo;</a>
+    {% endif %}
+</p>
+{% endif %}
+
+<table class="tablelist">
+    <tr>
+        <th>Registered</th>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Details</th>
+	<th>Approve</th>
+    </tr>
+    {% for t in transaction_list %}
+    <tr>
+        <td>{{ t.registered|date:"Y-m-d" }}</td>
+        <td>
+		To <a href="{% url account-summary t.to_account.group.slug,t.to_account.slug %}">{{ t.to_account.name }}</a>
+        </td>
+
+        <td class="align_right">{{ t.amount|stringformat:"0.2f" }}</td>
+
+        <td>
+            {% if t.settlement %}
+            {{ t.settlement.date|date:"Y-m-d" }}
+            {% endif %}
+            {{ t.details }}
+        </td>
+	<td class="align_center">
+	    <input type="checkbox" />
+	</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<button>Approve</button>
+
+{% if is_paginated %}
+<p>
+    {% if has_previous %}
+    <a href="{% url approve-transactions-page group.slug,previous %}">&laquo; Previous</a> |
+    {% endif %}
+    {{ hits }} hits
+    {% if has_next %}
+    | <a href="{% url approve-transactions-page group.slug,next %}">Next &raquo;</a>
+    {% endif %}
+</p>
+{% endif %}
+
+{% endif %}
+
+{% endblock %}

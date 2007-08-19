@@ -255,10 +255,11 @@ def balance(request, group):
                               context_instance=RequestContext(request))
 
 def generate_html(request, group, list_type=None):
-    group = AccountGroup.objects.get(slug=group)
-    accounts = Account.objects.filter(group=group)
-
-    print accounts
+    try:
+        group = AccountGroup.objects.get(slug=group)
+        accounts = Account.objects.filter(group=group)
+    except AccountGroup.DoesNotExist, AccountGroup.DoesNotExist:
+        raise Http404
 
     return render_to_response('accounting/internal-list.html',
                               {
@@ -266,3 +267,34 @@ def generate_html(request, group, list_type=None):
                                   'accounts': accounts,
                               },
                                 context_instance=RequestContext(request))
+
+def approve(request, group, page="1"):
+    if not request.user.is_authenticated():
+        # FIXME: Redirect to login page
+        return HttpResponseForbidden('Forbidden')
+
+    try:
+        group = AccountGroup.objects.get(slug=group)
+    except AccountGroup.DoesNotExist:
+        raise Http404
+
+    if group.admins.filter(id=request.user.id).count():
+        is_admin = True
+    else:
+        is_admin = False
+
+    # Get related transactions
+    transactions = Transaction.objects.filter(
+        Q(from_account__group=group) & Q(to_account__group=group) & Q(payed__isnull=True)).order_by('-registered')
+
+    # Pass on to generic view
+    return object_list(request, transactions,
+                       paginate_by=20,
+                       page=page,
+                       allow_empty=True,
+                       template_name='accounting/approve-transactions.html',
+                       extra_context={
+                            'is_admin': is_admin,
+                            'group': group,
+                       },
+                       template_object_name='transaction')
