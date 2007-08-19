@@ -20,6 +20,7 @@ amount_field = forms.DecimalField(required=True)
 details_field = forms.CharField(widget=forms.widgets.Textarea(attrs={'rows':2}), required=False)
 payed_field = forms.DateTimeField(initial=datetime.now().strftime('%Y-%m-%d %H:%M'), required=False)
 
+#FIXME http://www.djangoproject.com/documentation/newforms/#subclassing-forms
 
 class TransactionForm(forms.Form):
     to_account = to_field
