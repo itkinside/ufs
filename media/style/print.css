@@ -1,6 +1,7 @@
 body {
 	font-size: 12px;
 	padding: 2px;
+	font-family: sans-serif;
 }
 h1 {
 	font-size: 150%;
@@ -41,15 +42,30 @@ p.date {
 }
 .blacklisted img {
 	vertical-align: middle;
-	height: 12px;
+	height: 3px;
 	width: 100%;
 }
+
 .name {
-	width: 10em;
+	font-size: smaller;
 }
-.balance {
-	width: 5em;
+
+.tiny {
+	width: 2%;
 }
+
+.small {
+	width: 5%;
+}
+
+.medium {
+	width: 10%;
+}
+
+.large {
+	width: 20%;
+}
+
 td.balance {
 	text-align: center;
 }
