@@ -141,6 +141,7 @@ em {
 .tablelist td, .tabledetails td {
 	border: 1px solid gray;
 	padding: 0.3em;
+	vertical-align: top;
 }
 
 /* Alignment */

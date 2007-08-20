@@ -40,7 +40,7 @@
             {% if t.settlement %}
             {{ t.settlement.date|date:"Y-m-d" }}
             {% endif %}
-            {{ t.details }}
+            {{ t.details|striptags|linebreaksbr }}
         </td>
 	<td class="align_center">
 	    <input type="checkbox" />
