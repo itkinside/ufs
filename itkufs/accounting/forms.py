@@ -44,6 +44,7 @@ class DepositWithdrawForm(forms.Form):
     details = details_field
 
 class TransferForm(forms.Form):
+    # FIXME should only give choices for people in same group
     to_account = GroupedChoiceField(choices=user_choices, label="To", required=True)
     amount = amount_field
     details = details_field
