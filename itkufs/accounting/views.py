@@ -122,7 +122,7 @@ def account_summary(request, group, account, page='1'):
                        },
                        template_object_name='transaction')
 
-def transfer(request, group, account, transfer_type=None):
+def transfer(request, group, account=None, transfer_type=None):
     """Deposit, withdraw or transfer money"""
 
     if not request.user.is_authenticated():
@@ -132,7 +132,8 @@ def transfer(request, group, account, transfer_type=None):
     # Get account object
     try:
         group = AccountGroup.objects.get(slug=group)
-        account = group.account_set.get(slug=account)
+        if transfer_type != 'register':
+            account = group.account_set.get(slug=account)
     except (AccountGroup.DoesNotExist, Account.DoesNotExist):
         raise Http404
 
@@ -147,6 +148,8 @@ def transfer(request, group, account, transfer_type=None):
 
     if transfer_type == 'transfer':
         form = TransferForm(data)
+    elif transfer_type == 'register':
+        form = TransactionForm(data)
     else:
         form = DepositWithdrawForm(data)
 
@@ -175,6 +178,17 @@ def transfer(request, group, account, transfer_type=None):
                 transaction.to_account=Account.objects.get(id=to_account)
                 transaction.payed = datetime.now()
                 transaction.save()
+            elif transfer_type == 'register':
+                from_account = form.data['from_account']
+                to_account = form.data['to_account']
+
+                transaction.from_account=Account.objects.get(id=from_account)
+                transaction.to_account=Account.objects.get(id=to_account)
+
+                if form.data.has_key('payed'):
+                    transaction.payed = datetime.now()
+                transaction.save()
+                return HttpResponseRedirect(reverse(group_summary, args=[group.slug]))
 
             return HttpResponseRedirect(reverse(account_summary, args=[account.group.slug, account.slug]))
 

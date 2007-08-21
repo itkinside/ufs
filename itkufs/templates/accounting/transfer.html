@@ -1,7 +1,11 @@
 {% extends "accounting/base.html" %}
 
 {% block content %}
+{% ifnotequal type 'register' %}
 <h2>{{ type|capfirst }} {% ifequal type 'deposit' %}to{% else %}from{% endifequal %} account &ldquo;{{ account.name }}&rdquo;</h2>
+{% else %}
+<h2>Register transaction</h2>
+{% endifnotequal %}
 
 <form method="post" action=".">
 {{ form.as_p }}

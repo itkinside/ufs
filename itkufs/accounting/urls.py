@@ -32,6 +32,8 @@ urlpatterns = patterns('',
         approve, name='approve-transactions'),
     url(r'^(?P<group>[0-9a-z_-]+)/approve/(?P<page>\d+)/$',
         approve, name='approve-transactions-page'),
+    url(r'^(?P<group>[0-9a-z_-]+)/register/$',
+        transfer, {'transfer_type': 'register'}, name='register-transactions'),
 
     # Admin: Settlements
     # FIXME

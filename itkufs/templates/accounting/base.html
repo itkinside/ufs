@@ -18,7 +18,7 @@
         <ul>
             <li><a href="#">Settlement</a></li>
             <li><a href="{% url approve-transactions request.session.my_account.group.slug %}">Approve</a></li>
-            <li><a href="#">Register</a></li>
+            <li><a href="{% url register-transactions request.session.my_account.group.slug %}">Register</a></li>
         </ul>
     </li>
     <li class="admin"><a href="#">Statements</a>
