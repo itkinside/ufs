@@ -299,7 +299,9 @@ def approve(request, group, page="1"):
 
     # Get related transactions
     transactions = Transaction.objects.filter(
-        Q(from_account__group=group) & Q(to_account__group=group) & Q(payed__isnull=True)).order_by('-registered')
+        Q(from_account__group=group) &
+        Q(to_account__group=group) &
+        Q(payed__isnull=True)).order_by('-registered')
 
     # Pass on to generic view
     return object_list(request, transactions,

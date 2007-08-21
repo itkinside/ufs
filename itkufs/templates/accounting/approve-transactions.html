@@ -22,7 +22,8 @@
 <table class="tablelist">
     <tr>
         <th>Registered</th>
-        <th>Type</th>
+        <th>To</th>
+        <th>From</th>
         <th>Amount</th>
         <th>Details</th>
 	<th>Approve</th>
@@ -31,7 +32,10 @@
     <tr>
         <td>{{ t.registered|date:"Y-m-d" }}</td>
         <td>
-		To <a href="{% url account-summary t.to_account.group.slug,t.to_account.slug %}">{{ t.to_account.name }}</a>
+		<a href="{% url account-summary t.to_account.group.slug,t.to_account.slug %}">{{ t.to_account.name }}</a>
+        </td>
+        <td>
+		<a href="{% url account-summary t.from_account.group.slug,t.to_account.slug %}">{{ t.from_account.name }}</a>
         </td>
 
         <td class="align_right">{{ t.amount|stringformat:"0.2f" }}</td>
