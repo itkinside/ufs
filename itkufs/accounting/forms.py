@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django import newforms as forms
+from django.db.models import Q
 
 from itkufs.accounting.models import *
 from itkufs.widgets import *
@@ -30,27 +31,45 @@ details_field = forms.CharField(widget=forms.widgets.Textarea(attrs={'rows':2}),
 
 class TransactionForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        # to_useraccount to_groupaccount to_samegroup
-        to_user_account = kwargs.pop('to_user_account', False)
-        to_group_account = kwargs.pop('to_group_account', False)
-        to_group = kwargs.pop('to_limit_to_group', False)
+        def _get_choices(options={}):
+            limit_groups = options.pop('limit_to_groups', ())
+            exclude_users = options.pop('exclude_users', ())
+            user_account = options.pop('user_accounts', False)
+            exclude_groups = options.pop('exclude_groups', ())
+            group_account = options.pop('group_accounts', False)
 
+            # FIXME Clean up code please
+            # FIXME exlcude user not working yet...
+            if limit_groups and exclude_groups:
+                groups = AccountGroup.objects.filter(
+                    pk__in=[g.id for g in limit_groups]).exclude(
+                    pk__in=[g.id for g in exclude_groups])
+            elif limit_groups:
+                groups = AccountGroup.objects.filter(
+                    pk__in=[g.id for g in limit_groups])
+            elif exclude_groups:
+                groups = AccountGroup.objects.exclude(
+                    pk__in=[g.id for g in exclude_groups])
+            else:
+                groups = AccountGroup.objects.all()
+
+            choices = [(False, (('',''),))]
+            for g in groups:
+                a_choices = []
+                for a in g.account_set.all():
+                    if (a.is_user_account() and user_account) or (not a.is_user_account() and group_account):
+                        a_choices.append((a.id, a.name))
+                if a_choices:
+                    choices.append((g.name, a_choices))
+            return choices
+
+        to_options = kwargs.pop('to_options', {})
+        from_options = kwargs.pop('from_options', {})
         super(TransactionForm, self).__init__(*args, **kwargs)
 
-        to_choices = [(False, (('',''),))]
-        for g in AccountGroup.objects.all():
-            to_accounts = []
-            for a in g.account_set.all():
-                if not to_group or to_group == a.group:
-                    if a.is_user_account() and to_user_account:
-                        to_accounts.append((a.id, a.name))
-                    elif not a.is_user_account() and to_group_account:
-                        to_accounts.append((a.id, a.name))
-            if to_accounts:
-                to_choices.append((g.name, to_accounts))
+        self.fields['to_account'].choices = _get_choices(to_options)
+        self.fields['from_account'].choices = _get_choices(from_options)
 
-
-        self.fields['to_account'].choices = to_choices
 
     to_account = GroupedChoiceField(label="To", required=True)
     from_account = GroupedChoiceField(label="From", required=True)
