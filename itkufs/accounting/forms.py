@@ -29,12 +29,31 @@ details_field = forms.CharField(widget=forms.widgets.Textarea(attrs={'rows':2}),
 #FIXME http://www.djangoproject.com/documentation/newforms/#subclassing-forms
 
 class TransactionForm(forms.Form):
-    def _init_(self, choices=None):
-        self._init_()
-        print self
+    def __init__(self, *args, **kwargs):
+        # to_useraccount to_groupaccount to_samegroup
+        to_user_account = kwargs.pop('to_user_account', False)
+        to_group_account = kwargs.pop('to_group_account', False)
+        to_group = kwargs.pop('to_limit_to_group', False)
 
-    to_account = GroupedChoiceField(choices=all_choices, label="To", required=True)
-    from_account = GroupedChoiceField(choices=all_choices, label="From", required=True)
+        super(TransactionForm, self).__init__(*args, **kwargs)
+
+        to_choices = [(False, (('',''),))]
+        for g in AccountGroup.objects.all():
+            to_accounts = []
+            for a in g.account_set.all():
+                if not to_group or to_group == a.group:
+                    if a.is_user_account() and to_user_account:
+                        to_accounts.append((a.id, a.name))
+                    elif not a.is_user_account() and to_group_account:
+                        to_accounts.append((a.id, a.name))
+            if to_accounts:
+                to_choices.append((g.name, to_accounts))
+
+
+        self.fields['to_account'].choices = to_choices
+
+    to_account = GroupedChoiceField(label="To", required=True)
+    from_account = GroupedChoiceField(label="From", required=True)
     amount = amount_field
     payed = forms.BooleanField(required=False)
     details = details_field

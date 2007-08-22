@@ -149,7 +149,7 @@ def transfer(request, group, account=None, transfer_type=None):
     if transfer_type == 'transfer':
         form = TransferForm(data)
     elif transfer_type == 'register':
-        form = TransactionForm(data)
+        form = TransactionForm(data, to_user_account=True, to_limit_to_group=group)
     else:
         form = DepositWithdrawForm(data)
 
