@@ -10,26 +10,12 @@ all_choices = [(False, (('',''),))]
 user_choices = [(False, (('',''),))]
 group_choices = [(False, (('',''),))]
 
-for g in AccountGroup.objects.all():
-    all_accounts = []
-    user_accounts = []
-    group_accounts = []
-    for a in g.account_set.all():
-        all_accounts.append((a.id, a.name))
-        if a.is_user_account():
-            user_accounts.append((a.id, a.name))
-        else:
-            group_accounts.append((a.id, a.name))
-    all_choices.append((g.name, all_accounts))
-    group_choices.append((g.name, group_accounts))
-    user_choices.append((g.name, user_accounts))
-
 amount_field = forms.DecimalField(required=True)
 details_field = forms.CharField(widget=forms.widgets.Textarea(attrs={'rows':2}), required=False)
 
 #FIXME http://www.djangoproject.com/documentation/newforms/#subclassing-forms
 
-class TransactionForm(forms.Form):
+class BaseTransactionForm(forms.Form):
     def __init__(self, *args, **kwargs):
         def _get_choices(options={}):
             limit_groups = options.pop('limit_to_groups', ())
@@ -65,12 +51,15 @@ class TransactionForm(forms.Form):
 
         to_options = kwargs.pop('to_options', {})
         from_options = kwargs.pop('from_options', {})
-        super(TransactionForm, self).__init__(*args, **kwargs)
+        super(BaseTransactionForm, self).__init__(*args, **kwargs)
 
-        self.fields['to_account'].choices = _get_choices(to_options)
-        self.fields['from_account'].choices = _get_choices(from_options)
+        if self.fields.has_key('to_account'):
+            self.fields['to_account'].choices = _get_choices(to_options)
+        if self.fields.has_key('from_account'):
+            self.fields['from_account'].choices = _get_choices(from_options)
 
 
+class TransactionForm(BaseTransactionForm):
     to_account = GroupedChoiceField(label="To", required=True)
     from_account = GroupedChoiceField(label="From", required=True)
     amount = amount_field
@@ -81,8 +70,7 @@ class DepositWithdrawForm(forms.Form):
     amount = amount_field
     details = details_field
 
-class TransferForm(forms.Form):
-    # FIXME should only give choices for people in same group
-    to_account = GroupedChoiceField(choices=user_choices, label="To", required=True)
+class TransferForm(BaseTransactionForm):
+    to_account = GroupedChoiceField(label="To", required=True)
     amount = amount_field
     details = details_field

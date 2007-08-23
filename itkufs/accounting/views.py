@@ -147,7 +147,10 @@ def transfer(request, group, account=None, transfer_type=None):
         data = request.POST
 
     if transfer_type == 'transfer':
-        form = TransferForm(data)
+        form = TransferForm(data,
+            to_options={
+                'limit_to_groups':[group],
+                'user_accounts':True,})
     elif transfer_type == 'register':
         form = TransactionForm(data,
             from_options={
