@@ -17,6 +17,7 @@ table {
 thead th {
 	padding: 2px 5px;
 	font-weight: bolder;
+	text-align: center;
 }
 
 tbody th, tfoot th, td {
