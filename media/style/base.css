@@ -1,8 +1,6 @@
 body {
 	background: #333;
 	color: black;
-	font-family: Sans-serif;
-	font-size: 90%;
 	margin: 0;
 }
 
@@ -64,6 +62,7 @@ em {
 #menu a {
 	background: #e6e6e6;
 	color: black;
+	font-size: 116%;
 
 	/* Make links fill li */
 	display: block;
@@ -114,7 +113,7 @@ em {
 /* Footer block */
 #footer {
 	border-top: 1px solid #aaa;
-	font-size: smaller;
+	font-size: 85%;
 	padding-top: 0.5em;
 	margin-top: 0.7em;
 }
@@ -169,14 +168,26 @@ em {
 /* forms */
 label {
 	display: block;
+	width: 6em;
 	font-weight: bold;
+	float: left;
+	text-align: right;
+	margin-right: 1em;
+}
+input, select, textarea {
+	width: 15em;
 }
 input, select, textarea, button {
 	border: 1px solid gray;
+	font-size: 100%;
 }
 input:focus, select:focus, textarea:focus {
 	background: #FFFFF0;;
 }
 button {
+	margin-left: 7em;
 	background: #DDD;
+}
+input#id_payed { /* checkboxes */
+	width: auto;
 }
