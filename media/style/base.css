@@ -161,8 +161,14 @@ em {
 .warning {
 	color: #df8713;
 }
-.error, .errorlist {
-	color: red;
+.error {
+	color: #a10000;
+}
+/* Errorlist */
+ul.errorlist {
+	margin-left: 7em;
+	margin-bottom: -0.6em;
+	color: #a10000;
 }
 
 /* forms */
