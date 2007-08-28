@@ -197,6 +197,6 @@ button {
 button.table_form {
 	margin-left: auto;
 }
-input#id_payed, table#accounting_approve_transctions input { /* checkboxes */
+input#id_payed, table#accounting_approve_transactions input { /* checkboxes */
 	width: auto;
 }
