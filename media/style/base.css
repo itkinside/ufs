@@ -194,6 +194,6 @@ button {
 	margin-left: 7em;
 	background: #DDD;
 }
-input#id_payed { /* checkboxes */
+input#id_payed, table#accounting_approve_transctions input { /* checkboxes */
 	width: auto;
 }
