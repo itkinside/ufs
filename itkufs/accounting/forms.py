@@ -1,19 +1,10 @@
-from datetime import datetime
-
 from django import newforms as forms
-from django.db.models import Q
 
 from itkufs.accounting.models import *
 from itkufs.widgets import *
 
-all_choices = [(False, (('',''),))]
-user_choices = [(False, (('',''),))]
-group_choices = [(False, (('',''),))]
-
 amount_field = forms.DecimalField(required=True)
 details_field = forms.CharField(widget=forms.widgets.Textarea(attrs={'rows':2}), required=False)
-
-#FIXME http://www.djangoproject.com/documentation/newforms/#subclassing-forms
 
 class BaseTransactionForm(forms.Form):
     def __init__(self, *args, **kwargs):
