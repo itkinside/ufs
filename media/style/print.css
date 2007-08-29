@@ -70,6 +70,10 @@ p img {
 	width: 20%;
 }
 
+.hidden {
+	display: none;
+}
+
 td.balance {
 	text-align: center;
 }
