@@ -1,11 +1,8 @@
 body {
-	font-size: 12px;
 	padding: 2px;
-	font-family: sans-serif;
 }
 h1 {
-	font-size: 150%;
-	font-weight: bolder;
+	font-size: 200%;
 	float: left;
 }
 
@@ -54,7 +51,7 @@ p img {
 }
 
 .name {
-	font-size: smaller;
+	font-size: 77%;
 }
 
 .tiny {
