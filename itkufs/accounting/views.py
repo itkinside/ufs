@@ -110,6 +110,14 @@ def account_summary(request, group, account, page='1'):
     transactions = Transaction.objects.filter(
         Q(from_account=account) | Q(to_account=account)).order_by('-registered')
 
+    messages = []
+
+    if account.is_blocked():
+        messages.append('This account is currently below the block limit, please contact'
+            + ' the group admin or deposit enough to pass the limit.')
+    elif account.needs_warning():
+        messages.append('This account is currently within the warn limit.')
+
     # Pass on to generic view
     return object_list(request, transactions,
                        paginate_by=20,
@@ -119,6 +127,7 @@ def account_summary(request, group, account, page='1'):
                        extra_context={
                             'is_admin': is_admin,
                             'account': account,
+                            'messages': messages,
                        },
                        template_object_name='transaction')
 

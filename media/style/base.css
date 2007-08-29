@@ -132,6 +132,10 @@ em {
 	padding: 0 0.5em;
 }
 
+#messages {
+	margin-top: 1em;
+}
+
 /* Tables */
 .tablecolumn {
 	border-collapse: separate;

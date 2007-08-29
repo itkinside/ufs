@@ -15,9 +15,7 @@
             href="{% url media "style/fonts-min.css" %}" />
         <link rel="stylesheet" type="text/css"
             href="{% url media "style/base.css" %}" />
-        <!--[IF IE]>
           <script type="text/javascript" src="{% url media "js/menu.js" %}"></script>
-	<![ENDIF]-->
 </head>
 
 <body onload="menulist">
@@ -45,7 +43,7 @@ ITK Microfinance System<br />
 
 <div id="content">
 {% if messages %}
-<ul>
+<ul id="messages">
     {% for message in messages %}
     <li>{{ message }}</li>
     {% endfor %}
