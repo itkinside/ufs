@@ -28,6 +28,16 @@ p {
 table {
 	margin: 0.7em 0;
 }
+ul {
+	list-style-type: disc;
+	padding-left: 1em;
+}
+ul ul {
+	list-style-type: square;
+}
+ul ul ul {
+	list-style-type: circle;
+}
 
 /* Inline elements */
 a {
@@ -166,8 +176,10 @@ em {
 }
 /* Errorlist */
 ul.errorlist {
+	padding: 0;
 	margin-left: 7em;
 	margin-bottom: -0.6em;
+	list-style-type: none;
 	color: #a10000;
 }
 
