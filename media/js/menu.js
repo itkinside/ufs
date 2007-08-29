@@ -2,9 +2,9 @@
 // Taken from http://www.alistapart.com/articles/dropdowns/
 function menulist() {
     if (document.all && document.getElementById) {
-        navRoot = document.getElementById("menulist");
+        var navRoot = document.getElementById("menulist");
         for (i=0; i<navRoot.childNodes.length; i++) {
-            node = navRoot.childNodes[i];
+            var node = navRoot.childNodes[i];
             if (node.nodeName=="LI") {
                 node.onmouseover=function() {
                     this.className+=" over";
