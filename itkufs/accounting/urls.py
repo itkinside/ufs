@@ -36,7 +36,10 @@ urlpatterns = patterns('',
         transfer, {'transfer_type': 'register'}, name='register-transactions'),
 
     # Admin: Settlements
-    # FIXME
+    url(r'^(?P<group>[0-9a-z_-]+)/settlement/$',
+        settlement_summary, name='settlement-summary'),
+    url(r'^(?P<group>[0-9a-z_-]+)/settlement/(?P<page>\d+)/$',
+        settlement_summary, name='settlement-summary-page'),
 
     # Admin: Balance
     url(r'^(?P<group>[0-9a-z_-]+)/balance/$',

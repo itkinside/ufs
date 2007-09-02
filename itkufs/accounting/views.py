@@ -333,3 +333,18 @@ def approve(request, group, page="1"):
                             'group': group,
                        },
                        template_object_name='transaction')
+
+def settlement_summary(request, group, page="1"):
+    if not request.user.is_authenticated():
+        # FIXME: Redirect to login page
+        return HttpResponseForbidden('Forbidden')
+
+    try:
+        group = AccountGroup.objects.get(slug=group)
+    except AccountGroup.DoesNotExist:
+        raise Http404
+
+    if group.admins.filter(id=request.user.id).count():
+        is_admin = True
+    else:
+        is_admin = False
