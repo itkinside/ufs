@@ -206,6 +206,10 @@ input, select, textarea, button {
 input:focus, select:focus, textarea:focus {
 	background: #FFFFF0;;
 }
+input:hover, select:hover, textarea:hover, button:hover {
+	border: 1px solid #444;
+}
+
 button {
 	margin-left: 7em;
 	background: #DDD;
