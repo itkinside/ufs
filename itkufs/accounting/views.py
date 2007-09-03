@@ -151,9 +151,10 @@ def transfer(request, group, account=None, transfer_type=None):
     else:
         is_admin = False
 
-    data = None
     if request.method == 'POST':
         data = request.POST
+    else:
+        data = None
 
     if transfer_type == 'transfer':
         form = TransferForm(data,
