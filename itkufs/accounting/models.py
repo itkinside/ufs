@@ -133,9 +133,13 @@ class Account(models.Model):
 
 class Settlement(models.Model):
     date = models.DateField()
+    comment = models.CharField(maxlength=200, blank=True, null=True)
 
     def __unicode__(self):
-        return smart_unicode(self.date)
+        if self.comment:
+            return smart_unicode("%s: %s" % (self.date, self.comment))
+        else:
+            return smart_unicode(self.date)
 
     class Admin:
         pass
