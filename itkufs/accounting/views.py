@@ -187,17 +187,21 @@ def transfer(request, group, account=None, transfer_type=None):
                 transaction.from_account=account
                 transaction.to_account=group.bank_account
                 transaction.save()
+
             elif transfer_type == 'withdraw':
                 transaction.from_account=group.bank_account
                 transaction.to_account=account
                 transaction.save()
+
             elif transfer_type == 'transfer':
                 to_account = form.data['to_account']
 
                 transaction.from_account=account
                 transaction.to_account=Account.objects.get(id=to_account)
-                transaction.payed = datetime.now()
+                if transaction.amount <= account.balance():
+                    transaction.payed = datetime.now()
                 transaction.save()
+
             elif transfer_type == 'register':
                 from_account = form.data['from_account']
                 to_account = form.data['to_account']
