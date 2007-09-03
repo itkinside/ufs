@@ -65,3 +65,12 @@ class TransferForm(BaseTransactionForm):
     to_account = GroupedChoiceField(label="To", required=True)
     amount = amount_field
     details = details_field
+
+
+class ApproveForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        choices = kwargs.pop('transactions', {})
+        super(ApproveForm, self).__init__(*args, **kwargs)
+        for c in choices:
+            self.fields['transactions'].choices.append((c.id,c))
+    transactions = forms.MultipleChoiceField(widget=forms.widgets.CheckboxSelectMultiple())
