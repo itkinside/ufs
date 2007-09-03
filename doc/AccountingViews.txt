@@ -102,8 +102,8 @@ payed in the approve transaction view.
 Status: Barely started (adamcik)
 
 
-Admin: View group balance
--------------------------
+Admin: Statements
+-----------------
 
 Show a standard accounting balance sheet with:
 
@@ -111,4 +111,6 @@ Show a standard accounting balance sheet with:
 - Liabilities: user accounts, debts
 - Equity: result
 
-Status: Allmost done? (jodal)
+Show a standard income/expense statement.
+
+Status: Group balance done, income/expense statement not started (jodal)
