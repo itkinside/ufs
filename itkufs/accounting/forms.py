@@ -72,5 +72,4 @@ class ApproveForm(forms.Form):
         choices = kwargs.pop('transactions', {})
         super(ApproveForm, self).__init__(*args, **kwargs)
         for c in choices:
-            self.fields['transactions'].choices.append((c.id,c))
-    transactions = forms.MultipleChoiceField(widget=forms.widgets.CheckboxSelectMultiple())
+            self.fields['transaction_'+str(c.id)] = forms.BooleanField()

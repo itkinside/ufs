@@ -327,6 +327,8 @@ def approve(request, group, page="1"):
         Q(to_account__group=group) &
         Q(payed__isnull=True)).order_by('-registered')
 
+    form = ApproveForm(transactions=transactions)
+
     # Pass on to generic view
     return object_list(request, transactions,
                        paginate_by=20,
@@ -336,6 +338,7 @@ def approve(request, group, page="1"):
                        extra_context={
                             'is_admin': is_admin,
                             'group': group,
+                            'form': form,
                        },
                        template_object_name='transaction')
 
