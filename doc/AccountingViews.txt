@@ -46,7 +46,7 @@ Really a variant of the administrator's register transaction.
 - If transfer, show fields for recipient, amount and details.
 - In all cases, submit to the same context aware view.
 
-Status: Work in Progress (jodal)
+Status: All done
 
 
 Get ``krysseliste'' view
@@ -55,10 +55,10 @@ Get ``krysseliste'' view
 1. Select internal or external ``krysseliste'' from 'My group'.
    Goto URL: /itkufs/(?P<account_group_slug>\w+)/list/internal/
    Goto URL: /itkufs/(?P<account_group_slug>\w+)/list/external/
-2. Show PDF formatted list. (With HTML/CSS row backgrounds is ~impossible.)
-3. Print it.
+2. Show PDF/HTML formatted list. (With HTML/CSS row backgrounds is possible if
+   print-page-setup in client is correct) 3. Print it.
 
-Status: Work in Progress (klette)
+Status: Work in Progress (klette/adamcik)
 
 
 Admin: Approve transaction view
@@ -68,7 +68,7 @@ Admin: Approve transaction view
 2. Select all transactions you want to mark as payed.
 3. Submit and profit!
 
-Status: Not started
+Status: Missing newforms (adamcik)
 
 
 Admin: Register transaction view
@@ -78,7 +78,9 @@ Admin: Register transaction view
 2. Optionally enter details and settlement.
 3. Submit and profit!
 
-Status: Work in Progress (jodal)
+(Uses transfer money view)
+
+Status: Done, except settlement and default true (adamcik)
 
 
 Admin: Register settlement (BSF)
@@ -97,7 +99,7 @@ Admin: Register settlement (BSF)
 Later, when the claim is received from external account, mark transaction as
 payed in the approve transaction view.
 
-Status: Not started
+Status: Barely started (adamcik)
 
 
 Admin: View group balance
@@ -109,4 +111,4 @@ Show a standard accounting balance sheet with:
 - Liabilities: user accounts, debts
 - Equity: result
 
-Status: Not started
+Status: Allmost done? (jodal)

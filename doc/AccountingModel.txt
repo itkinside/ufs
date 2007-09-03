@@ -138,7 +138,7 @@ Settlement
 
 Settlement is an optional part of an transaction to group a set of
 transactions. It is intended for BSF and similar settlements between bars
-(account groups). Its only field is a date.
+(account groups). Its only field is a date and comment.
 
 
 :Authors: Stein Magnus Jodal, Thomas Adamcik
