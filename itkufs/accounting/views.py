@@ -299,7 +299,7 @@ def generate_html(request, group, list_type=None):
     except AccountGroup.DoesNotExist, AccountGroup.DoesNotExist:
         raise Http404
 
-    return render_to_response('accounting/internal-list.html',
+    return render_to_response('accounting/internal_list.html',
                               {
                                   'group': group,
                                   'accounts': accounts,
@@ -334,7 +334,7 @@ def approve(request, group, page="1"):
                        paginate_by=20,
                        page=page,
                        allow_empty=True,
-                       template_name='accounting/approve-transactions.html',
+                       template_name='accounting/approve_transactions.html',
                        extra_context={
                             'is_admin': is_admin,
                             'group': group,
