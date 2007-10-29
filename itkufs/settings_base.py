@@ -88,7 +88,11 @@ INSTALLED_APPS = (
     'itkufs.inventory',
 )
 
+# Session
 SESSION_COOKIE_NAME = 'itkufs'
 SESSION_COOKIE_SECURE = True
 
+# Authentication
 MAIL_DOMAIN = 'samfundet.no'
+LOGIN_URL = '/login/'
+

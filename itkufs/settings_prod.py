@@ -21,5 +21,3 @@ TEMPLATE_DIRS = (
     '/home/cassarossa/itk/felles/itkufs/itkufs/templates/',
 )
 
-# Authentication settings
-LOGIN_URL = '/login/'
