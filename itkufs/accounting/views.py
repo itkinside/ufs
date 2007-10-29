@@ -13,7 +13,7 @@ from django.views.generic.list_detail import object_list
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
 
-def login(request):
+def login_user(request):
     """Login user"""
 
     if not request.user.is_authenticated():

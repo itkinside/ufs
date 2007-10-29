@@ -5,7 +5,7 @@ from itkufs.accounting.pdf import *
 urlpatterns = patterns('',
     # Login
     url(r'login/$',
-        login, name='login'),
+        login_user, name='login'),
 
     # Account list
     url(r'^$',
