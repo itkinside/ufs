@@ -66,10 +66,12 @@ class TransferForm(BaseTransactionForm):
     amount = amount_field
     details = details_field
 
+class TransactionField(forms.BooleanField):
+    pass
 
 class ApproveForm(forms.Form):
     def __init__(self, *args, **kwargs):
         choices = kwargs.pop('transactions', {})
         super(ApproveForm, self).__init__(*args, **kwargs)
         for c in choices:
-            self.fields['transaction_'+str(c.id)] = forms.BooleanField()
+            self.fields['transaction_'+str(c.id)] = TransactionField()
