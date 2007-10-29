@@ -32,10 +32,10 @@
     <tr>
         <td>{{ t.registered|date:"Y-m-d" }}</td>
         <td>
-		From <a href="{% url account-summary t.from_account.group.slug,t.to_account.slug %}">{{ t.from_account.name }}</a>
+		From <a href="{% url account-summary t.credit_account.group.slug,t.credit_account.slug %}">{{ t.credit_account.name }}</a>
         </td>
         <td>
-		To <a href="{% url account-summary t.to_account.group.slug,t.to_account.slug %}">{{ t.to_account.name }}</a>
+		To <a href="{% url account-summary t.debit_account.group.slug,t.debit_account.slug %}">{{ t.debit_account.name }}</a>
         </td>
 
         <td class="align_right">{{ t.amount|stringformat:"0.2f" }}</td>

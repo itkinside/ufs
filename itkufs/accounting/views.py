@@ -108,7 +108,8 @@ def account_summary(request, group, account, page='1'):
 
     # Get related transactions
     transactions = Transaction.objects.filter(
-        Q(from_account=account) | Q(to_account=account)).order_by('-registered')
+        Q(credit_account=account) |
+        Q(debit_account=account)).order_by('-registered')
 
     messages = []
 
@@ -181,30 +182,30 @@ def transfer(request, group, account=None, transfer_type=None):
             transaction = Transaction(amount=amount,details=details)
 
             if transfer_type == 'deposit':
-                transaction.from_account=account
-                transaction.to_account=group.bank_account
+                transaction.credit_account=account
+                transaction.debit_account=group.bank_account
                 transaction.save()
 
             elif transfer_type == 'withdraw':
-                transaction.from_account=group.bank_account
-                transaction.to_account=account
+                transaction.credit_account=group.bank_account
+                transaction.debit_account=account
                 transaction.save()
 
             elif transfer_type == 'transfer':
-                to_account = form.data['to_account']
+                debit_account = form.data['debit_account']
 
-                transaction.from_account=account
-                transaction.to_account=Account.objects.get(id=to_account)
+                transaction.credit_account=account
+                transaction.debit_account=Account.objects.get(id=debit_account)
                 if transaction.amount <= account.balance():
                     transaction.payed = datetime.now()
                 transaction.save()
 
             elif transfer_type == 'register':
-                from_account = form.data['from_account']
-                to_account = form.data['to_account']
+                credit_account = form.data['credit_account']
+                debit_account = form.data['debit_account']
 
-                transaction.from_account=Account.objects.get(id=from_account)
-                transaction.to_account=Account.objects.get(id=to_account)
+                transaction.credit_account=Account.objects.get(id=credit_account)
+                transaction.debit_account=Account.objects.get(id=debit_account)
 
                 if form.data.has_key('payed'):
                     transaction.payed = datetime.now()
@@ -315,8 +316,8 @@ def approve(request, group, page="1"):
 
     # Get related transactions
     transactions = Transaction.objects.filter(
-        Q(from_account__group=group) &
-        Q(to_account__group=group) &
+        Q(credit_account__group=group) &
+        Q(debit_account__group=group) &
         Q(payed__isnull=True)).order_by('-registered')
 
     form = ApproveForm(transactions=transactions)

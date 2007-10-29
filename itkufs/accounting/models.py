@@ -75,9 +75,9 @@ class Account(models.Model):
 
         balance = 0
 
-        for t in self.from_transactions.filter(payed__isnull=False):
+        for t in self.credit_transactions.filter(payed__isnull=False):
             balance -= t.amount
-        for t in self.to_transactions.filter(payed__isnull=False):
+        for t in self.debit_transactions.filter(payed__isnull=False):
             balance += t.amount
 
         return balance
@@ -155,9 +155,10 @@ class InvalidTransaction(Exception):
         return u'Invalid transaction: %s' % self.value
 
 class Transaction(models.Model):
-    # FIXME: Should be renamed to debit and credit
-    from_account = models.ForeignKey(Account, related_name='from_transactions')
-    to_account = models.ForeignKey(Account, related_name='to_transactions')
+    credit_account = models.ForeignKey(Account,
+        related_name='credit_transactions')
+    debit_account = models.ForeignKey(Account,
+        related_name='debit_transactions')
 
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     details = models.CharField(maxlength=200, blank=True, null=True)
@@ -169,8 +170,8 @@ class Transaction(models.Model):
 
     def __unicode__(self):
         return u'%s from %s to %s' % (self.amount,
-                                      self.from_account,
-                                      self.to_account)
+                                      self.credit_account,
+                                      self.debit_account)
 
     def save(self):
         if float(self.amount) < 0:
@@ -179,14 +180,15 @@ class Transaction(models.Model):
         if self.amount == 0:
             raise InvalidTransaction, 'Amount is zero.'
 
-        if self.from_account == self.to_account:
-            raise InvalidTransaction, 'Giving yourself money?'
+        if self.credit_account == self.credit_account:
+            raise InvalidTransaction, 'Credit and debit is same account.'
 
         models.Model.save(self)
 
     class Admin:
-        list_display = ['amount', 'from_account', 'to_account', 'settlement']
-        list_filter = ['from_account', 'to_account', 'settlement']
+        list_display = ['amount', 'credit_account', 'debit_account',
+                        'settlement']
+        list_filter = ['credit_account', 'debit_account', 'settlement']
 
     class Meta:
         ordering = ['registered', 'payed']
