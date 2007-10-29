@@ -20,3 +20,6 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     '/home/cassarossa/itk/felles/itkufs/itkufs/templates/',
 )
+
+# Authentication settings
+LOGIN_URL = '/login/'

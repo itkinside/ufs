@@ -3,6 +3,10 @@ from itkufs.accounting.views import *
 from itkufs.accounting.pdf import *
 
 urlpatterns = patterns('',
+    # Login
+    url(r'login/$',
+        login, name='login'),
+
     # Account list
     url(r'^$',
         group_list, name='group-list'),

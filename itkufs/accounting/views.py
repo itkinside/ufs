@@ -2,6 +2,7 @@ from datetime import date, datetime
 from urlparse import urlparse
 
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
@@ -12,16 +13,21 @@ from django.views.generic.list_detail import object_list
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
 
-def group_list(request):
-    """Lists the user's account groups and accounts, including admin accounts"""
+def login(request):
+    """Login user"""
 
     if not request.user.is_authenticated():
         user = authenticate(request=request)
         if user is not None:
             login(request, user)
         else:
-            # FIXME: Redirect to login page
-            return HttpResponseForbidden('Forbidden')
+            return HttpResponseForbidden('Login failed')
+
+    return HttpResponseRedirect(reverse('group-list'))
+
+@login_required
+def group_list(request):
+    """Lists the user's account groups and accounts, including admin accounts"""
 
     # Build account struct
     accounts = []
@@ -46,15 +52,12 @@ def group_list(request):
                               },
                               context_instance=RequestContext(request))
 
+@login_required
 def group_summary(request, group):
     """Account group summary and paginated list of accounts"""
 
     # FIXME: The list is not paginated
     # FIXME: The list should be ordered by type, then name
-
-    if not request.user.is_authenticated():
-        # FIXME: Redirect to login page
-        return HttpResponseForbidden('Forbidden')
 
     # Get account group
     try:
@@ -74,13 +77,10 @@ def group_summary(request, group):
                               },
                               context_instance=RequestContext(request))
 
+@login_required
 def account_summary(request, group, account, page='1'):
     """Account details and a paginated list with recent transactions involving
     the user"""
-
-    if not request.user.is_authenticated():
-        # FIXME: Redirect to login page
-        return HttpResponseForbidden('Forbidden')
 
     # Get account object
     try:
@@ -131,12 +131,9 @@ def account_summary(request, group, account, page='1'):
                        },
                        template_object_name='transaction')
 
+@login_required
 def transfer(request, group, account=None, transfer_type=None):
     """Deposit, withdraw or transfer money"""
-
-    if not request.user.is_authenticated():
-        # FIXME: Redirect to login page
-        return HttpResponseForbidden('Forbidden')
 
     # Get account object
     try:
@@ -225,12 +222,9 @@ def transfer(request, group, account=None, transfer_type=None):
                               },
                               context_instance=RequestContext(request))
 
+@login_required
 def balance(request, group):
     """Show balance sheet for the group"""
-
-    if not request.user.is_authenticated():
-        # FIXME: Redirect to login page
-        return HttpResponseForbidden('Forbidden')
 
     try:
         group = AccountGroup.objects.get(slug=group)
@@ -292,6 +286,7 @@ def balance(request, group):
                               },
                               context_instance=RequestContext(request))
 
+@login_required
 def generate_html(request, group, list_type=None):
     try:
         group = AccountGroup.objects.get(slug=group)
@@ -304,13 +299,10 @@ def generate_html(request, group, list_type=None):
                                   'group': group,
                                   'accounts': accounts,
                               },
-                                context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
+@login_required
 def approve(request, group, page="1"):
-    if not request.user.is_authenticated():
-        # FIXME: Redirect to login page
-        return HttpResponseForbidden('Forbidden')
-
     try:
         group = AccountGroup.objects.get(slug=group)
     except AccountGroup.DoesNotExist:
@@ -342,11 +334,8 @@ def approve(request, group, page="1"):
                        },
                        template_object_name='transaction')
 
+@login_required
 def settlement_summary(request, group, page="1"):
-    if not request.user.is_authenticated():
-        # FIXME: Redirect to login page
-        return HttpResponseForbidden('Forbidden')
-
     try:
         group = AccountGroup.objects.get(slug=group)
     except AccountGroup.DoesNotExist:
@@ -356,3 +345,4 @@ def settlement_summary(request, group, page="1"):
         is_admin = True
     else:
         is_admin = False
+
