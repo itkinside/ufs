@@ -180,7 +180,7 @@ class Transaction(models.Model):
         if self.amount == 0:
             raise InvalidTransaction, 'Amount is zero.'
 
-        if self.credit_account == self.credit_account:
+        if self.credit_account == self.debit_account:
             raise InvalidTransaction, 'Credit and debit is same account.'
 
         models.Model.save(self)
