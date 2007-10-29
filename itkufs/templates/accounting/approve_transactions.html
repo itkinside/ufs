@@ -19,6 +19,7 @@
 </p>
 {% endif %}
 
+<form action="{% url approve-transactions group.slug %}" method="post">
 <table class="tablelist" id="accounting_approve_transactions">
     <tr>
         <th>Registered</th>
@@ -47,13 +48,13 @@
             {{ t.details|striptags|linebreaksbr }}
         </td>
 	<td class="align_center">
-	    <input type="checkbox" />
+	    <input type="checkbox" name="transcation_id_{{ t.id }}"/>
 	</td>
     </tr>
     {% endfor %}
 </table>
-
-<button class="table_form">Approve</button>
+<button type="submit" class="table_form">Approve</button>
+</form>
 
 {% if is_paginated %}
 <p>

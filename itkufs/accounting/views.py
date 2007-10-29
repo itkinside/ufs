@@ -320,7 +320,13 @@ def approve(request, group, page="1"):
         Q(debit_account__group=group) &
         Q(payed__isnull=True)).order_by('-registered')
 
-    form = ApproveForm(transactions=transactions)
+    if request.method == 'POST':
+        for t in transactions:
+            if request.POST.has_key(u'transcation_id_%d' % t.id):
+                t.payed = datetime.now()
+                t.save()
+
+    transactions = transactions.filter(Q(payed__isnull=True))
 
     # Pass on to generic view
     return object_list(request, transactions,
@@ -331,7 +337,6 @@ def approve(request, group, page="1"):
                        extra_context={
                             'is_admin': is_admin,
                             'group': group,
-                            'form': form,
                        },
                        template_object_name='transaction')
 
