@@ -9,21 +9,19 @@
 <table class="tabledetails">
     <tr>
         <th>Internal list</th>
-        <td><a href="{% url list-pdf group.slug,"internal" %}">PDF</a></td>
         <td><a href="{% url list-html group.slug,"internal" %}">HTML</a></td>
     </tr>
     <tr>
         <th>External list</th>
         <td>*FIXME*</td>
-        <td>*FIXME*</td>
     </tr>
     <tr>
         <th>Warning limit</th>
-        <td colspan="2">{{ group.warn_limit }}</td>
+        <td>{{ group.warn_limit }}</td>
     </tr>
     <tr>
         <th>Blocking limit</th>
-        <td colspan="2">{{ group.block_limit }}</td>
+        <td>{{ group.block_limit }}</td>
     </tr>
 </table>
 
