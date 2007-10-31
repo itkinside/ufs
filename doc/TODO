@@ -7,8 +7,6 @@ TODO µFS v1
 adamcik
 -------
 
-- JS code for toggeling checkbox'es in approve view
-- Convert first table in group_summary to <dl>
 - Dynamic lists
 
 jodal
@@ -16,3 +14,12 @@ jodal
 
 - Income statement is next
 
+done
+----
+
+- JS code for toggeling checkbox'es in approve view
+
+won't fix
+---------
+
+- Convert first table in group_summary to <dl>
