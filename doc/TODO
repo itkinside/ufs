@@ -12,6 +12,7 @@ adamcik
 -------
 
 - Convert first table in group_summary to <dl>
+- Enforce checking of admin rights, all we do today is hide menu...
 
 jodal
 -----
