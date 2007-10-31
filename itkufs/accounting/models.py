@@ -221,5 +221,6 @@ class ListItem(models.Model):
     def __unicode__(self):
         return u'%s, %s' % (self.list, self.name)
 
-#    class Meta:
+    class Meta:
+        ordering = ['order']
 #        Unique_together = (('name', 'list'),)

@@ -293,7 +293,6 @@ def html_list(request, group, slug):
         group = AccountGroup.objects.get(slug=group)
         accounts = Account.objects.filter(group=group)
         list = group.lists.get(slug=slug)
-        items = list.items.order_by('order')
     except AccountGroup.DoesNotExist, AccountGroup.DoesNotExist:
         raise Http404
 
@@ -301,7 +300,6 @@ def html_list(request, group, slug):
         {
             'accounts': accounts,
             'group': group,
-            'items': items,
             'list': list,
         },
         context_instance=RequestContext(request))

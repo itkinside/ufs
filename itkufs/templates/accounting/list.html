@@ -22,8 +22,8 @@
       {% ifnotequal list.balance_width 0 %}
         <th style="width: {{ list.balance_width }}%">Balance</th>
       {% endifnotequal %}
-      {% for i in items %}
-      <th style="width: {{ i.width }}%">{{ i.name }}</th>
+      {% for item in list.items.all %}
+      <th style="width: {{ i.width }}%">{{ item.name }}</th>
       {% endfor %}
     </tr>
     </thead>
@@ -35,7 +35,7 @@
           {% ifnotequal list.balance_width 0 %}
           <td class="balance">{{ account.balance_credit_reversed }}</td>
 	  {% endifnotequal %}
-          {% for i in items %}
+          {% for item in list.items.all %}
             {% if not account.is_blocked %}
               <td/>
             {% else %}
