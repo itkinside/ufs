@@ -9,7 +9,7 @@ TODO µFS v1
 adamcik
 -------
 
-- Dynamic lists
+- Convert first table in group_summary to <dl>
 
 jodal
 -----
@@ -20,8 +20,9 @@ done
 ----
 
 - JS code for toggeling checkbox'es in approve view
+- Dynamic lists
+
 
 won't fix
 ---------
 
-- Convert first table in group_summary to <dl>
