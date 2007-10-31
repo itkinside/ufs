@@ -33,7 +33,7 @@
       {% if account.is_user_account %}
     <tr class="{% cycle even,odd %}{% if account.is_blocked %} blacklisted{% endif %}">
       <th class="name">{{ account.name }}</th>
-      <td class="balance">{{ account.balance }}</td>
+      <td class="balance">{{ account.balance_credit_reversed }}</td>
       {% if not account.is_blocked %}
       <td/>
       <td/>

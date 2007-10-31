@@ -104,14 +104,14 @@ class Account(models.Model):
 
         if not self.is_user_account() or self.ignore_block_limit:
             return False
-        return self.balance_credit_reversed() > self.group.block_limit
+        return self.balance_credit_reversed() < self.group.block_limit
 
     def needs_warning(self):
         """Returns true if user account balance is below group warn limit"""
 
         if not self.is_user_account() or self.ignore_block_limit:
             return False
-        return self.balance_credit_reversed() > self.group.warn_limit
+        return self.balance_credit_reversed() < self.group.warn_limit
 
     class Admin:
         fields = (
