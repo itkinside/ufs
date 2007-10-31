@@ -25,8 +25,8 @@ urlpatterns = patterns('',
     # My group
     url(r'^(?P<group>[0-9a-z_-]+)/$',
         group_summary, name='group-summary'),
-    url(r'^(?P<group>[0-9a-z_-]+)/list/internal/html/$',
-        generate_html, {'list_type': 'internal'}, name='list-html'),
+    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/$',
+        html_list, name='html-list'),
 
     # Admin: Transactions
     url(r'^(?P<group>[0-9a-z_-]+)/approve/$',

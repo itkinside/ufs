@@ -16,40 +16,33 @@
    <p class="hidden">Denne listen er <b>IKKE</b> gyldig!</p>
    <p class="date">{% now "Y-m-d" %}</p>
    <table>
-    <thead
+    <thead>
     <tr>
-      <th class="medium">Navn</th>
-      <th class="tiny">Saldo</th>
-      <th class="medium">Øl</th>
-      <th class="large">Brus</th>
-      <th class="medium">10</th>
-      <th class="medium">5</th>
-      <th class="medium">3</th>
-      <th class="medium">1</th>
+      <th style="width: {{ list.account_width }}%">Name</th>
+      {% ifnotequal list.balance_width 0 %}
+        <th style="width: {{ list.balance_width }}%">Balance</th>
+      {% endifnotequal %}
+      {% for i in items %}
+      <th style="width: {{ i.width }}%">{{ i.name }}</th>
+      {% endfor %}
     </tr>
     </thead>
     <tbody>
     {% for account in accounts %}
       {% if account.is_user_account %}
-    <tr class="{% cycle even,odd %}{% if account.is_blocked %} blacklisted{% endif %}">
-      <th class="name">{{ account.name }}</th>
-      <td class="balance">{{ account.balance_credit_reversed }}</td>
-      {% if not account.is_blocked %}
-      <td/>
-      <td/>
-      <td/>
-      <td/>
-      <td/>
-      <td/>
-      {% else %}
-      <td><img src="{% url media "images/black.png" %}"/></td>
-      <td><img src="{% url media "images/black.png" %}"/></td>
-      <td><img src="{% url media "images/black.png" %}"/></td>
-      <td><img src="{% url media "images/black.png" %}"/></td>
-      <td><img src="{% url media "images/black.png" %}"/></td>
-      <td><img src="{% url media "images/black.png" %}"/></td>
-      {% endif %}
-    </tr>
+        <tr class="{% cycle even,odd %}{% if account.is_blocked %} blacklisted{% endif %}">
+          <th class="name">{{ account.name }}</th>
+          {% ifnotequal list.balance_width 0 %}
+          <td class="balance">{{ account.balance_credit_reversed }}</td>
+	  {% endifnotequal %}
+          {% for i in items %}
+            {% if not account.is_blocked %}
+              <td/>
+            {% else %}
+              <td><img src="{% url media "images/black.png" %}"/></td>
+            {% endif %}
+	  {% endfor %}
+        </tr>
       {% endif %}
     {% endfor %}
     </tbody>

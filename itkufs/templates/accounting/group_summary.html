@@ -8,14 +8,6 @@
 
 <table class="tabledetails">
     <tr>
-        <th>Internal list</th>
-        <td><a href="{% url list-html group.slug,"internal" %}">HTML</a></td>
-    </tr>
-    <tr>
-        <th>External list</th>
-        <td>*FIXME*</td>
-    </tr>
-    <tr>
         <th>Warning limit</th>
         <td>{{ group.warn_limit }}</td>
     </tr>
@@ -24,6 +16,17 @@
         <td>{{ group.block_limit }}</td>
     </tr>
 </table>
+
+<h3>Lists</h3>
+{% if not group.lists.count %}
+<p>No lists configured for this group.</p>
+{% else %}
+<ul>
+    {% for list in group.lists.all %}
+        <li><a href="{% url html-list group.slug,list.slug %}">{{ list.name }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 {% if is_admin %}
 

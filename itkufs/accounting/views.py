@@ -288,19 +288,23 @@ def balance(request, group):
                               context_instance=RequestContext(request))
 
 @login_required
-def generate_html(request, group, list_type=None):
+def html_list(request, group, slug):
     try:
         group = AccountGroup.objects.get(slug=group)
         accounts = Account.objects.filter(group=group)
+        list = group.lists.get(slug=slug)
+        items = list.items.order_by('order')
     except AccountGroup.DoesNotExist, AccountGroup.DoesNotExist:
         raise Http404
 
-    return render_to_response('accounting/internal_list.html',
-                              {
-                                  'group': group,
-                                  'accounts': accounts,
-                              },
-                              context_instance=RequestContext(request))
+    return render_to_response('accounting/list.html',
+        {
+            'accounts': accounts,
+            'group': group,
+            'items': items,
+            'list': list,
+        },
+        context_instance=RequestContext(request))
 
 @login_required
 def approve(request, group, page="1"):
