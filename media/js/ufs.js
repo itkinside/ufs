@@ -8,7 +8,7 @@ var ufs = {
     var forms = document.getElementsByTagName('form');
 
     for(i=0; i<forms.length; i++) {
-      if(forms[i].className.match(/\Wtogglecheckboxes\W/))
+      if(!forms[i].className.match(/togglecheckboxes/))
         continue;
 
       var button_parent = forms[i].getElementsByTagName('button')[0].parentNode;
