@@ -6,9 +6,14 @@ h1 {
 	float: left;
 }
 
+a {
+	color: black;
+}
+
 table {
 	width: 100%;
 	clear: both;
+	caption-side: bottom;
 }
 
 thead th {
@@ -22,11 +27,15 @@ tbody th, tfoot th, td {
 	padding: 2px;
 }
 
-p.date {
+td {
+	text-align: center;
+}
+
+#date {
 	float: right;
 }
 
-p img {
+caption img {
 	vertical-align: middle;
 	width: 3em;
 	height: 3px
@@ -34,10 +43,6 @@ p img {
 
 .even {
 	background: #eee;
-}
-
-.blacklisted {
-	text-decoration: line-through;
 }
 
 .blacklisted td {
@@ -50,32 +55,8 @@ p img {
 	width: 100%;
 }
 
-.name {
-	font-size: 77%;
-}
-
-.tiny {
-	width: 2%;
-}
-
-.small {
-	width: 5%;
-}
-
-.medium {
-	width: 10%;
-}
-
-.large {
-	width: 20%;
-}
-
 .hidden {
 	display: none;
-}
-
-td.balance {
-	text-align: center;
 }
 
 @page {

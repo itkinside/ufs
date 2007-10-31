@@ -183,7 +183,7 @@ em {
 }
 
 /* Colorization */
-.pending {
+.pending, .comment, .comment a {
 	color: gray;
 }
 .warning {
@@ -192,6 +192,7 @@ em {
 .error, .blocked {
 	color: #a10000;
 }
+
 /* Errorlist */
 ul.errorlist {
 	padding: 0;
