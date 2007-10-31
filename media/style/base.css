@@ -113,6 +113,11 @@ em {
 	display: block;
 }
 
+#menu #help {
+	float: right;
+	text-align: right;
+}
+
 /* Main content block */
 #content {
 	/* Get clear of the floating menu */
