@@ -21,7 +21,7 @@
 {% if not group.lists.count %}
 <p>No lists configured for this group.</p>
 {% else %}
-<ul>
+<ul id="lists">
     {% for list in group.lists.all %}
         <li><a href="{% url html-list group.slug,list.slug %}">{{ list.name }}</a></li>
     {% endfor %}
