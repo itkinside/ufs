@@ -12,7 +12,15 @@
             <li><a href="{% url account-transfer request.session.my_account.group.slug,request.session.my_account.slug %}">Transfer</a></li>
         </ul>
     </li>
-    <li><a href="{% url group-summary request.session.my_account.group.slug %}">My group</a></li>
+    <li><a href="{% url group-summary request.session.my_account.group.slug %}">My group</a>
+    {% if group.lists.count %}
+        <ul>
+        {% for list in group.lists.all %}
+            <li><a href="{% url html-list group.slug,list.slug %}">{{ list.name }}</a></li>
+	{% endfor %}
+	</ul>
+    {% endif %}
+    </li>
 {% if is_admin %}
     <li class="admin"><a href="#">Transactions</a>
         <ul>
