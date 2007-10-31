@@ -1,178 +1,171 @@
 [
-  {
-    "pk": "1", 
-    "model": "accounting.account", 
-    "fields": {
-      "group": 1, 
-      "name": "Bank", 
-      "active": true, 
-      "owner": null, 
-      "type": "As", 
-      "slug": "bank", 
-      "ignore_block_limit": false
+    {
+        "pk": "1", 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 1, 
+            "name": "Bank", 
+            "active": true, 
+            "owner": null, 
+            "type": "As", 
+            "slug": "bank", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": "2", 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 1, 
+            "name": "Cash", 
+            "active": true, 
+            "owner": null, 
+            "type": "As", 
+            "slug": "cash", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": "4", 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 1, 
+            "name": "Stein Magnus Jodal", 
+            "active": true, 
+            "owner": 1, 
+            "type": "Li", 
+            "slug": "jodal", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": "3", 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 1, 
+            "name": "Thomas Adamcik", 
+            "active": true, 
+            "owner": 2, 
+            "type": "Li", 
+            "slug": "adamcik", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": "5", 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 2, 
+            "name": "Bank", 
+            "active": true, 
+            "owner": null, 
+            "type": "As", 
+            "slug": "bank", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": "6", 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 2, 
+            "name": "Cash", 
+            "active": true, 
+            "owner": null, 
+            "type": "As", 
+            "slug": "cash", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": "1", 
+        "model": "accounting.list", 
+        "fields": {
+            "account_width": 10, 
+            "balance_width": 10, 
+            "name": "Intern", 
+            "account_group": 1
+        }
+    }, 
+    {
+        "pk": "2", 
+        "model": "accounting.accountgroup", 
+        "fields": {
+            "warn_limit": null, 
+            "name": "ARK", 
+            "block_limit": null, 
+            "slug": "ark", 
+            "admins": [
+                2
+            ], 
+            "cash_account": 6, 
+            "bank_account": 5
+        }
+    }, 
+    {
+        "pk": "1", 
+        "model": "accounting.accountgroup", 
+        "fields": {
+            "warn_limit": 200, 
+            "name": "ITK-Inside", 
+            "block_limit": null, 
+            "slug": "itk", 
+            "admins": [
+                2, 
+                1
+            ], 
+            "cash_account": 2, 
+            "bank_account": 1
+        }
+    }, 
+    {
+        "pk": "1", 
+        "model": "accounting.listitem", 
+        "fields": {
+            "width": 10, 
+            "list": 1, 
+            "name": "\u00d8l", 
+            "order": 0
+        }
+    }, 
+    {
+        "pk": "2", 
+        "model": "accounting.listitem", 
+        "fields": {
+            "width": 20, 
+            "list": 1, 
+            "name": "Brus", 
+            "order": 1
+        }
+    }, 
+    {
+        "pk": "3", 
+        "model": "accounting.listitem", 
+        "fields": {
+            "width": 10, 
+            "list": 1, 
+            "name": "10", 
+            "order": 2
+        }
+    }, 
+    {
+        "pk": "4", 
+        "model": "accounting.listitem", 
+        "fields": {
+            "width": 10, 
+            "list": 1, 
+            "name": "3", 
+            "order": 3
+        }
+    }, 
+    {
+        "pk": "5", 
+        "model": "accounting.listitem", 
+        "fields": {
+            "width": 10, 
+            "list": 1, 
+            "name": "1", 
+            "order": 4
+        }
     }
-  }, 
-  {
-    "pk": "2", 
-    "model": "accounting.account", 
-    "fields": {
-      "group": 1, 
-      "name": "Cash", 
-      "active": true, 
-      "owner": null, 
-      "type": "As", 
-      "slug": "cash", 
-      "ignore_block_limit": false
-    }
-  }, 
-  {
-    "pk": "8", 
-    "model": "accounting.account", 
-    "fields": {
-      "group": 1, 
-      "name": "Stein Magnus", 
-      "active": true, 
-      "owner": 1, 
-      "type": "Li", 
-      "slug": "jodal", 
-      "ignore_block_limit": false
-    }
-  }, 
-  {
-    "pk": "7", 
-    "model": "accounting.account", 
-    "fields": {
-      "group": 1, 
-      "name": "Thomas Adamcik", 
-      "active": true, 
-      "owner": 5, 
-      "type": "Li", 
-      "slug": "adamcik", 
-      "ignore_block_limit": false
-    }
-  }, 
-  {
-    "pk": "3", 
-    "model": "accounting.account", 
-    "fields": {
-      "group": 2, 
-      "name": "Bank", 
-      "active": true, 
-      "owner": null, 
-      "type": "As", 
-      "slug": "bank", 
-      "ignore_block_limit": false
-    }
-  }, 
-  {
-    "pk": "4", 
-    "model": "accounting.account", 
-    "fields": {
-      "group": 2, 
-      "name": "Cash", 
-      "active": true, 
-      "owner": null, 
-      "type": "As", 
-      "slug": "cash", 
-      "ignore_block_limit": false
-    }
-  }, 
-  {
-    "pk": "9", 
-    "model": "accounting.account", 
-    "fields": {
-      "group": 2, 
-      "name": "Thomas Adamcik", 
-      "active": true, 
-      "owner": 5, 
-      "type": "Li", 
-      "slug": "adamcik", 
-      "ignore_block_limit": false
-    }
-  }, 
-  {
-    "pk": "5", 
-    "model": "accounting.account", 
-    "fields": {
-      "group": 3, 
-      "name": "Bank", 
-      "active": true, 
-      "owner": null, 
-      "type": "As", 
-      "slug": "bank", 
-      "ignore_block_limit": false
-    }
-  }, 
-  {
-    "pk": "6", 
-    "model": "accounting.account", 
-    "fields": {
-      "group": 3, 
-      "name": "Cash", 
-      "active": true, 
-      "owner": null, 
-      "type": "As", 
-      "slug": "cash", 
-      "ignore_block_limit": false
-    }
-  }, 
-  {
-    "pk": "2", 
-    "model": "accounting.settlement", 
-    "fields": {
-      "date": "2007-09-02", 
-      "comment": ""
-    }
-  }, 
-  {
-    "pk": "1", 
-    "model": "accounting.settlement", 
-    "fields": {
-      "date": "2007-09-03", 
-      "comment": "BSF"
-    }
-  }, 
-  {
-    "pk": "2", 
-    "model": "accounting.accountgroup", 
-    "fields": {
-      "warn_limit": null, 
-      "name": "ARK", 
-      "block_limit": null, 
-      "slug": "ark", 
-      "admins": [], 
-      "cash_account": 4, 
-      "bank_account": 3
-    }
-  }, 
-  {
-    "pk": "1", 
-    "model": "accounting.accountgroup", 
-    "fields": {
-      "warn_limit": 200, 
-      "name": "ITK Inside", 
-      "block_limit": 0, 
-      "slug": "itk", 
-      "admins": [
-        5, 
-        1, 
-        3
-      ], 
-      "cash_account": 2, 
-      "bank_account": 1
-    }
-  }, 
-  {
-    "pk": "3", 
-    "model": "accounting.accountgroup", 
-    "fields": {
-      "warn_limit": null, 
-      "name": "Regi", 
-      "block_limit": null, 
-      "slug": "regi", 
-      "admins": [], 
-      "cash_account": 6, 
-      "bank_account": 5
-    }
-  }
 ]
