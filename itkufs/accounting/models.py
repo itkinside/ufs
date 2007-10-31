@@ -205,6 +205,9 @@ class List(models.Model):
 
     class Admin:
         list_filter = ['account_group']
+        list_display = ['account_group', 'name']
+        list_display_links = ['name']
+        ordering = ['account_group', 'name']
 
 #    class Meta:
 #        unique_together = (('slug', 'account_group'),)
