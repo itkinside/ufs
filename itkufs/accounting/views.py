@@ -127,6 +127,7 @@ def account_summary(request, group, account, page='1'):
                        extra_context={
                             'is_admin': is_admin,
                             'account': account,
+                            'group': group,
                        },
                        template_object_name='transaction')
 
