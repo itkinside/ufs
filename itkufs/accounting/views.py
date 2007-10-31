@@ -219,6 +219,7 @@ def transfer(request, group, account=None, transfer_type=None):
                                   'account': account,
                                   'type': transfer_type,
                                   'form': form,
+                                  'group': group,
                               },
                               context_instance=RequestContext(request))
 
@@ -352,4 +353,3 @@ def settlement_summary(request, group, page="1"):
         is_admin = True
     else:
         is_admin = False
-
