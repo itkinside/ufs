@@ -193,3 +193,23 @@ class Transaction(models.Model):
     class Meta:
         ordering = ['registered', 'payed']
 
+class List(models.Model):
+    name = models.CharField(maxlength=200)
+    account_width = models.IntegerField(help_text="Width in percent for account name cell in table")
+    balance_width = models.IntegerField(help_text="Zero value indicates that balance should be left out")
+    account_group = models.ForeignKey(AccountGroup)
+
+    def __unicode__(self):
+        return u'%s: %s' % (self.account_group, self.name)
+
+    class Admin:
+        list_filter = ['account_group']
+
+class ListItem(models.Model):
+    name = models.CharField(maxlength=200, core=True)
+    width = models.IntegerField()
+    order = models.IntegerField()
+    list = models.ForeignKey(List, edit_inline=models.TABULAR, num_in_admin=5)
+
+    def __unicode__(self):
+        return u'%s, %s' % (self.list, self.name)
