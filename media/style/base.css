@@ -19,6 +19,7 @@ h2 {
 h3 {
 	font-size: 123.1%;
 	margin: 0.7em 0;
+	font-weight: bold;
 }
 
 /* Block elements */
@@ -182,7 +183,7 @@ em {
 .warning {
 	color: #df8713;
 }
-.error {
+.error, .blocked {
 	color: #a10000;
 }
 /* Errorlist */
