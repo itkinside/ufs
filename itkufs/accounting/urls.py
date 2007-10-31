@@ -22,6 +22,10 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/transfer/$',
         transfer, {'transfer_type': 'transfer'}, name='account-transfer'),
 
+    # Help
+    url(r'^(?P<group>[0-9a-z_-]+)/help/$',
+        static_page, {'template': 'accounting/help.html'}, name='help'),
+
     # My group
     url(r'^(?P<group>[0-9a-z_-]+)/$',
         group_summary, name='group-summary'),

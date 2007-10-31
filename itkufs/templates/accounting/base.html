@@ -36,6 +36,6 @@
         </ul>
     </li>
 {% endif %}
-    <li id="help"><a href="#">Help</a></li>
+    <li id="help"><a href="{% url help request.session.my_account.group.slug %}">Help</a></li>
 </ul>
 {% endblock %}

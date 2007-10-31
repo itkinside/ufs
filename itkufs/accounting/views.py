@@ -353,3 +353,22 @@ def settlement_summary(request, group, page="1"):
         is_admin = True
     else:
         is_admin = False
+
+@login_required
+def static_page(request, group, template):
+    try:
+        group = AccountGroup.objects.get(slug=group)
+    except AccountGroup.DoesNotExist:
+        raise Http404
+
+    if group.admins.filter(id=request.user.id).count():
+        is_admin = True
+    else:
+        is_admin = False
+
+    return render_to_response(template,
+                              {
+                                  'group': group,
+                                  'is_admin': is_admin,
+                              },
+                              context_instance=RequestContext(request))
