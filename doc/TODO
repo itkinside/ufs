@@ -1,23 +1,27 @@
 TODO µFS v1
 ===========
 
+- Move group info to account summary
+- Account list in admin menu
+- Refactor menu
 - Settlement (BSF-oppgjør)
-- Income statement (see http://www.accountingcoach.com/)
+
 - Add concept of recieved payment? (gives us two sided approval of transfer)
-- Add contact field to account group for first-line support
-- Custom base.html for each accountgroups lists?
 - Sub groups of users, active, pang...?
 
 adamcik
 -------
 
-- Convert first table in group_summary to <dl>
+- Admin mesage with feedback to approval
 - Enforce checking of admin rights, all we do today is hide menu...
+- List: IntegerField->PositiveSmallIntm, enforce sum(width) < 100
+- Add contact field to account group for first-line support
+- Custom image for list
 
 jodal
 -----
 
-- Income statement is next
+- Income statement (see http://www.accountingcoach.com/)
 
 done
 ----
@@ -29,3 +33,4 @@ done
 won't fix
 ---------
 
+- Custom base.html for each accountgroups lists?
