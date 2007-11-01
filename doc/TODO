@@ -12,7 +12,6 @@ TODO µFS v1
 adamcik
 -------
 
-- Admin mesage with feedback to approval
 - Enforce checking of admin rights, all we do today is hide menu...
 - List: IntegerField->PositiveSmallIntm, enforce sum(width) < 100
 - Add contact field to account group for first-line support
@@ -28,6 +27,7 @@ done
 
 - JS code for toggeling checkbox'es in approve view
 - Dynamic lists
+- Admin mesage with feedback to approval
 
 
 won't fix

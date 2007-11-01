@@ -323,10 +323,13 @@ def approve(request, group, page="1"):
         Q(payed__isnull=True)).order_by('-registered')
 
     if request.method == 'POST':
+        count = 0
         for t in transactions:
             if request.POST.has_key(u'transcation_id_%d' % t.id):
+                count += 1
                 t.payed = datetime.now()
                 t.save()
+        request.user.message_set.create(message='Approved %d transaction in %s' % (count, group.name))
 
     transactions = transactions.filter(Q(payed__isnull=True))
 
