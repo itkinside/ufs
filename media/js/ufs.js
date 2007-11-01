@@ -66,8 +66,14 @@ var ufs = {
     // Taken from http://www.alistapart.com/articles/dropdowns/
     if (document.all && document.getElementById) {
       var navRoot = document.getElementById("menulist");
+
+      if (navRoot == null) return;
+
       for (i=0; i<navRoot.childNodes.length; i++) {
         var node = navRoot.childNodes[i];
+
+	if(node == null) continue;
+
         if (node.nodeName == "LI") {
           node.onmouseover = function() {
             this.className += " over";
@@ -78,7 +84,7 @@ var ufs = {
         }
       }
     }
-  },
-}
+  }
+};
 
 window.onload = ufs.init;
