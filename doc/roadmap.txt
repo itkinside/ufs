@@ -4,7 +4,7 @@ ITK µFS Roadmap
 Version 1: Accounting
 ---------------------
 
-:Scheduled release date: August 2007
+:Scheduled release date: December 2007
 
 Version 1 requirements:
 
@@ -32,7 +32,7 @@ doc/AccountingViews.txt.
 Version 2: Inventory
 --------------------
 
-:Scheduled release date: September 2007
+:Scheduled release date: 2008
 
 Version 2 ideas:
 
@@ -52,5 +52,21 @@ the accounting application in the files mentioned under `Version 1:
 Accounting`_.
 
 
+Version 3: Point-of-Sale
+------------------------
+
+:Scheduled release date: 2008
+
+Version 3 ideas:
+
+- Point-of-Sale (a computer) on top of ITK's refrigerator.
+- Can use bar codes on the inventory or at sheets (for 'smågodt' and such) for
+  registering all sales.
+- Can use future bar codes on our ID cards for registering payments.
+- Both sales and payment can be replaced or supplemented by a touch screen
+  monitor.
+- For motivation, please take a look at http://www.ping.uio.no/pils2000.shtml
+
+
 :Authors: Stein Magnus Jodal, Thomas Adamcik
-:Version: 2007-06-29-1
+:Version: 2007-11-04-1

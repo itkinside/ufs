@@ -1,56 +1,77 @@
+{% load i18n %}
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
 "http://www.w3.org/TR/xhtml11/DTD/xhtml11-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-  <head>
+
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>{{ group.name }}</title>
     <link rel="stylesheet" type="text/css" href="{% url media "style/reset-min.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% url media "style/fonts-min.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% url media "style/print.css" %}" media="print,screen" />
-  </head>
-  <body>
-   <h1>{{ group.name }}: {{ list.name }}</h1>
-   <p class="hidden"><b>Invalid</b> list, do not use!</p>
-   <p id="date">{% now "Y-m-d" %}</p>
-   <table>
+</head>
+
+<body>
+
+<h1>{{ group.name }}: {{ list.name }}</h1>
+
+<p class="hidden">{% trans "<b>Invalid</b> list, do not use!" %}</p>
+
+{% if group.logo %}
+<p id="logo"><img src="{% url media group.logo %}" alt="logo" /></p>
+{% endif %}
+
+<p id="secondary">
+  {% now "Y-m-d" %}
+  {% if group.email %} &ndash;
+  <a href="mailto:{{ group.email }}">{{group.email}}</a>
+  {% endif %}
+</p>
+
+
+<table>
     <caption>
-      (Blacklisted accounts are marked with <img src="{% url media "images/black.png" %}"/>, please remeber to <a href="{% url help group.slug %}">print with backgrounds</a>)
+        {% trans "Blacklisted accounts are marked with" %}
+        <img src="{% url media "images/black.png" %}"/>.
+        {% trans "Please remember to print with backgrounds in landscape orientation." %}
     </caption>
+
     <thead>
-    <tr>
-      <th style="width: {{ list.account_width }}%">Name</th>
-      {% ifnotequal list.balance_width 0 %}
-        <th style="width: {{ list.balance_width }}%">Balance</th>
-      {% endifnotequal %}
-      {% for item in list.items.all %}
-      <th style="width: {{ i.width }}%">{{ item.name }}</th>
-      {% endfor %}
-    </tr>
+        <tr>
+            <th style="width: {% widthratio list.account_width list.total_width 100 %}%">{% trans "Name" %}</th>
+            {% ifnotequal list.balance_width 0 %}
+            <th style="width: {% widthratio list.balance_width list.total_width 100 %}%">{% trans "Balance" %}</th>
+            {% endifnotequal %}
+        {% for item in list.item_set.all %}
+            <th style="width: {% widthratio item.width list.total_width 100 %}%">{{ item.name }}</th>
+        {% endfor %}
+        </tr>
     </thead>
+
     <tbody>
     {% for account in accounts %}
-      {% if account.is_user_account %}
+        {% if account.is_user_account %}
         <tr class="{% cycle even,odd %}{% if account.is_blocked %} blacklisted{% endif %}">
-          <th class="name">{{ account.name }}</th>
-          {% ifnotequal list.balance_width 0 %}
-          <td class="balance">{{ account.balance_credit_reversed }}</td>
-	  {% endifnotequal %}
-          {% for item in list.items.all %}
-            {% if not account.is_blocked %}
-              <td/>
-            {% else %}
-              <td><img src="{% url media "images/black.png" %}"/></td>
-            {% endif %}
-	  {% endfor %}
+            <th class="name">{{ account.name }}</th>
+            {% ifnotequal list.balance_width 0 %}
+            <td class="balance">{{ account.balance_credit_reversed }}</td>
+            {% endifnotequal %}
+            {% for item in list.item_set.all %}
+                {% if not account.is_blocked %}
+            <td></td>
+                {% else %}
+            <td><img src="{% url media "images/black.png" %}"/></td>
+                {% endif %}
+	    {% endfor %}
         </tr>
-      {% endif %}
+        {% endif %}
     {% endfor %}
     </tbody>
-   </table>
+</table>
 
+</body>
 
-  </body>
 </html>

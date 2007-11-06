@@ -1,20 +1,21 @@
 {% extends "accounting/base.html" %}
+{% load i18n %}
 
 {% block content %}
-<h2>Approve transactions in &ldquo;{{ group.name }}&rdquo;</h2>
+<h2>{% trans "Approve transactions" %}</h2>
 
 {% if not transaction_list %}
-<p>No pending transactions found.</p>
+<p>{% trans "No pending transactions found." %}</p>
 {% else %}
 
 {% if is_paginated %}
 <p>
     {% if has_previous %}
-    <a href="{% url approve-transactions-page group.slug,previous %}">&laquo; Previous</a> |
+    <a href="{% url approve-transactions-page group.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
     {% endif %}
-    {{ hits }} hits
+    {% blocktrans %}{{ hits }} hits{% endblocktrans %}
     {% if has_next %}
-    | <a href="{% url approve-transactions-page group.slug,next %}">Next &raquo;</a>
+    | <a href="{% url approve-transactions-page group.slug,next %}">{% trans "Next" %} &raquo;</a>
     {% endif %}
 </p>
 {% endif %}
@@ -22,21 +23,23 @@
 <form action="{% url approve-transactions group.slug %}" method="post" class="togglecheckboxes">
 <table class="tablelist" id="accounting_approve_transactions">
     <tr>
-        <th>Registered</th>
-        <th>From</th>
-        <th>To</th>
-        <th>Amount</th>
-        <th>Details</th>
-	<th>Approve</th>
+        <th>{% trans "Registered" %}</th>
+        <th>{% trans "Debit account" %}</th>
+        <th>{% trans "Credit account" %}</th>
+        <th>{% trans "Amount" %}</th>
+        <th>{% trans "Details" %}</th>
+	<th>{% trans "Approve" %}</th>
     </tr>
     {% for t in transaction_list %}
-    <tr>
+    <tr class="{% cycle evenrow,oddrow %}">
         <td>{{ t.registered|date:"Y-m-d" }}</td>
         <td>
-		From <a href="{% url account-summary t.credit_account.group.slug,t.credit_account.slug %}">{{ t.credit_account.name }}</a>
+		<a href="{% url account-summary t.debit_account.group.slug,t.debit_account.slug %}">{{ t.debit_account.name }}</a>,
+                {{ t.debit_account.group.name }}
         </td>
         <td>
-		To <a href="{% url account-summary t.debit_account.group.slug,t.debit_account.slug %}">{{ t.debit_account.name }}</a>
+		<a href="{% url account-summary t.debit_account.group.slug,t.debit_account.slug %}">{{ t.debit_account.name }}</a>,
+                {{ t.debit_account.group.name }}
         </td>
 
         <td class="align_right">{{ t.amount|stringformat:"0.2f" }}</td>
@@ -53,19 +56,18 @@
     </tr>
     {% endfor %}
 </table>
-<p>
-  <button type="submit">Approve</button>
-</p>
+
+<p><button type="submit">{% trans "Approve" %}</button> </p>
 </form>
 
 {% if is_paginated %}
 <p>
     {% if has_previous %}
-    <a href="{% url approve-transactions-page group.slug,previous %}">&laquo; Previous</a> |
+    <a href="{% url approve-transactions-page group.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
     {% endif %}
-    {{ hits }} hits
+    {% blocktrans %}{{ hits }} hits{% endblocktrans %}
     {% if has_next %}
-    | <a href="{% url approve-transactions-page group.slug,next %}">Next &raquo;</a>
+    | <a href="{% url approve-transactions-page group.slug,next %}">{% trans "Next" %} &raquo;</a>
     {% endif %}
 </p>
 {% endif %}

@@ -1,5 +1,5 @@
-ITK Microfinance System (µFS)
-=============================
+µFS Microfinance System
+=======================
 
 What is microfinance?
 ---------------------
@@ -16,10 +16,10 @@ From Wikipedia_:
 .. _Wikipedia: http://en.wikipedia.org/wiki/Microfinance
 
 
-What is ITK µFS?
-----------------
+What is µFS?
+------------
 
-ITK Microfinance System (µFS) is a system providing financial services, such as
+µFS Microfinance System is a system providing financial services, such as
 ``krysselister'' or transacations of small change, for the members of the `IT
 committee`_ (ITK) of `Studentersamfundet i Trondhjem`_. The members of ITK are
 students. Students are per some definition poor. Poor people get new
@@ -31,10 +31,10 @@ opportunities by microfinance, as shown by Nobel Prize winner Yunus.
 .. _Studentersamfundet i Trondhjem: http://www.samfundet.no/
 
 
-Why ITK µFS?
-------------
+Why µFS?
+--------
 
-The original intention with ITK µFS, was to get in control of the bar economy
+The original intention with µFS, was to get in control of the bar economy
 at our computer club. The rest of it was created because we could ;-)
 
 
@@ -61,5 +61,4 @@ this project in the `rST format`_.
 
 
 :Authors: Stein Magnus Jodal
-:Version: 2007-06-22-1
-:Dedication: To ITK Inside.
+:Version: 2007-11-04-1

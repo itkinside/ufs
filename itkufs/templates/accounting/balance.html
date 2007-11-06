@@ -1,13 +1,14 @@
 {% extends "accounting/base.html" %}
+{% load i18n %}
 
 {% block content %}
-<h2>Balance sheet for {{ group.name }} at {{ today }}</h2>
+<h2>{% blocktrans with group.name as group_name %}Balance sheet for {{ group_name }} at {{ today }}{% endblocktrans %}</h2>
 
 <table class="tablecolumn"><tr><td>
 
 <table class="tablelist">
     <tr>
-        <th colspan="2">Assets</th>
+        <th colspan="2">{% trans "Assets" %}</th>
     </tr>
 {% for name, balance in accounts.As %}
     <tr>
@@ -16,7 +17,7 @@
     </tr>
 {% endfor %}
     <tr>
-        <td><em>Total assets</em></td>
+        <td><em>{% trans "Total assets" %}</em></td>
         <td class="align_right">
             <em>{{ accounts.AsSum|stringformat:"0.2f" }}</em>
         </td>
@@ -27,11 +28,11 @@
 
 <table class="tablelist">
     <tr>
-        <th colspan="2">Liabilities and equities</th>
+        <th colspan="2">{% trans "Liabilities and equities" %}</th>
     </tr>
 
     <tr>
-        <th colspan="2">&nbsp;&nbsp;Liabilities</th>
+        <th colspan="2">&nbsp;&nbsp;{% trans "Liabilities" %}</th>
     </tr>
 {% for name, balance in accounts.Li %}
     <tr>
@@ -40,14 +41,14 @@
     </tr>
 {% endfor %}
     <tr>
-        <td><em>&nbsp;&nbsp;Total liabilities</em></td>
+        <td><em>&nbsp;&nbsp;{% trans "Total liabilities" %}</em></td>
         <td class="align_right">
             <em>{{ accounts.LiSum|stringformat:"0.2f" }}</em>
         </td>
     </tr>
 
     <tr>
-        <th colspan="2">&nbsp;&nbsp;Equities</th>
+        <th colspan="2">&nbsp;&nbsp;{% trans "Equities" %}</th>
     </tr>
 {% for name, balance in accounts.Eq %}
     <tr>
@@ -56,14 +57,14 @@
     </tr>
 {% endfor %}
     <tr>
-        <td><em>&nbsp;&nbsp;Total equities (Net worth)</em></td>
+        <td><em>&nbsp;&nbsp;{% trans "Total equities (Net worth)" %}</em></td>
         <td class="align_right">
             <em>{{ accounts.EqSum|stringformat:"0.2f" }}</em>
         </td>
     </tr>
 
     <tr>
-        <td><em>Total liabilities and equities</em></td>
+        <td><em>{% trans "Total liabilities and equities" %}</em></td>
         <td class="align_right">
             <em>{{ accounts.LiEqSum|stringformat:"0.2f" }}</em>
         </td>

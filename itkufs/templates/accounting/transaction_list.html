@@ -1,71 +1,59 @@
-<h3>Transactions</h3>
+{% load i18n %}
+<h3>{% trans "Transactions" %}</h3>
 
 {% if not transaction_list %}
-<p>No transactions found.</p>
+<p>{% trans "No transactions found." %}</p>
 {% else %}
 
 {% if is_paginated %}
 <p>
     {% if has_previous %}
-    <a href="{% url account-summary-page account.group.slug,account.id,previous %}">&laquo; Previous</a> |
+    <a href="{% url account-summary-page account.group.slug,account.id,previous %}">&laquo; {% trans "Previous" %}</a> |
     {% endif %}
-    {{ hits }} hits
+    {% blocktrans %}{{ hits }} hits{% endblocktrans %}
     {% if has_next %}
-    | <a href="{% url account-summary-page account.group.slug,account.id,next %}">Next &raquo;</a>
+    | <a href="{% url account-summary-page account.group.slug,account.id,next %}">{% trans "Next" %} &raquo;</a>
     {% endif %}
 </p>
 {% endif %}
 
 <table class="tablelist">
     <tr>
-        <th>Registered</th>
-        <th>Payed</th>
-        <th>Group</th>
-        <th>Type</th>
-        <th>Credit</th>
-        <th>Debit</th>
-        <th>Details</th>
+        <th>{% trans "Registered" %}</th>
+        <th>{% trans "Payed" %}</th>
+        <th>{% trans "Debit Account" %}</th>
+        <th>{% trans "Credit Account" %}</th>
+        <th>{% trans "Amount" %}</th>
+        <th>{% trans "Details" %}</th>
     </tr>
     {% for t in transaction_list %}
-    <tr{% if not t.payed %} class="pending"{% endif %}>
+    <tr class="{% cycle evenrow,oddrow %}{% if not t.payed %} pending{% endif %}">
         <td>{{ t.registered|date:"Y-m-d" }}</td>
         {% if t.payed %}
         <td>{{ t.payed|date:"Y-m-d" }}</td>
         {% else %}
-        <td><em>Pending</em></td>
+        <td><em>{% trans "Pending" %}</em></td>
         {% endif %}
 
-				<td>
-				{% ifequal t.credit_account.id account.id %}
-					{{ t.debit_account.group.name }}
-				{% else %}
-					{{ t.credit_account.group.name }}
-				{% endifequal %}
-				</td>
-
         <td>
-				{% ifequal t.credit_account.id account.id %}
-						{% if is_admin %}
-				To <a href="{% url account-summary t.debit_account.group.slug,t.debit_account.slug %}">{{ t.debit_account.name }}</a>
-						{% else %}
-				To {{ t.debit_account.name }}
-						{% endif %}
-				{% else %}
-						{% if is_admin %}
-				From <a href="{% url account-summary t.credit_account.group.slug,t.credit_account.slug %}">{{ t.credit_account.name }}</a>
-						{% else %}
-				From {{ t.credit_account.name }}
-						{% endif %}
-				{% endifequal %}
+        {% if is_admin %}
+            <a href="{% url account-summary t.debit_account.group.slug,t.debit_account.slug %}">{{ t.debit_account.name }}</a>,
+        {% else %}
+            {{ t.debit_account.name }},
+        {% endif %}
+        {{ t.debit_account.group.name }}
         </td>
 
-        {% ifequal t.credit_account.id account.id %}
-        <td class="align_right">{{ t.amount|stringformat:"0.2f" }}</td>
-        <td></td>
+        <td>
+        {% if is_admin %}
+            <a href="{% url account-summary t.credit_account.group.slug,t.credit_account.slug %}">{{ t.credit_account.name }}</a>,
         {% else %}
-        <td></td>
+            {{ t.credit_account.name }},
+        {% endif %}
+        {{ t.credit_account.group.name }}
+        </td>
+
         <td class="align_right">{{ t.amount|stringformat:"0.2f" }}</td>
-        {% endifequal %}
 
         <td>
             {% if t.settlement %}
@@ -80,11 +68,11 @@
 {% if is_paginated %}
 <p>
     {% if has_previous %}
-    <a href="{% url account-summary-page account.group.slug,account.id,previous %}">&laquo; Previous</a> |
+    <a href="{% url account-summary-page account.group.slug,account.id,previous %}">&laquo; {% trans "Previous" %}</a> |
     {% endif %}
-    {{ hits }} hits
+    {% blocktrans %}{{ hits }} hits{% endblocktrans %}
     {% if has_next %}
-    | <a href="{% url account-summary-page account.group.slug,account.id,next %}">Next &raquo;</a>
+    | <a href="{% url account-summary-page account.group.slug,account.id,next %}">{% trans "Next" %} &raquo;</a>
     {% endif %}
 </p>
 {% endif %}

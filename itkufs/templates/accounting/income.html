@@ -1,0 +1,48 @@
+{% extends "accounting/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<h2>{% blocktrans with group.name as group_name %}Income statement for {{ group_name }} until {{ today }}{% endblocktrans %}</h2>
+
+<p>FIXME: Delimit income statement to time interval.</p>
+
+<table class="tablelist">
+    <tr>
+        <th colspan="2">{% trans "Revenues and gains" %}</th>
+    </tr>
+{% for name, balance in accounts.In %}
+    <tr>
+        <td>&nbsp;&nbsp;{{ name }}</td>
+        <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
+    </tr>
+{% endfor %}
+    <tr>
+        <td><em>{% trans "Total revenues and gains" %}</em></td>
+        <td class="align_right">
+            <em>{{ accounts.InSum|stringformat:"0.2f" }}</em>
+        </td>
+    </tr>
+
+    <tr>
+        <th colspan="2">{% trans "Expenses and losses" %}</th>
+    </tr>
+{% for name, balance in accounts.Ex %}
+    <tr>
+        <td>&nbsp;&nbsp;{{ name }}</td>
+        <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
+    </tr>
+{% endfor %}
+    <tr>
+        <td><em>{% trans "Total expenses and losses" %}</em></td>
+        <td class="align_right">
+            <em>{{ accounts.ExSum|stringformat:"0.2f" }}</em>
+        </td>
+    </tr>
+
+    <tr>
+        <th>{% trans "Net income" %}</th>
+        <th class="align_right">{{ accounts.InExDiff|stringformat:"0.2f" }}</th>
+    </tr>
+</table>
+
+{% endblock %}

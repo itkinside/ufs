@@ -29,8 +29,18 @@ urlpatterns = patterns('',
     # My group
     url(r'^(?P<group>[0-9a-z_-]+)/$',
         group_summary, name='group-summary'),
+    url(r'^(?P<group>[0-9a-z_-]+)/(?P<page>\d+)/$',
+        group_summary, name='group-summary-page'),
+
+    # lists
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/$',
-        html_list, name='html-list'),
+        html_list, name='view-list'),
+    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/new/$',
+        html_list, name='new-list'),
+    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/edit/$',
+        html_list, name='edit-list'),
+    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/delete/$',
+        html_list, name='delete-list'),
 
     # Admin: Transactions
     url(r'^(?P<group>[0-9a-z_-]+)/approve/$',
@@ -46,7 +56,9 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/settlement/(?P<page>\d+)/$',
         settlement_summary, name='settlement-summary-page'),
 
-    # Admin: Balance
+    # Admin: Statements
     url(r'^(?P<group>[0-9a-z_-]+)/balance/$',
         balance, name='balance'),
+    url(r'^(?P<group>[0-9a-z_-]+)/income/$',
+        income, name='income'),
 )

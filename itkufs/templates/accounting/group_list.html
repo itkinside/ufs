@@ -1,27 +1,26 @@
 {% extends "accounting/base.html" %}
+{% load i18n %}
 
 {% block menu %}{% endblock %}
 
 {% block content %}
-<h2>Accounts for user {{ user.username }}</h2>
+<h2>{% blocktrans with user.username as username %}Accounts for user &ldquo;{{ username }}&rdquo;{% endblocktrans %}</h2>
 
 {% if not accounts %}
-<p>You already have a µFS user, but it is not connected to any accounts. Please
-ask your group administrator to create an account for you and connect the
-account with your user.</p>
+<p>{% trans "You already have a µFS user, but it is not connected to any accounts. Please ask your group administrator to create an account for you and connect the account with your user." %}</p>
 {% else %}
 
 <table class="tablelist">
     <tr>
-        <th>Account</th>
-        <th>Group</th>
-        <th>Group admin</th>
+        <th>{% trans "Account" %}</th>
+        <th>{% trans "Group" %}</th>
+        <th>{% trans "Group admin" %}</th>
     </tr>
     {% for account, is_admin in accounts %}
     <tr>
         <td><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.name }}</a></td>
         <td>{{ account.group.name }}</td>
-        <td>{{ is_admin|yesno:"Yes,No" }}</td>
+        <td>{{ is_admin|yesno:_("Yes,No") }}</td>
     </tr>
     {% endfor %}
 </table>

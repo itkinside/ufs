@@ -1,26 +1,36 @@
 TODO µFS v1
 ===========
 
-- Move group info to account summary
-- Account list in admin menu
-- Refactor menu
+Cross-group transfers:
+- Add concept of received payment, to givs us two sided approval of transfer.
 - Settlement (BSF-oppgjør)
 
-- Add concept of recieved payment? (gives us two sided approval of transfer)
-- Sub groups of users, active, pang...?
+Transfers:
+- Make it possible for users to claim money from Expense accounts like
+  'Innkjøp' when they have bought stuff for the bar.
+- Make it possible for admins to delete unapproved transactions? Send mail
+  warning to the end that registered the transaction?
+
+Lists:
+- Sub groups of users, active, pang...? Should list have a concept of who
+  should be on it?
+
+Sanity and robustness:
+- Create unit tests for at least the model layer
+- Use decorators to control commit/rollback of transactions
+
+i18n:
+- Translate itkufs/locale/no/LC_MESSAGES/django.po
 
 adamcik
 -------
 
-- Enforce checking of admin rights, all we do today is hide menu...
-- List: IntegerField->PositiveSmallIntm, enforce sum(width) < 100
-- Add contact field to account group for first-line support
-- Custom image for list
+- Admin should be able to edit lists...
 
 jodal
 -----
 
-- Income statement (see http://www.accountingcoach.com/)
+- (void)
 
 done
 ----
@@ -28,9 +38,19 @@ done
 - JS code for toggeling checkbox'es in approve view
 - Dynamic lists
 - Admin mesage with feedback to approval
+- enforce sum(width) < 100, implimented by relative 100%
+- Move group info to account summary
+- Refactor menu
+- Income statement (see http://www.accountingcoach.com/)
+- i18n: Add _() et al around all strings
+- Add contact field to account group for first-line support
+- Custom image for list
+- List: IntegerField->PositiveSmallInt
+- Enforce checking of admin rights, all we do today is hide menu...
 
-
-won't fix
----------
+wontfix
+-------
 
 - Custom base.html for each accountgroups lists?
+- Account list in admin menu
+- Serial number to lists (somewhat in doubt...)

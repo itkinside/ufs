@@ -1,5 +1,5 @@
-ITK Microfinance System (µFS)
-=============================
+µFS Microfinance System
+=======================
 
 How to install
 --------------
@@ -10,8 +10,8 @@ Dependencies
 ------------
 
 - Django from SVN (pre-0.97)
-- python-reportlab
+- A database supported by Django
 
 
 :Authors: Stein Magnus Jodal
-:Version: 2007-08-01-1
+:Version: 2007-11-04-1

@@ -1,16 +1,14 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Internal Server Error{% endblock %}
-
+{% block title %}{% trans "Internal server error" %}{% endblock %}
 {% block header %}{% endblock %}
-
 {% block menu %}{% endblock %}
 
 {% block content %}
-<h2>Internal Server Error</h2>
 
-<p>Please report this error to
-<a href="mailto:itk-ufs@samfundet.no">itk-ufs@samfundet.no</a>,
-together with what you did leading up to the error, and what you expected to
-happen instead of the error.</p>
+<h2>{% trans "Internal server error" %}</h2>
+
+<p>{% trans 'Please report this error to <a href="mailto:itk-ufs@samfundet.no">itk-ufs@samfundet.no</a>, together with what you did leading up to the error, and what you expected to happen instead of the error.' %}</p>
+
 {% endblock %}

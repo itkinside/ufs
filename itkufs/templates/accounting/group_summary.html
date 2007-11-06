@@ -1,59 +1,97 @@
 {% extends "accounting/base.html" %}
-
-{% block title %}{{ group.name }}{% endblock %}
-{% block header %}{{ group.name }}{% endblock %}
+{% load i18n %}
 
 {% block content %}
-<h2>Group summary for &ldquo;{{ group.name }}&rdquo;</h2>
 
+<h2>{% blocktrans with group.name as group_name %}Group summary for &ldquo;{{ group_name }}&rdquo;{% endblocktrans %}</h2>
+
+<div id="groupinfo">
+<h3>{% trans "Group info" %}</h3>
 <table class="tabledetails">
     <tr>
-        <th>Warning limit</th>
+        <th>{% trans "Warning limit" %}</th>
+        {% if group.warn_limit %}
+        <td>{{ group.warn_limit|stringformat:"0.2f" }}</td>
+        {% else %}
         <td>{{ group.warn_limit }}</td>
+        {% endif %}
     </tr>
     <tr>
-        <th>Blocking limit</th>
+        <th>{% trans "Blocking limit" %}</th>
+        {% if group.block_limit %}
+        <td>{{ group.block_limit|stringformat:"0.2f" }}</td>
+        {% else %}
         <td>{{ group.block_limit }}</td>
+        {% endif %}
     </tr>
 </table>
+</div>
 
-<h3>Lists</h3>
-{% if not group.lists.count %}
-<p>No lists configured for this group.</p>
+<div id="transaction_actions">
+<h3>{% trans "Transactions" %}</h3>
+   <ul>
+      <li><a href="{% url approve-transactions group.slug %}">{% trans "Approve transaction" %}</a></li>
+      <li><a href="{% url register-transactions group.slug %}">{% trans "Register transaction" %}</a></li>
+   </ul>
+</div>
+
+<div id="statements">
+<h3>{% trans "Statements" %}</h3>
+   <ul>
+      <li><a href="{% url balance group.slug %}">{% trans "Balance statement" %}</a></li>
+      <li><a href="{% url income group.slug %}">{% trans "Income statement" %}</a></li>
+   </ul>
+</div>
+
+<div id="lists">
+<h3>{% trans "Lists" %}</h3>
+{% if not group.list_set.count %}
+<p>{% trans "No lists configured for this group." %}</p>
 {% else %}
-<ul id="lists">
-    {% for list in group.lists.all %}
-        <li><a href="{% url html-list group.slug,list.slug %}">{{ list.name }}</a></li>
+<ul>
+    {% for list in group.list_set.all %}
+    <li>
+      <a href="{% url view-list group.slug,list.slug %}">{{ list.name }}</a>
+      [<a href="{% url edit-list group.slug,list.slug %}">{% trans "Edit"%}</a>,
+       <a href="{% url delete-list group.slug,list.slug %}">{% trans "Delete"%}</a>]
+    </li>
     {% endfor %}
+    <li>[<a href="{% url new-list group.slug %}">{% trans "New"%}</a>]</li>
 </ul>
 {% endif %}
+</div>
 
 {% if is_admin %}
 
-<h3>Accounts</h3>
-
+<div id="accounts">
+<h3>{% trans "Accounts" %}</h3>
 {% if not group.account_set.count %}
-<p>No accounts found.</p>
+<p>{% trans "No accounts found." %}</p>
 {% else %}
 
 <table class="tablelist">
     <tr>
-        <th>Account</th>
-        <th>Type</th>
-        <th>Balance</th>
+        <th>{% trans "Account" %}</th>
+        <th>{% trans "Type" %}</th>
+        <th>{% trans "Balance" %}</th>
     </tr>
 {% for account in group.account_set.all %}
-    <tr>
+    <tr class="{% cycle evenrow,oddrow %}">
         <td><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.name }}</a></td>
         <td>{{ account.get_type_display }}</td>
         <td class="align_right{% if account.is_blocked %} blocked{% endif %}">{{ account.balance|stringformat:"0.2f" }}</td>
     </tr>
 {% endfor %}
 </table>
-<p class="comment">(Please note that negative liabilty acounts in fact have credit in the bank/cash accounts,
-see <a href="{% url help group.slug %}">help</a> for more info)</p>
+
+<p class="comment">{% trans "Please note, a negative balance in a liabilty account tells that the owner has money to spend, while a positive balance means it is time for a deposit." %}</p>
 
 {% endif %}
+</div>
+
+<div id="transactions">
+{% include "accounting/transaction_list.html" %}
+</div>
 
 {% endif %}
 

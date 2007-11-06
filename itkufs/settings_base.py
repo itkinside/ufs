@@ -60,6 +60,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
 
 ROOT_URLCONF = 'itkufs.urls'
@@ -96,3 +97,9 @@ SESSION_COOKIE_SECURE = True
 MAIL_DOMAIN = 'samfundet.no'
 LOGIN_URL = '/login/'
 
+# Languages
+ugettext = lambda s: s
+LANGUAGES = (
+    ('en', ugettext('English')),
+    ('no', ugettext('Norwegian')),
+)

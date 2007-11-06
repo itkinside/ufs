@@ -5,20 +5,21 @@ body {
 }
 
 /* Headers */
+h1#head {
+	height: 40px; /* Height of background logo */
+}
+
 h1 {
 	/* background: ...; */ /* Defined in template, as logo url is needed */
 	font-size:  200%;
-	height: 80px; /* Height of background logo */
-	line-height: 40px; /* Half of height */
-	margin: 0 0 0.5em 0;
+	margin: 0.2em 0;
 }
 h2 {
 	font-size:  138.5%;
-	margin: 0.7em 0;
+	margin: 0.5em 0;
 }
 h3 {
 	font-size: 123.1%;
-	margin: 0.7em 0;
 	font-weight: bold;
 }
 
@@ -32,6 +33,7 @@ table {
 ul {
 	list-style-type: disc;
 	padding-left: 1em;
+	margin: 0.3em 0 1em;
 }
 ul ul {
 	list-style-type: square;
@@ -126,12 +128,6 @@ em {
 	margin: 0.5em 0;
 }
 
-/* Group summary page */
-#lists li {
-	display: inline;
-	list-style-type: none;
-}
-
 /* Footer block */
 #footer {
 	border-top: 1px solid #aaa;
@@ -170,6 +166,14 @@ em {
 	padding: 0.3em;
 	vertical-align: top;
 }
+.tablelist tr.evenrow {
+	background: white;
+	color: black;
+}
+.tablelist tr.oddrow {
+	background: #eee;
+	color: black;
+}
 
 /* Alignment */
 .align_left {
@@ -193,7 +197,7 @@ em {
 	color: #a10000;
 }
 
-/* Errorlist */
+/* Error list */
 ul.errorlist {
 	padding: 0;
 	margin-left: 7em;
@@ -202,7 +206,7 @@ ul.errorlist {
 	color: #a10000;
 }
 
-/* forms */
+/* Forms */
 label {
 	display: block;
 	width: 6em;
@@ -235,3 +239,14 @@ table + p button {
 input#id_payed, table#accounting_approve_transactions input { /* checkboxes */
 	width: auto;
 }
+
+/* Account/group summary */
+#accountinfo, #groupinfo, #actions, #lists, #transaction_actions, #statements {
+	float: left;
+	margin-right: 3em;
+}
+#transactions, #accounts {
+	clear: both;
+}
+
+

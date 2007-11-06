@@ -31,8 +31,13 @@ td {
 	text-align: center;
 }
 
-#date {
+#secondary {
+	float: left;
+	clear: left;
+}
+#logo {
 	float: right;
+	padding: 0.5em;
 }
 
 caption img {

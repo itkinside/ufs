@@ -1,4 +1,4 @@
-{% load webdesign %}
+{% load i18n webdesign %}
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
@@ -8,10 +8,11 @@
 
 <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>µFS Microfinance System - {% block title %}Foo Bar{% endblock %}</title>
+        <title>µFS - {% block title %}Foo Bar{% endblock %}</title>
         <link rel="stylesheet" type="text/css" href="{% url media "style/reset-min.css" %}" />
         <link rel="stylesheet" type="text/css" href="{% url media "style/fonts-min.css" %}" />
         <link rel="stylesheet" type="text/css" href="{% url media "style/base.css" %}" />
+	<script type="text/javascript" src="{% url jsi18n %}"></script>
         <script type="text/javascript" src="{% url media "js/ufs.js" %}"></script>
 
 </head>
@@ -19,9 +20,8 @@
 
 <div id="container">
 
-<h1 style="background: url({% url media "images/logo.png" %}) top right no-repeat;">
-µFS Microfinance System<br />
-{% block header %}Foo Bar{% endblock %}</h1>
+<h1 id="head" style="background: url({% url media "images/logo.png" %}) top right no-repeat;">
+{% trans "µFS Microfinance System" %}</h1>
 
 <div id="menu">
 {% block menu %}
@@ -39,6 +39,8 @@
 </div>
 
 <div id="content">
+<h1>{% block header %}Foo Bar{% endblock %}</h1>
+
 {% if messages %}
 <ul id="messages">
     {% for message in messages %}
@@ -46,6 +48,7 @@
     {% endfor %}
 </ul>
 {% endif %}
+
 {% block content %}
 <h2>Header 2</h2>
 {% lorem 2 p %}
@@ -56,16 +59,34 @@
 
 <div id="footer">
 {% block footer %}
-µFS v1.0-pre <span>&raquo;</span>
-User: {{ user.username }}
+µFS v1.0-pre
+<span>&bull;</span>
+{% trans "User:" %} {{ user.username }}
 {% if request.session.my_account %}
-<span>&raquo;</span>
-Active account:
+<span>&bull;</span>
+{% trans "Active account:" %}
 <a href="{% url group-summary request.session.my_account.group.slug %}">{{ request.session.my_account.group.name }}</a> &rarr;
 <a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">{{ request.session.my_account.name }}</a>
-[<a href="{% url group-list %}">Change</a>]
+[<a href="{% url group-list %}">{% trans "Change" %}</a>]
+{% endif %}
+{% if group.email %}
+<span>&bull;</span>
+{% trans "Contact:" %}
+<a href="mailto:{{group.email}}">{{group.email}}</a>
 {% endif %}
 {% endblock %}
+
+<form action="{% url django.views.i18n.set_language %}" method="post" style="display: inline">
+<span>&bull;</span>
+{% trans "Language:" %} <select name="language">
+{% for lang in LANGUAGES %}
+<option value="{{ lang.0 }}" {% ifequal lang.0 request.LANGUAGE_CODE %}selected="selected"{% endifequal %}>
+	{% trans lang.1 %}
+</option>
+{% endfor %}
+</select>
+<button style="margin-left: 0">{% trans "Go" %}</button>
+</form>
 </div>
 
 </div>

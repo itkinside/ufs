@@ -142,4 +142,4 @@ transactions. It is intended for BSF and similar settlements between bars
 
 
 :Authors: Stein Magnus Jodal, Thomas Adamcik
-:Version: 2007-06-24-1
+:Version: 2007-08-06-1

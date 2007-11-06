@@ -49,16 +49,17 @@ Really a variant of the administrator's register transaction.
 Status: All done
 
 
-Get ``krysseliste'' view
-------------------------
+List views
+----------
 
-1. Select internal or external ``krysseliste'' from 'My group'.
+1. Select the wanted list (internal, external) from 'My account' or 'My group'.
    Goto URL: /itkufs/(?P<account_group_slug>\w+)/list/internal/
    Goto URL: /itkufs/(?P<account_group_slug>\w+)/list/external/
-2. Show PDF/HTML formatted list. (With HTML/CSS row backgrounds is possible if
-   print-page-setup in client is correct) 3. Print it.
+2. Show HTML formatted list. Ask user to enable backgrounds in the print
+   settings.
+3. Print it and profit!.
 
-Status: Work in Progress (klette/adamcik)
+Status: Done, except list admin must be done from django-admin. (adamcik)
 
 
 Admin: Approve transaction view
@@ -113,4 +114,9 @@ Show a standard accounting balance sheet with:
 
 Show a standard income/expense statement.
 
-Status: Group balance done, income/expense statement not started (jodal)
+Status: Done, except it is not possible to select a time interval for the
+income statement. (jodal)
+
+
+:Authors: Stein Magnus Jodal, Thomas Adamcik
+:Version: 2007-11-04-1

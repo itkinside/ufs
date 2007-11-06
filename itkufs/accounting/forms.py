@@ -1,22 +1,24 @@
 from django import newforms as forms
+from django.utils.translation import ugettext as _
 
 from itkufs.accounting.models import *
 from itkufs.widgets import *
 
-amount_field = forms.DecimalField(required=True)
-details_field = forms.CharField(widget=forms.widgets.Textarea(attrs={'rows':2}), required=False)
+amount_field = forms.DecimalField(required=True,min_value=0)
+details_field = forms.CharField(widget=forms.widgets.Textarea(
+    attrs={'rows': 2}), required=False)
 
 class BaseTransactionForm(forms.Form):
     def __init__(self, *args, **kwargs):
         def _get_choices(options={}):
             limit_groups = options.pop('limit_to_groups', ())
-            exclude_users = options.pop('exclude_users', ())
+            exclude_accounts = options.pop('exclude_accounts', ())
             user_account = options.pop('user_accounts', False)
             exclude_groups = options.pop('exclude_groups', ())
             group_account = options.pop('group_accounts', False)
 
-            # FIXME Clean up code please
-            # FIXME exlcude user not working yet...
+            # Run a diffrent query depending on which combo of limit and
+            # exclude is present:
             if limit_groups and exclude_groups:
                 groups = AccountGroup.objects.filter(
                     pk__in=[g.id for g in limit_groups]).exclude(
@@ -30,29 +32,43 @@ class BaseTransactionForm(forms.Form):
             else:
                 groups = AccountGroup.objects.all()
 
+            # Build the choices data structure:
             choices = [(False, (('',''),))]
+
+            # Loop over all accounts in group:
             for g in groups:
                 a_choices = []
+
+                # Loop over accounts in group:
                 for a in g.account_set.all():
-                    if (a.is_user_account() and user_account) or (not a.is_user_account() and group_account):
-                        a_choices.append((a.id, a.name))
+
+                    # Filter based on options telling if user/group accounts
+                    # should be added.
+                    if ( (a.is_user_account() and user_account) or
+                        (not a.is_user_account() and group_account) ):
+
+                        # Finally, remove excluded accounts (might be doable
+                        # with filter() on qs, but this is easier
+                        if a not in exclude_accounts:
+                            a_choices.append((a.id, a.name))
                 if a_choices:
                     choices.append((g.name, a_choices))
+
             return choices
 
-        to_options = kwargs.pop('to_options', {})
-        from_options = kwargs.pop('from_options', {})
+        debit_options = kwargs.pop('debit_options', {})
+        credit_options = kwargs.pop('credit_options', {})
         super(BaseTransactionForm, self).__init__(*args, **kwargs)
 
         if self.fields.has_key('debit_account'):
-            self.fields['debit_account'].choices = _get_choices(to_options)
+            self.fields['debit_account'].choices = _get_choices(debit_options)
         if self.fields.has_key('credit_account'):
-            self.fields['credit_account'].choices = _get_choices(from_options)
+            self.fields['credit_account'].choices = _get_choices(credit_options)
 
 
 class TransactionForm(BaseTransactionForm):
-    debit_account = GroupedChoiceField(label="To", required=True)
-    credit_account = GroupedChoiceField(label="From", required=True)
+    debit_account = GroupedChoiceField(label=_('Debit'), required=True)
+    credit_account = GroupedChoiceField(label=_('Credit'), required=True)
     amount = amount_field
     payed = forms.BooleanField(required=False)
     details = details_field
@@ -62,6 +78,6 @@ class DepositWithdrawForm(forms.Form):
     details = details_field
 
 class TransferForm(BaseTransactionForm):
-    debit_account = GroupedChoiceField(label="To", required=True)
+    credit_account = GroupedChoiceField(label=_('To'), required=True)
     amount = amount_field
     details = details_field

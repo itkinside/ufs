@@ -1,41 +1,29 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block title %}{{ request.session.my_account.group.name }}{% endblock %}
 {% block header %}{{ request.session.my_account.group.name }}{% endblock %}
 
 {% block menu %}
 <ul id="menulist">
-    <li><a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">My account</a>
-        <ul>
-            <li><a href="{% url account-deposit request.session.my_account.group.slug,request.session.my_account.slug %}">Deposit</a></li>
-            <li><a href="{% url account-withdraw request.session.my_account.group.slug,request.session.my_account.slug %}">Withdraw</a></li>
-            <li><a href="{% url account-transfer request.session.my_account.group.slug,request.session.my_account.slug %}">Transfer</a></li>
-        </ul>
-    </li>
-    <li><a href="{% url group-summary request.session.my_account.group.slug %}">My group</a>
-    {% if group.lists.count %}
-        <ul>
-        {% for list in group.lists.all %}
-            <li><a href="{% url html-list group.slug,list.slug %}">{{ list.name }}</a></li>
+    <li><a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">{% trans "My account" %}</a>
+    	{% ifnotequal request.user.account_set.count 0 %}
+    	{% ifnotequal request.user.account_set.count 1 %}
+	<ul>
+	{% for account in request.user.account_set.all %}
+		<li><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.group.name }}</a></li>
 	{% endfor %}
 	</ul>
-    {% endif %}
+	{% endifnotequal %}
+	{% endifnotequal %}
     </li>
 {% if is_admin %}
-    <li class="admin"><a href="#">Transactions</a>
-        <ul>
-            <li><a href="#">Settlement</a></li>
-            <li><a href="{% url approve-transactions request.session.my_account.group.slug %}">Approve</a></li>
-            <li><a href="{% url register-transactions request.session.my_account.group.slug %}">Register</a></li>
-        </ul>
-    </li>
-    <li class="admin"><a href="#">Statements</a>
-        <ul>
-            <li><a href="{% url balance request.session.my_account.group.slug %}">Balance</a></li>
-            <li><a href="#">Income</a></li>
-        </ul>
+    <li class="admin">
+      <a href="{% url group-summary request.session.my_account.group.slug %}">
+        {% trans "Admin" %}{% if group.has_pending_transactions %}*{% endif %}
+      </a>
     </li>
 {% endif %}
-    <li id="help"><a href="{% url help request.session.my_account.group.slug %}">Help</a></li>
+    <li id="help"><a href="{% url help request.session.my_account.group.slug %}">{% trans "Help" %}</a></li>
 </ul>
 {% endblock %}
