@@ -8,8 +8,8 @@ Cross-group transfers:
 Transfers:
 - Make it possible for users to claim money from Expense accounts like
   'Innkjøp' when they have bought stuff for the bar.
-- Make it possible for admins to delete unapproved transactions? Send mail
-  warning to the end that registered the transaction?
+- Make it possible for admins to delete unapproved transactions? Send admin to
+  «are you sure» page where a reason must be filled in, send reason to account owner.
 
 Lists:
 - Sub groups of users, active, pang...? Should list have a concept of who
