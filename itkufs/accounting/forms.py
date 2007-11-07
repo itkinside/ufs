@@ -1,5 +1,6 @@
 from django import newforms as forms
 from django.utils.translation import ugettext as _
+from django.newforms.util import ValidationError
 
 from itkufs.accounting.models import *
 from itkufs.widgets import *
@@ -64,6 +65,12 @@ class BaseTransactionForm(forms.Form):
             self.fields['debit_account'].choices = _get_choices(debit_options)
         if self.fields.has_key('credit_account'):
             self.fields['credit_account'].choices = _get_choices(credit_options)
+
+    def clean(self):
+        if self.data['debit_account'] == self.data['credit_account']:
+            raise ValidationError(_('Credit and debit is same account'))
+
+        return self.cleaned_data
 
 class TransactionForm(BaseTransactionForm):
     debit_account = GroupedChoiceField(label=_('Debit'), required=True)

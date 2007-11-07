@@ -10,6 +10,8 @@ Transfers:
   'Innkjøp' when they have bought stuff for the bar.
 - Make it possible for admins to delete unapproved transactions? Send admin to
   «are you sure» page where a reason must be filled in, send reason to account owner.
+- Keep even more metadata, we should know who did what to a transaction, use
+  djangos logging framework?
 
 Lists:
 - Sub groups of users, active, pang...? Should list have a concept of who
@@ -21,6 +23,9 @@ Sanity and robustness:
 
 i18n:
 - Translate itkufs/locale/no/LC_MESSAGES/django.po
+
+Invoice:
+- Enable printing of transactions for given settlement for use as invoice
 
 adamcik
 -------
