@@ -77,7 +77,8 @@ def group_summary(request, group, page='1'):
 
     if is_admin and group.has_pending_transactions():
         request.user.message_set.create(
-            message=_('You have pending transctions in the group: %s') % group.name)
+            message=_('You have pending transactions in the group: %s') \
+                % group.name)
 
     # Pass on to generic view
     return object_list(request, transactions,
