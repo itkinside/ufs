@@ -10,11 +10,13 @@ urlpatterns = patterns('',
     url(r'^$',
         group_list, name='group-list'),
 
-    # My account
+    # Account summary
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/$',
         account_summary, name='account-summary'),
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/(?P<page>\d+)/$',
         account_summary, name='account-summary-page'),
+
+    # Account actions
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/deposit/$',
         transfer, {'transfer_type': 'deposit'}, name='account-deposit'),
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/withdraw/$',
@@ -26,13 +28,13 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/help/$',
         static_page, {'template': 'accounting/help.html'}, name='help'),
 
-    # My group
+    # Group summary
     url(r'^(?P<group>[0-9a-z_-]+)/$',
         group_summary, name='group-summary'),
     url(r'^(?P<group>[0-9a-z_-]+)/(?P<page>\d+)/$',
         group_summary, name='group-summary-page'),
 
-    # lists
+    # Lists
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/$',
         html_list, name='view-list'),
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/new/$',

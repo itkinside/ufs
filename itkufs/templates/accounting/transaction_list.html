@@ -8,11 +8,19 @@
 {% if is_paginated %}
 <p>
     {% if has_previous %}
-    <a href="{% url account-summary-page account.group.slug,account.id,previous %}">&laquo; {% trans "Previous" %}</a> |
+        {% if account %}
+    <a href="{% url account-summary-page account.group.slug,account.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
+        {% else %}
+    <a href="{% url group-summary-page account.group.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
+        {% endif %}
     {% endif %}
     {% blocktrans %}{{ hits }} hits{% endblocktrans %}
     {% if has_next %}
-    | <a href="{% url account-summary-page account.group.slug,account.id,next %}">{% trans "Next" %} &raquo;</a>
+        {% if account %}
+    | <a href="{% url account-summary-page account.group.slug,account.slug,next %}">{% trans "Next" %} &raquo;</a>
+        {% else %}
+    | <a href="{% url group-summary-page account.group.slug,next %}">{% trans "Next" %} &raquo;</a>
+        {% endif %}
     {% endif %}
 </p>
 {% endif %}
@@ -72,11 +80,19 @@
 {% if is_paginated %}
 <p>
     {% if has_previous %}
-    <a href="{% url account-summary-page account.group.slug,account.id,previous %}">&laquo; {% trans "Previous" %}</a> |
+        {% if account %}
+    <a href="{% url account-summary-page account.group.slug,account.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
+        {% else %}
+    <a href="{% url group-summary-page account.group.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
+        {% endif %}
     {% endif %}
     {% blocktrans %}{{ hits }} hits{% endblocktrans %}
     {% if has_next %}
-    | <a href="{% url account-summary-page account.group.slug,account.id,next %}">{% trans "Next" %} &raquo;</a>
+        {% if account %}
+    | <a href="{% url account-summary-page account.group.slug,account.slug,next %}">{% trans "Next" %} &raquo;</a>
+        {% else %}
+    | <a href="{% url group-summary-page account.group.slug,next %}">{% trans "Next" %} &raquo;</a>
+        {% endif %}
     {% endif %}
 </p>
 {% endif %}
