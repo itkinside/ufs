@@ -11,7 +11,7 @@
         {% if account %}
     <a href="{% url account-summary-page account.group.slug,account.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
         {% else %}
-    <a href="{% url group-summary-page account.group.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
+    <a href="{% url group-summary-page group.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
         {% endif %}
     {% endif %}
     {% blocktrans %}{{ hits }} hits{% endblocktrans %}
@@ -19,7 +19,7 @@
         {% if account %}
     | <a href="{% url account-summary-page account.group.slug,account.slug,next %}">{% trans "Next" %} &raquo;</a>
         {% else %}
-    | <a href="{% url group-summary-page account.group.slug,next %}">{% trans "Next" %} &raquo;</a>
+    | <a href="{% url group-summary-page group.slug,next %}">{% trans "Next" %} &raquo;</a>
         {% endif %}
     {% endif %}
 </p>
@@ -83,7 +83,7 @@
         {% if account %}
     <a href="{% url account-summary-page account.group.slug,account.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
         {% else %}
-    <a href="{% url group-summary-page account.group.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
+    <a href="{% url group-summary-page group.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
         {% endif %}
     {% endif %}
     {% blocktrans %}{{ hits }} hits{% endblocktrans %}
@@ -91,7 +91,7 @@
         {% if account %}
     | <a href="{% url account-summary-page account.group.slug,account.slug,next %}">{% trans "Next" %} &raquo;</a>
         {% else %}
-    | <a href="{% url group-summary-page account.group.slug,next %}">{% trans "Next" %} &raquo;</a>
+    | <a href="{% url group-summary-page group.slug,next %}">{% trans "Next" %} &raquo;</a>
         {% endif %}
     {% endif %}
 </p>
