@@ -5,8 +5,8 @@
 
 <h2>
 {% ifnotequal type "register" %}
-    {% blocktrans with type|capfirst as type_c and account.name as account_name %}
-    {{ type_c }} for account &ldquo;{{ account_name }}&rdquo;
+    {% blocktrans with account.name as account_name %}
+    {{ title }} &ldquo;{{ account_name }}&rdquo;
     {% endblocktrans %}
 {% else %}
     {% trans "Register transaction" %}

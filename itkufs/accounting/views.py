@@ -174,6 +174,7 @@ def transfer(request, group, account=None, transfer_type=None):
         data = None
 
     if transfer_type == 'transfer':
+        title = _('Transfer from account')
         form = TransferForm(data,
             credit_options={
                 'limit_to_groups': [group],
@@ -181,6 +182,7 @@ def transfer(request, group, account=None, transfer_type=None):
                 'exclude_accounts': [account],
             })
     elif transfer_type == 'register' and is_admin:
+        title = 'This string is not used'
         form = TransactionForm(data,
             debit_options={
                 'user_accounts': True,
@@ -190,7 +192,11 @@ def transfer(request, group, account=None, transfer_type=None):
                 'user_accounts': True,
                 'group_accounts': True,
             })
-    elif transfer_type == 'deposit' or transfer_type == 'withdraw':
+    elif transfer_type == 'deposit':
+        title = _('Deposit to account')
+        form = DepositWithdrawForm(data)
+    elif transfer_type == 'withdraw':
+        title = _('Withdrawal from account')
         form = DepositWithdrawForm(data)
     else:
         return HttpResponseForbidden(_('Sorry, group admins only...'))
@@ -260,6 +266,7 @@ def transfer(request, group, account=None, transfer_type=None):
                                   'is_admin': is_admin,
                                   'account': account,
                                   'type': transfer_type,
+                                  'title': title,
                                   'form': form,
                                   'group': group,
                               },

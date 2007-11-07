@@ -4,9 +4,9 @@ from django.utils.translation import ugettext as _
 from itkufs.accounting.models import *
 from itkufs.widgets import *
 
-amount_field = forms.DecimalField(required=True,min_value=0)
-details_field = forms.CharField(widget=forms.widgets.Textarea(
-    attrs={'rows': 2}), required=False)
+amount_field = forms.DecimalField(label=_('Amount'), required=True, min_value=0)
+details_field = forms.CharField(label=_('Details'),
+    widget=forms.widgets.Textarea(attrs={'rows': 2}), required=False)
 
 class BaseTransactionForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -65,12 +65,11 @@ class BaseTransactionForm(forms.Form):
         if self.fields.has_key('credit_account'):
             self.fields['credit_account'].choices = _get_choices(credit_options)
 
-
 class TransactionForm(BaseTransactionForm):
     debit_account = GroupedChoiceField(label=_('Debit'), required=True)
     credit_account = GroupedChoiceField(label=_('Credit'), required=True)
     amount = amount_field
-    payed = forms.BooleanField(required=False)
+    payed = forms.BooleanField(label=_('Payed'), required=False)
     details = details_field
 
 class DepositWithdrawForm(forms.Form):

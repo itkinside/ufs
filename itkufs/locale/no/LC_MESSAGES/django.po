@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-07 01:13+0100\n"
+"POT-Creation-Date: 2007-11-07 11:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,15 +30,29 @@ msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 "Velg et lovlig valg. Det valget er ikke et av de tilgjengelige valgene."
 
-#: accounting/forms.py:70
+#: accounting/forms.py:7 templates/accounting/approve_transactions.html:29
+#: templates/accounting/transaction_list.html:26
+msgid "Amount"
+msgstr "Beløp"
+
+#: accounting/forms.py:8 templates/accounting/approve_transactions.html:30
+#: templates/accounting/transaction_list.html:27
+msgid "Details"
+msgstr "Detaljer"
+
+#: accounting/forms.py:69
 msgid "Debit"
 msgstr "Debet"
 
-#: accounting/forms.py:71
+#: accounting/forms.py:70
 msgid "Credit"
 msgstr "Kredit"
 
-#: accounting/forms.py:81
+#: accounting/forms.py:72 templates/accounting/transaction_list.html:23
+msgid "Payed"
+msgstr "Betalt"
+
+#: accounting/forms.py:80
 msgid "To"
 msgstr "Til"
 
@@ -252,9 +266,9 @@ msgstr "listeelementer"
 msgid "Login failed"
 msgstr "Innlogging feilet"
 
-#: accounting/views.py:70 accounting/views.py:196 accounting/views.py:253
-#: accounting/views.py:280 accounting/views.py:345 accounting/views.py:405
-#: accounting/views.py:449
+#: accounting/views.py:70 accounting/views.py:202 accounting/views.py:259
+#: accounting/views.py:287 accounting/views.py:352 accounting/views.py:412
+#: accounting/views.py:456
 msgid "Sorry, group admins only..."
 msgstr "Beklager, kun gruppeadministratorer..."
 
@@ -275,15 +289,27 @@ msgstr "Kontobalansen er under blokkeringsgrensen."
 msgid "The account balance is below the warning limit."
 msgstr "Kontobalansen er under advarselsgrensen."
 
-#: accounting/views.py:305
+#: accounting/views.py:177
+msgid "Transfer from account"
+msgstr "Overføring fra konto"
+
+#: accounting/views.py:196
+msgid "Deposit to account"
+msgstr "Innskudd til konto"
+
+#: accounting/views.py:199
+msgid "Withdrawal from account"
+msgstr "Uttak fra konto"
+
+#: accounting/views.py:312
 msgid "Member accounts"
 msgstr "Medlemskontoer"
 
-#: accounting/views.py:319
+#: accounting/views.py:326
 msgid "Current year's net income"
 msgstr "Inneværende års nettoinntekt"
 
-#: accounting/views.py:421
+#: accounting/views.py:428
 #, python-format
 msgid "Approved %(count)d transaction."
 msgid_plural "Approved %(count)d transactions."
@@ -461,16 +487,6 @@ msgstr "Debetkonto"
 #: templates/accounting/approve_transactions.html:28
 msgid "Credit account"
 msgstr "Kreditkonto"
-
-#: templates/accounting/approve_transactions.html:29
-#: templates/accounting/transaction_list.html:26
-msgid "Amount"
-msgstr "Beløp"
-
-#: templates/accounting/approve_transactions.html:30
-#: templates/accounting/transaction_list.html:27
-msgid "Details"
-msgstr "Detaljer"
 
 #: templates/accounting/approve_transactions.html:31
 #: templates/accounting/approve_transactions.html:60
@@ -670,10 +686,6 @@ msgstr "Husk å skriv ut med bakgrunner i landskapsorientering."
 msgid "No transactions found."
 msgstr "Ingen transaksjoner funnet."
 
-#: templates/accounting/transaction_list.html:23
-msgid "Payed"
-msgstr "Betalt"
-
 #: templates/accounting/transaction_list.html:24
 msgid "Debit Account"
 msgstr "Debetkonto"
@@ -691,12 +703,15 @@ msgid "None"
 msgstr "Ingen"
 
 #: templates/accounting/transfer.html:8
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "\n"
-"    %(type_c)s for account &ldquo;%(account_name)s&rdquo;\n"
+"    %(title)s &ldquo;%(account_name)s&rdquo;\n"
 "    "
 msgstr ""
 "\n"
 "    %(type_c)s for konto &ldquo;%(account_name)s&rdquo;\n"
 "    "
+
+#~ msgid "Register transaction for account"
+#~ msgstr "Registrer transaksjon for konto"
