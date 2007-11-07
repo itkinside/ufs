@@ -59,7 +59,11 @@
             {% if t.settlement %}
             {{ t.settlement.date|date:"Y-m-d" }}
             {% endif %}
+            {% if t.details %}
             {{ t.details|striptags|linebreaksbr }}
+            {% else %}
+            {% trans "None" %}
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
