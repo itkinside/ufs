@@ -34,7 +34,7 @@ class AccountGroup(models.Model):
         return self.name
 
     def save(self):
-        models.Model.save(self)
+        super(AccountGroup, self).save()
         # Create default accounts
         if not self.account_set.count():
             bank = Account(name=_('Bank'), slug='bank', group=self, type='As')
@@ -44,7 +44,7 @@ class AccountGroup(models.Model):
 
             self.bank_account = bank;
             self.cash_account = cash;
-            models.Model.save(self)
+            super(AccountGroup, self).save()
 
     def has_pending_transactions(self):
         transactions = Transaction.objects.filter(
@@ -225,7 +225,7 @@ class Transaction(models.Model):
             raise InvalidTransaction, _('Amount is zero.')
         if self.credit_account == self.debit_account:
             raise InvalidTransaction, _('Credit and debit is same account.')
-        models.Model.save(self)
+        super(Transaction, self).save()
 
 class List(models.Model):
     name = models.CharField(_('name'), max_length=200)
