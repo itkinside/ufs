@@ -5,10 +5,6 @@ var ufs = {
   }
 };
 
-function dummy_translation_test() {
-  gettext('test');
-}
-
 var checkbox = {
   init: function() {
     var forms = document.getElementsByTagName('form');
@@ -22,19 +18,19 @@ var checkbox = {
       var all = document.createElement('a');
       all.setAttribute('onclick', 'checkbox.toggle(this)');
       all.setAttribute('href',    '#');
-      all.appendChild(document.createTextNode('All'));
+      all.appendChild(document.createTextNode(gettext('All')));
 
       var none = document.createElement('a');
       none.setAttribute('onclick', 'checkbox.toggle(this, "none")');
       none.setAttribute('href',    '#');
-      none.appendChild(document.createTextNode('None'));
+      none.appendChild(document.createTextNode(gettext('None')));
 
       var invert = document.createElement('a');
       invert.setAttribute('onclick', 'checkbox.toggle(this, "invert")');
       invert.setAttribute('href',    '#');
-      invert.appendChild(document.createTextNode('Invert'));
+      invert.appendChild(document.createTextNode(gettext('Invert')));
 
-      button_parent.appendChild(document.createTextNode('Checkboxes: '));
+      button_parent.appendChild(document.createTextNode(gettext('Checkboxes: ')));
       button_parent.appendChild(all);
       button_parent.appendChild(document.createTextNode(' '));
       button_parent.appendChild(none);

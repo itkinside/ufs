@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-07 15:24+0100\n"
+"POT-Creation-Date: 2007-11-07 15:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Thomas Kongevold Adamcik (adamcik@samfundet.no)\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,19 +18,16 @@ msgstr ""
 
 #: js/ufs.js:21
 msgid "All"
-msgstr "Alle"
+msgstr ""
 
 #: js/ufs.js:26
 msgid "None"
-msgstr "Ingen"
+msgstr ""
 
 #: js/ufs.js:31
 msgid "Invert"
-msgstr "Inverter"
+msgstr ""
 
 #: js/ufs.js:33
 msgid "Checkboxes: "
 msgstr ""
-
-#~ msgid "test"
-#~ msgstr "It works!"
