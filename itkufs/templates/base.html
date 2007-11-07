@@ -76,7 +76,7 @@
 {% endif %}
 {% endblock %}
 
-<form action="{% url django.views.i18n.set_language %}" method="post" style="display: inline">
+<form action="{% url django.views.i18n.set_language %}" method="post">
 <span>&bull;</span>
 {% trans "Language:" %} <select name="language">
 {% for lang in LANGUAGES %}
@@ -85,7 +85,7 @@
 </option>
 {% endfor %}
 </select>
-<button style="margin-left: 0">{% trans "Go" %}</button>
+<button type="submit">{% trans "Go" %}</button>
 </form>
 </div>
 

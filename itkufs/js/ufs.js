@@ -5,7 +5,7 @@ var ufs = {
   }
 };
 
-gettext('test');
+ugettext('test');
 
 var checkbox = {
   init: function() {

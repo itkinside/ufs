@@ -139,6 +139,15 @@ em {
 	font-weight: bold;
 	padding: 0 0.5em;
 }
+#footer form {
+	display: inline;
+}
+#footer select {
+	width: auto;
+}
+#footer button {
+	margin-left: 0;
+}
 
 #messages {
 	margin-top: 1em;
