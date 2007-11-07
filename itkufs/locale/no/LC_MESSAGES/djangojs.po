@@ -30,7 +30,7 @@ msgstr "Inverter"
 
 #: js/ufs.js:33
 msgid "Checkboxes: "
-msgstr ""
+msgstr "Avkrysningsruter: "
 
 #~ msgid "test"
 #~ msgstr "It works!"
