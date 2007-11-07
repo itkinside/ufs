@@ -5,7 +5,9 @@ var ufs = {
   }
 };
 
-ugettext('test');
+function dummy_translation_test() {
+  gettext('test');
+}
 
 var checkbox = {
   init: function() {
