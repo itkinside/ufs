@@ -15,30 +15,16 @@ var checkbox = {
 
       var button_parent = forms[i].getElementsByTagName('button')[0].parentNode;
 
-      var all = document.createElement('a');
-      all.setAttribute('onclick', 'checkbox.toggle(this)');
-      all.setAttribute('href',    '#');
-      all.appendChild(document.createTextNode(gettext('All')));
-
-      var none = document.createElement('a');
-      none.setAttribute('onclick', 'checkbox.toggle(this, "none")');
-      none.setAttribute('href',    '#');
-      none.appendChild(document.createTextNode(gettext('None')));
-
-      var invert = document.createElement('a');
-      invert.setAttribute('onclick', 'checkbox.toggle(this, "invert")');
-      invert.setAttribute('href',    '#');
-      invert.appendChild(document.createTextNode(gettext('Invert')));
-
-      button_parent.appendChild(document.createTextNode(gettext('Checkboxes: ')));
-      button_parent.appendChild(all);
-      button_parent.appendChild(document.createTextNode(' '));
-      button_parent.appendChild(none);
-      button_parent.appendChild(document.createTextNode(' '));
-      button_parent.appendChild(invert);
-
+      // Argh... IE sucks, tried using DOM but IE has a broken setAttribute :(
+      button_parent.innerHTML += gettext('Checkboxes: ')
+      	+ '<a href="#" onclick="checkbox.all(this)">'    + gettext('All')    + '</a> '
+      	+ '<a href="#" onclick="checkbox.none(this)">'   + gettext('None')   + '</a> '
+      	+ '<a href="#" onclick="checkbox.invert(this)">' + gettext('Invert') + '</a> ';
     }
   },
+  all: function(node) { checkbox.toggle(node,'all'); },
+  none: function(node) { checkbox.toggle(node,'none'); },
+  invert: function(node) { checkbox.toggle(node,'invert'); },
   toggle: function(node, mode) {
     if(mode == null) mode = 'all';
 
@@ -46,7 +32,7 @@ var checkbox = {
       if(node.parentNode)
         node = node.parentNode;
       else
-        return;
+        return false;
     }
 
     var inputs = node.getElementsByTagName('input');
@@ -56,11 +42,12 @@ var checkbox = {
         if (mode == 'all')
           input.checked = 'checked';
         else if (mode == 'invert')
-          input.checked = input.checked ? '' : 'checked';
+          input.checked = input.checked == true ? '' : 'checked';
         else if (mode == 'none')
           input.checked = '';
       }
     }
+    return false;
   }
 };
 
