@@ -5,96 +5,14 @@
 <p>{% trans "No transactions found." %}</p>
 {% else %}
 
-{% if is_paginated %}
-<p>
-    {% if has_previous %}
-        {% if account %}
-    <a href="{% url account-summary-page account.group.slug,account.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
-        {% else %}
-    <a href="{% url group-summary-page group.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
-        {% endif %}
-    {% endif %}
-    {% blocktrans %}{{ hits }} hits{% endblocktrans %}
-    {% if has_next %}
-        {% if account %}
-    | <a href="{% url account-summary-page account.group.slug,account.slug,next %}">{% trans "Next" %} &raquo;</a>
-        {% else %}
-    | <a href="{% url group-summary-page group.slug,next %}">{% trans "Next" %} &raquo;</a>
-        {% endif %}
-    {% endif %}
-</p>
+{% include "accounting/transaction_list_menu.html" %}
+
+{% if is_admin %}
+    {% include "accounting/transaction_list_admin.html" %}
+{% else %}
+    {% include "accounting/transaction_list_user.html" %}
 {% endif %}
 
-<table class="tablelist">
-    <tr>
-        <th>{% trans "Registered" %}</th>
-        <th>{% trans "Payed" %}</th>
-        <th>{% trans "Debit Account" %}</th>
-        <th>{% trans "Credit Account" %}</th>
-        <th>{% trans "Amount" %}</th>
-        <th>{% trans "Details" %}</th>
-    </tr>
-    {% for t in transaction_list %}
-    <tr class="{% cycle evenrow,oddrow %}{% if not t.payed %} pending{% endif %}">
-        <td>{{ t.registered|date:"Y-m-d" }}</td>
-        {% if t.payed %}
-        <td>{{ t.payed|date:"Y-m-d" }}</td>
-        {% else %}
-        <td><em>{% trans "Pending" %}</em></td>
-        {% endif %}
-
-        <td>
-        {% if is_admin %}
-            <a href="{% url account-summary t.debit_account.group.slug,t.debit_account.slug %}">{{ t.debit_account.name }}</a>,
-        {% else %}
-            {{ t.debit_account.name }},
-        {% endif %}
-        {{ t.debit_account.group.name }}
-        </td>
-
-        <td>
-        {% if is_admin %}
-            <a href="{% url account-summary t.credit_account.group.slug,t.credit_account.slug %}">{{ t.credit_account.name }}</a>,
-        {% else %}
-            {{ t.credit_account.name }},
-        {% endif %}
-        {{ t.credit_account.group.name }}
-        </td>
-
-        <td class="align_right">{{ t.amount|stringformat:"0.2f" }}</td>
-
-        <td>
-            {% if t.settlement %}
-            {{ t.settlement.date|date:"Y-m-d" }}
-            {% endif %}
-            {% if t.details %}
-            {{ t.details|striptags|linebreaksbr }}
-            {% else %}
-            {% trans "None" %}
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-
-{% if is_paginated %}
-<p>
-    {% if has_previous %}
-        {% if account %}
-    <a href="{% url account-summary-page account.group.slug,account.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
-        {% else %}
-    <a href="{% url group-summary-page group.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
-        {% endif %}
-    {% endif %}
-    {% blocktrans %}{{ hits }} hits{% endblocktrans %}
-    {% if has_next %}
-        {% if account %}
-    | <a href="{% url account-summary-page account.group.slug,account.slug,next %}">{% trans "Next" %} &raquo;</a>
-        {% else %}
-    | <a href="{% url group-summary-page group.slug,next %}">{% trans "Next" %} &raquo;</a>
-        {% endif %}
-    {% endif %}
-</p>
-{% endif %}
+{% include "accounting/transaction_list_menu.html" %}
 
 {% endif %}

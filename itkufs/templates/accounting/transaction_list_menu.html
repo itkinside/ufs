@@ -1,0 +1,21 @@
+{% load i18n %}
+
+{% if is_paginated %}
+<p>
+    {% if has_previous %}
+        {% if account %}
+    <a href="{% url account-summary-page account.group.slug,account.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
+        {% else %}
+    <a href="{% url group-summary-page group.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
+        {% endif %}
+    {% endif %}
+    {% blocktrans %}{{ hits }} hits{% endblocktrans %}
+    {% if has_next %}
+        {% if account %}
+    | <a href="{% url account-summary-page account.group.slug,account.slug,next %}">{% trans "Next" %} &raquo;</a>
+        {% else %}
+    | <a href="{% url group-summary-page group.slug,next %}">{% trans "Next" %} &raquo;</a>
+        {% endif %}
+    {% endif %}
+</p>
+{% endif %}
