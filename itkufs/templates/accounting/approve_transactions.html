@@ -20,8 +20,8 @@
 </p>
 {% endif %}
 
-<form action="{% url approve-transactions group.slug %}" method="post" class="togglecheckboxes">
-<table class="tablelist" id="accounting_approve_transactions">
+<form action="{% url approve-transactions group.slug %}" method="post" class="togglecheckboxes" id="accounting_approve_transactions">
+<table class="tablelist">
     <tr>
         <th>{% trans "Registered" %}</th>
         <th>{% trans "Debit account" %}</th>
@@ -57,7 +57,10 @@
     {% endfor %}
 </table>
 
-<p><button type="submit">{% trans "Approve" %}</button> </p>
+<p>
+    <button name="approve" type="submit">{% trans "Approve" %}</button>
+    <button name="reject" type="submit">{% trans "Reject" %}</button>
+</p>
 </form>
 
 {% if is_paginated %}

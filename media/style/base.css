@@ -242,10 +242,15 @@ button {
 	margin-left: 7em;
 	background: #DDD;
 }
+#accounting_approve_transactions button {
+	margin-left: 0 !important;
+	margin-right: 0.5em;
+}
 table + p button {
 	margin-left: auto !important;
+	margin-right: auto !important;
 }
-input#id_payed, table#accounting_approve_transactions input { /* checkboxes */
+input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 	width: auto;
 	border: 0;
 }
