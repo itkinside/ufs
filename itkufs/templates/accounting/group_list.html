@@ -2,6 +2,7 @@
 {% load i18n %}
 
 {% block menu %}{% endblock %}
+{% block title %}{% trans "Accounts for user" %} {{ request.user }}{% endblock %}
 
 {% block content %}
 <h2>{% blocktrans with user.username as username %}Accounts for user &ldquo;{{ username }}&rdquo;{% endblocktrans %}</h2>
