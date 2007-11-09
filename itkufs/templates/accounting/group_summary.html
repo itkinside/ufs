@@ -71,13 +71,14 @@
 <p>{% trans "No accounts found." %}</p>
 {% else %}
 
+<div class="col">
 <table class="tablelist">
     <tr>
         <th>{% trans "Account" %}</th>
         <th>{% trans "Type" %}</th>
         <th>{% trans "Balance" %}</th>
     </tr>
-{% for account in group.account_set.all %}
+{% for account in group.user_account_set %}
     <tr class="{% cycle evenrow,oddrow %}">
         <td><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.name }}</a></td>
         <td>{{ account.get_type_display }}</td>
@@ -85,6 +86,23 @@
     </tr>
 {% endfor %}
 </table>
+</div>
+<div class="col">
+<table class="tablelist">
+    <tr>
+        <th>{% trans "Account" %}</th>
+        <th>{% trans "Type" %}</th>
+        <th>{% trans "Balance" %}</th>
+    </tr>
+{% for account in group.group_account_set %}
+    <tr class="{% cycle evenrow,oddrow %}">
+        <td><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.name }}</a></td>
+        <td>{{ account.get_type_display }}</td>
+        <td class="align_right{% if account.is_blocked %} blocked{% endif %}">{{ account.balance|stringformat:"0.2f" }}</td>
+    </tr>
+{% endfor %}
+</table>
+</div>
 
 <p class="comment">{% trans "Please note, a negative balance in a liabilty account tells that the owner has money to spend, while a positive balance means it is time for a deposit." %}</p>
 

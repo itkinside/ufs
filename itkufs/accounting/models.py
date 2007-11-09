@@ -47,6 +47,14 @@ class Group(models.Model):
             self.cash_account = cash;
             super(Group, self).save()
 
+    def user_account_set(self):
+        """Return queryset of user accounts"""
+        return self.account_set.filter(type='Li', owner__isnull=False)
+
+    def group_account_set(self):
+        """Return array of group accounts"""
+        return self.account_set.exclude(type='Li', owner__isnull=False)
+
     def transaction_set(self):
         """Return all transactions connected to group"""
         return Transaction.objects.filter(

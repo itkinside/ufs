@@ -263,3 +263,10 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 #transactions, #accounts {
 	clear: both;
 }
+
+#accounts .col {
+	width: 48%;
+	padding-right: 1em;
+	float: left;
+}
+
