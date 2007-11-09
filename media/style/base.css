@@ -154,16 +154,6 @@ em {
 }
 
 /* Tables */
-.tablecolumn {
-	border-collapse: separate;
-	width: 100%;
-}
-.tablecolumn td {
-	padding: 0 0.5em;
-	vertical-align: top;
-	width: 50%;
-}
-
 .tablelist th, .tabledetails th {
 	background: #e6e6e6;
 	border: 1px solid gray;
@@ -204,6 +194,18 @@ em {
 }
 .error, .blocked {
 	color: #a10000;
+}
+
+/* Columns */
+div.coltwo {
+	width: 48%;
+	padding-right: 1em;
+	float: left;
+}
+div.colthree {
+	width: 32%;
+	padding-right: 1em;
+	float: left;
 }
 
 /* Error list */
@@ -262,11 +264,5 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 }
 #transactions, #accounts {
 	clear: both;
-}
-
-#accounts .col {
-	width: 48%;
-	padding-right: 1em;
-	float: left;
 }
 
