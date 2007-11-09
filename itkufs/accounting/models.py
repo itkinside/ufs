@@ -37,9 +37,10 @@ class Group(models.Model):
         super(Group, self).save()
         # Create default accounts
         if not self.account_set.count():
-            bank = Account(name=_('Bank'), slug='bank', group=self, type='As')
+            # FIXME _('Bank') and _('Cash') does not seem to work here...
+            bank = Account(name='Bank', slug='bank', type='As', group=self)
             bank.save()
-            cash = Account(name=_('Cash'), slug='cash', group=self, type='As')
+            cash = Account(name='Cash', slug='cash', type='As', group=self)
             cash.save()
 
             self.bank_account = bank;
