@@ -59,8 +59,8 @@ def group_summary(request, group, page='1'):
 
     # Get account group
     try:
-        group = AccountGroup.objects.get(slug=group)
-    except AccountGroup.DoesNotExist:
+        group = Group.objects.get(slug=group)
+    except Group.DoesNotExist:
         raise Http404
 
     if group.admins.filter(id=request.user.id).count():
@@ -99,9 +99,9 @@ def account_summary(request, group, account, page='1'):
 
     # Get account object
     try:
-        group = AccountGroup.objects.get(slug=group)
+        group = Group.objects.get(slug=group)
         account = group.account_set.get(slug=account)
-    except (AccountGroup.DoesNotExist, Account.DoesNotExist):
+    except (Group.DoesNotExist, Account.DoesNotExist):
         raise Http404
 
     # Save account in session
@@ -157,10 +157,10 @@ def transfer(request, group, account=None, transfer_type=None):
 
     # Get account object
     try:
-        group = AccountGroup.objects.get(slug=group)
+        group = Group.objects.get(slug=group)
         if transfer_type != 'register':
             account = group.account_set.get(slug=account)
-    except (AccountGroup.DoesNotExist, Account.DoesNotExist):
+    except (Group.DoesNotExist, Account.DoesNotExist):
         raise Http404
 
     if group.admins.filter(id=request.user.id).count():
@@ -277,8 +277,8 @@ def balance(request, group):
     """Show balance sheet for the group"""
 
     try:
-        group = AccountGroup.objects.get(slug=group)
-    except AccountGroup.DoesNotExist:
+        group = Group.objects.get(slug=group)
+    except Group.DoesNotExist:
         raise Http404
 
     if group.admins.filter(id=request.user.id).count():
@@ -342,8 +342,8 @@ def income(request, group):
     """Show income statement for group"""
 
     try:
-        group = AccountGroup.objects.get(slug=group)
-    except AccountGroup.DoesNotExist:
+        group = Group.objects.get(slug=group)
+    except Group.DoesNotExist:
         raise Http404
 
     if group.admins.filter(id=request.user.id).count():
@@ -385,10 +385,10 @@ def income(request, group):
 @login_required
 def html_list(request, group, slug):
     try:
-        group = AccountGroup.objects.get(slug=group)
+        group = Group.objects.get(slug=group)
         accounts = Account.objects.filter(group=group)
         list = group.list_set.get(slug=slug)
-    except AccountGroup.DoesNotExist, AccountGroup.DoesNotExist:
+    except Group.DoesNotExist, Group.DoesNotExist:
         raise Http404
 
     return render_to_response('accounting/list.html',
@@ -402,8 +402,8 @@ def html_list(request, group, slug):
 @login_required
 def approve(request, group, page="1"):
     try:
-        group = AccountGroup.objects.get(slug=group)
-    except AccountGroup.DoesNotExist:
+        group = Group.objects.get(slug=group)
+    except Group.DoesNotExist:
         raise Http404
 
     if group.admins.filter(id=request.user.id).count():
@@ -446,8 +446,8 @@ def approve(request, group, page="1"):
 @login_required
 def settlement_summary(request, group, page="1"):
     try:
-        group = AccountGroup.objects.get(slug=group)
-    except AccountGroup.DoesNotExist:
+        group = Group.objects.get(slug=group)
+    except Group.DoesNotExist:
         raise Http404
 
     if group.admins.filter(id=request.user.id).count():
@@ -460,8 +460,8 @@ def settlement_summary(request, group, page="1"):
 @login_required
 def static_page(request, group, template):
     try:
-        group = AccountGroup.objects.get(slug=group)
-    except AccountGroup.DoesNotExist:
+        group = Group.objects.get(slug=group)
+    except Group.DoesNotExist:
         raise Http404
 
     if group.admins.filter(id=request.user.id).count():

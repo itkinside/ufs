@@ -6,7 +6,6 @@ MUST HAVE
 
 Model:
 - Group
-  * Rename AccountGroup to Group
   * Methods for registered_transaction_set, payed_transaction_set,
     received_transaction_set, not_payed_transaction_set,
     not_recieved_transaction_set in the Group model
@@ -64,6 +63,7 @@ DONE
 - Enforce checking of admin rights, all we do today is hide menu...
 - i18n: Translate itkufs/locale/no/LC_MESSAGES/django.po
 - Split transation_list template into user/admin/menu
+- Rename AccountGroup to Group
 
 WONTFIX
 -------

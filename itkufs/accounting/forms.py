@@ -21,17 +21,17 @@ class BaseTransactionForm(forms.Form):
             # Run a diffrent query depending on which combo of limit and
             # exclude is present:
             if limit_groups and exclude_groups:
-                groups = AccountGroup.objects.filter(
+                groups = Group.objects.filter(
                     pk__in=[g.id for g in limit_groups]).exclude(
                     pk__in=[g.id for g in exclude_groups])
             elif limit_groups:
-                groups = AccountGroup.objects.filter(
+                groups = Group.objects.filter(
                     pk__in=[g.id for g in limit_groups])
             elif exclude_groups:
-                groups = AccountGroup.objects.exclude(
+                groups = Group.objects.exclude(
                     pk__in=[g.id for g in exclude_groups])
             else:
-                groups = AccountGroup.objects.all()
+                groups = Group.objects.all()
 
             # Build the choices data structure:
             choices = [(False, (('',''),))]

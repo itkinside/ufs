@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _
 
-class AccountGroup(models.Model):
+class Group(models.Model):
     name = models.CharField(_('name'), max_length=100)
     slug = models.SlugField(_('slug'), prepopulate_from=['name'], unique=True,
         help_text=_('A shortname used in URLs etc.'))
@@ -24,8 +24,8 @@ class AccountGroup(models.Model):
 
     class Meta:
         ordering = ['name']
-        verbose_name = _('account group')
-        verbose_name_plural = _('account groups')
+        verbose_name = _('group')
+        verbose_name_plural = _('groups')
 
     class Admin:
         pass
@@ -34,7 +34,7 @@ class AccountGroup(models.Model):
         return self.name
 
     def save(self):
-        super(AccountGroup, self).save()
+        super(Group, self).save()
         # Create default accounts
         if not self.account_set.count():
             bank = Account(name=_('Bank'), slug='bank', group=self, type='As')
@@ -44,7 +44,7 @@ class AccountGroup(models.Model):
 
             self.bank_account = bank;
             self.cash_account = cash;
-            super(AccountGroup, self).save()
+            super(Group, self).save()
 
     def has_pending_transactions(self):
         transactions = Transaction.objects.filter(
@@ -65,7 +65,7 @@ class Account(models.Model):
     name = models.CharField(_('name'), max_length=100)
     slug = models.SlugField(_('slug'), prepopulate_from=['name'],
         help_text=_('A shortname used in URLs etc.'))
-    group = models.ForeignKey(AccountGroup, verbose_name=_('group'))
+    group = models.ForeignKey(Group, verbose_name=_('group'))
     type = models.CharField(_('type'), max_length=2, choices=ACCOUNT_TYPE,
         default='Li')
     owner = models.ForeignKey(User, verbose_name=_('owner'),
@@ -234,8 +234,8 @@ class List(models.Model):
         help_text=_('Relative size of cell (everything will be converted to precent)'))
     balance_width = models.PositiveSmallIntegerField(_('balance width'),
         help_text=_('Zero value indicates that balance should be left out.'))
-    account_group = models.ForeignKey(AccountGroup,
-        verbose_name=_('account group'), related_name='list_set')
+    group = models.ForeignKey(Group,
+        verbose_name=_('group'), related_name='list_set')
 
     class Meta:
         #unique_together = (('slug', 'account_group'),)
@@ -243,13 +243,13 @@ class List(models.Model):
         verbose_name_plural = _('lists')
 
     class Admin:
-        list_filter = ['account_group']
-        list_display = ['account_group', 'name']
+        list_filter = ['group']
+        list_display = ['group', 'name']
         list_display_links = ['name']
-        ordering = ['account_group', 'name']
+        ordering = ['group', 'name']
 
     def __unicode__(self):
-        return u'%s: %s' % (self.account_group, self.name)
+        return u'%s: %s' % (self.group, self.name)
 
     def total_width(self):
         sum = self.account_width + self.balance_width
@@ -271,5 +271,5 @@ class ListItem(models.Model):
         verbose_name_plural = _('list items')
 
     def __unicode__(self):
-        return u'%s: %s, %s' % (self.list.account_group, self.list, self.name)
+        return u'%s: %s, %s' % (self.list.group, self.list, self.name)
 
