@@ -62,13 +62,6 @@
 µFS v1.0-&alpha;
 <span>&bull;</span>
 {% trans "User:" %} {{ user.username }}
-{% if request.session.my_account %}
-<span>&bull;</span>
-{% trans "Active account:" %}
-<a href="{% url group-summary request.session.my_account.group.slug %}">{{ request.session.my_account.group.name }}</a> &rarr;
-<a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">{{ request.session.my_account.name }}</a>
-[<a href="{% url group-list %}">{% trans "Change" %}</a>]
-{% endif %}
 {% if group.email %}
 <span>&bull;</span>
 {% trans "Contact:" %}
