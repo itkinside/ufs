@@ -91,7 +91,7 @@ class Account(models.Model):
         list_display = ['group', 'name', 'type', 'owner', 'balance',
             'active', 'ignore_block_limit']
         list_display_links = ['name']
-        list_filter = ['active', 'type', 'group', 'name']
+        list_filter = ['active', 'type', 'group']
         list_per_page = 20
         search_fields = ['name']
 

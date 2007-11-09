@@ -1,0 +1,154 @@
+[
+    {
+        "pk": 2, 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 1, 
+            "name": "Stein Magnus", 
+            "active": true, 
+            "owner": 1, 
+            "type": "Li", 
+            "slug": "jodal", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 1, 
+            "name": "Thomas Adamcik", 
+            "active": true, 
+            "owner": 2, 
+            "type": "Li", 
+            "slug": "adamcik", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 2, 
+            "name": "Thomas Adamcik", 
+            "active": true, 
+            "owner": 2, 
+            "type": "Li", 
+            "slug": "adamcik", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "accounting.group", 
+        "fields": {
+            "warn_limit": null, 
+            "name": "ARK", 
+            "block_limit": null, 
+            "slug": "ark", 
+            "email": "ark-bar@samfundet.no", 
+            "admins": [
+                2, 
+                5
+            ], 
+            "logo": "", 
+            "cash_account": null, 
+            "bank_account": null
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "accounting.group", 
+        "fields": {
+            "warn_limit": 200, 
+            "name": "ITK-Inside", 
+            "block_limit": 0, 
+            "slug": "itk", 
+            "email": "itk-bar@samfundet.no", 
+            "admins": [
+                2, 
+                1, 
+                4
+            ], 
+            "logo": "", 
+            "cash_account": null, 
+            "bank_account": null
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "accounting.group", 
+        "fields": {
+            "warn_limit": null, 
+            "name": "Regi", 
+            "block_limit": null, 
+            "slug": "regi", 
+            "email": "", 
+            "admins": [], 
+            "logo": "", 
+            "cash_account": null, 
+            "bank_account": null
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "accounting.list", 
+        "fields": {
+            "account_width": 2, 
+            "balance_width": 1, 
+            "name": "Intern", 
+            "group": 1, 
+            "slug": "intern"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "accounting.listitem", 
+        "fields": {
+            "width": 1, 
+            "list": 1, 
+            "name": "\u00d8l", 
+            "order": 1
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "accounting.listitem", 
+        "fields": {
+            "width": 3, 
+            "list": 1, 
+            "name": "Brus", 
+            "order": 2
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "accounting.listitem", 
+        "fields": {
+            "width": 2, 
+            "list": 1, 
+            "name": "10", 
+            "order": 3
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "accounting.listitem", 
+        "fields": {
+            "width": 2, 
+            "list": 1, 
+            "name": "3", 
+            "order": 4
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "accounting.listitem", 
+        "fields": {
+            "width": 2, 
+            "list": 1, 
+            "name": "1", 
+            "order": 5
+        }
+    }
+]
