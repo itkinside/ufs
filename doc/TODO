@@ -5,10 +5,6 @@ MUST HAVE
 ---------
 
 Model:
-- Group
-  * Methods for registered_transaction_set, payed_transaction_set,
-    received_transaction_set, not_payed_transaction_set,
-    not_recieved_transaction_set in the Group model
 - Transaction: strip down
 - TransactionLog(transaction, type, timestamp, user, message) instead of
   transaction details and to know who did what to a transaction. Type is
@@ -27,6 +23,9 @@ Forms:
 Templates:
 - Updated transaction lists and detail views, differentiated for admins and
   users
+
+Views & Templates:
+- Use new convinience functions for transaction_sets in Group model
 
 New features:
 - Settlement
@@ -63,7 +62,11 @@ DONE
 - Enforce checking of admin rights, all we do today is hide menu...
 - i18n: Translate itkufs/locale/no/LC_MESSAGES/django.po
 - Split transation_list template into user/admin/menu
-- Rename AccountGroup to Group
+- Group
+  * Rename AccountGroup to Group
+  * Methods for registered_transaction_set, payed_transaction_set,
+    received_transaction_set, not_payed_transaction_set,
+    not_recieved_transaction_set in the Group model
 
 WONTFIX
 -------

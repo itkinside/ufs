@@ -75,7 +75,7 @@ def group_summary(request, group, page='1'):
         Q(credit_account__in=accounts) |
         Q(debit_account__in=accounts)).order_by('-registered')
 
-    if is_admin and group.has_pending_transactions():
+    if is_admin and group.not_payed_transaction_set().count():
         request.user.message_set.create(
             message=_('You have pending transactions in the group: %s') \
                 % group.name)

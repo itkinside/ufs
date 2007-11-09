@@ -32,7 +32,7 @@
 <div id="transaction_actions">
 <h3>{% trans "Transactions" %}</h3>
    <ul>
-      <li><a href="{% url approve-transactions group.slug %}">{% trans "Approve transaction" %}{% if group.has_pending_transactions %}*{% endif %}</a></li>
+      <li><a href="{% url approve-transactions group.slug %}">{% trans "Approve transaction" %}{% if group.not_payed_transaction_set.count %}*{% endif %}</a></li>
       <li><a href="{% url register-transactions group.slug %}">{% trans "Register transaction" %}</a></li>
    </ul>
 </div>

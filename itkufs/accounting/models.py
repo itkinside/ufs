@@ -47,12 +47,48 @@ class Group(models.Model):
             self.cash_account = cash;
             super(Group, self).save()
 
-    def has_pending_transactions(self):
-        transactions = Transaction.objects.filter(
+    def transaction_set(self):
+        """Return all transactions connected to group"""
+        return Transaction.objects.filter(
+                Q(credit_account__group=self) &
+                Q(debit_account__group=self))
+
+    def registered_transaction_set(self):
+        """Return all transactions that are not rejected connected to group"""
+        # FIXME implement
+        return Transaction.objects.none()
+
+    def payed_transaction_set(self):
+        """Return all payed transactions connected to group"""
+        # FIXME filter out rejected
+        return Transaction.objects.filter(
+                Q(credit_account__group=self) &
+                Q(debit_account__group=self) &
+                Q(payed__isnull=False))
+
+    def not_payed_transaction_set(self):
+        """Return all unpayed transactions connected to group"""
+        # FIXME filter out rejected
+        return Transaction.objects.filter(
                 Q(credit_account__group=self) &
                 Q(debit_account__group=self) &
                 Q(payed__isnull=True))
-        return transactions.count() > 0
+
+    def recieved_transaction_set(self):
+        """Return all recieved transactions connected to group"""
+        # FIXME implement
+        return Transaction.objects.none()
+
+    def not_recieved_transaction_set(self):
+        """Return all transactions that have not been recieved connected to group"""
+        # FIXME implement
+        return Transaction.objects.none()
+
+    def rejected_transaction_set(self):
+        """Return all transactions that have been rejected connected to group"""
+        # FIXME implement
+        return Transaction.objects.none()
+
 
 ACCOUNT_TYPE = (
     ('As', _('Asset')),     # Eiendeler/aktiva

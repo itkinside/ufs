@@ -20,7 +20,7 @@
 {% if is_admin %}
     <li class="admin">
       <a href="{% url group-summary request.session.my_account.group.slug %}">
-        {% trans "Admin" %}{% if group.has_pending_transactions %}*{% endif %}
+        {% trans "Admin" %}{% if group.not_payed_transaction_set.count %}*{% endif %}
       </a>
     </li>
 {% endif %}
