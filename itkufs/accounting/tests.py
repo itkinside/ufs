@@ -41,5 +41,16 @@ class TransactionlTestCase(unittest.TestCase):
     def setUp(self):
         pass
 
-    # ...
+    def testSimpleTransaction(self):
+        pass
 
+    def testTransActionWithManyDebitEntries(self):
+        pass
+
+    def testTransActionWithManyCreditEntries(self):
+        pass
+
+    def testTransactionLog(self):
+        pass
+
+    # ...
