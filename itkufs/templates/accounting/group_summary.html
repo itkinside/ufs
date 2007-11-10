@@ -66,12 +66,13 @@
 {% if is_admin %}
 
 <div id="accounts">
-<h3>{% trans "Accounts" %}</h3>
 {% if not group.account_set.count %}
+<h3>{% trans "Accounts" %}</h3>
 <p>{% trans "No accounts found." %}</p>
 {% else %}
 
 <div class="coltwo">
+<h3>{% trans "User accounts" %}</h3>
 <table class="tablelist">
     <tr>
         <th>{% trans "Account" %}</th>
@@ -88,6 +89,7 @@
 </table>
 </div>
 <div class="coltwo">
+<h3>{% trans "Group accounts" %}</h3>
 <table class="tablelist">
     <tr>
         <th>{% trans "Account" %}</th>
