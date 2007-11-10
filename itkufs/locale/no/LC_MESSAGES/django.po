@@ -9,13 +9,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-07 11:44+0100\n"
+"POT-Creation-Date: 2007-11-10 02:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: widgets.py:46
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+"Velg et lovlig valg. Det valget er ikke et av de tilgjengelige valgene."
 
 #: settings_base.py:103
 msgid "English"
@@ -25,47 +30,50 @@ msgstr "Engelsk"
 msgid "Norwegian"
 msgstr "Norsk"
 
-#: widgets.py:46
-msgid "Select a valid choice. That choice is not one of the available choices."
-msgstr ""
-"Velg et lovlig valg. Det valget er ikke et av de tilgjengelige valgene."
-
-#: accounting/forms.py:7 templates/accounting/approve_transactions.html:29
-#: templates/accounting/transaction_list.html:26
+#: accounting/forms.py:8 templates/accounting/approve_transactions.html:29
+#: templates/accounting/transaction_list_user.html:8
+#: templates/accounting/transaction_list_admin.html:8
 msgid "Amount"
 msgstr "Beløp"
 
-#: accounting/forms.py:8 templates/accounting/approve_transactions.html:30
-#: templates/accounting/transaction_list.html:27
+#: accounting/forms.py:9 templates/accounting/approve_transactions.html:30
+#: templates/accounting/transaction_list_user.html:9
+#: templates/accounting/transaction_list_admin.html:9
 msgid "Details"
 msgstr "Detaljer"
 
-#: accounting/forms.py:69
+#: accounting/forms.py:71
+#, fuzzy
+msgid "Credit and debit is same account"
+msgstr "Kredit og debet er samme konto."
+
+#: accounting/forms.py:76
 msgid "Debit"
 msgstr "Debet"
 
-#: accounting/forms.py:70
+#: accounting/forms.py:77
 msgid "Credit"
 msgstr "Kredit"
 
-#: accounting/forms.py:72 templates/accounting/transaction_list.html:23
+#: accounting/forms.py:79 templates/accounting/transaction_list_user.html:5
+#: templates/accounting/transaction_list_admin.html:5
 msgid "Payed"
 msgstr "Betalt"
 
-#: accounting/forms.py:80
+#: accounting/forms.py:87
 msgid "To"
 msgstr "Til"
 
-#: accounting/models.py:8 accounting/models.py:65 accounting/models.py:231
-#: accounting/models.py:261
+#: accounting/models.py:8 accounting/models.py:110 accounting/models.py:276
+#: accounting/models.py:306
 msgid "name"
 msgstr "navn"
 
-#: accounting/models.py:9 accounting/models.py:66 accounting/models.py:232
+#: accounting/models.py:9 accounting/models.py:111 accounting/models.py:277
 msgid "slug"
 msgstr ""
 
-#: accounting/models.py:10 accounting/models.py:67
+#: accounting/models.py:10 accounting/models.py:112
 msgid "A shortname used in URLs etc."
 msgstr "Et kortnavn brukt i URL-er o.l."
 
@@ -89,176 +97,165 @@ msgstr "bankkonto"
 msgid "cash account"
 msgstr "kontantkonto"
 
-#: accounting/models.py:27 accounting/models.py:238
-msgid "account group"
-msgstr "kontogruppe"
-
-#: accounting/models.py:28
-msgid "account groups"
-msgstr "kontogrupper"
-
-#: accounting/models.py:40
-msgid "Bank"
-msgstr "Bank"
-
-#: accounting/models.py:42
-msgid "Cash"
-msgstr "Kontanter"
-
-#: accounting/models.py:57
-msgid "Asset"
-msgstr "Eiendel/aktiva"
-
-#: accounting/models.py:58
-msgid "Liability"
-msgstr "Gjeld/passiva"
-
-#: accounting/models.py:59
-msgid "Equity"
-msgstr "Egenkapital"
-
-#: accounting/models.py:60
-msgid "Income"
-msgstr "Inntekt"
-
-#: accounting/models.py:61
-msgid "Expense"
-msgstr "Utgift"
-
-#: accounting/models.py:68
+#: accounting/models.py:27 accounting/models.py:113 accounting/models.py:283
 msgid "group"
 msgstr "gruppe"
 
-#: accounting/models.py:69
+#: accounting/models.py:28
+#, fuzzy
+msgid "groups"
+msgstr "gruppe"
+
+#: accounting/models.py:102
+msgid "Asset"
+msgstr "Eiendel/aktiva"
+
+#: accounting/models.py:103
+msgid "Liability"
+msgstr "Gjeld/passiva"
+
+#: accounting/models.py:104
+msgid "Equity"
+msgstr "Egenkapital"
+
+#: accounting/models.py:105
+msgid "Income"
+msgstr "Inntekt"
+
+#: accounting/models.py:106
+msgid "Expense"
+msgstr "Utgift"
+
+#: accounting/models.py:114
 msgid "type"
 msgstr "type"
 
-#: accounting/models.py:71
+#: accounting/models.py:116
 msgid "owner"
 msgstr "eier"
 
-#: accounting/models.py:73
+#: accounting/models.py:118
 msgid "active"
 msgstr "aktiv"
 
-#: accounting/models.py:74
+#: accounting/models.py:119
 msgid "ignore block limit"
 msgstr "ignorer blokkeringsgrense"
 
-#: accounting/models.py:80
+#: accounting/models.py:125
 msgid "account"
 msgstr "konto"
 
-#: accounting/models.py:81
+#: accounting/models.py:126
 msgid "accounts"
 msgstr "kontoer"
 
-#: accounting/models.py:87
+#: accounting/models.py:132
 msgid "Advanced options"
 msgstr "Avanserte valg"
 
-#: accounting/models.py:165
+#: accounting/models.py:210
 msgid "date"
 msgstr "dato"
 
-#: accounting/models.py:166
+#: accounting/models.py:211
 msgid "comment"
 msgstr "kommentar"
 
-#: accounting/models.py:171 accounting/models.py:201
+#: accounting/models.py:216 accounting/models.py:246
 msgid "settlement"
 msgstr "oppgjør"
 
-#: accounting/models.py:172
+#: accounting/models.py:217
 msgid "settlements"
 msgstr "oppgjør"
 
-#: accounting/models.py:192
+#: accounting/models.py:237
 msgid "credit account"
 msgstr "kreditkonto"
 
-#: accounting/models.py:194
+#: accounting/models.py:239
 msgid "debit account"
 msgstr "debetkonto"
 
-#: accounting/models.py:195
+#: accounting/models.py:240
 msgid "amount"
 msgstr "beløp"
 
-#: accounting/models.py:196
+#: accounting/models.py:241
 msgid "details"
 msgstr "detaljer"
 
-#: accounting/models.py:198
+#: accounting/models.py:243
 msgid "registered"
 msgstr "registrert"
 
-#: accounting/models.py:199
+#: accounting/models.py:244
 msgid "payed"
 msgstr "betalt"
 
-#: accounting/models.py:206
+#: accounting/models.py:251
 msgid "transaction"
 msgstr "transaksjon"
 
-#: accounting/models.py:207
+#: accounting/models.py:252
 msgid "transactions"
 msgstr "transaksjon"
 
-#: accounting/models.py:215
+#: accounting/models.py:260
 #, python-format
 msgid "%(amount)s, credit %(credit_acc)s, debit %(debit_acc)s"
 msgstr "%(amount)s, kredit %(credit_acc)s, debet %(debit_acc)s"
 
-#: accounting/models.py:223
+#: accounting/models.py:268
 msgid "Amount is negative."
 msgstr "Beløpet er negativt."
 
-#: accounting/models.py:225
+#: accounting/models.py:270
 msgid "Amount is zero."
 msgstr "Beløpet er null."
 
-#: accounting/models.py:227
+#: accounting/models.py:272
 msgid "Credit and debit is same account."
 msgstr "Kredit og debet er samme konto."
 
-#: accounting/models.py:233
+#: accounting/models.py:278
 msgid "account width"
 msgstr "kontobredde"
 
-#: accounting/models.py:234
+#: accounting/models.py:279
 msgid "Relative size of cell (everything will be converted to precent)"
 msgstr "Relativ cellestørrelse (alt blir konvertert til prosent)"
 
-#: accounting/models.py:235
+#: accounting/models.py:280
 msgid "balance width"
 msgstr "balansebredde"
 
-#: accounting/models.py:236
+#: accounting/models.py:281
 msgid "Zero value indicates that balance should be left out."
 msgstr "Null-verdi indikerer at balansen skal bli utelatt."
 
-#: accounting/models.py:242 accounting/models.py:264
+#: accounting/models.py:287 accounting/models.py:309
 msgid "list"
 msgstr "liste"
 
-#: accounting/models.py:243
+#: accounting/models.py:288
 msgid "lists"
 msgstr "lister"
 
-#: accounting/models.py:262
+#: accounting/models.py:307
 msgid "width"
 msgstr "bredde"
 
-#: accounting/models.py:263
+#: accounting/models.py:308
 msgid "order"
 msgstr "rekkefølge"
 
-#: accounting/models.py:270
+#: accounting/models.py:315
 msgid "list item"
 msgstr "listeelement"
 
-#: accounting/models.py:271
+#: accounting/models.py:316
 msgid "list items"
 msgstr "listeelementer"
 
@@ -316,13 +313,26 @@ msgid_plural "Approved %(count)d transactions."
 msgstr[0] "Godkjente %(count)d transaksjon."
 msgstr[1] "Godkjente %(count)d transaksjoner."
 
-#: templates/404.html:4 templates/404.html.py:11
-msgid "Page not found"
-msgstr "Fant ikke siden"
+#: templates/base.html:24
+#, fuzzy
+msgid "&mu;FS Microfinance System"
+msgstr "&mu;FS Mikrofinanssystem"
 
-#: templates/404.html:13
-msgid "The page you requested was not found."
-msgstr "Siden du forespurte ble ikke funnet."
+#: templates/base.html:65
+msgid "User:"
+msgstr "Bruker:"
+
+#: templates/base.html:68
+msgid "Contact:"
+msgstr "Kontakt:"
+
+#: templates/base.html:74
+msgid "Language:"
+msgstr "Språk:"
+
+#: templates/base.html:81
+msgid "Go"
+msgstr "Utfør"
 
 #: templates/500.html:4 templates/500.html.py:10
 msgid "Internal server error"
@@ -338,33 +348,13 @@ msgstr ""
 "\">itk-ufs@samfundet.no</a>, sammen med hva du gjorde før feilen oppstod, og "
 "hva du forventet at skulle skje istedenfor denne feilen."
 
-#: templates/base.html:24
-msgid "µFS Microfinance System"
-msgstr "µFS Mikrofinanssystem"
+#: templates/404.html:4 templates/404.html.py:11
+msgid "Page not found"
+msgstr "Fant ikke siden"
 
-#: templates/base.html:64
-msgid "User:"
-msgstr "Bruker:"
-
-#: templates/base.html:67
-msgid "Active account:"
-msgstr "Aktiv konto:"
-
-#: templates/base.html:70
-msgid "Change"
-msgstr "Endre"
-
-#: templates/base.html:74
-msgid "Contact:"
-msgstr "Kontakt:"
-
-#: templates/base.html:81
-msgid "Language:"
-msgstr "Språk:"
-
-#: templates/base.html:88
-msgid "Go"
-msgstr "Utfør"
+#: templates/404.html:13
+msgid "The page you requested was not found."
+msgstr "Siden du forespurte ble ikke funnet."
 
 #: templates/accounting/account_summary.html:6
 #, python-format
@@ -376,7 +366,8 @@ msgid "Account info"
 msgstr "Kontoinformasjon"
 
 #: templates/accounting/account_summary.html:12
-#: templates/accounting/group_summary.html:76
+#: templates/accounting/group_summary.html:80
+#: templates/accounting/group_summary.html:97
 #: templates/accounting/list.html:46
 msgid "Balance"
 msgstr "Balanse"
@@ -386,7 +377,8 @@ msgid "Owner"
 msgstr "Eier"
 
 #: templates/accounting/account_summary.html:23
-#: templates/accounting/group_summary.html:75
+#: templates/accounting/group_summary.html:79
+#: templates/accounting/group_summary.html:96
 msgid "Type"
 msgstr "Type"
 
@@ -395,12 +387,12 @@ msgid "Active"
 msgstr "Aktiv"
 
 #: templates/accounting/account_summary.html:30
-#: templates/accounting/group_list.html:23
+#: templates/accounting/group_list.html:24
 msgid "Yes,No"
 msgstr "Ja,Nei"
 
 #: templates/accounting/account_summary.html:36
-#: templates/accounting/group_summary.html:9
+#: templates/accounting/group_summary.html:11
 msgid "Group info"
 msgstr "Gruppeinformasjon"
 
@@ -410,12 +402,12 @@ msgid "Name"
 msgstr "Navn"
 
 #: templates/accounting/account_summary.html:44
-#: templates/accounting/group_summary.html:12
+#: templates/accounting/group_summary.html:14
 msgid "Warning limit"
 msgstr "Advarselsgrense"
 
 #: templates/accounting/account_summary.html:52
-#: templates/accounting/group_summary.html:20
+#: templates/accounting/group_summary.html:22
 msgid "Blocking limit"
 msgstr "Blokkeringsgrense"
 
@@ -436,99 +428,14 @@ msgid "Transfer"
 msgstr "Overføring"
 
 #: templates/accounting/account_summary.html:74
-#: templates/accounting/group_summary.html:47
+#: templates/accounting/group_summary.html:49
 msgid "Lists"
 msgstr "Lister"
 
 #: templates/accounting/account_summary.html:76
-#: templates/accounting/group_summary.html:49
+#: templates/accounting/group_summary.html:51
 msgid "No lists configured for this group."
 msgstr "Ingern lister er konfigurert for denne gruppen."
-
-#: templates/accounting/approve_transactions.html:5
-msgid "Approve transactions"
-msgstr "Godkjenn transaksjoner"
-
-#: templates/accounting/approve_transactions.html:8
-msgid "No pending transactions found."
-msgstr "Ingen ventende transaksjoner funnet."
-
-#: templates/accounting/approve_transactions.html:14
-#: templates/accounting/approve_transactions.html:66
-#: templates/accounting/transaction_list.html:11
-#: templates/accounting/transaction_list.html:75
-msgid "Previous"
-msgstr "Forrige"
-
-#: templates/accounting/approve_transactions.html:16
-#: templates/accounting/approve_transactions.html:68
-#: templates/accounting/transaction_list.html:13
-#: templates/accounting/transaction_list.html:77
-#, python-format
-msgid "%(hits)s hits"
-msgstr "%(hits)s treff"
-
-#: templates/accounting/approve_transactions.html:18
-#: templates/accounting/approve_transactions.html:70
-#: templates/accounting/transaction_list.html:15
-#: templates/accounting/transaction_list.html:79
-msgid "Next"
-msgstr "Neste"
-
-#: templates/accounting/approve_transactions.html:26
-#: templates/accounting/transaction_list.html:22
-msgid "Registered"
-msgstr "Registrert"
-
-#: templates/accounting/approve_transactions.html:27
-msgid "Debit account"
-msgstr "Debetkonto"
-
-#: templates/accounting/approve_transactions.html:28
-msgid "Credit account"
-msgstr "Kreditkonto"
-
-#: templates/accounting/approve_transactions.html:31
-#: templates/accounting/approve_transactions.html:60
-msgid "Approve"
-msgstr "Godkjenn"
-
-#: templates/accounting/balance.html:5
-#, python-format
-msgid "Balance sheet for %(group_name)s at %(today)s"
-msgstr "Balanse for %(group_name)s ved %(today)s"
-
-#: templates/accounting/balance.html:11
-msgid "Assets"
-msgstr "Eiendeler"
-
-#: templates/accounting/balance.html:20
-msgid "Total assets"
-msgstr "Totale eiendeler"
-
-#: templates/accounting/balance.html:31
-msgid "Liabilities and equities"
-msgstr "Egenkapital og gjeld"
-
-#: templates/accounting/balance.html:35
-msgid "Liabilities"
-msgstr "Gjeld"
-
-#: templates/accounting/balance.html:44
-msgid "Total liabilities"
-msgstr "Total gjeld"
-
-#: templates/accounting/balance.html:51
-msgid "Equities"
-msgstr "Egenkapital"
-
-#: templates/accounting/balance.html:60
-msgid "Total equities (Net worth)"
-msgstr "Total egenkapital (nettoverdi)"
-
-#: templates/accounting/balance.html:67
-msgid "Total liabilities and equities"
-msgstr "Total egenkapital og gjeld"
 
 #: templates/accounting/base.html:9
 msgid "My account"
@@ -542,86 +449,103 @@ msgstr "Administrasjon"
 msgid "Help"
 msgstr "Hjelp"
 
-#: templates/accounting/group_list.html:7
+#: templates/accounting/group_list.html:5
+#, fuzzy
+msgid "Accounts for user"
+msgstr "Kontoinformasjon"
+
+#: templates/accounting/group_list.html:8
 #, python-format
 msgid "Accounts for user &ldquo;%(username)s&rdquo;"
 msgstr "Kontoer for brukeren &ldquo;%(username)s&rdquo;"
 
-#: templates/accounting/group_list.html:10
+#: templates/accounting/group_list.html:11
+#, fuzzy
 msgid ""
-"You already have a µFS user, but it is not connected to any accounts. Please "
-"ask your group administrator to create an account for you and connect the "
-"account with your user."
+"You already have a &mu;FS user, but it is not connected to any accounts. "
+"Please ask your group administrator to create an account for you and connect "
+"the account with your user."
 msgstr ""
-"Du har allerede en µFS-bruker, men den er ikke koblet med noen kontoer. "
+"Du har allerede en &mu;FS-bruker, men den er ikke koblet med noen kontoer. "
 "Vennligst spør din gruppeadministrator om å opprette en konto til deg og å "
 "koble den med brukeren din."
 
-#: templates/accounting/group_list.html:15
-#: templates/accounting/group_summary.html:74
+#: templates/accounting/group_list.html:16
+#: templates/accounting/group_summary.html:78
+#: templates/accounting/group_summary.html:95
 msgid "Account"
 msgstr "Konto"
 
-#: templates/accounting/group_list.html:16
+#: templates/accounting/group_list.html:17
 msgid "Group"
 msgstr "Gruppe"
 
-#: templates/accounting/group_list.html:17
+#: templates/accounting/group_list.html:18
 msgid "Group admin"
 msgstr "Gruppeadministrator"
 
-#: templates/accounting/group_summary.html:6
+#: templates/accounting/group_summary.html:8
 #, python-format
 msgid "Group summary for &ldquo;%(group_name)s&rdquo;"
 msgstr "Gruppesammendrag for &ldquo;%(group_name)s&rdquo;"
 
-#: templates/accounting/group_summary.html:31
+#: templates/accounting/group_summary.html:33
 #: templates/accounting/transaction_list.html:2
 msgid "Transactions"
 msgstr "Transaksjoner"
 
-#: templates/accounting/group_summary.html:33
+#: templates/accounting/group_summary.html:35
 msgid "Approve transaction"
 msgstr "Godkjenn transaksjon"
 
-#: templates/accounting/group_summary.html:34
+#: templates/accounting/group_summary.html:36
 #: templates/accounting/transfer.html:12
 msgid "Register transaction"
 msgstr "Registrer transaksjon"
 
-#: templates/accounting/group_summary.html:39
+#: templates/accounting/group_summary.html:41
 msgid "Statements"
 msgstr "Rapporter"
 
-#: templates/accounting/group_summary.html:41
+#: templates/accounting/group_summary.html:43
 msgid "Balance statement"
 msgstr "Balanseregnskap"
 
-#: templates/accounting/group_summary.html:42
+#: templates/accounting/group_summary.html:44
 msgid "Income statement"
 msgstr "Inntektsregnskap"
 
-#: templates/accounting/group_summary.html:55
+#: templates/accounting/group_summary.html:57
 msgid "Edit"
 msgstr "Rediger"
 
-#: templates/accounting/group_summary.html:56
+#: templates/accounting/group_summary.html:58
 msgid "Delete"
 msgstr "Slett"
 
-#: templates/accounting/group_summary.html:59
+#: templates/accounting/group_summary.html:61
 msgid "New"
 msgstr "Ny"
 
-#: templates/accounting/group_summary.html:67
+#: templates/accounting/group_summary.html:70
 msgid "Accounts"
 msgstr "Kontoer"
 
-#: templates/accounting/group_summary.html:69
+#: templates/accounting/group_summary.html:71
 msgid "No accounts found."
 msgstr "Ingen kontoer funnet."
 
-#: templates/accounting/group_summary.html:87
+#: templates/accounting/group_summary.html:75
+#, fuzzy
+msgid "User accounts"
+msgstr "Medlemskontoer"
+
+#: templates/accounting/group_summary.html:92
+#, fuzzy
+msgid "Group accounts"
+msgstr "kontoer"
+
+#: templates/accounting/group_summary.html:109
 msgid ""
 "Please note, a negative balance in a liabilty account tells that the owner "
 "has money to spend, while a positive balance means it is time for a deposit."
@@ -629,18 +553,86 @@ msgstr ""
 "Bemerk, en negativ balanse på en gjeldskonto betyr at eieren har penger å "
 "bruke, mens en positiv balanse betyr at det er på tide med et innskudd."
 
+#: templates/accounting/transaction_list.html:5
+msgid "No transactions found."
+msgstr "Ingen transaksjoner funnet."
+
+#: templates/accounting/transfer.html:8
+#, fuzzy, python-format
+msgid ""
+"\n"
+"    %(title)s &ldquo;%(account_name)s&rdquo;\n"
+"    "
+msgstr ""
+"\n"
+"    %(type_c)s for konto &ldquo;%(account_name)s&rdquo;\n"
+"    "
+
+#: templates/accounting/balance.html:5
+#, python-format
+msgid "Balance sheet for %(group_name)s at %(today)s"
+msgstr "Balanse for %(group_name)s ved %(today)s"
+
+#: templates/accounting/balance.html:10
+msgid "Assets"
+msgstr "Eiendeler"
+
+#: templates/accounting/balance.html:19
+msgid "Total assets"
+msgstr "Totale eiendeler"
+
+#: templates/accounting/balance.html:30
+msgid "Liabilities and equities"
+msgstr "Egenkapital og gjeld"
+
+#: templates/accounting/balance.html:34
+msgid "Liabilities"
+msgstr "Gjeld"
+
+#: templates/accounting/balance.html:43
+msgid "Total liabilities"
+msgstr "Total gjeld"
+
+#: templates/accounting/balance.html:50
+msgid "Equities"
+msgstr "Egenkapital"
+
+#: templates/accounting/balance.html:59
+msgid "Total equities (Net worth)"
+msgstr "Total egenkapital (nettoverdi)"
+
+#: templates/accounting/balance.html:66
+msgid "Total liabilities and equities"
+msgstr "Total egenkapital og gjeld"
+
+#: templates/accounting/list.html:21
+msgid "<b>Invalid</b> list, do not use!"
+msgstr "<b>Ugyldig</b> liste, ikke bruk!"
+
+#: templates/accounting/list.html:37
+msgid "Blacklisted accounts are marked with"
+msgstr "Svartelistede kontoer er merket med"
+
+#: templates/accounting/list.html:39
+#, fuzzy
+msgid ""
+"Please remember to print with backgrounds and with landscape orientation."
+msgstr "Husk å skriv ut med bakgrunner i landskapsorientering."
+
 #: templates/accounting/help.html:9 templates/accounting/help.html.py:12
-msgid "Who do I contact about technical errors in µFS?"
-msgstr "Hvem kontakter jeg ved tekniske feil ved µFS"
+#, fuzzy
+msgid "Who do I contact about technical errors in &mu;FS?"
+msgstr "Hvem kontakter jeg ved tekniske feil ved &mu;FS"
 
 #: templates/accounting/help.html:14
+#, fuzzy
 msgid ""
-"Please contact the µFS developers at <a href=\"mailto:itk-ufs@samfundet.no"
+"Please contact the &mu;FS developers at <a href=\"mailto:itk-ufs@samfundet.no"
 "\">itk-ufs@samfundet.no</a> if you experience any technical errors. Please "
 "include a description of what you did, what you expected and what actually "
 "happened, including any error messages you may have gotten."
 msgstr ""
-"Vennligst kontakt µFS-utviklerne på <a href=\"mailto:itk-ufs@samfundet.no"
+"Vennligst kontakt &mu;FS-utviklerne på <a href=\"mailto:itk-ufs@samfundet.no"
 "\">itk-ufs@samfundet.no</a> hvis du opplever tekniske problemer. Vennligst "
 "inkluder en beskrivelse av hva du gjorde, hva du forventet å skje og hva som "
 "faktisk skjedde, inkludert eventuelle feilmeldinger du har fått."
@@ -670,48 +662,99 @@ msgstr "Totale utgifter og tap"
 msgid "Net income"
 msgstr "Nettoinntekt"
 
-#: templates/accounting/list.html:21
-msgid "<b>Invalid</b> list, do not use!"
-msgstr "<b>Ugyldig</b> liste, ikke bruk!"
+#: templates/accounting/approve_transactions.html:5
+msgid "Approve transactions"
+msgstr "Godkjenn transaksjoner"
 
-#: templates/accounting/list.html:37
-msgid "Blacklisted accounts are marked with"
-msgstr "Svartelistede kontoer er merket med"
+#: templates/accounting/approve_transactions.html:8
+msgid "No pending transactions found."
+msgstr "Ingen ventende transaksjoner funnet."
 
-#: templates/accounting/list.html:39
-msgid "Please remember to print with backgrounds in landscape orientation."
-msgstr "Husk å skriv ut med bakgrunner i landskapsorientering."
+#: templates/accounting/approve_transactions.html:14
+#: templates/accounting/approve_transactions.html:69
+#: templates/accounting/transaction_list_menu.html:7
+#: templates/accounting/transaction_list_menu.html:9
+msgid "Previous"
+msgstr "Forrige"
 
-#: templates/accounting/transaction_list.html:5
-msgid "No transactions found."
-msgstr "Ingen transaksjoner funnet."
+#: templates/accounting/approve_transactions.html:16
+#: templates/accounting/approve_transactions.html:71
+#: templates/accounting/transaction_list_menu.html:12
+#, python-format
+msgid "%(hits)s hits"
+msgstr "%(hits)s treff"
 
-#: templates/accounting/transaction_list.html:24
+#: templates/accounting/approve_transactions.html:18
+#: templates/accounting/approve_transactions.html:73
+#: templates/accounting/transaction_list_menu.html:15
+#: templates/accounting/transaction_list_menu.html:17
+msgid "Next"
+msgstr "Neste"
+
+#: templates/accounting/approve_transactions.html:26
+#: templates/accounting/transaction_list_user.html:4
+#: templates/accounting/transaction_list_admin.html:4
+msgid "Registered"
+msgstr "Registrert"
+
+#: templates/accounting/approve_transactions.html:27
+msgid "Debit account"
+msgstr "Debetkonto"
+
+#: templates/accounting/approve_transactions.html:28
+msgid "Credit account"
+msgstr "Kreditkonto"
+
+#: templates/accounting/approve_transactions.html:31
+#: templates/accounting/approve_transactions.html:61
+msgid "Approve"
+msgstr "Godkjenn"
+
+#: templates/accounting/approve_transactions.html:62
+msgid "Reject"
+msgstr ""
+
+#: templates/accounting/transaction_list_user.html:6
+#: templates/accounting/transaction_list_admin.html:6
 msgid "Debit Account"
 msgstr "Debetkonto"
 
-#: templates/accounting/transaction_list.html:25
+#: templates/accounting/transaction_list_user.html:7
+#: templates/accounting/transaction_list_admin.html:7
 msgid "Credit Account"
 msgstr "Kreditkonto"
 
-#: templates/accounting/transaction_list.html:35
+#: templates/accounting/transaction_list_user.html:17
+#: templates/accounting/transaction_list_admin.html:17
 msgid "Pending"
 msgstr "Ventende"
 
-#: templates/accounting/transaction_list.html:65
+#: templates/accounting/transaction_list_user.html:33
+#: templates/accounting/transaction_list_admin.html:39
 msgid "None"
 msgstr "Ingen"
 
-#: templates/accounting/transfer.html:8
-#, fuzzy, python-format
-msgid ""
-"\n"
-"    %(title)s &ldquo;%(account_name)s&rdquo;\n"
-"    "
-msgstr ""
-"\n"
-"    %(type_c)s for konto &ldquo;%(account_name)s&rdquo;\n"
-"    "
+#: templates/admin/base_site.html:7
+msgid "&mu;FS administration"
+msgstr "&mu;FS administrasjon"
+
+#~ msgid "account group"
+#~ msgstr "kontogruppe"
+
+#~ msgid "account groups"
+#~ msgstr "kontogrupper"
+
+#~ msgid "Bank"
+#~ msgstr "Bank"
+
+#~ msgid "Cash"
+#~ msgstr "Kontanter"
+
+#~ msgid "Active account:"
+#~ msgstr "Aktiv konto:"
+
+#~ msgid "Change"
+#~ msgstr "Endre"
 
 #~ msgid "Register transaction for account"
 #~ msgstr "Registrer transaksjon for konto"
