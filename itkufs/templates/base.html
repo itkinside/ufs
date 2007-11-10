@@ -1,5 +1,4 @@
-{% load i18n webdesign %}
-<?xml version="1.0" encoding="UTF-8"?>
+{% load i18n webdesign %}<?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
 "http://www.w3.org/TR/xhtml11/DTD/xhtml11-strict.dtd">
@@ -21,7 +20,7 @@
 <div id="container">
 
 <h1 id="head" style="background: url({% url media "images/logo.png" %}) top right no-repeat;">
-{% trans "µFS Microfinance System" %}</h1>
+{% trans "&mu;FS Microfinance System" %}</h1>
 
 <div id="menu">
 {% block menu %}
@@ -60,26 +59,31 @@
 <div id="footer">
 {% block footer %}
 µFS v1.0-&alpha;
+
 <span>&bull;</span>
 {% trans "User:" %} {{ user.username }}
+
 {% if group.email %}
 <span>&bull;</span>
 {% trans "Contact:" %}
 <a href="mailto:{{group.email}}">{{group.email}}</a>
 {% endif %}
-{% endblock %}
 
-<form action="{% url django.views.i18n.set_language %}" method="post">
 <span>&bull;</span>
-{% trans "Language:" %} <select name="language">
-{% for lang in LANGUAGES %}
-<option value="{{ lang.0 }}" {% ifequal lang.0 request.LANGUAGE_CODE %}selected="selected"{% endifequal %}>
-	{% trans lang.1 %}
-</option>
-{% endfor %}
+<form action="{% url django.views.i18n.set_language %}" method="post">
+<div style="display: inline;">
+{% trans "Language:" %}
+<select name="language">
+    {% for lang in LANGUAGES %}
+    <option value="{{ lang.0 }}"{% ifequal lang.0 request.LANGUAGE_CODE %} selected="selected"{% endifequal %}>
+            {% trans lang.1 %}</option>
+    {% endfor %}
 </select>
 <button type="submit">{% trans "Go" %}</button>
+</div>
 </form>
+
+{% endblock %}
 </div>
 
 </div>
