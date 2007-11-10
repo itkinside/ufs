@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-10 02:10+0100\n"
+"POT-Creation-Date: 2007-11-10 02:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -615,9 +615,8 @@ msgstr "Svartelistede kontoer er merket med"
 
 #: templates/accounting/list.html:39
 #, fuzzy
-msgid ""
-"Please remember to print with backgrounds and with landscape orientation."
-msgstr "Husk å skriv ut med bakgrunner i landskapsorientering."
+msgid "Please remember to print with backgrounds and landscape orientation."
+msgstr "Husk å skriv ut med bakgrunner og landskapsorientering."
 
 #: templates/accounting/help.html:9 templates/accounting/help.html.py:12
 #, fuzzy
