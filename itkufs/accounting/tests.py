@@ -16,6 +16,7 @@ class GroupTestCase(unittest.TestCase):
 
     def testPayedTransactionSet(self):
         """Check that payed_transaction_set only contains payed and related transactions"""
+        # FIXME this test _will_ break when we change transaction model
 
         group = Group.objects.get(id=1)
         account1 = Account.objects.get(id=1)
@@ -74,10 +75,36 @@ class AccountTestCase(unittest.TestCase):
 
 class TransactionlTestCase(unittest.TestCase):
     def setUp(self):
-        pass
+        # Remove all transactions...
+        trans = Transaction.objects.all()
+        for t in trans: t.delete()
+    def tearDown(self):
+        # Remove all transactions...
+        trans = Transaction.objects.all()
+        for t in trans: t.delete()
 
     def testSimpleTransaction(self):
-        pass
+        """Baseline test to check transactions"""
+        debit_account = Account.objects.get(id=1)
+        credit_account = Account.objects.get(id=2)
+
+        t = Transaction({'debit':100, 'account':debit_account},
+            {'credit': 100, 'account':credit_account})
+
+        entries = t.entry_set.all()
+        debit = 0
+        credit = 0
+        for e in entries:
+            if e.credit > 0:
+                credit += e.credit
+                self.assertEqual(credit_account, e.account)
+            elif e.debit > 0:
+                debit  += e.debit
+                self.assertEqual(debit_account, e.account)
+            else:
+                self.fail('TransactionEntry with without valid credit or debit')
+
+        self.assertEqual(credit, debit)
 
     def testTransActionWithManyDebitEntries(self):
         pass

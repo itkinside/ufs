@@ -1,10 +1,49 @@
 [
     {
+        "pk": 1, 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 1, 
+            "name": "Bank", 
+            "active": true, 
+            "owner": null, 
+            "type": "As", 
+            "slug": "bank", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
         "pk": 2, 
         "model": "accounting.account", 
         "fields": {
             "group": 1, 
-            "name": "Stein Magnus", 
+            "name": "Cash", 
+            "active": true, 
+            "owner": null, 
+            "type": "As", 
+            "slug": "cash", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 1, 
+            "name": "Norvald Ryeng", 
+            "active": true, 
+            "owner": 5, 
+            "type": "Li", 
+            "slug": "ryeng", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 1, 
+            "name": "Stein Magnus Jodal", 
             "active": true, 
             "owner": 1, 
             "type": "Li", 
@@ -13,7 +52,7 @@
         }
     }, 
     {
-        "pk": 1, 
+        "pk": 7, 
         "model": "accounting.account", 
         "fields": {
             "group": 1, 
@@ -30,6 +69,32 @@
         "model": "accounting.account", 
         "fields": {
             "group": 2, 
+            "name": "Bank", 
+            "active": true, 
+            "owner": null, 
+            "type": "As", 
+            "slug": "bank", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 2, 
+            "name": "Cash", 
+            "active": true, 
+            "owner": null, 
+            "type": "As", 
+            "slug": "cash", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 2, 
             "name": "Thomas Adamcik", 
             "active": true, 
             "owner": 2, 
@@ -39,21 +104,47 @@
         }
     }, 
     {
+        "pk": 5, 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 3, 
+            "name": "Bank", 
+            "active": true, 
+            "owner": null, 
+            "type": "As", 
+            "slug": "bank", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "accounting.account", 
+        "fields": {
+            "group": 3, 
+            "name": "Cash", 
+            "active": true, 
+            "owner": null, 
+            "type": "As", 
+            "slug": "cash", 
+            "ignore_block_limit": false
+        }
+    }, 
+    {
         "pk": 2, 
         "model": "accounting.group", 
         "fields": {
-            "warn_limit": null, 
+            "warn_limit": 500, 
             "name": "ARK", 
-            "block_limit": null, 
+            "block_limit": 100, 
             "slug": "ark", 
-            "email": "ark-bar@samfundet.no", 
+            "email": "", 
             "admins": [
                 2, 
                 5
             ], 
             "logo": "", 
-            "cash_account": null, 
-            "bank_account": null
+            "cash_account": 4, 
+            "bank_account": 3
         }
     }, 
     {
@@ -61,18 +152,18 @@
         "model": "accounting.group", 
         "fields": {
             "warn_limit": 200, 
-            "name": "ITK-Inside", 
+            "name": "ITK Inside", 
             "block_limit": 0, 
             "slug": "itk", 
-            "email": "itk-bar@samfundet.no", 
+            "email": "", 
             "admins": [
                 2, 
                 1, 
                 4
             ], 
             "logo": "", 
-            "cash_account": null, 
-            "bank_account": null
+            "cash_account": 2, 
+            "bank_account": 1
         }
     }, 
     {
@@ -86,69 +177,8 @@
             "email": "", 
             "admins": [], 
             "logo": "", 
-            "cash_account": null, 
-            "bank_account": null
-        }
-    }, 
-    {
-        "pk": 1, 
-        "model": "accounting.list", 
-        "fields": {
-            "account_width": 2, 
-            "balance_width": 1, 
-            "name": "Intern", 
-            "group": 1, 
-            "slug": "intern"
-        }
-    }, 
-    {
-        "pk": 1, 
-        "model": "accounting.listitem", 
-        "fields": {
-            "width": 1, 
-            "list": 1, 
-            "name": "\u00d8l", 
-            "order": 1
-        }
-    }, 
-    {
-        "pk": 2, 
-        "model": "accounting.listitem", 
-        "fields": {
-            "width": 3, 
-            "list": 1, 
-            "name": "Brus", 
-            "order": 2
-        }
-    }, 
-    {
-        "pk": 3, 
-        "model": "accounting.listitem", 
-        "fields": {
-            "width": 2, 
-            "list": 1, 
-            "name": "10", 
-            "order": 3
-        }
-    }, 
-    {
-        "pk": 4, 
-        "model": "accounting.listitem", 
-        "fields": {
-            "width": 2, 
-            "list": 1, 
-            "name": "3", 
-            "order": 4
-        }
-    }, 
-    {
-        "pk": 5, 
-        "model": "accounting.listitem", 
-        "fields": {
-            "width": 2, 
-            "list": 1, 
-            "name": "1", 
-            "order": 5
+            "cash_account": 6, 
+            "bank_account": 5
         }
     }
 ]

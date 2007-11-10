@@ -3,6 +3,10 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import *
+
+#FIXME replace custom save method with validator_lists where this can be done
+#      and makes sense
 
 class Group(models.Model):
     name = models.CharField(_('name'), max_length=100)
@@ -141,7 +145,7 @@ class Account(models.Model):
         search_fields = ['name']
 
     def __unicode__(self):
-        return self.name
+        return "%s: %s" % (self.group, self.name)
 
     def debit_to_increase(self):
         """Returns True if account type uses debit to increase, False if using
@@ -271,6 +275,42 @@ class Transaction(models.Model):
         if self.credit_account == self.debit_account:
             raise InvalidTransaction, _('Credit and debit is same account.')
         super(Transaction, self).save()
+
+class NewTransaction(models.Model):
+    settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
+        null=True, blank=True)
+    class Admin:
+        pass
+
+TRANSACTIONLOG_TYPE = (
+    ('Reg', _('Registered')),
+    ('Pay', _('Payed')),
+    ('Rec', _('Recived')),
+    ('Rej', _('Rejected')),
+)
+
+class TransactionLog(models.Model):
+    transaction = models.ForeignKey(NewTransaction, edit_inline=models.TABULAR,
+        num_in_admin=1, max_num_in_admin=4, num_extra_on_change=1)
+    type = models.CharField(_('type'), max_length=3, core=True,
+        choices=TRANSACTIONLOG_TYPE)
+    time = models.DateTimeField(_('time'), auto_now_add=True)
+    user = models.ForeignKey(User, null=True, blank=True)
+    message = models.CharField(_('message'), max_length=200,
+        blank=True, null=True)
+    class Meta:
+        unique_together = (("transaction", "type"),)
+
+class TransactionEntry(models.Model):
+    transaction = models.ForeignKey(NewTransaction, edit_inline=models.TABULAR,
+        num_in_admin=5, num_extra_on_change=3)
+    debit = models.DecimalField(_('debit amount'), max_digits=10,
+        decimal_places=2, blank=True, null=True)
+    credit = models.DecimalField(_('credit amount'), max_digits=10,
+        decimal_places=2, blank=True, null=True)
+    account = models.ForeignKey(Account, core=True)
+    class Meta:
+        unique_together = (("transaction", "account"),)
 
 class List(models.Model):
     name = models.CharField(_('name'), max_length=200)
