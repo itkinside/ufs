@@ -32,6 +32,7 @@ New features:
 - Settlement
   * Invoice
 - Admin rejection of user claims, using TransactionMessage
+- Account management, optionally connect with users
 
 SHOULD HAVE
 -----------
