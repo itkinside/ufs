@@ -263,7 +263,7 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 	float: left;
 	margin-right: 3em;
 }
-#transactions, #accounts {
+#transactions, #accounts, #accounts .comment {
 	clear: both;
 }
 
