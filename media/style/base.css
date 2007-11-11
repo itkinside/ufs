@@ -131,6 +131,7 @@ em {
 /* Footer block */
 #footer {
 	border-top: 1px solid #aaa;
+	clear: both;
 	font-size: 85%;
 	padding-top: 0.5em;
 	margin-top: 0.7em;
