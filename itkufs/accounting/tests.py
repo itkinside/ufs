@@ -10,10 +10,10 @@ from itkufs.accounting.models import *
 class GroupTestCase(unittest.TestCase):
     """Test the group model"""
     def setUp(self):
-        pass
+        self.fail('Test not implemented')
 
     def testDefaultGroup(self):
-        pass
+        self.fail('Test not implemented')
 
     def testPayedTransactionSet(self):
         """Check that payed_transaction_set only contains payed and related transactions"""
@@ -63,18 +63,18 @@ class AccountTestCase(unittest.TestCase):
         self.assertEqual(default.active, True)
 
     def testAccountTypes(self):
-        pass
+        self.fail('Test not implemented')
 
     def testAccountWithOwner(self):
-        pass
+        self.fail('Test not implemented')
 
     def testDisabledAccount(self):
-        pass
+        self.fail('Test not implemented')
 
     def testAccountBalance(self):
-        pass
+        self.fail('Test not implemented')
 
-class TransactionlTestCase(unittest.TestCase):
+class TransactionTestCase(unittest.TestCase):
     def setUp(self):
         pass
 
@@ -85,59 +85,59 @@ class TransactionlTestCase(unittest.TestCase):
 
     def testEmptyTransaction(self):
         """Check that transaction fails when no accounts are given"""
-        pass
+        self.fail('Test not implemented')
 
     def testNullAmountTransaction(self):
         """Check that transaction fail when debit and credit are not given"""
-        pass
+        self.fail('Test not implemented')
 
     def testDebitAndCreditAmmountEquall(self):
         """Check that transtion only accept sum(debit)==sum(credit)"""
-        pass
+        self.fail('Test not implemented')
 
     def testAccountOnlyInOneSideOfTransaction(self):
         """Check that debit accounts aren't present among credit accounts, and vica versa"""
-        pass
+        self.fail('Test not implemented')
 
     def testRegisteredLogEntry(self):
         """Check that a registered log entry is created"""
-        pass
+        self.fail('Test not implemented')
 
     def testPayedLogEntry(self):
         """Check creation of payed log entry"""
-        pass
+        self.fail('Test not implemented')
 
     def testRejectLogEntry(self):
         """Check that registered transaction can be rejected"""
-        pass
+        self.fail('Test not implemented')
 
     def testRejectPayedTransaction(self):
         """Test that rejecting payed transaction fails"""
-        pass
+        self.fail('Test not implemented')
 
     def testRejectRecievedTransaction(self):
         """Test that rejecting recieved transaction fails"""
-        pass
+        self.fail('Test not implemented')
 
     def testRecievePayedTransaction(self):
         """Check that we can set a payed transaction as recieved"""
-        pass
+        self.fail('Test not implemented')
 
     def testRecieveNotPayedTransaction(self):
         """Check that recieving a transaction that is not payed fails"""
-        pass
+        self.fail('Test not implemented')
 
     def testRejectRecievedTransaction(self):
         """Check that we can't reject a recieved transaction"""
-        pass
+        self.fail('Test not implemented')
 
     def testLogEntryUniqePerType(self):
         """Check that we can only have one log entry of each type"""
-        pass
+        self.fail('Test not implemented')
 
-    def testLogEntryModify(self)
+    def testLogEntryModify(self):
         """Test that modifying log entry raises error"""
-        pass
+        self.fail('Test not implemented')
 
     def testSimpleTransaction(self):
         """Baseline test to check transactions"""
@@ -163,12 +163,12 @@ class TransactionlTestCase(unittest.TestCase):
         self.assertEqual(credit, debit)
 
     def testTransActionWithManyDebitEntries(self):
-        pass
+        self.fail('Test not implemented')
 
     def testTransActionWithManyCreditEntries(self):
-        pass
+        self.fail('Test not implemented')
 
     def testTransactionLog(self):
-        pass
+        self.fail('Test not implemented')
 
     # ...
