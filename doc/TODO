@@ -38,6 +38,8 @@ SHOULD HAVE
 -----------
 
 - Admin should be able to edit lists (adamcik)
+- Respect active flag for accounts, or at least indicate that account is
+  inactive
 
 MAY HAVE
 --------

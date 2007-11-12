@@ -2,6 +2,7 @@ import unittest
 from datetime import datetime
 
 from itkufs.accounting.models import *
+#import NewTransaction as Transaction # FIXME
 
 # FIXME Write more tests
 # FIXME Add docstrings explainging purpose of all tests
@@ -75,13 +76,28 @@ class AccountTestCase(unittest.TestCase):
 
 class TransactionlTestCase(unittest.TestCase):
     def setUp(self):
-        # Remove all transactions...
-        trans = Transaction.objects.all()
-        for t in trans: t.delete()
+        pass
+
     def tearDown(self):
         # Remove all transactions...
         trans = Transaction.objects.all()
         for t in trans: t.delete()
+
+    def testEmptyTransaction(self):
+        """Check that transaction fails when no accounts are given"""
+        pass
+
+    def testNullAmountTransaction(self):
+        """Check that transaction fail when debit and credit are not given"""
+        pass
+
+    def testDebitAndCreditAmmountEquall(self):
+        """Check that transtion only accept sum(debit)==sum(credit)"""
+        pass
+
+    def testAccountOnlyInOneSideOfTransaction(self):
+        """Check that debit accounts aren't present among credit accounts, and vica versa"""
+        pass
 
     def testSimpleTransaction(self):
         """Baseline test to check transactions"""
