@@ -53,52 +53,46 @@ class Group(models.Model):
             super(Group, self).save()
 
     def user_account_set(self):
-        """Return queryset of user accounts"""
+        """Returns queryset of user accounts"""
         return self.account_set.filter(type='Li', owner__isnull=False)
 
     def group_account_set(self):
-        """Return array of group accounts"""
+        """Returns array of group accounts"""
         return self.account_set.exclude(type='Li', owner__isnull=False)
 
     def transaction_set(self):
-        """Return all transactions connected to group"""
+        """Returns all transactions connected to group"""
         return Transaction.objects.filter(
                 Q(credit_account__group=self) &
                 Q(debit_account__group=self))
 
     def registered_transaction_set(self):
-        """Return all transactions that are not rejected connected to group"""
+        """Returns all transactions connected to group, that are not rejected"""
         # FIXME implement
         return Transaction.objects.none()
 
     def payed_transaction_set(self):
-        """Return all payed transactions connected to group"""
+        """Returns all payed transactions connected to group, that are not rejected"""
         # FIXME filter out rejected
-        return Transaction.objects.filter(
-                Q(credit_account__group=self) &
-                Q(debit_account__group=self) &
-                Q(payed__isnull=False))
+        return self.transaction_set().filter(payed__isnull=False)
 
     def not_payed_transaction_set(self):
-        """Return all unpayed transactions connected to group"""
+        """Returns all unpayed transactions connected to group, that are not rejected"""
         # FIXME filter out rejected
-        return Transaction.objects.filter(
-                Q(credit_account__group=self) &
-                Q(debit_account__group=self) &
-                Q(payed__isnull=True))
+        return self.transaction_set().filter(payed__isnull=True)
 
     def recieved_transaction_set(self):
-        """Return all recieved transactions connected to group"""
+        """Returns all recieved transactions connected to group"""
         # FIXME implement
         return Transaction.objects.none()
 
     def not_recieved_transaction_set(self):
-        """Return all transactions that have not been recieved connected to group"""
+        """Returns all transactions that have not been recieved connected to group"""
         # FIXME implement
         return Transaction.objects.none()
 
     def rejected_transaction_set(self):
-        """Return all transactions that have been rejected connected to group"""
+        """Returns all transactions connected to group, that have been rejected"""
         # FIXME implement
         return Transaction.objects.none()
 
@@ -238,6 +232,7 @@ class InvalidTransaction(Exception):
         return u'Invalid transaction: %s' % self.value
 
 class Transaction(models.Model):
+    # FIXME: This model is deprecated and should be removed
     credit_account = models.ForeignKey(Account,
         verbose_name=_('credit account'), related_name='credit_transactions')
     debit_account = models.ForeignKey(Account,
@@ -247,7 +242,6 @@ class Transaction(models.Model):
         blank=True, null=True)
     registered = models.DateTimeField(_('registered'), auto_now_add=True)
     payed = models.DateTimeField(_('payed'), blank=True, null=True)
-    #received = models.DateTimeField(blank=True, null=True) # FIXME
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
 
@@ -280,38 +274,63 @@ class Transaction(models.Model):
 class NewTransaction(models.Model):
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
+
     class Admin:
         pass
 
 TRANSACTIONLOG_TYPE = (
     ('Reg', _('Registered')),
     ('Pay', _('Payed')),
-    ('Rec', _('Recived')),
+    ('Rec', _('Received')),
     ('Rej', _('Rejected')),
 )
 
 class TransactionLog(models.Model):
-    transaction = models.ForeignKey(NewTransaction, edit_inline=models.TABULAR,
-        num_in_admin=1, max_num_in_admin=4, num_extra_on_change=1)
+    transaction = models.ForeignKey(NewTransaction,
+        verbose_name=_('transaction'), related_name='log_set',
+        edit_inline=models.TABULAR, num_in_admin=1, max_num_in_admin=4,
+        num_extra_on_change=1)
     type = models.CharField(_('type'), max_length=3, core=True,
         choices=TRANSACTIONLOG_TYPE)
-    time = models.DateTimeField(_('time'), auto_now_add=True)
-    user = models.ForeignKey(User, null=True, blank=True)
+    # FIXME: Rename to timestamp?
+    time = models.DateTimeField(_('timestamp'), auto_now_add=True)
+    user = models.ForeignKey(User, verbose_name=_('user'),
+        null=True, blank=True)
     message = models.CharField(_('message'), max_length=200,
         blank=True, null=True)
+
     class Meta:
-        unique_together = (("transaction", "type"),)
+        unique_together = (('transaction', 'type'),)
+
+    def __unicode__(self):
+        return _(u'%(type)s at %(timestamp)s by %(user)s: %(message)s') % {
+            # FIXME: Use full type name
+            'type': self.type,
+            # FIXME: Rename to timestamp
+            'timestamp': self.time.strftime('%Y-%m-%d %H:%M'),
+            'user': self.user,
+            'message': self.message,
+        }
 
 class TransactionEntry(models.Model):
-    transaction = models.ForeignKey(NewTransaction, edit_inline=models.TABULAR,
-        num_in_admin=5, num_extra_on_change=3)
-    debit = models.DecimalField(_('debit amount'), max_digits=10,
-        decimal_places=2, blank=True, null=True)
-    credit = models.DecimalField(_('credit amount'), max_digits=10,
-        decimal_places=2, blank=True, null=True)
-    account = models.ForeignKey(Account, core=True)
+    transaction = models.ForeignKey(NewTransaction,
+        verbose_name=_('transaction'), related_name='entry_set',
+        edit_inline=models.TABULAR, num_in_admin=5, num_extra_on_change=3)
+    account = models.ForeignKey(Account, verbose_name=_('account'), core=True)
+    debit = models.DecimalField(_('debit amount'),
+        max_digits=10, decimal_places=2, blank=True, null=True)
+    credit = models.DecimalField(_('credit amount'),
+        max_digits=10, decimal_places=2, blank=True, null=True)
+
     class Meta:
-        unique_together = (("transaction", "account"),)
+        unique_together = (('transaction', 'account'),)
+
+    def __unicode__(self):
+        return _(u'%(account)s: debit %(debit)s, credit %(credit)s') % {
+            'account': self.account,
+            'debit': self.debit,
+            'credit': self.credit,
+        }
 
 class List(models.Model):
     name = models.CharField(_('name'), max_length=200)
