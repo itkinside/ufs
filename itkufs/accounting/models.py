@@ -42,6 +42,7 @@ class Group(models.Model):
         # Create default accounts
         if not self.account_set.count():
             # FIXME _('Bank') and _('Cash') does not seem to work here...
+            # Could the problem be related to lazy/non-lazy ugettext?
             bank = Account(name='Bank', slug='bank', type='As', group=self)
             bank.save()
             cash = Account(name='Cash', slug='cash', type='As', group=self)
