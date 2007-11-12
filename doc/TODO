@@ -8,25 +8,25 @@ Model:
 - Transaction: strip down
 - TransactionLog(transaction, type, timestamp, user, message) instead of
   transaction details and to know who did what to a transaction. Type is
-  registered, payed, recieved and rejected.
+  registered, payed, received and rejected.
 - TransactionEntry(transaction, account, debit, credit) instead of debit/credit
   account and amount on Transaction
 - Unit tests of model layer, especially transaction and account balance
-- Convinience functions in Account model to match *transaction_set in group
+- Convenience functions in Account model to match *transaction_set in group
 
 Views:
 - Use decorators to control commit/rollback of transactions
 
 Forms:
-- More sanity cheking, prevent admin from performing transactions that he does
-  not have enough privelegdes to invoke (should be done in form and/or model)
+- More sanity checking, prevent admin from performing transactions that he does
+  not have enough privileges to invoke (should be done in form and/or model)
 
 Templates:
 - Updated transaction lists and detail views, differentiated for admins and
   users
 
 Views & Templates:
-- Use new convinience functions for transaction_sets in Group model
+- Use new convenience functions for transaction_sets in Group model
 
 New features:
 - Settlement
