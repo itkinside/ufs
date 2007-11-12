@@ -99,6 +99,46 @@ class TransactionlTestCase(unittest.TestCase):
         """Check that debit accounts aren't present among credit accounts, and vica versa"""
         pass
 
+    def testRegisteredLogEntry(self):
+        """Check that a registered log entry is created"""
+        pass
+
+    def testPayedLogEntry(self):
+        """Check creation of payed log entry"""
+        pass
+
+    def testRejectLogEntry(self):
+        """Check that registered transaction can be rejected"""
+        pass
+
+    def testRejectPayedTransaction(self):
+        """Test that rejecting payed transaction fails"""
+        pass
+
+    def testRejectRecievedTransaction(self):
+        """Test that rejecting recieved transaction fails"""
+        pass
+
+    def testRecievePayedTransaction(self):
+        """Check that we can set a payed transaction as recieved"""
+        pass
+
+    def testRecieveNotPayedTransaction(self):
+        """Check that recieving a transaction that is not payed fails"""
+        pass
+
+    def testRejectRecievedTransaction(self):
+        """Check that we can't reject a recieved transaction"""
+        pass
+
+    def testLogEntryUniqePerType(self):
+        """Check that we can only have one log entry of each type"""
+        pass
+
+    def testLogEntryModify(self)
+        """Test that modifying log entry raises error"""
+        pass
+
     def testSimpleTransaction(self):
         """Baseline test to check transactions"""
         debit_account = Account.objects.get(id=1)
