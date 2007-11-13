@@ -281,6 +281,7 @@ class NewTransaction(models.Model):
         self.entries = entries
 
     def save(self):
+        # FIXME transaction or some other form of rollback
         super(NewTransaction, self).save()
 
         entries = []
@@ -315,7 +316,19 @@ class NewTransaction(models.Model):
 
     def reject(self, reason):
         if self.is_registered() and not self.is_payed() and self.is_received():
-            TransactionLog(type='Rec', transaction=self).save()
+            TransactionLog(type='Rej', transaction=self, message=reason).save()
+
+    def is_registered(self):
+        return self.log_set.filter(type='Reg').count() > 0
+
+    def is_payed(self):
+        return self.log_set.filter(type='Pay').count() > 0
+
+    def is_received(self):
+        return self.log_set.filter(type='Rec').count() > 0
+
+    def is_rejected(self):
+        return self.log_set.filter(type='Rej').count() > 0
 
     class Admin:
         pass

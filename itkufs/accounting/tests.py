@@ -171,7 +171,7 @@ class TransactionTestCase(unittest.TestCase):
         transaction.set_payed()
 
         #FIXME different error type perhaps?
-        self.assertRaises(InvalidTransaction, transaction.reject('Reason for rejecting'))
+        self.assertRaises(InvalidTransaction, transaction.reject, 'Reason for rejecting')
 
     def testRecievePayedTransaction(self):
         """Check that we can set a payed transaction as recieved"""
@@ -186,13 +186,13 @@ class TransactionTestCase(unittest.TestCase):
         transaction.set_payed()
         transaction.set_recieved()
 
-        self.assertRaises(InvalidTransaction, transaction.reject('Reason for rejecting'))
+        self.assertRaises(InvalidTransaction, transaction.reject, 'Reason for rejecting')
 
     def testRecieveNotPayedTransaction(self):
         """Check that recieving a transaction that is not payed fails"""
         transaction = self.transaction
 
-        self.assertRaises(InvalidTransaction, transaction.set_recieved())
+        self.assertRaises(InvalidTransaction, transaction.set_recieved)
 
     def testLogEntryUniqePerType(self):
         """Check that we can only have one log entry of each type"""
