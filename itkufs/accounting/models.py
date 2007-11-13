@@ -275,6 +275,19 @@ class NewTransaction(models.Model):
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
 
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('entries', [])
+        super(NewTransaction, self).__init__(*args, **kwargs)
+
+    def set_payed(self):
+        raise Exception('Not implemented')
+
+    def set_recieved(self):
+        raise Exception('Not implemented')
+
+    def reject(self, reason):
+        raise Exception('Not implemented')
+
     class Admin:
         pass
 

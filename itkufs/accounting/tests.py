@@ -2,7 +2,8 @@ import unittest
 from datetime import datetime
 
 from itkufs.accounting.models import *
-#import NewTransaction as Transaction # FIXME
+from itkufs.accounting.models import NewTransaction as Transaction
+
 
 # FIXME Write more tests
 # FIXME Add docstrings explainging purpose of all tests
@@ -10,10 +11,10 @@ from itkufs.accounting.models import *
 class GroupTestCase(unittest.TestCase):
     """Test the group model"""
     def setUp(self):
-        self.fail('Test not implemented')
+        pass
 
     def testDefaultGroup(self):
-        self.fail('Test not implemented')
+        pass
 
     def testPayedTransactionSet(self):
         """Check that payed_transaction_set only contains payed and related transactions"""
@@ -76,76 +77,145 @@ class AccountTestCase(unittest.TestCase):
 
 class TransactionTestCase(unittest.TestCase):
     def setUp(self):
-        pass
+        self.group = Group(name='group1', slug='group1')
+        self.group.save()
+
+        self.accounts = [
+            Account(name='account1', slug='account1', group=self.group),
+            Account(name='account2', slug='account2', group=self.group),
+            Account(name='account3', slug='account3', group=self.group),
+        ]
+        for a in self.accounts:
+            a.save()
+
+        self.transaction = Transaction(entries=[
+            {'account': self.accounts[0], 'debit': 100},
+            {'account': self.accounts[1], 'credit': 100},
+        ])
+
+        self.transaction.save()
 
     def tearDown(self):
-        # Remove all transactions...
-        trans = Transaction.objects.all()
-        for t in trans: t.delete()
+        for t in Transaction.objects.all():
+            if t.id:
+                t.delete()
+        for a in self.accounts:
+            if a.id:
+                a.delete()
+        if self.group.id:
+            self.group.delete()
 
     def testEmptyTransaction(self):
         """Check that transaction fails when no accounts are given"""
-        self.fail('Test not implemented')
+
+        t = Transaction(entries=({'debit': 100}, {'credit': 100}))
+        self.assertRaises(InvalidTransaction, t.save)
 
     def testNullAmountTransaction(self):
         """Check that transaction fail when debit and credit are not given"""
-        self.fail('Test not implemented')
+
+        t = Transaction(entries=[
+            {'account': self.accounts[0]},
+            {'account': self.accounts[1]},
+        ])
+        self.assertRaises(InvalidTransaction, t.save)
 
     def testDebitAndCreditAmmountEquall(self):
-        """Check that transtion only accept sum(debit)==sum(credit)"""
-        self.fail('Test not implemented')
+        """Check that transaction only accept sum(debit)==sum(credit)"""
+
+        transaction = Transaction(entries=[
+            {'account': self.accounts[0], 'debit': 100},
+            {'account': self.accounts[1], 'credit': 200},
+        ])
+        self.assertRaises(InvalidTransaction, transaction.save)
 
     def testAccountOnlyInOneSideOfTransaction(self):
         """Check that debit accounts aren't present among credit accounts, and vica versa"""
-        self.fail('Test not implemented')
+
+        transaction = Transaction(entries=[
+            {'account': self.accounts[1], 'debit': 200},
+            {'account': self.accounts[0], 'credit': 100},
+            {'account': self.accounts[1], 'credit': 100},
+        ])
+        self.assertRaises(InvalidTransaction, transaction.save)
 
     def testRegisteredLogEntry(self):
         """Check that a registered log entry is created"""
-        self.fail('Test not implemented')
+
+        transaction = self.transaction
+
+        self.assertEqual(transaction.log_set.count(), 1)
+        self.assertEqual(transaction.log_set.filter(type='Rec').count(), 1)
+        #FIXME test time
 
     def testPayedLogEntry(self):
         """Check creation of payed log entry"""
-        self.fail('Test not implemented')
+
+        transaction = self.transaction
+        transaction.set_payed()
+
+        self.assertEqual(transaction.log_set.count(), 2)
+        self.assertEqual(transaction.log_set.filter(type='Pay').count(), 1)
+        #FIXME test time
 
     def testRejectLogEntry(self):
         """Check that registered transaction can be rejected"""
-        self.fail('Test not implemented')
+
+        transaction = self.transaction
+        transaction.reject("Reason for rejecting")
+
+        self.assertEqual(transaction.log_set.count(), 2)
+        self.assertEqual(transaction.log_set.filter(type='Rej').count(), 1)
+        #FIXME test time
 
     def testRejectPayedTransaction(self):
         """Test that rejecting payed transaction fails"""
-        self.fail('Test not implemented')
 
-    def testRejectRecievedTransaction(self):
-        """Test that rejecting recieved transaction fails"""
-        self.fail('Test not implemented')
+        transaction = self.transaction
+        transaction.set_payed()
+
+        #FIXME different error type perhaps?
+        self.assertRaises(InvalidTransaction, transaction.reject('Reason for rejecting'))
 
     def testRecievePayedTransaction(self):
         """Check that we can set a payed transaction as recieved"""
-        self.fail('Test not implemented')
+
+        transaction = self.transaction
+        transaction.set_payed()
+        transaction.set_recieved()
+
+    def testRejectRecievedTransaction(self):
+        """Test that rejecting recieved transaction fails"""
+        transaction = self.transaction
+        transaction.set_payed()
+        transaction.set_recieved()
+
+        self.assertRaises(InvalidTransaction, transaction.reject('Reason for rejecting'))
 
     def testRecieveNotPayedTransaction(self):
         """Check that recieving a transaction that is not payed fails"""
-        self.fail('Test not implemented')
+        transaction = self.transaction
 
-    def testRejectRecievedTransaction(self):
-        """Check that we can't reject a recieved transaction"""
-        self.fail('Test not implemented')
+        self.assertRaises(InvalidTransaction, transaction.set_recieved())
 
     def testLogEntryUniqePerType(self):
         """Check that we can only have one log entry of each type"""
-        self.fail('Test not implemented')
+        #FIXME this should be a logentry test not a transaction test
+        pass
+
 
     def testLogEntryModify(self):
         """Test that modifying log entry raises error"""
-        self.fail('Test not implemented')
+        #FIXME this should be a logentry test not a transaction test
+        pass
 
     def testSimpleTransaction(self):
         """Baseline test to check transactions"""
         debit_account = Account.objects.get(id=1)
         credit_account = Account.objects.get(id=2)
 
-        t = Transaction({'debit':100, 'account':debit_account},
-            {'credit': 100, 'account':credit_account})
+        t = Transaction(entries=[{'debit': 100, 'account': debit_account},
+                        {'credit': 100, 'account': credit_account}])
 
         entries = t.entry_set.all()
         debit = 0
@@ -161,14 +231,3 @@ class TransactionTestCase(unittest.TestCase):
                 self.fail('TransactionEntry with without valid credit or debit')
 
         self.assertEqual(credit, debit)
-
-    def testTransActionWithManyDebitEntries(self):
-        self.fail('Test not implemented')
-
-    def testTransActionWithManyCreditEntries(self):
-        self.fail('Test not implemented')
-
-    def testTransactionLog(self):
-        self.fail('Test not implemented')
-
-    # ...
