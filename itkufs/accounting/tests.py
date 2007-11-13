@@ -140,8 +140,9 @@ class TransactionTestCase(unittest.TestCase):
 
         transaction = self.transaction
 
+        self.assertEqual(transaction.is_registered(), True)
         self.assertEqual(transaction.log_set.count(), 1)
-        self.assertEqual(transaction.log_set.filter(type='Rec').count(), 1)
+        self.assertEqual(transaction.log_set.filter(type='Reg').count(), 1)
         #FIXME test time
 
     def testPayedLogEntry(self):
