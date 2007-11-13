@@ -277,8 +277,10 @@ class NewTransaction(models.Model):
 
     def __init__(self, *args, **kwargs):
         entries = kwargs.pop('entries', [])
+        user = kwargs.pop('user', None)
         super(NewTransaction, self).__init__(*args, **kwargs)
         self.entries = entries
+        self.user = user
 
     def save(self):
         # FIXME transaction or some other form of rollback
@@ -332,7 +334,7 @@ class NewTransaction(models.Model):
             raise InvalidTransaction('Could not set transaction as recieved')
 
     def reject(self, reason):
-        if self.is_registered() and not self.is_payed() and self.is_received():
+        if self.is_registered() and not self.is_payed() and not self.is_received():
             TransactionLog(type='Rej', transaction=self, message=reason).save()
         else:
             raise InvalidTransaction('Could not set transaction as rejected')
@@ -379,7 +381,7 @@ class TransactionLog(models.Model):
     def __unicode__(self):
         return _(u'%(type)s at %(timestamp)s by %(user)s: %(message)s') % {
             # FIXME: Use full type name
-            'type': self.type,
+            'type': TRANSACTIONLOG_TYPE[self.type],
             # FIXME: Rename to timestamp
             'timestamp': self.time.strftime('%Y-%m-%d %H:%M'),
             'user': self.user,

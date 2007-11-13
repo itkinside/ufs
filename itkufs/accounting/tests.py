@@ -161,9 +161,10 @@ class TransactionTestCase(unittest.TestCase):
         """Check that registered transaction can be rejected"""
 
         transaction = self.transaction
+        self.assertEqual(transaction.is_registered(), True)
+
         transaction.reject('Reason for rejecting')
 
-        self.assertEqual(transaction.is_registered(), True)
         self.assertEqual(transaction.is_rejected(), True)
         self.assertEqual(transaction.log_set.count(), 2)
         self.assertEqual(transaction.log_set.filter(type='Rej').count(), 1)
