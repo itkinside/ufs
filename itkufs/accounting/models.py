@@ -276,17 +276,46 @@ class NewTransaction(models.Model):
         null=True, blank=True)
 
     def __init__(self, *args, **kwargs):
-        kwargs.pop('entries', [])
+        entries = kwargs.pop('entries', [])
         super(NewTransaction, self).__init__(*args, **kwargs)
+        self.entries = entries
+
+    def save(self):
+        super(NewTransaction, self).save()
+
+        entries = []
+        debit_sum = 0
+        credit_sum = 0
+
+        for e in self.entries:
+            if e.has_key('account'):
+                account = e['account']
+                debit = e.pop('debit', 0)
+                credit = e.pop('credit', 0)
+                entries.append(TransactionEntry(transaction=self, account=account, debit=debit, credit=credit))
+                debit_sum += float(debit)
+                credit_sum += float(credit)
+            else:
+                raise InvalidTransaction('Account missing in entry')
+
+        if debit_sum != credit_sum:
+            raise InvalidTransaction('Credit and debit do not match')
+
+        TransactionLog(type='Reg', transaction=self).save()
+
+        self.entries = []
 
     def set_payed(self):
-        raise Exception('Not implemented')
+        if not self.is_rejected() and self.is_registered():
+            TransactionLog(type='Pay', transaction=self).save()
 
     def set_recieved(self):
-        raise Exception('Not implemented')
+        if not self.is_rejected() and self.is_registered() and self.is_payed():
+            TransactionLog(type='Rec', transaction=self).save()
 
     def reject(self, reason):
-        raise Exception('Not implemented')
+        if self.is_registered() and not self.is_payed() and self.is_received():
+            TransactionLog(type='Rec', transaction=self).save()
 
     class Admin:
         pass

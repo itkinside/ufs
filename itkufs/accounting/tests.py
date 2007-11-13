@@ -77,6 +77,7 @@ class AccountTestCase(unittest.TestCase):
 
 class TransactionTestCase(unittest.TestCase):
     def setUp(self):
+        Group.objects.all().delete()
         self.group = Group(name='group1', slug='group1')
         self.group.save()
 
@@ -96,14 +97,9 @@ class TransactionTestCase(unittest.TestCase):
         self.transaction.save()
 
     def tearDown(self):
-        for t in Transaction.objects.all():
-            if t.id:
-                t.delete()
-        for a in self.accounts:
-            if a.id:
-                a.delete()
-        if self.group.id:
-            self.group.delete()
+        Transaction.objects.all().delete()
+        Account.objects.all().delete()
+        Group.objects.all().delete()
 
     def testEmptyTransaction(self):
         """Check that transaction fails when no accounts are given"""
