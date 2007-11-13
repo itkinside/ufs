@@ -17,7 +17,7 @@ class GroupTestCase(unittest.TestCase):
         pass
 
     def testPayedTransactionSet(self):
-        """Check that payed_transaction_set only contains payed and related transactions"""
+        """Checks that payed_transaction_set only contains payed and related transactions"""
         # FIXME this test _will_ break when we change transaction model
 
         group = Group.objects.get(id=1)
@@ -102,13 +102,13 @@ class TransactionTestCase(unittest.TestCase):
         Group.objects.all().delete()
 
     def testEmptyTransaction(self):
-        """Check that transaction fails when no accounts are given"""
+        """Checks that transaction fails when no accounts are given"""
 
         t = Transaction(entries=({'debit': 100}, {'credit': 100}))
         self.assertRaises(InvalidTransaction, t.save)
 
     def testNullAmountTransaction(self):
-        """Check that transaction fail when debit and credit are not given"""
+        """Checks that transaction fail when debit and credit are not given"""
 
         t = Transaction(entries=[
             {'account': self.accounts[0]},
@@ -117,7 +117,7 @@ class TransactionTestCase(unittest.TestCase):
         self.assertRaises(InvalidTransaction, t.save)
 
     def testEqualDebitAndCreditAmount(self):
-        """Check that transaction only accept sum(debit)==sum(credit)"""
+        """Checks that transaction only accept sum(debit)==sum(credit)"""
 
         transaction = Transaction(entries=[
             {'account': self.accounts[0], 'debit': 100},
@@ -126,7 +126,7 @@ class TransactionTestCase(unittest.TestCase):
         self.assertRaises(InvalidTransaction, transaction.save)
 
     def testAccountOnlyOnceInTransaction(self):
-        """Check that debit accounts are only present once per transaction"""
+        """Checks that debit accounts are only present once per transaction"""
 
         transaction = Transaction(entries=[
             {'account': self.accounts[1], 'debit': 200},
@@ -136,7 +136,7 @@ class TransactionTestCase(unittest.TestCase):
         self.assertRaises(InvalidTransaction, transaction.save)
 
     def testRegisteredLogEntry(self):
-        """Check that a registered log entry is created"""
+        """Checks that a registered log entry is created"""
 
         transaction = self.transaction
 
@@ -146,7 +146,7 @@ class TransactionTestCase(unittest.TestCase):
         #FIXME test time
 
     def testPayedLogEntry(self):
-        """Check creation of payed log entry"""
+        """Checks creation of payed log entry"""
 
         transaction = self.transaction
         transaction.set_payed()
@@ -158,7 +158,7 @@ class TransactionTestCase(unittest.TestCase):
         #FIXME test time
 
     def testRejectLogEntry(self):
-        """Check that registered transaction can be rejected"""
+        """Checks that registered transaction can be rejected"""
 
         transaction = self.transaction
         self.assertEqual(transaction.is_registered(), True)
@@ -182,7 +182,7 @@ class TransactionTestCase(unittest.TestCase):
         self.assertRaises(InvalidTransaction, transaction.reject, 'Reason for rejecting')
 
     def testRecievePayedTransaction(self):
-        """Check that we can set a payed transaction as recieved"""
+        """Checks that we can set a payed transaction as recieved"""
 
         transaction = self.transaction
         transaction.set_payed()
@@ -195,7 +195,7 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(transaction.log_set.filter(type='Rec').count(), 1)
 
     def testRejectRecievedTransaction(self):
-        """Test that rejecting recieved transaction fails"""
+        """Tests that rejecting recieved transaction fails"""
         transaction = self.transaction
         transaction.set_payed()
         transaction.set_recieved()
@@ -203,13 +203,13 @@ class TransactionTestCase(unittest.TestCase):
         self.assertRaises(InvalidTransaction, transaction.reject, 'Reason for rejecting')
 
     def testRecieveNotPayedTransaction(self):
-        """Check that recieving a transaction that is not payed fails"""
+        """Checks that recieving a transaction that is not payed fails"""
         transaction = self.transaction
 
         self.assertRaises(InvalidTransaction, transaction.set_recieved)
 
     def testLogEntryUniqePerType(self):
-        """Check that we can only have one log entry of each type"""
+        """Checks that we can only have one log entry of each type"""
         #FIXME this should be a logentry test not a transaction test
         pass
 
