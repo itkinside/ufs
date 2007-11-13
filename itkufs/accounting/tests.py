@@ -151,6 +151,8 @@ class TransactionTestCase(unittest.TestCase):
         transaction = self.transaction
         transaction.set_payed()
 
+        self.assertEqual(transaction.is_registered(), True)
+        self.assertEqual(transaction.is_payed(), True)
         self.assertEqual(transaction.log_set.count(), 2)
         self.assertEqual(transaction.log_set.filter(type='Pay').count(), 1)
         #FIXME test time
@@ -159,8 +161,10 @@ class TransactionTestCase(unittest.TestCase):
         """Check that registered transaction can be rejected"""
 
         transaction = self.transaction
-        transaction.reject("Reason for rejecting")
+        transaction.reject('Reason for rejecting')
 
+        self.assertEqual(transaction.is_registered(), True)
+        self.assertEqual(transaction.is_rejected(), True)
         self.assertEqual(transaction.log_set.count(), 2)
         self.assertEqual(transaction.log_set.filter(type='Rej').count(), 1)
         #FIXME test time
@@ -172,6 +176,8 @@ class TransactionTestCase(unittest.TestCase):
         transaction.set_payed()
 
         #FIXME different error type perhaps?
+        self.assertEqual(transaction.is_registered(), True)
+        self.assertEqual(transaction.is_payed(), True)
         self.assertRaises(InvalidTransaction, transaction.reject, 'Reason for rejecting')
 
     def testRecievePayedTransaction(self):
@@ -180,6 +186,13 @@ class TransactionTestCase(unittest.TestCase):
         transaction = self.transaction
         transaction.set_payed()
         transaction.set_recieved()
+
+        self.assertEqual(transaction.is_registered(), True)
+        self.assertEqual(transaction.is_payed(), True)
+        self.assertEqual(transaction.is_received(), True)
+        self.assertEqual(transaction.log_set.count(), 3)
+        self.assertEqual(transaction.log_set.filter(type='Rec').count(), 1)
+
 
     def testRejectRecievedTransaction(self):
         """Test that rejecting recieved transaction fails"""

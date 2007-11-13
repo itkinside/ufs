@@ -322,14 +322,20 @@ class NewTransaction(models.Model):
     def set_payed(self):
         if not self.is_rejected() and self.is_registered():
             TransactionLog(type='Pay', transaction=self).save()
+        else:
+            raise InvalidTransaction('Could not set transaction as payed')
 
     def set_recieved(self):
         if not self.is_rejected() and self.is_registered() and self.is_payed():
             TransactionLog(type='Rec', transaction=self).save()
+        else:
+            raise InvalidTransaction('Could not set transaction as recieved')
 
     def reject(self, reason):
         if self.is_registered() and not self.is_payed() and self.is_received():
             TransactionLog(type='Rej', transaction=self, message=reason).save()
+        else:
+            raise InvalidTransaction('Could not set transaction as rejected')
 
     def is_registered(self):
         return self.log_set.filter(type='Reg').count() > 0
