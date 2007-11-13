@@ -301,7 +301,7 @@ class NewTransaction(models.Model):
                 credit = e.pop('credit', 0)
 
                 if account in seen:
-                    raise InvalidTransaction('Account is allready part of this transaction')
+                    raise InvalidTransaction('Account is already part of this transaction')
                 else:
                     seen.append(account)
 
@@ -380,9 +380,8 @@ class TransactionLog(models.Model):
 
     def __unicode__(self):
         return _(u'%(type)s at %(timestamp)s by %(user)s: %(message)s') % {
-            # FIXME: Use full type name
-            'type': TRANSACTIONLOG_TYPE[self.type],
-            # FIXME: Rename to timestamp
+            'type': self.get_type_display(),
+            # FIXME: Rename time to timestamp
             'timestamp': self.time.strftime('%Y-%m-%d %H:%M'),
             'user': self.user,
             'message': self.message,

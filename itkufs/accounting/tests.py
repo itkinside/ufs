@@ -116,7 +116,7 @@ class TransactionTestCase(unittest.TestCase):
         ])
         self.assertRaises(InvalidTransaction, t.save)
 
-    def testDebitAndCreditAmmountEquall(self):
+    def testEqualDebitAndCreditAmount(self):
         """Check that transaction only accept sum(debit)==sum(credit)"""
 
         transaction = Transaction(entries=[
@@ -194,7 +194,6 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(transaction.log_set.count(), 3)
         self.assertEqual(transaction.log_set.filter(type='Rec').count(), 1)
 
-
     def testRejectRecievedTransaction(self):
         """Test that rejecting recieved transaction fails"""
         transaction = self.transaction
@@ -213,7 +212,6 @@ class TransactionTestCase(unittest.TestCase):
         """Check that we can only have one log entry of each type"""
         #FIXME this should be a logentry test not a transaction test
         pass
-
 
     def testLogEntryModify(self):
         """Test that modifying log entry raises error"""
