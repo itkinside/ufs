@@ -285,6 +285,7 @@ class NewTransaction(models.Model):
         super(NewTransaction, self).save()
 
         entries = []
+        seen = []
         debit_sum = 0
         credit_sum = 0
 
@@ -296,6 +297,11 @@ class NewTransaction(models.Model):
                 account = e['account']
                 debit = e.pop('debit', 0)
                 credit = e.pop('credit', 0)
+
+                if account in seen:
+                    raise InvalidTransaction('Account is allready part of this transaction')
+                else:
+                    seen.append(account)
 
                 if debit == 0 and credit == 0:
                     raise InvalidTransaction('Credit or debit must be set')

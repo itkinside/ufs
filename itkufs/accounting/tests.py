@@ -125,8 +125,8 @@ class TransactionTestCase(unittest.TestCase):
         ])
         self.assertRaises(InvalidTransaction, transaction.save)
 
-    def testAccountOnlyInOneSideOfTransaction(self):
-        """Check that debit accounts aren't present among credit accounts, and vica versa"""
+    def testAccountOnlyOnceInTransaction(self):
+        """Check that debit accounts are only present once per transaction"""
 
         transaction = Transaction(entries=[
             {'account': self.accounts[1], 'debit': 200},
