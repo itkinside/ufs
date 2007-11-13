@@ -288,11 +288,18 @@ class NewTransaction(models.Model):
         debit_sum = 0
         credit_sum = 0
 
+        if not self.entries:
+            raise InvalidTransaction('No entries found')
+
         for e in self.entries:
             if e.has_key('account'):
                 account = e['account']
                 debit = e.pop('debit', 0)
                 credit = e.pop('credit', 0)
+
+                if debit == 0 and credit == 0:
+                    raise InvalidTransaction('Credit or debit must be set')
+
                 entries.append(TransactionEntry(transaction=self, account=account, debit=debit, credit=credit))
                 debit_sum += float(debit)
                 credit_sum += float(credit)
