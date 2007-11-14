@@ -231,5 +231,40 @@ class TransactionLogTestCase(unittest.TestCase):
 
             self.assertRaises(Exception, log1.save)
 
-class TransactionEntryTestCase(unittest.TestCase):
-    pass
+class EntryTestCase(unittest.TestCase):
+    def setUp(self):
+        Group.objects.all().delete()
+        group = Group(name='group1', slug='group1')
+        group.save()
+
+        account = Account(name='account1', slug='account1', group=group)
+        account.save()
+
+        transaction = Transaction()
+        transaction.save()
+
+        self.entry = TransactionEntry(account=account, debit=100, credit=100, transaction=transaction)
+
+
+    def tearDown(self):
+        Transaction.objects.all().delete()
+        Account.objects.all().delete()
+        Group.objects.all().delete()
+
+    def testDebitAndCreditInSameEntry(self):
+        self.entry.credit = 100
+        self.entry.debit  = 100
+        self.assertRaises(Exception, self.entry.save)
+
+    def testNegativeCredit(self):
+        self.entry.credit  = -100
+        self.assertRaises(Exception, self.entry.save)
+
+    def testNegativeDebit(self):
+        self.entry.debit  = -100
+        self.assertRaises(Exception, self.entry.save)
+
+    def testDebitAndCreditSetToZero(self):
+        self.entry.debit  = 0
+        self.entry.credit = 0
+        self.assertRaises(Exception, self.entry.save)
