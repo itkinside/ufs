@@ -390,9 +390,9 @@ class TransactionEntry(models.Model):
         edit_inline=models.TABULAR, num_in_admin=5, num_extra_on_change=3)
     account = models.ForeignKey(Account, verbose_name=_('account'), core=True)
     debit = models.DecimalField(_('debit amount'),
-        max_digits=10, decimal_places=2, blank=True, null=True)
+        max_digits=10, decimal_places=2, default=0)
     credit = models.DecimalField(_('credit amount'),
-        max_digits=10, decimal_places=2, blank=True, null=True)
+        max_digits=10, decimal_places=2, default=0)
 
     class Meta:
         unique_together = (('transaction', 'account'),)
