@@ -1,21 +1,7 @@
 from django.conf.urls.defaults import *
 from itkufs.accounting.views import *
 
-# Setup which classes can be used with databrowse...
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib import databrowse
-databrowse.site.register(Group)
-databrowse.site.register(Account)
-databrowse.site.register(List)
-databrowse.site.register(ListItem)
-databrowse.site.register(NewTransaction)
-databrowse.site.register(TransactionLog)
-databrowse.site.register(TransactionEntry)
-
 urlpatterns = patterns('',
-    # Superuser can use databrowse :)
-    (r'^databrowse/(.*)',  user_passes_test(lambda u: u.is_superuser)(databrowse.site.root)),
-
     # Login
     url(r'login/$',
         login_user, name='login'),
