@@ -102,10 +102,10 @@ class TransactionTestCase(unittest.TestCase):
         Group.objects.all().delete()
 
     def testEmptyTransaction(self):
-        """Checks that transaction fails when no accounts are given"""
+        """Checks that empty transactions are accepted"""
 
         t = Transaction(entries=({'debit': 100}, {'credit': 100}))
-        self.assertRaises(InvalidTransaction, t.save)
+        t.save()
 
     def testNullAmountTransaction(self):
         """Checks that transaction fail when debit and credit are not given"""
@@ -208,16 +208,6 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertRaises(InvalidTransaction, transaction.set_recieved)
 
-    def testLogEntryUniqePerType(self):
-        """Checks that we can only have one log entry of each type"""
-        #FIXME this should be a logentry test not a transaction test
-        pass
-
-    def testLogEntryModify(self):
-        """Test that modifying log entry raises error"""
-        #FIXME this should be a logentry test not a transaction test
-        pass
-
     def testSimpleTransaction(self):
         """Baseline test to check transactions"""
         debit_account = Account.objects.get(id=1)
@@ -240,3 +230,32 @@ class TransactionTestCase(unittest.TestCase):
                 self.fail('TransactionEntry with without valid credit or debit')
 
         self.assertEqual(credit, debit)
+
+class TransactionLogTestCase(unittest.TestCase):
+    def setUp(self):
+        self.transaction = Transaction()
+        self.transaction.save()
+
+    def tearDown(self):
+        self.transaction.delete()
+
+    def testLogEntryUniqePerType(self):
+        """Checks that we can only have one log entry of each type"""
+        for key, value in TRANSACTIONLOG_TYPE:
+            log1 = TransactionLog(type=key, transaction=self.transaction)
+            log2 = TransactionLog(type=key, transaction=self.transaction)
+
+            log1.save()
+            self.assertRaises(Exception, log2.save)
+
+
+    def testLogEntryModify(self):
+        """Test that modifying log entry raises error"""
+        for key, value in TRANSACTIONLOG_TYPE:
+            log1 = TransactionLog(type=key, transaction=self.transaction)
+            log1.save()
+
+            self.assertRaises(Exception, log1.save)
+
+class TransactionEntryTestCase(unittest.TestCase):
+    pass
