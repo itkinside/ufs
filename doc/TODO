@@ -5,14 +5,9 @@ MUST HAVE
 ---------
 
 Model:
-- Transaction: strip down
-- TransactionLog(transaction, type, timestamp, user, message) instead of
-  transaction details and to know who did what to a transaction. Type is
-  registered, payed, received and rejected.
-- TransactionEntry(transaction, account, debit, credit) instead of debit/credit
-  account and amount on Transaction
 - Unit tests of model layer, especially transaction and account balance
 - Convenience functions in Account model to match *transaction_set in group
+- Change NewTransaction -> Transaction and update rest of code...
 
 Views:
 - Use decorators to control commit/rollback of transactions
@@ -71,6 +66,12 @@ DONE
   * Methods for registered_transaction_set, payed_transaction_set,
     received_transaction_set, not_payed_transaction_set,
     not_recieved_transaction_set in the Group model
+- Transaction: strip down
+- TransactionLog(transaction, type, timestamp, user, message) instead of
+  transaction details and to know who did what to a transaction. Type is
+  registered, payed, received and rejected.
+- TransactionEntry(transaction, account, debit, credit) instead of debit/credit
+  account and amount on Transaction
 
 WONTFIX
 -------
