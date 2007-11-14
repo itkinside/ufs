@@ -288,6 +288,12 @@ class Transaction(models.Model):
 class NewTransaction(models.Model):
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
+    user = None # Not a django field as we don't realy want to use it...
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(NewTransaction, self).__init__(*args, **kwargs)
+        self.user = user
 
     class Meta:
         verbose_name = _('transaction')

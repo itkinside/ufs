@@ -205,6 +205,9 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertRaises(InvalidTransaction, transaction.set_recieved)
 
+    def testUserGetsPassedOnToLog(self):
+        self.fail('Test not written yet')
+
 class LogTestCase(unittest.TestCase):
     def setUp(self):
         self.transaction = Transaction()
