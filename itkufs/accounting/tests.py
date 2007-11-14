@@ -205,7 +205,7 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertRaises(InvalidTransaction, transaction.set_recieved)
 
-class TransactionLogTestCase(unittest.TestCase):
+class LogTestCase(unittest.TestCase):
     def setUp(self):
         self.transaction = Transaction()
         self.transaction.save()
@@ -219,17 +219,21 @@ class TransactionLogTestCase(unittest.TestCase):
             log1 = TransactionLog(type=key, transaction=self.transaction)
             log2 = TransactionLog(type=key, transaction=self.transaction)
 
-            log1.save()
+            if key != 'Reg':
+                log1.save()
             self.assertRaises(IntegrityError, log2.save)
 
 
     def testLogEntryModify(self):
         """Test that modifying log entry raises error"""
+        self.assertRaises(InvalidTransactionLog, self.transaction.log_set.filter(type='Reg')[0].save)
+
         for key, value in TRANSACTIONLOG_TYPE:
             log1 = TransactionLog(type=key, transaction=self.transaction)
-            log1.save()
 
-            self.assertRaises(Exception, log1.save)
+            if key != 'Reg':
+                log1.save()
+                self.assertRaises(InvalidTransactionLog, log1.save)
 
 class EntryTestCase(unittest.TestCase):
     def setUp(self):

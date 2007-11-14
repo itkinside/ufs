@@ -238,6 +238,13 @@ class InvalidTransactionEntry(InvalidTransaction):
     def __unicode__(self):
         return u'Invalid transaction entry: %s' % self.value
 
+class InvalidTransactionLog(InvalidTransaction):
+    def __init__(self, value):
+        self.value = value
+
+    def __unicode__(self):
+        return u'Invalid transaction log: %s' % self.value
+
 class Transaction(models.Model):
     # FIXME: This model is deprecated and should be removed
     credit_account = models.ForeignKey(Account,
@@ -376,6 +383,11 @@ class TransactionLog(models.Model):
         null=True, blank=True)
     message = models.CharField(_('message'), max_length=200,
         blank=True, null=True)
+
+    def save(self):
+        if self.id is not None:
+            raise InvalidTransactionLog(_('Altering transaction log entries is not allowed'))
+        super(TransactionLog, self).save()
 
     class Meta:
         unique_together = (('transaction', 'type'),)
