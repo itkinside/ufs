@@ -4,6 +4,7 @@ from urlparse import urlparse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.core.xheaders import populate_xheaders
 from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -81,7 +82,7 @@ def group_summary(request, group, page='1'):
                 % group.name)
 
     # Pass on to generic view
-    return object_list(request, transactions,
+    response = object_list(request, transactions,
                        paginate_by=20,
                        page=page,
                        allow_empty=True,
@@ -91,6 +92,9 @@ def group_summary(request, group, page='1'):
                             'group': group,
                        },
                        template_object_name='transaction')
+
+    populate_xheaders(request, response, Group, group.id)
+    return response
 
 @login_required
 def account_summary(request, group, account, page='1'):
@@ -139,7 +143,7 @@ def account_summary(request, group, account, page='1'):
                 message=_('The account balance is below the warning limit.'))
 
     # Pass on to generic view
-    return object_list(request, transactions,
+    response = object_list(request, transactions,
                        paginate_by=20,
                        page=page,
                        allow_empty=True,
@@ -150,6 +154,8 @@ def account_summary(request, group, account, page='1'):
                             'group': group,
                        },
                        template_object_name='transaction')
+    populate_xheaders(request, response, Account, account.id)
+    return response
 
 @login_required
 def transfer(request, group, account=None, transfer_type=None):
@@ -391,13 +397,15 @@ def html_list(request, group, slug):
     except Group.DoesNotExist, Group.DoesNotExist:
         raise Http404
 
-    return render_to_response('accounting/list.html',
+    response = render_to_response('accounting/list.html',
                               {
                                   'accounts': accounts,
                                   'group': group,
                                   'list': list,
                               },
                               context_instance=RequestContext(request))
+    populate_xheaders(request, response, List, list.id)
+    return response
 
 @login_required
 def approve(request, group, page="1"):
