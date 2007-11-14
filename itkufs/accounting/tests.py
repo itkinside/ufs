@@ -220,7 +220,7 @@ class TransactionLogTestCase(unittest.TestCase):
             log2 = TransactionLog(type=key, transaction=self.transaction)
 
             log1.save()
-            self.assertRaises(Exception, log2.save)
+            self.assertRaises(IntegrityError, log2.save)
 
 
     def testLogEntryModify(self):
@@ -254,17 +254,17 @@ class EntryTestCase(unittest.TestCase):
     def testDebitAndCreditInSameEntry(self):
         self.entry.credit = 100
         self.entry.debit  = 100
-        self.assertRaises(Exception, self.entry.save)
+        self.assertRaises(InvalidTransactionEntry, self.entry.save)
 
     def testNegativeCredit(self):
         self.entry.credit  = -100
-        self.assertRaises(Exception, self.entry.save)
+        self.assertRaises(InvalidTransactionEntry, self.entry.save)
 
     def testNegativeDebit(self):
         self.entry.debit  = -100
-        self.assertRaises(Exception, self.entry.save)
+        self.assertRaises(InvalidTransactionEntry, self.entry.save)
 
     def testDebitAndCreditSetToZero(self):
         self.entry.debit  = 0
         self.entry.credit = 0
-        self.assertRaises(Exception, self.entry.save)
+        self.assertRaises(InvalidTransactionEntry, self.entry.save)
