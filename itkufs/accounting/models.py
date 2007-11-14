@@ -275,6 +275,10 @@ class NewTransaction(models.Model):
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
 
+    class Meta:
+        verbose_name = _('transaction')
+        verbose_name_plural = _('transactions')
+
     def __init__(self, *args, **kwargs):
         entries = kwargs.pop('entries', [])
         user = kwargs.pop('user', None)
@@ -377,6 +381,8 @@ class TransactionLog(models.Model):
 
     class Meta:
         unique_together = (('transaction', 'type'),)
+        verbose_name = _('transaction log entry')
+        verbose_name_plural = _('transaction log entries')
 
     def __unicode__(self):
         return _(u'%(type)s at %(timestamp)s by %(user)s: %(message)s') % {
@@ -398,8 +404,9 @@ class TransactionEntry(models.Model):
         max_digits=10, decimal_places=2, blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = _('transaction entries')
         unique_together = (('transaction', 'account'),)
+        verbose_name = _('transaction entry')
+        verbose_name_plural = _('transaction entries')
 
     def __unicode__(self):
         return _(u'%(account)s: debit %(debit)s, credit %(credit)s') % {
