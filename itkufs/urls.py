@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
+from django.contrib import databrowse
 
 urlpatterns = patterns('',
     (r'^admin/', include('django.contrib.admin.urls')),
