@@ -231,6 +231,13 @@ class InvalidTransaction(Exception):
     def __unicode__(self):
         return u'Invalid transaction: %s' % self.value
 
+class InvalidTransactionEntry(InvalidTransaction):
+    def __init__(self, value):
+        self.value = value
+
+    def __unicode__(self):
+        return u'Invalid transaction entry: %s' % self.value
+
 class Transaction(models.Model):
     # FIXME: This model is deprecated and should be removed
     credit_account = models.ForeignKey(Account,
@@ -393,6 +400,18 @@ class TransactionEntry(models.Model):
         max_digits=10, decimal_places=2, default=0)
     credit = models.DecimalField(_('credit amount'),
         max_digits=10, decimal_places=2, default=0)
+
+    def save(self):
+        if self.debit < 0 or self.credit < 0:
+            raise InvalidTransactionEntry(_('Credit and debit must be positive or zero'))
+
+        if self.debit > 0 and self.credit > 0:
+            raise InvalidTransactionEntry(_('Only credit or debit may be set'))
+
+        if self.debit == 0 and self.credit == 0:
+            raise InvalidTransactionEntry(_('Create or debit must be positive'))
+
+        super(TransactionEntry, self).save()
 
     class Meta:
         unique_together = (('transaction', 'account'),)
