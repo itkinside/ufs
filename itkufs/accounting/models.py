@@ -288,42 +288,33 @@ class NewTransaction(models.Model):
 
     def save(self):
         # FIXME transaction or some other form of rollback
-        super(NewTransaction, self).save()
+        try:
+            seen = []
+            debit_sum = 0
+            credit_sum = 0
 
-        entries = []
-        seen = []
-        debit_sum = 0
-        credit_sum = 0
-
-        if not self.entries:
-            raise InvalidTransaction('No entries found')
-
-        for e in self.entries:
-            if e.has_key('account'):
-                account = e['account']
-                debit = e.pop('debit', 0)
-                credit = e.pop('credit', 0)
-
-                if account in seen:
+            for e in self.entry_set.all():
+                if e.account in seen:
                     raise InvalidTransaction('Account is already part of this transaction')
                 else:
-                    seen.append(account)
+                    seen.append(e.account)
 
-                if debit == 0 and credit == 0:
-                    raise InvalidTransaction('Credit or debit must be set')
+                debit_sum += float(e.debit)
+                credit_sum += float(e.credit)
 
-                entries.append(TransactionEntry(transaction=self, account=account, debit=debit, credit=credit))
-                debit_sum += float(debit)
-                credit_sum += float(credit)
-            else:
-                raise InvalidTransaction('Account missing in entry')
+            if debit_sum != credit_sum:
+                raise InvalidTransaction('Credit and debit do not match')
 
-        if debit_sum != credit_sum:
-            raise InvalidTransaction('Credit and debit do not match')
+            super(NewTransaction, self).save()
 
-        TransactionLog(type='Reg', transaction=self).save()
+            if not self.is_registered():
+                TransactionLog(type='Reg', transaction=self).save()
 
-        self.entries = []
+        except InvalidTransaction:
+            # Nuke all transaction entries on error
+            self.entry_set.all().delete()
+            # self.delete() # FIXME? self implode?
+            raise
 
     def set_payed(self):
         if not self.is_rejected() and self.is_registered():
