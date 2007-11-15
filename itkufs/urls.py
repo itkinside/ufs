@@ -9,7 +9,7 @@ from itkufs.accounting.models import *
 databrowse.site.register(Group)
 databrowse.site.register(Account)
 databrowse.site.register(List)
-databrowse.site.register(ListItem)
+databrowse.site.register(ListColumn)
 databrowse.site.register(NewTransaction)
 databrowse.site.register(TransactionLog)
 databrowse.site.register(TransactionEntry)

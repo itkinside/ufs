@@ -483,16 +483,16 @@ class List(models.Model):
 
     def total_width(self):
         sum = self.account_width + self.balance_width
-        for item in self.item_set.all():
-            sum += item.width
+        for column in self.column_set.all():
+            sum += column.width
         return sum
 
-class ListItem(models.Model):
+class ListColumn(models.Model):
     name = models.CharField(_('name'), max_length=200, core=True)
     width = models.PositiveSmallIntegerField(_('width'))
     order = models.PositiveSmallIntegerField(_('order'))
     list = models.ForeignKey(List, verbose_name=_('list'),
-        edit_inline=models.TABULAR, num_in_admin=5, related_name='item_set')
+        edit_inline=models.TABULAR, num_in_admin=5, related_name='column_set')
 
     class Meta:
         ordering = ['order']

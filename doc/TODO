@@ -42,7 +42,7 @@ MAY HAVE
 - User registration of expenses
 - Lists:
   * Who to include on the list?
-  * Rename "list item" to "list column" or "list field"?
+- Refactor of lists, statements, invoice etc to report app
 
 DONE
 ----
@@ -72,6 +72,7 @@ DONE
   registered, payed, received and rejected.
 - TransactionEntry(transaction, account, debit, credit) instead of debit/credit
   account and amount on Transaction
+- Rename "list item" to "list column" or "list field"?
 
 WONTFIX
 -------

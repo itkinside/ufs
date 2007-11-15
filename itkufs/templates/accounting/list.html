@@ -45,8 +45,8 @@
             {% ifnotequal list.balance_width 0 %}
             <th style="width: {% widthratio list.balance_width list.total_width 100 %}%">{% trans "Balance" %}</th>
             {% endifnotequal %}
-        {% for item in list.item_set.all %}
-            <th style="width: {% widthratio item.width list.total_width 100 %}%">{{ item.name }}</th>
+        {% for column in list.column_set.all %}
+            <th style="width: {% widthratio column.width list.total_width 100 %}%">{{ column.name }}</th>
         {% endfor %}
         </tr>
     </thead>
@@ -59,7 +59,7 @@
             {% ifnotequal list.balance_width 0 %}
             <td class="balance">{{ account.balance_credit_reversed }}</td>
             {% endifnotequal %}
-            {% for item in list.item_set.all %}
+            {% for item in list.column_set.all %}
                 {% if not account.is_blocked %}
             <td></td>
                 {% else %}
