@@ -8,6 +8,21 @@ from django.core.validators import *
 #FIXME replace custom save method with validator_lists where this can be done
 #      and makes sense
 
+class InvalidTransaction(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __unicode__(self):
+        return u'Invalid transaction: %s' % self.value
+
+class InvalidTransactionEntry(InvalidTransaction):
+    def __unicode__(self):
+        return u'Invalid transaction entry: %s' % self.value
+
+class InvalidTransactionLog(InvalidTransaction):
+    def __unicode__(self):
+        return u'Invalid transaction log: %s' % self.value
+
 class Group(models.Model):
     name = models.CharField(_('name'), max_length=100)
     slug = models.SlugField(_('slug'), prepopulate_from=['name'], unique=True,
@@ -62,9 +77,8 @@ class Group(models.Model):
 
     def transaction_set(self):
         """Returns all transactions connected to group"""
-        return Transaction.objects.filter(
-                Q(credit_account__group=self) &
-                Q(debit_account__group=self))
+        # FIXME implement
+        return Transaction.objects.none()
 
     def registered_transaction_set(self):
         """Returns all transactions connected to group, that are not rejected"""
@@ -166,10 +180,11 @@ class Account(models.Model):
 
         balance = 0
 
-        for t in self.credit_transactions.filter(payed__isnull=False):
-            balance -= t.amount
-        for t in self.debit_transactions.filter(payed__isnull=False):
-            balance += t.amount
+        # FIXME: Use new transaction
+        #for t in self.credit_transactions.filter(payed__isnull=False):
+        #    balance -= t.amount
+        #for t in self.debit_transactions.filter(payed__isnull=False):
+        #    balance += t.amount
 
         return balance
 
@@ -228,85 +243,22 @@ class Settlement(models.Model):
         else:
             return smart_unicode(self.date)
 
-class InvalidTransaction(Exception):
-    def __init__(self, value):
-        self.value = value
-
-    def __unicode__(self):
-        return u'Invalid transaction: %s' % self.value
-
-class InvalidTransactionEntry(InvalidTransaction):
-    def __init__(self, value):
-        self.value = value
-
-    def __unicode__(self):
-        return u'Invalid transaction entry: %s' % self.value
-
-class InvalidTransactionLog(InvalidTransaction):
-    def __init__(self, value):
-        self.value = value
-
-    def __unicode__(self):
-        return u'Invalid transaction log: %s' % self.value
-
 class Transaction(models.Model):
-    # FIXME: This model is deprecated and should be removed
-    credit_account = models.ForeignKey(Account,
-        verbose_name=_('credit account'), related_name='credit_transactions')
-    debit_account = models.ForeignKey(Account,
-        verbose_name=_('debit account'), related_name='debit_transactions')
-    amount = models.DecimalField(_('amount'), max_digits=10, decimal_places=2)
-    details = models.CharField(_('details'), max_length=200,
-        blank=True, null=True)
-    registered = models.DateTimeField(_('registered'), auto_now_add=True)
-    payed = models.DateTimeField(_('payed'), blank=True, null=True)
-    settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
-        null=True, blank=True)
-
-    class Meta:
-        ordering = ['registered', 'payed']
-        verbose_name = _('transaction')
-        verbose_name_plural = _('transactions')
-
-    class Admin:
-        list_display = ['amount', 'credit_account', 'debit_account',
-                        'settlement']
-        list_filter = ['credit_account', 'debit_account', 'settlement']
-
-    def __unicode__(self):
-        return _(u'%(amount)s, credit %(credit_acc)s, debit %(debit_acc)s') % {
-            'amount': self.amount,
-            'credit_acc': self.credit_account,
-            'debit_acc': self.debit_account
-        }
-
-    def save(self):
-        if float(self.amount) < 0:
-            raise InvalidTransaction, _('Amount is negative.')
-        if self.amount == 0:
-            raise InvalidTransaction, _('Amount is zero.')
-        if self.credit_account == self.debit_account:
-            raise InvalidTransaction, _('Credit and debit is same account.')
-        super(Transaction, self).save()
-
-class NewTransaction(models.Model):
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
     user = None # Not a django field as we use this for a hack
 
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        super(NewTransaction, self).__init__(*args, **kwargs)
-        self.user = user
-
     class Meta:
         verbose_name = _('transaction')
         verbose_name_plural = _('transactions')
 
+    #class Admin:
+    #    pass
+
     def __init__(self, *args, **kwargs):
         entries = kwargs.pop('entries', [])
         user = kwargs.pop('user', None)
-        super(NewTransaction, self).__init__(*args, **kwargs)
+        super(Transaction, self).__init__(*args, **kwargs)
         self.entries = entries
         self.user = user
 
@@ -319,7 +271,8 @@ class NewTransaction(models.Model):
 
             for entry in self.entry_set.all():
                 if entry.account in seen_accounts:
-                    raise InvalidTransaction('Account is already part of this transaction')
+                    raise InvalidTransaction(
+                        'Account is already part of this transaction')
                 else:
                     seen_accounts.append(entry.account)
 
@@ -329,7 +282,7 @@ class NewTransaction(models.Model):
             if debit_sum != credit_sum:
                 raise InvalidTransaction('Credit and debit do not match')
 
-            super(NewTransaction, self).save()
+            super(Transaction, self).save()
 
             if not self.is_registered():
                 log = TransactionLog(type='Reg', transaction=self)
@@ -400,7 +353,7 @@ TRANSACTIONLOG_TYPE = (
 )
 
 class TransactionLog(models.Model):
-    transaction = models.ForeignKey(NewTransaction,
+    transaction = models.ForeignKey(Transaction,
         verbose_name=_('transaction'), related_name='log_set',
         edit_inline=models.TABULAR, num_in_admin=1, max_num_in_admin=4,
         num_extra_on_change=1)
@@ -432,7 +385,7 @@ class TransactionLog(models.Model):
         }
 
 class TransactionEntry(models.Model):
-    transaction = models.ForeignKey(NewTransaction,
+    transaction = models.ForeignKey(Transaction,
         verbose_name=_('transaction'), related_name='entry_set',
         edit_inline=models.TABULAR, num_in_admin=5, num_extra_on_change=3)
     account = models.ForeignKey(Account, verbose_name=_('account'), core=True)

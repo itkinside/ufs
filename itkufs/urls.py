@@ -10,7 +10,7 @@ databrowse.site.register(Group)
 databrowse.site.register(Account)
 databrowse.site.register(List)
 databrowse.site.register(ListColumn)
-databrowse.site.register(NewTransaction)
+databrowse.site.register(Transaction)
 databrowse.site.register(TransactionLog)
 databrowse.site.register(TransactionEntry)
 
