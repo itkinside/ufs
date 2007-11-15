@@ -336,21 +336,36 @@ class NewTransaction(models.Model):
             # self.delete() # FIXME? self implode?
             raise
 
-    def set_payed(self):
+    def set_payed(self, user=None, message=''):
         if not self.is_rejected() and self.is_registered():
-            TransactionLog(type='Pay', transaction=self).save()
+            log = TransactionLog(type='Pay', transaction=self)
+            if user:
+                log.user = user
+            if message.strip() != '':
+                log.message = message
+            log.save()
         else:
             raise InvalidTransaction('Could not set transaction as payed')
 
-    def set_recieved(self):
+    def set_recieved(self, user=None, message=''):
         if not self.is_rejected() and self.is_registered() and self.is_payed():
-            TransactionLog(type='Rec', transaction=self).save()
+            log = TransactionLog(type='Rec', transaction=self)
+            if user:
+                log.user = user
+            if message.strip() != '':
+                log.message = message
+            log.save()
         else:
             raise InvalidTransaction('Could not set transaction as recieved')
 
-    def reject(self, reason):
+    def reject(self, user=None, message=''):
         if self.is_registered() and not self.is_payed() and not self.is_received():
-            TransactionLog(type='Rej', transaction=self, message=reason).save()
+            log = TransactionLog(type='Rej', transaction=self)
+            if user:
+                log.user = user
+            if message.strip() != '':
+                log.message = message
+            log.save()
         else:
             raise InvalidTransaction('Could not set transaction as rejected')
 
@@ -383,8 +398,7 @@ class TransactionLog(models.Model):
         num_extra_on_change=1)
     type = models.CharField(_('type'), max_length=3, core=True,
         choices=TRANSACTIONLOG_TYPE)
-    # FIXME: Rename to timestamp?
-    time = models.DateTimeField(_('timestamp'), auto_now_add=True)
+    timestamp =  models.DateTimeField(_('timestamp'), auto_now_add=True)
     user = models.ForeignKey(User, verbose_name=_('user'),
         null=True, blank=True)
     message = models.CharField(_('message'), max_length=200,

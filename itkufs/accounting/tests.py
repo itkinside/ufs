@@ -14,41 +14,8 @@ class GroupTestCase(unittest.TestCase):
     def setUp(self):
         pass
 
-    def testDefaultGroup(self):
-        pass
+    # TODO write tests.
 
-    def testPayedTransactionSet(self):
-        """Checks that payed_transaction_set only contains payed and related transactions"""
-        # FIXME this test _will_ break when we change transaction model
-
-        group = Group.objects.get(id=1)
-        account1 = Account.objects.get(id=1)
-        account2 = Account.objects.get(id=2)
-
-        self.assertEqual(group.payed_transaction_set().count(), 0)
-
-        # This one should show up
-        t1 = Transaction(debit_account=account1, credit_account=account2,
-            amount=100, payed=datetime.now())
-
-        # Not payed show not be in set
-        t2 = Transaction(debit_account=account1, credit_account=account2,
-            amount=200)
-
-        t1.save()
-        t2.save()
-
-        transactions = group.payed_transaction_set()
-        for t in transactions:
-            self.assert_(t.payed is not None)
-            self.assertEqual(t.amount, 100)
-            self.assert_(t.credit_account.group == group
-                or t.debit_account.group == group)
-
-        t1.delete()
-        t2.delete()
-
-    # ...
 
 class AccountTestCase(unittest.TestCase):
     def setUp(self):
@@ -90,10 +57,14 @@ class TransactionTestCase(unittest.TestCase):
         for a in self.accounts:
             a.save()
 
+        self.before = datetime.now()
+
         self.transaction = Transaction()
         self.transaction.save()
         self.transaction.entry_set.add(TransactionEntry(account= self.accounts[0], debit=100))
         self.transaction.entry_set.add(TransactionEntry(account= self.accounts[1], debit=100))
+
+        self.after = datetime.now()
 
 
     def tearDown(self):
@@ -103,13 +74,7 @@ class TransactionTestCase(unittest.TestCase):
 
     def testEmptyTransaction(self):
         """Checks that empty transactions are accepted"""
-        # FIXME
-        pass
-
-    def testNullAmountTransaction(self):
-        """Checks that transaction fail when debit and credit are not given"""
-        # FIXME not needed as entry test should cover this
-        pass
+        Transaction().save()
 
     def testEqualDebitAndCreditAmount(self):
         """Checks that transaction only accept sum(debit)==sum(credit)"""
@@ -140,19 +105,29 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(transaction.is_registered(), True)
         self.assertEqual(transaction.log_set.count(), 1)
         self.assertEqual(transaction.log_set.filter(type='Reg').count(), 1)
-        #FIXME test time
+
+        registered = transaction.log_set.filter(type='Reg')[0].timestamp
+
+        self.assert_(registered > self.before)
+        self.assert_(registered < self.after)
 
     def testPayedLogEntry(self):
         """Checks creation of payed log entry"""
 
         transaction = self.transaction
+
+        before = datetime.now()
         transaction.set_payed()
+        after = datetime.now()
 
         self.assertEqual(transaction.is_registered(), True)
         self.assertEqual(transaction.is_payed(), True)
         self.assertEqual(transaction.log_set.count(), 2)
         self.assertEqual(transaction.log_set.filter(type='Pay').count(), 1)
-        #FIXME test time
+
+        payed = transaction.log_set.filter(type='Pay')[0].timestamp
+        self.assert_(payed > before)
+        self.assert_(payed < after)
 
     def testRejectLogEntry(self):
         """Checks that registered transaction can be rejected"""
@@ -160,12 +135,17 @@ class TransactionTestCase(unittest.TestCase):
         transaction = self.transaction
         self.assertEqual(transaction.is_registered(), True)
 
-        transaction.reject('Reason for rejecting')
+        before = datetime.now()
+        transaction.reject(message='Reason for rejecting')
+        after = datetime.now()
 
         self.assertEqual(transaction.is_rejected(), True)
         self.assertEqual(transaction.log_set.count(), 2)
         self.assertEqual(transaction.log_set.filter(type='Rej').count(), 1)
-        #FIXME test time
+
+        rejected = transaction.log_set.filter(type='Rej')[0].timestamp
+        self.assert_(rejected > before)
+        self.assert_(rejected < after)
 
     def testRejectPayedTransaction(self):
         """Test that rejecting payed transaction fails"""
@@ -183,13 +163,20 @@ class TransactionTestCase(unittest.TestCase):
 
         transaction = self.transaction
         transaction.set_payed()
+
+        before = datetime.now()
         transaction.set_recieved()
+        after = datetime.now()
 
         self.assertEqual(transaction.is_registered(), True)
         self.assertEqual(transaction.is_payed(), True)
         self.assertEqual(transaction.is_received(), True)
         self.assertEqual(transaction.log_set.count(), 3)
         self.assertEqual(transaction.log_set.filter(type='Rec').count(), 1)
+
+        recieved = transaction.log_set.filter(type='Rec')[0].timestamp
+        self.assert_(recieved > before)
+        self.assert_(recieved < after)
 
     def testRejectRecievedTransaction(self):
         """Tests that rejecting recieved transaction fails"""
