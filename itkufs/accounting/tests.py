@@ -7,6 +7,9 @@ from itkufs.accounting.models import NewTransaction as Transaction
 
 
 # FIXME Write more tests
+#       * all group properties need to be checked
+#       * same goes for account
+#       * missing test to check that user get set in log.
 # FIXME Add docstrings explainging purpose of all tests
 
 class GroupTestCase(unittest.TestCase):

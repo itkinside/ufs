@@ -288,7 +288,7 @@ class Transaction(models.Model):
 class NewTransaction(models.Model):
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
-    user = None # Not a django field as we don't realy want to use it...
+    user = None # Not a django field as we use this for a hack
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -328,7 +328,11 @@ class NewTransaction(models.Model):
             super(NewTransaction, self).save()
 
             if not self.is_registered():
-                TransactionLog(type='Reg', transaction=self).save()
+                log = TransactionLog(type='Reg', transaction=self)
+                if self.user:
+                    log.user = self.user
+                    self.user = None
+                log.save()
 
         except InvalidTransaction:
             # Nuke all transaction entries on error
