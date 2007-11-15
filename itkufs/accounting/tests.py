@@ -10,38 +10,12 @@ from itkufs.accounting.models import NewTransaction as Transaction
 # FIXME Add docstrings explainging purpose of all tests
 
 class GroupTestCase(unittest.TestCase):
-    """Test the group model"""
     def setUp(self):
         pass
 
-    # TODO write tests.
-
-
 class AccountTestCase(unittest.TestCase):
     def setUp(self):
-        self.group   = Group(name='Account Test Group', slug='account-test-group-slug')
-        self.default = Account(name='Account Test', slug='account-test-slug')
-
-    def testDefaultAccount(self):
-        default = self.default
-
-        self.assertEqual(default.name,'Account Test')
-        self.assertEqual(default.ignore_block_limit, False)
-        self.assertEqual(default.type, 'Li')
-        self.assertEqual(default.owner, None)
-        self.assertEqual(default.active, True)
-
-    def testAccountTypes(self):
-        self.fail('Test not implemented')
-
-    def testAccountWithOwner(self):
-        self.fail('Test not implemented')
-
-    def testDisabledAccount(self):
-        self.fail('Test not implemented')
-
-    def testAccountBalance(self):
-        self.fail('Test not implemented')
+        pass
 
 class TransactionTestCase(unittest.TestCase):
     def setUp(self):
@@ -215,7 +189,7 @@ class LogTestCase(unittest.TestCase):
 
 
     def testLogEntryModify(self):
-        """Test that modifying log entry raises error"""
+        """Checks that modifying log entry raises error"""
         self.assertRaises(InvalidTransactionLog, self.transaction.log_set.filter(type='Reg')[0].save)
 
         for key, value in TRANSACTIONLOG_TYPE:
@@ -246,19 +220,23 @@ class EntryTestCase(unittest.TestCase):
         Group.objects.all().delete()
 
     def testDebitAndCreditInSameEntry(self):
+        """Checks that setting both debit and credit will fail"""
         self.entry.credit = 100
         self.entry.debit  = 100
         self.assertRaises(InvalidTransactionEntry, self.entry.save)
 
     def testNegativeCredit(self):
+        """Checks that inputing av negative credit raises an error"""
         self.entry.credit  = -100
         self.assertRaises(InvalidTransactionEntry, self.entry.save)
 
     def testNegativeDebit(self):
+        """Checks that inputing av negative debit  raises an error"""
         self.entry.debit  = -100
         self.assertRaises(InvalidTransactionEntry, self.entry.save)
 
     def testDebitAndCreditSetToZero(self):
+        """Checks that setting both debit and credit to zero raises error"""
         self.entry.debit  = 0
         self.entry.credit = 0
         self.assertRaises(InvalidTransactionEntry, self.entry.save)
