@@ -23,13 +23,13 @@ class AccountTestCase(unittest.TestCase):
 class TransactionTestCase(unittest.TestCase):
     def setUp(self):
         Group.objects.all().delete()
-        self.group = Group(name='group1', slug='group1')
+        self.group = Group(name='Group 1', slug='group1')
         self.group.save()
 
         self.accounts = [
-            Account(name='account1', slug='account1', group=self.group),
-            Account(name='account2', slug='account2', group=self.group),
-            Account(name='account3', slug='account3', group=self.group),
+            Account(name='Account 1', slug='account1', group=self.group),
+            Account(name='Account 2', slug='account2', group=self.group),
+            Account(name='Account 3', slug='account3', group=self.group),
         ]
         for a in self.accounts:
             a.save()
@@ -38,11 +38,12 @@ class TransactionTestCase(unittest.TestCase):
 
         self.transaction = Transaction()
         self.transaction.save()
-        self.transaction.entry_set.add(TransactionEntry(account= self.accounts[0], debit=100))
-        self.transaction.entry_set.add(TransactionEntry(account= self.accounts[1], debit=100))
+        self.transaction.entry_set.add(TransactionEntry(
+            account=self.accounts[0], debit=100))
+        self.transaction.entry_set.add(TransactionEntry(
+            account=self.accounts[1], debit=100))
 
         self.after = datetime.now()
-
 
     def tearDown(self):
         Transaction.objects.all().delete()
@@ -51,6 +52,7 @@ class TransactionTestCase(unittest.TestCase):
 
     def testEmptyTransaction(self):
         """Checks that empty transactions are accepted"""
+
         Transaction().save()
 
     def testEqualDebitAndCreditAmount(self):
@@ -59,8 +61,10 @@ class TransactionTestCase(unittest.TestCase):
         transaction = Transaction()
         transaction.save()
 
-        transaction.entry_set.add(TransactionEntry(account=self.accounts[1], debit=200))
-        transaction.entry_set.add(TransactionEntry(account=self.accounts[0], credit=100))
+        transaction.entry_set.add(TransactionEntry(
+            account=self.accounts[1], debit=200))
+        transaction.entry_set.add(TransactionEntry(
+            account=self.accounts[0], credit=100))
         self.assertRaises(InvalidTransaction, transaction.save)
 
     def testAccountOnlyOnceInTransaction(self):
@@ -69,10 +73,13 @@ class TransactionTestCase(unittest.TestCase):
         transaction = Transaction()
         transaction.save()
 
-        transaction.entry_set.add(TransactionEntry(account=self.accounts[1], debit=200))
-        transaction.entry_set.add(TransactionEntry(account=self.accounts[0], credit=100))
+        transaction.entry_set.add(TransactionEntry(
+            account=self.accounts[1], debit=200))
+        transaction.entry_set.add(TransactionEntry(
+            account=self.accounts[0], credit=100))
 
-        self.assertRaises(IntegrityError, transaction.entry_set.add, TransactionEntry(account=self.accounts[1], credit=100))
+        self.assertRaises(IntegrityError, transaction.entry_set.add,
+            TransactionEntry(account=self.accounts[1], credit=100))
 
     def testRegisteredLogEntry(self):
         """Checks that a registered log entry is created"""
@@ -133,7 +140,8 @@ class TransactionTestCase(unittest.TestCase):
         #FIXME different error type perhaps?
         self.assertEqual(transaction.is_registered(), True)
         self.assertEqual(transaction.is_payed(), True)
-        self.assertRaises(InvalidTransaction, transaction.reject, 'Reason for rejecting')
+        self.assertRaises(InvalidTransaction, transaction.reject,
+            'Reason for rejecting')
 
     def testRecievePayedTransaction(self):
         """Checks that we can set a payed transaction as recieved"""
@@ -161,7 +169,8 @@ class TransactionTestCase(unittest.TestCase):
         transaction.set_payed()
         transaction.set_recieved()
 
-        self.assertRaises(InvalidTransaction, transaction.reject, 'Reason for rejecting')
+        self.assertRaises(InvalidTransaction, transaction.reject,
+            'Reason for rejecting')
 
     def testRecieveNotPayedTransaction(self):
         """Checks that recieving a transaction that is not payed fails"""
@@ -181,7 +190,8 @@ class LogTestCase(unittest.TestCase):
         self.transaction.delete()
 
     def testLogEntryUniqePerType(self):
-        """Checks that we can only have one log entry of each type"""
+        """Checks that only one log entry of each type is allowed"""
+
         for key, value in TRANSACTIONLOG_TYPE:
             log1 = TransactionLog(type=key, transaction=self.transaction)
             log2 = TransactionLog(type=key, transaction=self.transaction)
@@ -193,7 +203,8 @@ class LogTestCase(unittest.TestCase):
 
     def testLogEntryModify(self):
         """Checks that modifying log entry raises error"""
-        self.assertRaises(InvalidTransactionLog, self.transaction.log_set.filter(type='Reg')[0].save)
+        self.assertRaises(InvalidTransactionLog,
+            self.transaction.log_set.filter(type='Reg')[0].save)
 
         for key, value in TRANSACTIONLOG_TYPE:
             log1 = TransactionLog(type=key, transaction=self.transaction)
@@ -214,7 +225,8 @@ class EntryTestCase(unittest.TestCase):
         transaction = Transaction()
         transaction.save()
 
-        self.entry = TransactionEntry(account=account, debit=100, credit=100, transaction=transaction)
+        self.entry = TransactionEntry(account=account, debit=100, credit=100,
+                                      transaction=transaction)
 
 
     def tearDown(self):
@@ -224,22 +236,27 @@ class EntryTestCase(unittest.TestCase):
 
     def testDebitAndCreditInSameEntry(self):
         """Checks that setting both debit and credit will fail"""
+
+        self.entry.debit = 100
         self.entry.credit = 100
-        self.entry.debit  = 100
         self.assertRaises(InvalidTransactionEntry, self.entry.save)
 
     def testNegativeCredit(self):
         """Checks that inputing av negative credit raises an error"""
-        self.entry.credit  = -100
+
+        self.entry.credit = -100
         self.assertRaises(InvalidTransactionEntry, self.entry.save)
 
     def testNegativeDebit(self):
         """Checks that inputing av negative debit  raises an error"""
-        self.entry.debit  = -100
+
+        self.entry.debit = -100
         self.assertRaises(InvalidTransactionEntry, self.entry.save)
 
     def testDebitAndCreditSetToZero(self):
         """Checks that setting both debit and credit to zero raises error"""
-        self.entry.debit  = 0
+
+        self.entry.debit = 0
         self.entry.credit = 0
         self.assertRaises(InvalidTransactionEntry, self.entry.save)
+
