@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.utils.encoding import smart_unicode
@@ -310,21 +310,21 @@ class NewTransaction(models.Model):
         self.entries = entries
         self.user = user
 
+    @transaction.commit_manually
     def save(self):
-        # FIXME transaction or some other form of rollback
         try:
             seen_accounts = []
             debit_sum = 0
             credit_sum = 0
 
-            for e in self.entry_set.all():
-                if e.account in seen_accounts:
+            for entry in self.entry_set.all():
+                if entry.account in seen_accounts:
                     raise InvalidTransaction('Account is already part of this transaction')
                 else:
-                    seen_accounts.append(e.account)
+                    seen_accounts.append(entry.account)
 
-                debit_sum += float(e.debit)
-                credit_sum += float(e.credit)
+                debit_sum += float(entry.debit)
+                credit_sum += float(entry.credit)
 
             if debit_sum != credit_sum:
                 raise InvalidTransaction('Credit and debit do not match')
@@ -338,11 +338,11 @@ class NewTransaction(models.Model):
                     self.user = None
                 log.save()
 
-        except InvalidTransaction:
-            # Nuke all transaction entries on error
-            self.entry_set.all().delete()
-            # self.delete() # FIXME? self implode?
-            raise
+        except InvalidTransaction, e:
+            transaction.rollback()
+            raise e
+        else:
+            transaction.commit()
 
     def set_payed(self, user=None, message=''):
         if not self.is_rejected() and self.is_registered():
