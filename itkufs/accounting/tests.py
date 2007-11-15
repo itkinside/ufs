@@ -11,16 +11,9 @@ from itkufs.accounting.models import *
 # FIXME Add docstrings explaining purpose of all tests
 
 class GroupTestCase(unittest.TestCase):
-    def setUp(self):
-        pass
+    # FIXME: Check more than count in the set tests?
 
-class AccountTestCase(unittest.TestCase):
     def setUp(self):
-        pass
-
-class TransactionTestCase(unittest.TestCase):
-    def setUp(self):
-        Group.objects.all().delete()
         self.group = Group(name='Group 1', slug='group1')
         self.group.save()
 
@@ -29,8 +22,110 @@ class TransactionTestCase(unittest.TestCase):
             Account(name='Account 2', slug='account2', group=self.group),
             Account(name='Account 3', slug='account3', group=self.group),
         ]
-        for a in self.accounts:
-            a.save()
+        for account in self.accounts:
+            account.save()
+
+        self.transactions = {
+            'Reg': Transaction(),
+            'Pay': Transaction(),
+            'Rec': Transaction(),
+            'Rej': Transaction(),
+        }
+        for transaction in self.transactions.values():
+            transaction.save()
+            transaction.entry_set.add(TransactionEntry(
+                account=self.accounts[0], debit=100))
+            transaction.entry_set.add(TransactionEntry(
+                account=self.accounts[1], debit=100))
+        self.transactions['Pay'].set_payed()
+        self.transactions['Rec'].set_payed()
+        self.transactions['Rec'].set_received()
+        self.transactions['Rej'].set_rejected()
+
+    def tearDown(self):
+        self.group.delete()
+        for transaction in self.transactions.values():
+            transaction.delete()
+
+    def testTransactionSetWithRejected(self):
+        """Checks that transaction_set_with_rejected returns all
+        transactions"""
+
+        set = self.group.transaction_set_with_rejected()
+        self.assertEqual(set.count(), 4)
+
+    def testTransactionSet(self):
+        """Checks that transaction_set returns all transactions that is not
+        rejected"""
+
+        set = self.group.transaction_set()
+        self.assertEqual(set.count(), 3)
+
+    def testRegisteredTransactionSet(self):
+        """Checks that registered_transaction_set returns all registered
+        transactions that is not rejected"""
+
+        set = self.group.registered_transaction_set()
+        self.assertEqual(set.count(), 1)
+
+    def testPayedTransactionSet(self):
+        """Checks that payed_transaction_set returns all payed
+        transactions that is not rejected"""
+
+        set = self.group.payed_transaction_set()
+        self.assertEqual(set.count(), 2)
+
+    def testNotPayedTransactionSet(self):
+        """Checks that not_payed_transaction_set returns all unpayed
+        transactions that is not rejected"""
+
+        set = self.group.not_payed_transaction_set()
+        self.assertEqual(set.count(), 1)
+
+    def testReceivedTransactionSet(self):
+        """Checks that received_transaction_set returns all received
+        transactions that is not rejected"""
+
+        set = self.group.received_transaction_set()
+        self.assertEqual(set.count(), 1)
+
+    def testNotReceivedTransactionSet(self):
+        """Checks that not_received_transaction_set returns all transactions
+        that has not been received, that is not rejected"""
+
+        set = self.group.not_received_transaction_set()
+        self.assertEqual(set.count(), 2)
+
+    def testRejectedTransactionSet(self):
+        """Checks that rejected_transaction_set returns all rejected
+        transactions"""
+
+        set = self.group.rejected_transaction_set()
+        self.assertEqual(set.count(), 1)
+
+    def testNotReceivedTransactionSet(self):
+        """Checks that rejected_transaction_set returns all transactions that
+        is not rejected"""
+
+        set = self.group.not_rejected_transaction_set()
+        self.assertEqual(set.count(), 3)
+
+class AccountTestCase(unittest.TestCase):
+    def setUp(self):
+        pass
+
+class TransactionTestCase(unittest.TestCase):
+    def setUp(self):
+        self.group = Group(name='Group 1', slug='group1')
+        self.group.save()
+
+        self.accounts = [
+            Account(name='Account 1', slug='account1', group=self.group),
+            Account(name='Account 2', slug='account2', group=self.group),
+            Account(name='Account 3', slug='account3', group=self.group),
+        ]
+        for account in self.accounts:
+            account.save()
 
         self.before = datetime.now()
 
@@ -44,9 +139,10 @@ class TransactionTestCase(unittest.TestCase):
         self.after = datetime.now()
 
     def tearDown(self):
-        Transaction.objects.all().delete()
-        Account.objects.all().delete()
-        Group.objects.all().delete()
+        self.transaction.delete()
+        for account in self.accounts:
+            account.delete()
+        self.group.delete()
 
     def testEmptyTransaction(self):
         """Checks that empty transactions are accepted"""
@@ -141,14 +237,14 @@ class TransactionTestCase(unittest.TestCase):
         self.assertRaises(InvalidTransaction, transaction.reject,
             'Reason for rejecting')
 
-    def testRecievePayedTransaction(self):
-        """Checks that we can set a payed transaction as recieved"""
+    def testReceivePayedTransaction(self):
+        """Checks that we can set a payed transaction as received"""
 
         transaction = self.transaction
         transaction.set_payed()
 
         before = datetime.now()
-        transaction.set_recieved()
+        transaction.set_received()
         after = datetime.now()
 
         self.assertEqual(transaction.is_registered(), True)
@@ -157,27 +253,28 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(transaction.log_set.count(), 3)
         self.assertEqual(transaction.log_set.filter(type='Rec').count(), 1)
 
-        recieved = transaction.log_set.filter(type='Rec')[0].timestamp
-        self.assert_(recieved > before)
-        self.assert_(recieved < after)
+        received = transaction.log_set.filter(type='Rec')[0].timestamp
+        self.assert_(received > before)
+        self.assert_(received < after)
 
-    def testRejectRecievedTransaction(self):
-        """Tests that rejecting recieved transaction fails"""
+    def testRejectReceivedTransaction(self):
+        """Tests that rejecting received transaction fails"""
         transaction = self.transaction
         transaction.set_payed()
-        transaction.set_recieved()
+        transaction.set_received()
 
         self.assertRaises(InvalidTransaction, transaction.reject,
             'Reason for rejecting')
 
-    def testRecieveNotPayedTransaction(self):
-        """Checks that recieving a transaction that is not payed fails"""
+    def testReceiveNotPayedTransaction(self):
+        """Checks that receiving a transaction that is not payed fails"""
         transaction = self.transaction
 
-        self.assertRaises(InvalidTransaction, transaction.set_recieved)
+        self.assertRaises(InvalidTransaction, transaction.set_received)
 
     def testUserGetsPassedOnToLog(self):
-        self.fail('Test not written yet')
+        # FIXME
+        self.fail('Test not implemented')
 
 class LogTestCase(unittest.TestCase):
     def setUp(self):
@@ -213,24 +310,23 @@ class LogTestCase(unittest.TestCase):
 
 class EntryTestCase(unittest.TestCase):
     def setUp(self):
-        Group.objects.all().delete()
-        group = Group(name='group1', slug='group1')
-        group.save()
+        self.group = Group(name='group1', slug='group1')
+        self.group.save()
 
-        account = Account(name='account1', slug='account1', group=group)
-        account.save()
+        self.account = Account(name='account1', slug='account1',
+            group=self.group)
+        self.account.save()
 
-        transaction = Transaction()
-        transaction.save()
+        self.transaction = Transaction()
+        self.transaction.save()
 
-        self.entry = TransactionEntry(account=account, debit=100, credit=100,
-                                      transaction=transaction)
-
+        self.entry = TransactionEntry(account=self.account,
+            debit=100, credit=100, transaction=self.transaction)
 
     def tearDown(self):
-        Transaction.objects.all().delete()
-        Account.objects.all().delete()
-        Group.objects.all().delete()
+        self.transaction.delete()
+        self.account.delete()
+        self.group.delete()
 
     def testDebitAndCreditInSameEntry(self):
         """Checks that setting both debit and credit will fail"""

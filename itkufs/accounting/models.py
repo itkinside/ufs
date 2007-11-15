@@ -75,44 +75,47 @@ class Group(models.Model):
         """Returns array of group accounts"""
         return self.account_set.exclude(type='Li', owner__isnull=False)
 
+    def transaction_set_with_rejected(self):
+        """Returns all transactions connected to group, including rejected"""
+        return Transaction.objects.filter(
+            entry_set__account__group=self).distinct()
+
     def transaction_set(self):
-        """Returns all transactions connected to group"""
-        # FIXME implement
-        return Transaction.objects.none()
+        """Returns all transactions connected to group, that have not been
+        rejected"""
+        return self.transaction_set_with_rejected().exclude(log_set__type='Rej')
 
     def registered_transaction_set(self):
         """Returns all transactions connected to group, that are not rejected"""
-        # FIXME implement
-        return Transaction.objects.none()
+        return self.transaction_set().filter(log_set__type='Reg')
 
     def payed_transaction_set(self):
         """Returns all payed transactions connected to group, that are not
         rejected"""
-        # FIXME filter out rejected
-        return self.transaction_set().filter(payed__isnull=False)
+        return self.transaction_set().filter(log_set__type='Pay')
 
     def not_payed_transaction_set(self):
         """Returns all unpayed transactions connected to group, that are not
         rejected"""
-        # FIXME filter out rejected
-        return self.transaction_set().filter(payed__isnull=True)
+        return self.transaction_set().exclude(log_set__type='Pay')
 
-    def recieved_transaction_set(self):
-        """Returns all recieved transactions connected to group"""
-        # FIXME implement
-        return Transaction.objects.none()
+    def received_transaction_set(self):
+        """Returns all received transactions connected to group"""
+        return self.transaction_set().filter(log_set__type='Rec')
 
-    def not_recieved_transaction_set(self):
-        """Returns all transactions that have not been recieved connected to
+    def not_received_transaction_set(self):
+        """Returns all transactions that have not been received connected to
         group"""
-        # FIXME implement
-        return Transaction.objects.none()
+        return self.transaction_set().exclude(log_set__type='Rec')
 
     def rejected_transaction_set(self):
-        """Returns all transactions connected to group, that have been
-        rejected"""
-        # FIXME implement
-        return Transaction.objects.none()
+        """Returns all rejected transactions connected to group"""
+        return self.transaction_set().filter(log_set__type='Rej')
+
+    def not_rejected_transaction_set(self):
+        """Returns all transactions that have not been rejected connected to
+        group. Same as transaction_set()."""
+        return self.transaction_set()
 
 
 ACCOUNT_TYPE = (
@@ -279,7 +282,7 @@ class Transaction(models.Model):
             for entry in self.entry_set.all():
                 if entry.account in seen_accounts:
                     raise InvalidTransaction(
-                        'Account is already part of this transaction')
+                        _('Account is already part of this transaction'))
                 else:
                     seen_accounts.append(entry.account)
 
@@ -287,7 +290,7 @@ class Transaction(models.Model):
                 credit_sum += float(entry.credit)
 
             if debit_sum != credit_sum:
-                raise InvalidTransaction('Credit and debit do not match')
+                raise InvalidTransaction(_('Credit and debit do not match'))
 
             super(Transaction, self).save()
 
@@ -313,9 +316,9 @@ class Transaction(models.Model):
                 log.message = message
             log.save()
         else:
-            raise InvalidTransaction('Could not set transaction as payed')
+            raise InvalidTransaction(_('Could not set transaction as payed'))
 
-    def set_recieved(self, user=None, message=''):
+    def set_received(self, user=None, message=''):
         if not self.is_rejected() and self.is_registered() and self.is_payed():
             log = TransactionLog(type='Rec', transaction=self)
             if user:
@@ -324,7 +327,7 @@ class Transaction(models.Model):
                 log.message = message
             log.save()
         else:
-            raise InvalidTransaction('Could not set transaction as recieved')
+            raise InvalidTransaction(_('Could not set transaction as received'))
 
     def reject(self, user=None, message=''):
         if self.is_registered() and not self.is_payed() and not self.is_received():
@@ -335,7 +338,9 @@ class Transaction(models.Model):
                 log.message = message
             log.save()
         else:
-            raise InvalidTransaction('Could not set transaction as rejected')
+            raise InvalidTransaction(_('Could not set transaction as rejected'))
+    set_rejected = reject
+    set_rejected.__doc__ = 'set_rejected() is an alias for reject()'
 
     def is_registered(self):
         return self.log_set.filter(type='Reg').count() > 0
@@ -403,7 +408,8 @@ class TransactionEntry(models.Model):
 
     def save(self):
         if self.debit < 0 or self.credit < 0:
-            raise InvalidTransactionEntry(_('Credit and debit must be positive or zero'))
+            raise InvalidTransactionEntry(
+                _('Credit and debit must be positive or zero'))
 
         if self.debit > 0 and self.credit > 0:
             raise InvalidTransactionEntry(_('Only credit or debit may be set'))
