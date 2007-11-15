@@ -72,12 +72,14 @@ class Group(models.Model):
         return Transaction.objects.none()
 
     def payed_transaction_set(self):
-        """Returns all payed transactions connected to group, that are not rejected"""
+        """Returns all payed transactions connected to group, that are not
+        rejected"""
         # FIXME filter out rejected
         return self.transaction_set().filter(payed__isnull=False)
 
     def not_payed_transaction_set(self):
-        """Returns all unpayed transactions connected to group, that are not rejected"""
+        """Returns all unpayed transactions connected to group, that are not
+        rejected"""
         # FIXME filter out rejected
         return self.transaction_set().filter(payed__isnull=True)
 
@@ -87,12 +89,14 @@ class Group(models.Model):
         return Transaction.objects.none()
 
     def not_recieved_transaction_set(self):
-        """Returns all transactions that have not been recieved connected to group"""
+        """Returns all transactions that have not been recieved connected to
+        group"""
         # FIXME implement
         return Transaction.objects.none()
 
     def rejected_transaction_set(self):
-        """Returns all transactions connected to group, that have been rejected"""
+        """Returns all transactions connected to group, that have been
+        rejected"""
         # FIXME implement
         return Transaction.objects.none()
 
@@ -309,15 +313,15 @@ class NewTransaction(models.Model):
     def save(self):
         # FIXME transaction or some other form of rollback
         try:
-            seen = []
+            seen_accounts = []
             debit_sum = 0
             credit_sum = 0
 
             for e in self.entry_set.all():
-                if e.account in seen:
+                if e.account in seen_accounts:
                     raise InvalidTransaction('Account is already part of this transaction')
                 else:
-                    seen.append(e.account)
+                    seen_accounts.append(e.account)
 
                 debit_sum += float(e.debit)
                 credit_sum += float(e.credit)
