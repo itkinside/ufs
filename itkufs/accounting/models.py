@@ -367,7 +367,8 @@ class TransactionLog(models.Model):
 
     def save(self):
         if self.id is not None:
-            raise InvalidTransactionLog(_('Altering transaction log entries is not allowed'))
+            raise InvalidTransactionLog(
+                _('Altering transaction log entries is not allowed'))
         super(TransactionLog, self).save()
 
     class Meta:
@@ -378,8 +379,7 @@ class TransactionLog(models.Model):
     def __unicode__(self):
         return _(u'%(type)s at %(timestamp)s by %(user)s: %(message)s') % {
             'type': self.get_type_display(),
-            # FIXME: Rename time to timestamp
-            'timestamp': self.time.strftime('%Y-%m-%d %H:%M'),
+            'timestamp': self.timestamp.strftime('%Y-%m-%d %H:%M'),
             'user': self.user,
             'message': self.message,
         }
