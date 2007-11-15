@@ -262,6 +262,13 @@ class Transaction(models.Model):
         self.entries = entries
         self.user = user
 
+    def __unicode__(self):
+        if self.entry_set.all().count():
+            return ','.join([str(entry) for entry in self.entry_set.all()])
+        else:
+            return _('Empty transaction')
+
+
     @transaction.commit_manually
     def save(self):
         try:
