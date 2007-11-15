@@ -1,16 +1,14 @@
-import unittest
 from datetime import datetime
 from django.db import IntegrityError
+import unittest
 
 from itkufs.accounting.models import *
-from itkufs.accounting.models import NewTransaction as Transaction
-
 
 # FIXME Write more tests
 #       * all group properties need to be checked
 #       * same goes for account
 #       * missing test to check that user get set in log.
-# FIXME Add docstrings explainging purpose of all tests
+# FIXME Add docstrings explaining purpose of all tests
 
 class GroupTestCase(unittest.TestCase):
     def setUp(self):
