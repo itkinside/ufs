@@ -352,6 +352,24 @@ class Transaction(models.Model):
     def is_rejected(self):
         return self.log_set.filter(type='Rej').count() > 0
 
+    def get_registered(self):
+        if self.is_registered():
+            return self.log_set.filter(type='Reg')[0];
+    def get_payed(self):
+        if self.is_payed():
+            return self.log_set.filter(type='Pay')[0];
+    def get_received(self):
+        if self.is_received():
+            return self.log_set.filter(type='Rec')[0];
+    def get_rejected(self):
+        if self.is_rejected():
+            return self.log_set.filter(type='Rej')[0];
+
+    registered = property(get_registered, None, None)
+    received = property(get_received, None, None)
+    rejected = property(get_rejected, None, None)
+    payed = property(get_payed, None, None)
+
     class Admin:
         pass
 
