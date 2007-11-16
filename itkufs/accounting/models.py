@@ -112,11 +112,9 @@ class Group(models.Model):
         """Returns all rejected transactions connected to group"""
         return self.transaction_set().filter(log_set__type='Rej')
 
-    def not_rejected_transaction_set(self):
-        """Returns all transactions that have not been rejected connected to
-        group. Same as transaction_set()."""
-        return self.transaction_set()
-
+    not_rejected_transaction_set = transaction_set
+    not_rejected_transaction_set.__doc__ = """Returns all transactions that
+    have not been rejected connected to group. Same as transaction_set()."""
 
 ACCOUNT_TYPE = (
     ('As', _('Asset')),     # Eiendeler/aktiva
