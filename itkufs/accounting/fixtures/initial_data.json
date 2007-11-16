@@ -29,7 +29,7 @@
         "pk": 9, 
         "model": "accounting.account", 
         "fields": {
-            "group": 1, 
+            "group": 2, 
             "name": "Norvald Ryeng", 
             "active": true, 
             "owner": 5, 
