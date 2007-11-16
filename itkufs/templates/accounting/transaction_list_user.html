@@ -3,35 +3,29 @@
     <tr>
         <th>{% trans "Registered" %}</th>
         <th>{% trans "Payed" %}</th>
-        <th>{% trans "Debit Account" %}</th>
-        <th>{% trans "Credit Account" %}</th>
+        <th>{% trans "Transaction" %}</th>
         <th>{% trans "Amount" %}</th>
         <th>{% trans "Details" %}</th>
     </tr>
     {% for t in transaction_list %}
-    <tr class="{% cycle evenrow,oddrow %}{% if not t.payed %} pending{% endif %}">
-        <td>{{ t.registered|date:"Y-m-d" }}</td>
-        {% if t.payed %}
-        <td>{{ t.payed|date:"Y-m-d" }}</td>
+    <tr class="{% cycle evenrow,oddrow %}{% if not t.is_payed %} pending{% endif %}">
+        <td>{{ t.registered.timestamp|date:"Y-m-d" }}</td>
+        {% if t.is_payed %}
+        <td>{{ t.payed.timestamp|date:"Y-m-d" }}</td>
         {% else %}
         <td><em>{% trans "Pending" %}</em></td>
         {% endif %}
 
-        <td>{{ t.debit_account.name }}, {{ t.debit_account.group.name }}</td>
+        <td>*FIXME* {{ t }}</td>
 
-        <td>{{ t.credit_account.name }}, {{ t.credit_account.group.name }}</td>
 
-        <td class="align_right">{{ t.amount|stringformat:"0.2f" }}</td>
+        <td class="align_right">*FIXME*</td
 
         <td>
             {% if t.settlement %}
                 {{ t.settlement.date|date:"Y-m-d" }}
             {% endif %}
-            {% if t.details %}
-                {{ t.details|striptags|linebreaksbr }}
-            {% else %}
-                {% trans "None" %}
-            {% endif %}
+						*FIXME*
         </td>
     </tr>
     {% endfor %}

@@ -127,9 +127,8 @@ def account_summary(request, group, account, page='1'):
         return HttpResponseForbidden(_('Forbidden'))
 
     # Get related transactions
-    transactions = Transaction.objects.filter(
-        Q(credit_account=account) |
-        Q(debit_account=account)).order_by('-registered')
+    # FIXME order by registered
+    transactions = Transaction.objects.filter(entry_set__account=account)
 
     # Warn owner of account about a low balance
     if request.user == account.owner:
