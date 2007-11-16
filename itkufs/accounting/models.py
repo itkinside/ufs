@@ -267,7 +267,7 @@ class Transaction(models.Model):
         if self.entry_set.all().count():
             return ','.join([str(entry) for entry in self.entry_set.all()])
         else:
-            return _('Empty transaction')
+            return u'Empty transaction'
 
 
     @transaction.commit_manually
