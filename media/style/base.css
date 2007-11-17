@@ -268,7 +268,7 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 }
 
 #transactions dl {
-	width: 12em;
+	width: 15em;
 	font-size: 85%;
 }
 #transactions dt {
@@ -280,6 +280,6 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 }
 #transactions dd {
 	float: left;
-	width: 5em;
+	width: 8em;
 }
 

@@ -12,18 +12,18 @@
         <td rowspan="{{ t.entry_set.all.count }}">
 					<dl>
 						<dt>Registered:</dt>
-						<dd>{{ t.registered.timestamp|date:"Y-m-d" }}</dd>
+						<dd>{{ t.registered.timestamp|date:"Y-m-d H:i" }}</dd>
         		{% if t.is_payed %}
 						<dt>Payed:</dt>
-						<dd>{{ t.payed.timestamp|date:"Y-m-d" }</dd>
+						<dd>{{ t.payed.timestamp|date:"Y-m-d H:i" }}</dd>
 		        {% endif %}
-						{% if t.is_recieved %}
-						<dt>Recieved</dt>
-						<dd>{{ t.recieved.timestampt|date:"Y-m-d" }}</dd>
+						{% if t.is_received %}
+						<dt>Recieved:</dt>
+						<dd>{{ t.received.timestamp|date:"Y-m-d H:i" }}</dd>
 						{% endif %}
 		        {% if t.is_rejected %}
 						<dt>Rejected:</dt>
-						<dd>{{ t.rejected.timestamp|date:"Y-m-d" }}</dd>
+						<dd>{{ t.rejected.timestamp|date:"Y-m-d H:i" }}</dd>
 		        {% endif %}
 					</dl>
 				</td>
