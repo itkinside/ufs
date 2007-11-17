@@ -181,11 +181,9 @@ class Account(models.Model):
 
         balance = 0
 
-        # FIXME: Use new transaction
-        #for t in self.credit_transactions.filter(payed__isnull=False):
-        #    balance -= t.amount
-        #for t in self.debit_transactions.filter(payed__isnull=False):
-        #    balance += t.amount
+        for e in self.transactionentry_set.filter(transaction__log_set__type='Rec'):
+            balance -= e.debit
+            balance += e.credit
 
         return balance
 
