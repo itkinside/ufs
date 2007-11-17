@@ -187,13 +187,13 @@ em {
 }
 
 /* Colorization */
-.pending, .comment, .comment a {
+.pending, .comment, .comment a, .none {
 	color: gray;
 }
 .warning {
 	color: #df8713;
 }
-.error, .blocked {
+.error, .blocked, .rejected {
 	color: #a10000;
 }
 
@@ -280,4 +280,7 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 #transactions dd {
 	margin-left: 6.5em;
 }
-
+#transactions p {
+	margin: 0 !important;
+	padding: 0 !important;
+}
