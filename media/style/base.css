@@ -193,8 +193,8 @@ em {
 .warning {
 	color: #df8713;
 }
-.error, .blocked, .rejected {
-	color: #a10000;
+.error, .blocked {
+color: #a10000;
 }
 
 /* Columns */
@@ -283,4 +283,21 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 #transactions p {
 	margin: 0 !important;
 	padding: 0 !important;
+}
+#transactions .rejected a,
+#transactions .rejected {
+	color: #a10000;
+}
+#transactions .rejected .registered,
+#transactions .pending a,
+#transactions .pending {
+	color: gray;
+}
+#transactions .status {
+	color: black;
+}
+#transactions .rejected .account,
+#transactions .rejected .debit,
+#transactions .rejected .credit {
+	text-decoration: line-through;
 }

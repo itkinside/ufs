@@ -16,8 +16,10 @@
         <th>{% trans "Details" %}</th>
     </tr>
     {% for t in transaction_list %}
-    <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}">
-        <td rowspan="{{ t.entry_set.all.count }}">
+    <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}
+			{% if t.is_rejected %}rejected{% else %}
+			{% if not t.is_received %}pending{% endif %}{% endif %}">
+        <td rowspan="{{ t.entry_set.all.count }}" class="status">
 					<dl>
 						<dt>Registered:</dt>
 						<dd>{{ t.registered.timestamp|date:"Y-m-d H:i" }}</dd>
@@ -37,7 +39,7 @@
 				</td>
 
         {% for e in t.entry_set.all %}
-       		<td>
+       		<td class="account">
 						{% if is_admin %}
 						<a href="{% url group-summary e.account.group.slug %}">{{e.account.group.name}}</a>:
 						<a href="{% url account-summary e.account.group.slug,e.account.slug %}">
@@ -47,14 +49,14 @@
 							{{ e.account.group.name }}: {{e.account.name}}
 						{% endif %}
 	        </td>
-	        <td class="align_right">
+	        <td class="align_right credit">
 						{% if e.credit %} {{e.credit|stringformat:"0.2f"}} {% endif %}
 	        </td>
-  	      <td class="align_right">
+  	      <td class="align_right debit">
 						{% if e.debit %} {{e.debit|stringformat:"0.2f"}} {% endif %}
 	        </td>
 					{% if forloop.first %}
-					<td rowspan="{{ t.entry_set.all.count }}">
+					<td rowspan="{{ t.entry_set.all.count }}" class="details">
 						{% if t.rejected.message %}
 							{%if t.registered.message %}
 							<p class="registered">
@@ -76,7 +78,9 @@
 					</td>
 					{% endif %}
 				</tr>
-				<tr class="{{ trclass }}">
+				<tr class="{{ trclass }}
+					{% if t.is_rejected %}rejected{% else %}
+					{% if not t.is_received %}pending{% endif %}{% endif %}">
 				{% endfor %}
     </tr>
     {% endfor %}
