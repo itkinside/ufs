@@ -7,11 +7,72 @@
 
 {% include "accounting/transaction_list_menu.html" %}
 
-{% if is_admin %}
-    {% include "accounting/transaction_list_admin.html" %}
-{% else %}
-    {% include "accounting/transaction_list_user.html" %}
-{% endif %}
+<table class="tablelist">
+    <tr>
+        <th>{% trans "Status" %}</th>
+        <th>{% trans "Account" %}</th>
+        <th>{% trans "Credit" %}</th>
+        <th>{% trans "Debit" %}</th>
+        <th>{% trans "Details" %}</th>
+    </tr>
+    {% for t in transaction_list %}
+    <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}">
+        <td rowspan="{{ t.entry_set.all.count }}">
+					<dl>
+						<dt>Registered:</dt>
+						<dd>{{ t.registered.timestamp|date:"Y-m-d H:i" }}</dd>
+        		{% if t.is_payed %}
+						<dt>Payed:</dt>
+						<dd>{{ t.payed.timestamp|date:"Y-m-d H:i" }}</dd>
+		        {% endif %}
+						{% if t.is_received %}
+						<dt>Recieved:</dt>
+						<dd>{{ t.received.timestamp|date:"Y-m-d H:i" }}</dd>
+						{% endif %}
+		        {% if t.is_rejected %}
+						<dt>Rejected:</dt>
+						<dd>{{ t.rejected.timestamp|date:"Y-m-d H:i" }}</dd>
+		        {% endif %}
+					</dl>
+				</td>
+
+        {% for e in t.entry_set.all %}
+       		<td>
+						{% if is_admin %}
+						<a href="{% url group-summary e.account.group.slug %}">{{e.account.group.name}}</a>:
+						<a href="{% url account-summary e.account.group.slug,e.account.slug %}">
+							{{e.account.name}}
+						</a>
+						{% else %}
+							{{ e.account.group.name }}: {{e.account.name}}
+						{% endif %}
+	        </td>
+	        <td class="align_right">
+						{% if e.credit %} {{e.credit|stringformat:"0.2f"}} {% endif %}
+	        </td>
+  	      <td class="align_right">
+						{% if e.debit %} {{e.debit|stringformat:"0.2f"}} {% endif %}
+	        </td>
+					{% if forloop.first %}
+					<td rowspan="{{ t.entry_set.all.count }}">
+						{% if t.rejected.message %}
+							{{ t.registered.message }}
+							Rejected: {{ t.rejected.message }}
+						{% else %}
+							{%if t.registered.message %}
+								{{ t.registered.message }}
+							{% else %}
+								None
+							{% endif %}
+						{% endif %}
+					</td>
+					{% endif %}
+				</tr>
+				<tr class="{{ trclass }}">
+				{% endfor %}
+    </tr>
+    {% endfor %}
+</table>
 
 {% include "accounting/transaction_list_menu.html" %}
 
