@@ -72,9 +72,7 @@ def group_summary(request, group, page='1'):
 
     # Get related transactions
     accounts = Account.objects.filter(group=group)
-    transactions = Transaction.objects.filter(
-        Q(credit_account__in=accounts) |
-        Q(debit_account__in=accounts)).order_by('-registered')
+    transactions = Transaction.objects.filter(entry_set__account__group=group).distinct()
 
     if is_admin and group.not_payed_transaction_set().count():
         request.user.message_set.create(
