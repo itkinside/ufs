@@ -286,7 +286,7 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 }
 #transactions .rejected a,
 #transactions .rejected {
-	color: #a10000;
+	color: #C66
 }
 #transactions .rejected .registered,
 #transactions .pending a,
