@@ -248,6 +248,7 @@ class Transaction(models.Model):
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
     user = None # Not a django field as we use this for a hack
+    message = ''
 
     class Meta:
         verbose_name = _('transaction')
@@ -257,11 +258,11 @@ class Transaction(models.Model):
     #    pass
 
     def __init__(self, *args, **kwargs):
-        entries = kwargs.pop('entries', [])
         user = kwargs.pop('user', None)
+        message = kwargs.pop('message', '')
         super(Transaction, self).__init__(*args, **kwargs)
-        self.entries = entries
         self.user = user
+        self.message = message
 
     def __unicode__(self):
         if self.entry_set.all().count():
@@ -297,6 +298,9 @@ class Transaction(models.Model):
                 if self.user:
                     log.user = self.user
                     self.user = None
+                if self.message.strip() != '':
+                    log.message = self.message.strip()
+                    self.message = ''
                 log.save()
 
         except InvalidTransaction, e:

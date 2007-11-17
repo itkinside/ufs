@@ -8,7 +8,7 @@
         <th>{% trans "Details" %}</th>
     </tr>
     {% for t in transaction_list %}
-    <tr class="{% cycle evenrow,oddrow %}{% if not t.is_payed %} pending{% endif %}">
+    <tr class="{% cycle evenrow,oddrow %}">
         <td rowspan="{{ t.entry_set.all.count }}">
 					<dl>
 						<dt>Registered:</dt>
@@ -43,12 +43,12 @@
 	        </td>
 					{% if forloop.first %}
 					<td rowspan="{{ t.entry_set.all.count }}">
-						{% if e.rejected.message %}
-							{{ e.registered.message }}
-							{{ e.rejected.message }}
+						{% if t.rejected.message %}
+							{{ t.registered.message }}
+							Rejected: {{ t.rejected.message }}
 						{% else %}
-							{%if e.rejected.message %}
-								{{ e.registered.message }}
+							{%if t.registered.message %}
+								{{ t.registered.message }}
 							{% else %}
 								None
 							{% endif %}
