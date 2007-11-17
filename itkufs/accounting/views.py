@@ -72,6 +72,8 @@ def group_summary(request, group, page='1'):
 
     # Get related transactions
     accounts = Account.objects.filter(group=group)
+    # FIXME
+    # transactions = group.transaction_set()
     transactions = Transaction.objects.filter(entry_set__account__group=group).distinct()
 
     if is_admin and group.not_payed_transaction_set().count():
@@ -126,6 +128,8 @@ def account_summary(request, group, account, page='1'):
 
     # Get related transactions
     # FIXME order by registered
+    # FIXME
+    # transactions = account.transaction_set()
     transactions = Transaction.objects.filter(entry_set__account=account)
 
     # Warn owner of account about a low balance
