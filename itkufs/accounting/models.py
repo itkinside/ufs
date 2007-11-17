@@ -67,9 +67,11 @@ class Group(models.Model):
             self.cash_account = cash;
             super(Group, self).save()
 
-    def user_account_set(self):
+    # FIXME Use property for all elements?
+    def get_user_account_set(self):
         """Returns queryset of user accounts"""
         return self.account_set.filter(type='Li', owner__isnull=False)
+    user_account_set = property(get_user_account_set,None,None)
 
     def group_account_set(self):
         """Returns array of group accounts"""
