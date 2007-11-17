@@ -8,7 +8,7 @@
         <th>{% trans "Details" %}</th>
     </tr>
     {% for t in transaction_list %}
-    <tr class="{% cycle evenrow,oddrow %}">
+    <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}">
         <td rowspan="{{ t.entry_set.all.count }}">
 					<dl>
 						<dt>Registered:</dt>
@@ -53,7 +53,7 @@
 					</td>
 					{% endif %}
 				</tr>
-				<tr>
+				<tr class="{{ trclass }}">
 				{% endfor %}
     </tr>
     {% endfor %}
