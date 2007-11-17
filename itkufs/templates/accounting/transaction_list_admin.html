@@ -1,34 +1,63 @@
 {% load i18n %}
 <table class="tablelist">
     <tr>
-        <th>{% trans "Registered" %}</th>
-        <th>{% trans "Payed" %}</th>
-        <th>{% trans "Transaction" %}</th>
-        <th>{% trans "Amount" %}</th>
+        <th>{% trans "Status" %}</th>
+        <th>{% trans "Account" %}</th>
+        <th>{% trans "Credit" %}</th>
+        <th>{% trans "Debit" %}</th>
         <th>{% trans "Details" %}</th>
     </tr>
     {% for t in transaction_list %}
     <tr class="{% cycle evenrow,oddrow %}{% if not t.is_payed %} pending{% endif %}">
-        <td>{{ t.registered.timestamp|date:"Y-m-d" }}</td>
-        {% if t.is_payed %}
-        <td>{{ t.payed.timestamp|date:"Y-m-d" }}</td>
-        {% else %}
-        <td><em>{% trans "Pending" %}</em></td>
-        {% endif %}
+        <td rowspan="{{ t.entry_set.all.count }}">
+					<dl>
+						<dt>Registered:</dt>
+						<dd>{{ t.registered.timestamp|date:"Y-m-d" }}</dd>
+        		{% if t.is_payed %}
+						<dt>Payed:</dt>
+						<dd>{{ t.payed.timestamp|date:"Y-m-d" }</dd>
+		        {% endif %}
+						{% if t.is_recieved %}
+						<dt>Recieved</dt>
+						<dd>{{ t.recieved.timestampt|date:"Y-m-d" }}</dd>
+						{% endif %}
+		        {% if t.is_rejected %}
+						<dt>Rejected:</dt>
+						<dd>{{ t.rejected.timestamp|date:"Y-m-d" }}</dd>
+		        {% endif %}
+					</dl>
+				</td>
 
-
-        <td>
-            *FIXME* {{ t }}
-        </td>
-
-        <td class="align_right">*FIXME*</td>
-
-        <td>
-            {% if t.settlement %}
-                {{ t.settlement.date|date:"Y-m-d" }}
-            {% endif %}
-						*FIXME*
-        </td>
+        {% for e in t.entry_set.all %}
+       		<td>
+						<a href="{% url group-summary e.account.group.slug %}">{{e.account.group.name}}</a>:
+						<a href="{% url account-summary e.account.group.slug,e.account.slug %}">
+							{{e.account.name}}
+						</a>
+	        </td>
+	        <td class="align_right">
+						{% if e.credit %} {{e.credit|stringformat:"0.2f"}} {% endif %}
+	        </td>
+  	      <td class="align_right">
+						{% if e.debit %} {{e.debit|stringformat:"0.2f"}} {% endif %}
+	        </td>
+					{% if forloop.first %}
+					<td rowspan="{{ t.entry_set.all.count }}">
+						{% if e.rejected.message %}
+							{{ e.registered.message }}
+							{{ e.rejected.message }}
+						{% else %}
+							{%if e.rejected.message %}
+								{{ e.registered.message }}
+							{% else %}
+								None
+							{% endif %}
+						{% endif %}
+					</td>
+					{% endif %}
+				</tr>
+				<tr>
+				{% endfor %}
     </tr>
     {% endfor %}
 </table>
