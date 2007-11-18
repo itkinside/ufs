@@ -57,24 +57,18 @@
 	        </td>
 					{% if forloop.first %}
 					<td rowspan="{{ t.entry_set.all.count }}" class="details">
-						{% if t.rejected.message %}
-							{%if t.registered.message %}
-							<p class="registered">
-							{{ t.registered.message }}
-							</p>
-							{% endif %}
-							<p class="rejected">
-							{{ t.rejected.message }}
-							</p>
-						{% else %}
-							{%if t.registered.message %}
-								<p class="registered">
-								{{ t.registered.message }}
-								</p>
-							{% else %}
-								<p class="none">(None)</p>
-							{% endif %}
+						<dl>
+							<dt>Registered:</dt>
+							<dd class="registered">
+							{{ t.registered.message|default:"(None)" }}
+							</dd>
+						{% if t.rejected %}
+							<dt>Rejected:</dt>
+							<dd class="rejected">
+							{{ t.rejected.message|default:"(None)" }}
+							</dd>
 						{% endif %}
+						</dl>
 					</td>
 					{% endif %}
 				</tr>

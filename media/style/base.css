@@ -268,14 +268,14 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 }
 
 #transactions dl {
-	width: 14.5em;
 	font-size: 85%;
 }
 #transactions dt {
 	width: 6em;
 	text-align: right;
-	float: left;
 	font-weight: bold;
+	float: left;
+	color: black;
 }
 #transactions dd {
 	margin-left: 6.5em;
