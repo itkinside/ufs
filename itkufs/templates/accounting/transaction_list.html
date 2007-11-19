@@ -58,12 +58,12 @@
 					{% if forloop.first %}
 					<td rowspan="{{ t.entry_set.all.count }}" class="details">
 						<dl>
-							<dt>Registered:</dt>
+							<dt>{{ t.registered.user|default:"(Unknown user)" }}:</dt>
 							<dd class="registered">
 							{{ t.registered.message|default:"(None)" }}
 							</dd>
 						{% if t.rejected %}
-							<dt>Rejected:</dt>
+							<dt>{{ t.rejected.user|default:"(Unknown user)"}}:</dt>
 							<dd class="rejected">
 							{{ t.rejected.message|default:"(None)" }}
 							</dd>
