@@ -186,6 +186,15 @@ em {
 	text-align: right;
 }
 
+/* Float */
+.float_left {
+	float: left;
+}
+
+.float_right {
+	float: right;
+}
+
 /* Colorization */
 .pending, .comment, .comment a, .none {
 	color: gray;
@@ -263,7 +272,7 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 	float: left;
 	margin-right: 3em;
 }
-#transactions, #accounts, #accounts .comment {
+#transactions, #accounts, #accounts .comment, #transactions table {
 	clear: both;
 }
 
