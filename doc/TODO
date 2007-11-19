@@ -7,7 +7,10 @@ MUST HAVE
 Model:
 - Unit tests of model layer, especially transaction and account balance
 - Convenience functions in Account model to match *transaction_set in group
-- Update code wrt the new Transaction model
+- Update code with the new Transaction model
+- Modify Transaction so that we don't automagicly set it as registered, also
+  ensure that entries can only be added to unregistered transactions, thus
+  ensuring data integrity
 
 Views:
 - Use decorators to control commit/rollback of transactions
