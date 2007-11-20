@@ -21,6 +21,7 @@ h2 {
 h3 {
 	font-size: 123.1%;
 	font-weight: bold;
+	margin-top: 0.5em;
 }
 
 /* Block elements */
@@ -40,6 +41,13 @@ ul ul {
 }
 ul ul ul {
 	list-style-type: circle;
+}
+
+dt {
+	font-weight: bold;
+}
+dd {
+	margin-left: 0.5em;
 }
 
 /* Inline elements */
@@ -282,7 +290,6 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 #transactions dt {
 	width: 6em;
 	text-align: right;
-	font-weight: bold;
 	float: left;
 	color: black;
 }
