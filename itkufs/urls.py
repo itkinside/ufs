@@ -4,17 +4,6 @@ from django.contrib import databrowse
 from django.contrib.auth.decorators import user_passes_test
 from itkufs.accounting.models import *
 
-
-# Setup which classes can be used with databrowse...
-databrowse.site.register(Group)
-databrowse.site.register(Account)
-databrowse.site.register(List)
-databrowse.site.register(ListColumn)
-databrowse.site.register(Transaction)
-databrowse.site.register(TransactionLog)
-databrowse.site.register(TransactionEntry)
-
-
 urlpatterns = patterns('',
     (r'^admin/', include('django.contrib.admin.urls')),
 

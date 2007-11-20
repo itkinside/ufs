@@ -1,9 +1,12 @@
 from django.db import models, transaction
 from django.db.models import Q
+from django.contrib import databrowse
 from django.contrib.auth.models import User
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import *
+
+databrowse.site.register(User)
 
 #FIXME replace custom save method with validator_lists where this can be done
 #      and makes sense
@@ -117,6 +120,7 @@ class Group(models.Model):
     not_rejected_transaction_set = transaction_set
     not_rejected_transaction_set.__doc__ = """Returns all transactions that
     have not been rejected connected to group. Same as transaction_set()."""
+databrowse.site.register(Group)
 
 ACCOUNT_TYPE = (
     ('As', _('Asset')),     # Eiendeler/aktiva
@@ -224,6 +228,7 @@ class Account(models.Model):
             or self.group.warn_limit is None):
             return False
         return self.balance_credit_reversed() < self.group.warn_limit
+databrowse.site.register(Account)
 
 class Settlement(models.Model):
     date = models.DateField(_('date'))
@@ -243,6 +248,7 @@ class Settlement(models.Model):
             return smart_unicode("%s: %s" % (self.date, self.comment))
         else:
             return smart_unicode(self.date)
+databrowse.site.register(Settlement)
 
 class Transaction(models.Model):
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
@@ -376,6 +382,7 @@ class Transaction(models.Model):
 
     class Admin:
         pass
+databrowse.site.register(Transaction)
 
 TRANSACTIONLOG_TYPE = (
     ('Reg', _('Registered')),
@@ -415,6 +422,7 @@ class TransactionLog(models.Model):
             'user': self.user,
             'message': self.message,
         }
+databrowse.site.register(TransactionLog)
 
 class TransactionEntry(models.Model):
     transaction = models.ForeignKey(Transaction,
@@ -450,6 +458,7 @@ class TransactionEntry(models.Model):
             'debit': self.debit,
             'credit': self.credit,
         }
+databrowse.site.register(TransactionEntry)
 
 class List(models.Model):
     name = models.CharField(_('name'), max_length=200)
@@ -480,6 +489,7 @@ class List(models.Model):
         for column in self.column_set.all():
             sum += column.width
         return sum
+databrowse.site.register(List)
 
 class ListColumn(models.Model):
     name = models.CharField(_('name'), max_length=200, core=True)
@@ -496,4 +506,4 @@ class ListColumn(models.Model):
 
     def __unicode__(self):
         return u'%s: %s, %s' % (self.list.group, self.list, self.name)
-
+databrowse.site.register(ListColumn)
