@@ -299,6 +299,9 @@ class Transaction(models.Model):
             transaction.commit()
 
     def set_registered(self, user=None, message=''):
+        if self.id is None:
+            self.save()
+
         if not self.is_registered():
             log = TransactionLog(type='Reg', transaction=self)
             if user:
