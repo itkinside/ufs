@@ -8,10 +8,6 @@ Model:
 - Unit tests of model layer, especially transaction and account balance
 - Convenience functions in Account model to match *transaction_set in group
 - Update code with the new Transaction model
-- Modify Transaction so that we don't automagicly set it as registered, also
-  ensure that entries can only be added to unregistered transactions, thus
-  ensuring data integrity
-- TransactionLog needs to enforce that user is set.
 
 Views:
 - Use decorators to control commit/rollback of transactions
@@ -78,6 +74,10 @@ DONE
   account and amount on Transaction
 - Rename "list item" to "list column" or "list field"?
 - Change NewTransaction to Transaction
+- Modify Transaction so that we don't automagicly set it as registered, also
+  ensure that entries can only be added to unregistered transactions, thus
+  ensuring data integrity
+- TransactionLog needs to enforce that user is set.
 
 WONTFIX
 -------

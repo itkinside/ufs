@@ -263,13 +263,6 @@ class Transaction(models.Model):
     #class Admin:
     #    pass
 
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        message = kwargs.pop('message', '')
-        super(Transaction, self).__init__(*args, **kwargs)
-        self.user = user
-        self.message = message
-
     def __unicode__(self):
         if self.entry_set.all().count():
             return ','.join([str(entry) for entry in self.entry_set.all()])
@@ -299,21 +292,22 @@ class Transaction(models.Model):
 
             super(Transaction, self).save()
 
-            if not self.is_registered():
-                log = TransactionLog(type='Reg', transaction=self)
-                if self.user:
-                    log.user = self.user
-                    self.user = None
-                if self.message.strip() != '':
-                    log.message = self.message.strip()
-                    self.message = ''
-                log.save()
-
         except InvalidTransaction, e:
             transaction.rollback()
             raise e
         else:
             transaction.commit()
+
+    def set_registered(self, user=None, message=''):
+        if not self.is_registered():
+            log = TransactionLog(type='Reg', transaction=self)
+            if user:
+                log.user = user
+            if message.strip() != '':
+                log.message = message
+            log.save()
+        else:
+            raise InvalidTransaction(_('Could not set transaction as registered'))
 
     def set_payed(self, user=None, message=''):
         if not self.is_rejected() and self.is_registered():
@@ -399,10 +393,8 @@ class TransactionLog(models.Model):
     type = models.CharField(_('type'), max_length=3, core=True,
         choices=TRANSACTIONLOG_TYPE)
     timestamp =  models.DateTimeField(_('timestamp'), auto_now_add=True)
-    user = models.ForeignKey(User, verbose_name=_('user'),
-        null=True, blank=True)
-    message = models.CharField(_('message'), max_length=200,
-        blank=True, null=True)
+    user = models.ForeignKey(User, verbose_name=_('user'))
+    message = models.CharField(_('message'), max_length=200, blank=True)
 
     def save(self):
         if self.id is not None:
@@ -435,15 +427,21 @@ class TransactionEntry(models.Model):
         max_digits=10, decimal_places=2, default=0)
 
     def save(self):
+        if self.transaction.is_registered():
+            raise InvalidTransactionEntry(
+                _("Can't add entries to registered transactions"))
+
         if self.debit < 0 or self.credit < 0:
             raise InvalidTransactionEntry(
                 _('Credit and debit must be positive or zero'))
 
         if self.debit > 0 and self.credit > 0:
-            raise InvalidTransactionEntry(_('Only credit or debit may be set'))
+            raise InvalidTransactionEntry(
+                _('Only credit or debit may be set'))
 
         if self.debit == 0 and self.credit == 0:
-            raise InvalidTransactionEntry(_('Create or debit must be positive'))
+            raise InvalidTransactionEntry(
+                _('Create or debit must be positive'))
 
         super(TransactionEntry, self).save()
 
