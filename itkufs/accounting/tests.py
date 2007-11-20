@@ -14,6 +14,8 @@ class GroupTestCase(unittest.TestCase):
     # FIXME: Check more than count in the set tests?
 
     def setUp(self):
+        self.user = User(username='user')
+        self.user.save()
         self.group = Group(name='Group 1', slug='group1')
         self.group.save()
 
@@ -34,16 +36,19 @@ class GroupTestCase(unittest.TestCase):
         for transaction in self.transactions.values():
             transaction.save()
             transaction.entry_set.add(TransactionEntry(
-                account=self.accounts[0], debit=100))
+                account=self.accounts[0], credit=100))
             transaction.entry_set.add(TransactionEntry(
                 account=self.accounts[1], debit=100))
-        self.transactions['Pay'].set_payed()
-        self.transactions['Rec'].set_payed()
-        self.transactions['Rec'].set_received()
-        self.transactions['Rej'].set_rejected()
+
+            transaction.set_registered(user=self.user)
+        self.transactions['Pay'].set_payed(user=self.user)
+        self.transactions['Rec'].set_payed(user=self.user)
+        self.transactions['Rec'].set_received(user=self.user)
+        self.transactions['Rej'].set_rejected(user=self.user)
 
     def tearDown(self):
         self.group.delete()
+        self.user.delete()
         for transaction in self.transactions.values():
             transaction.delete()
 
@@ -116,6 +121,11 @@ class AccountTestCase(unittest.TestCase):
 
 class TransactionTestCase(unittest.TestCase):
     def setUp(self):
+        User.objects.all().delete()
+        self.user = User(username='user')
+        self.user.save()
+
+        Group.objects.all().delete()
         self.group = Group(name='Group 1', slug='group1')
         self.group.save()
 
@@ -134,11 +144,14 @@ class TransactionTestCase(unittest.TestCase):
         self.transaction.entry_set.add(TransactionEntry(
             account=self.accounts[0], debit=100))
         self.transaction.entry_set.add(TransactionEntry(
-            account=self.accounts[1], debit=100))
+            account=self.accounts[1], credit=100))
+
+        self.transaction.set_registered(user=self.user)
 
         self.after = datetime.now()
 
     def tearDown(self):
+        self.user.delete()
         self.transaction.delete()
         for account in self.accounts:
             account.delete()
@@ -159,7 +172,8 @@ class TransactionTestCase(unittest.TestCase):
             account=self.accounts[1], debit=200))
         transaction.entry_set.add(TransactionEntry(
             account=self.accounts[0], credit=100))
-        self.assertRaises(InvalidTransaction, transaction.save)
+        self.assertRaises(InvalidTransaction,
+            transaction.set_registered, user=self.user)
 
     def testAccountOnlyOnceInTransaction(self):
         """Checks that debit accounts are only present once per transaction"""
@@ -174,6 +188,7 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertRaises(IntegrityError, transaction.entry_set.add,
             TransactionEntry(account=self.accounts[1], credit=100))
+
 
     def testRegisteredLogEntry(self):
         """Checks that a registered log entry is created"""
@@ -195,7 +210,7 @@ class TransactionTestCase(unittest.TestCase):
         transaction = self.transaction
 
         before = datetime.now()
-        transaction.set_payed()
+        transaction.set_payed(user=self.user)
         after = datetime.now()
 
         self.assertEqual(transaction.is_registered(), True)
@@ -214,7 +229,7 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(transaction.is_registered(), True)
 
         before = datetime.now()
-        transaction.reject(message='Reason for rejecting')
+        transaction.reject(message='Reason for rejecting', user=self.user)
         after = datetime.now()
 
         self.assertEqual(transaction.is_rejected(), True)
@@ -229,7 +244,7 @@ class TransactionTestCase(unittest.TestCase):
         """Test that rejecting payed transaction fails"""
 
         transaction = self.transaction
-        transaction.set_payed()
+        transaction.set_payed(user=self.user)
 
         #FIXME different error type perhaps?
         self.assertEqual(transaction.is_registered(), True)
@@ -241,10 +256,10 @@ class TransactionTestCase(unittest.TestCase):
         """Checks that we can set a payed transaction as received"""
 
         transaction = self.transaction
-        transaction.set_payed()
+        transaction.set_payed(user=self.user)
 
         before = datetime.now()
-        transaction.set_received()
+        transaction.set_received(user=self.user)
         after = datetime.now()
 
         self.assertEqual(transaction.is_registered(), True)
@@ -260,8 +275,8 @@ class TransactionTestCase(unittest.TestCase):
     def testRejectReceivedTransaction(self):
         """Tests that rejecting received transaction fails"""
         transaction = self.transaction
-        transaction.set_payed()
-        transaction.set_received()
+        transaction.set_payed(user=self.user)
+        transaction.set_received(user=self.user)
 
         self.assertRaises(InvalidTransaction, transaction.reject,
             'Reason for rejecting')
@@ -270,7 +285,7 @@ class TransactionTestCase(unittest.TestCase):
         """Checks that receiving a transaction that is not payed fails"""
         transaction = self.transaction
 
-        self.assertRaises(InvalidTransaction, transaction.set_received)
+        self.assertRaises(InvalidTransaction, transaction.set_received, user=self.user)
 
     def testUserGetsPassedOnToLog(self):
         # FIXME
@@ -278,18 +293,21 @@ class TransactionTestCase(unittest.TestCase):
 
 class LogTestCase(unittest.TestCase):
     def setUp(self):
+        self.user = User(username='user')
+        self.user.save()
         self.transaction = Transaction()
-        self.transaction.save()
+        self.transaction.set_registered(user=self.user)
 
     def tearDown(self):
         self.transaction.delete()
+        self.user.delete()
 
     def testLogEntryUniqePerType(self):
         """Checks that only one log entry of each type is allowed"""
 
         for key, value in TRANSACTIONLOG_TYPE:
-            log1 = TransactionLog(type=key, transaction=self.transaction)
-            log2 = TransactionLog(type=key, transaction=self.transaction)
+            log1 = TransactionLog(type=key, transaction=self.transaction, user=self.user)
+            log2 = TransactionLog(type=key, transaction=self.transaction, user=self.user)
 
             if key != 'Reg':
                 log1.save()
@@ -302,7 +320,7 @@ class LogTestCase(unittest.TestCase):
             self.transaction.log_set.filter(type='Reg')[0].save)
 
         for key, value in TRANSACTIONLOG_TYPE:
-            log1 = TransactionLog(type=key, transaction=self.transaction)
+            log1 = TransactionLog(type=key, transaction=self.transaction, user=self.user)
 
             if key != 'Reg':
                 log1.save()
@@ -310,6 +328,9 @@ class LogTestCase(unittest.TestCase):
 
 class EntryTestCase(unittest.TestCase):
     def setUp(self):
+        self.user = User(username='user')
+        self.user.save()
+
         self.group = Group(name='group1', slug='group1')
         self.group.save()
 
@@ -327,6 +348,7 @@ class EntryTestCase(unittest.TestCase):
         self.transaction.delete()
         self.account.delete()
         self.group.delete()
+        self.user.delete()
 
     def testDebitAndCreditInSameEntry(self):
         """Checks that setting both debit and credit will fail"""

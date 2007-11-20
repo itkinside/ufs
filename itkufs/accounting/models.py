@@ -269,28 +269,20 @@ class Transaction(models.Model):
         else:
             return u'Empty transaction'
 
-
-    @transaction.commit_manually
+    @transaction.commit_manually # TODO check how the state is code fails...
     def save(self):
         try:
-            seen_accounts = []
-            debit_sum = 0
-            credit_sum = 0
+           debit_sum = 0
+           credit_sum = 0
 
-            for entry in self.entry_set.all():
-                if entry.account in seen_accounts:
-                    raise InvalidTransaction(
-                        _('Account is already part of this transaction'))
-                else:
-                    seen_accounts.append(entry.account)
+           for entry in self.entry_set.all():
+               debit_sum += float(entry.debit)
+               credit_sum += float(entry.credit)
 
-                debit_sum += float(entry.debit)
-                credit_sum += float(entry.credit)
+           if debit_sum != credit_sum:
+               raise InvalidTransaction(_('Credit and debit do not match'))
 
-            if debit_sum != credit_sum:
-                raise InvalidTransaction(_('Credit and debit do not match'))
-
-            super(Transaction, self).save()
+           super(Transaction, self).save()
 
         except InvalidTransaction, e:
             transaction.rollback()
@@ -299,6 +291,8 @@ class Transaction(models.Model):
             transaction.commit()
 
     def set_registered(self, user=None, message=''):
+        self.save()
+
         if self.id is None:
             self.save()
 
@@ -403,6 +397,8 @@ class TransactionLog(models.Model):
         if self.id is not None:
             raise InvalidTransactionLog(
                 _('Altering transaction log entries is not allowed'))
+        if self.transaction.id is None:
+            self.transaction.save()
         super(TransactionLog, self).save()
 
     class Meta:
