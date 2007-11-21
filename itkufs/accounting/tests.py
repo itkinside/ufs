@@ -37,12 +37,12 @@ class GroupTestCase(unittest.TestCase):
         }
         for transaction in self.transactions.values():
             transaction.save()
-            transaction.entry_set.add(TransactionEntry(
-                account=self.accounts[0], credit=100))
-            transaction.entry_set.add(TransactionEntry(
-                account=self.accounts[1], debit=100))
-
+            transaction.entry_set.add(
+                TransactionEntry(account=self.accounts[0], credit=100))
+            transaction.entry_set.add(
+                TransactionEntry(account=self.accounts[1], debit=100))
             transaction.set_registered(user=self.user)
+
         self.transactions['Pay'].set_payed(user=self.user)
         self.transactions['Rec'].set_payed(user=self.user)
         self.transactions['Rec'].set_received(user=self.user)

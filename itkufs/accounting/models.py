@@ -269,6 +269,10 @@ class Transaction(models.Model):
         else:
             return u'Empty transaction'
 
+    def debug(self):
+        status = self.log_set.all()
+        return "%s %s" % (self.__unicode__(), status)
+
     @transaction.commit_manually # TODO check how the state is code fails...
     def save(self):
         try:
