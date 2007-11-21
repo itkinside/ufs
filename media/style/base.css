@@ -295,13 +295,13 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 }
 #transactions .details dt {
 	font-weight: normal;
-	width: 8em;
+	width: auto;
 }
 #transactions dd {
 	margin-left: 6.5em;
 }
 #transactions .details dd {
-	margin-left: 8.5em;
+	margin-left: auto;
 }
 #transactions p {
 	margin: 0 !important;

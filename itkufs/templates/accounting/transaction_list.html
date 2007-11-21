@@ -21,8 +21,10 @@
 		{% if not t.is_received %}pending{% endif %}{% endif %}">
 		<td rowspan="{{ t.entry_set.all.count }}" class="status">
 			<dl>
+				{% if t.is_registered %}
 				<dt>Registered:</dt>
 				<dd>{{ t.registered.timestamp|date:"Y-m-d H:i" }}</dd>
+				{% endif %}
 				{% if t.is_payed %}
 				<dt>Payed:</dt>
 				<dd>{{ t.payed.timestamp|date:"Y-m-d H:i" }}</dd>
@@ -59,10 +61,10 @@
 		{% if forloop.first %}
 		<td rowspan="{{ t.entry_set.all.count }}" class="details">
 			<dl>
-				<dt>{{ t.registered.user|default:"(Unknown user)" }}:</dt>
+				<dt>{{ t.registered.user|default:"Unknown" }}: </dt>
 				<dd class="registered">{{ t.registered.message|default:"(None)" }}</dd>
 				{% if t.rejected %}
-				<dt>{{ t.rejected.user|default:"(Unknown user)"}}:</dt>
+				<dt>{{ t.rejected.user|default:"Unknown" }}: </dt>
 				<dd class="rejected">{{ t.rejected.message|default:"(None)" }}</dd>
 				{% endif %}
 			</dl>
