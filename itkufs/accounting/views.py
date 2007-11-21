@@ -431,6 +431,7 @@ def approve(request, group, page="1"):
         return HttpResponseForbidden(_('Sorry, group admins only...'))
 
     # Get related transactions
+    # FIXME
     transactions = Transaction.objects.filter(
         Q(credit_account__group=group) &
         Q(debit_account__group=group) &

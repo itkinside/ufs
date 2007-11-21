@@ -27,6 +27,8 @@ class GroupTestCase(unittest.TestCase):
         for account in self.accounts:
             account.save()
 
+        Transaction.objects.all().delete()
+
         self.transactions = {
             'Reg': Transaction(),
             'Pay': Transaction(),
@@ -52,19 +54,20 @@ class GroupTestCase(unittest.TestCase):
         for transaction in self.transactions.values():
             transaction.delete()
 
+    def testTransactionSet(self):
+        """Checks that transaction_set returns all transactions that is not
+        rejected"""
+
+        set = self.group.transaction_set()
+        self.fail(set)
+        self.assertEqual(set.count(), 3)
+
     def testTransactionSetWithRejected(self):
         """Checks that transaction_set_with_rejected returns all
         transactions"""
 
         set = self.group.transaction_set_with_rejected()
         self.assertEqual(set.count(), 4)
-
-    def testTransactionSet(self):
-        """Checks that transaction_set returns all transactions that is not
-        rejected"""
-
-        set = self.group.transaction_set()
-        self.assertEqual(set.count(), 3)
 
     def testRegisteredTransactionSet(self):
         """Checks that registered_transaction_set returns all registered
