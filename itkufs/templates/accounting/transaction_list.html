@@ -11,9 +11,9 @@
 	<tr>
 		<th>{% trans "Status" %}</th>
 		<th>{% trans "Account" %}</th>
-        <th>{% trans "Credit" %}</th>
-        <th>{% trans "Debit" %}</th>
-        <th>{% trans "Details" %}</th>
+    <th>{% trans "Debit" %}</th>
+    <th>{% trans "Credit" %}</th>
+    <th>{% trans "Details" %}</th>
 	</tr>
 	{% for t in transaction_list %}
 	<tr class="{% cycle 'evenrow' 'oddrow' as trclass %}
@@ -46,14 +46,14 @@
 				{{ e.account.group.name }}: {{e.account.name}}
 			{% endif %}
 		</td>
-		<td class="align_right credit">
-			{% if e.credit %}
-			{{e.credit|stringformat:"0.2f"}}
-			{% endif %}
-		</td>
 		<td class="align_right debit">
 			{% if e.debit %}
 			{{e.debit|stringformat:"0.2f"}}
+			{% endif %}
+		</td>
+		<td class="align_right credit">
+			{% if e.credit %}
+			{{e.credit|stringformat:"0.2f"}}
 			{% endif %}
 		</td>
 		{% if forloop.first %}
