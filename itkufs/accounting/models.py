@@ -300,7 +300,7 @@ class Transaction(models.Model):
             log = TransactionLog(type='Reg', transaction=self)
             if user:
                 log.user = user
-            if message.strip() != '':
+            if message and message.strip() != '':
                 log.message = message
             log.save()
         else:
@@ -385,7 +385,7 @@ TRANSACTIONLOG_TYPE = (
 class TransactionLog(models.Model):
     transaction = models.ForeignKey(Transaction,
         verbose_name=_('transaction'), related_name='log_set',
-        edit_inline=models.TABULAR, num_in_admin=1, max_num_in_admin=4,
+        edit_inline=models.TABULAR, num_in_admin=3, max_num_in_admin=4,
         num_extra_on_change=1)
     type = models.CharField(_('type'), max_length=3, core=True,
         choices=TRANSACTIONLOG_TYPE)

@@ -215,51 +215,61 @@ def transfer(request, group, account=None, transfer_type=None):
         if details == '':
             details = None
 
-        transaction = Transaction(amount=amount, details=details)
+        transaction = Transaction()
+        transaction.save() # FIXME this shouldn't be need if we figure out a reasonable hack
 
         if transfer_type == 'deposit':
             # Deposit to user account
 
-            transaction.credit_account = account
-            transaction.debit_account = group.bank_account
-            transaction.save()
+            transaction.entry_set.add(TransactionEntry(account=account, debit=amount))
+            transaction.entry_set.add(TransactionEntry(account=group.bank_account, credit=amount))
+
+            transaction.set_registered(user=request.user, message=details)
+            transaction.set_payed(user=request.user)
 
         elif transfer_type == 'withdraw':
             # Withdraw from user account
 
-            transaction.credit_account = group.bank_account
-            transaction.debit_account = account
-            transaction.save()
+            transaction.entry_set.add(TransactionEntry(account=account, credit=amount))
+            transaction.entry_set.add(TransactionEntry(account=group.bank_account, debit=amount))
+
+            transaction.set_registered(user=request.user, message=details)
 
         elif transfer_type == 'transfer':
             # Transfer from user account to other user account
 
-            credit_account = form.cleaned_data['credit_account']
+            credit_account = Account.objects.get(id=form.cleaned_data['credit_account'])
 
-            transaction.credit_account = Account.objects.get(
-                id=credit_account)
-            transaction.debit_account = account
+            transaction.entry_set.add(TransactionEntry(account=account, credit=amount))
+            transaction.entry_set.add(TransactionEntry(account=credit_account, debit=amount))
 
-            if transaction.amount <= account.balance_credit_reversed():
-                transaction.payed = datetime.now()
+            transaction.set_registered(user=request.user, message=details)
 
-            transaction.save()
+            if amount <= account.balance_credit_reversed():
+                transaction.set_payed(user=request.user)
+                transaction.set_received(user=request.user)
 
         elif transfer_type == 'register' and is_admin:
             # General transaction by group admin
+            # FIXME needs alot more sanity checking
 
-            credit_account = form.cleaned_data['credit_account']
-            debit_account = form.cleaned_data['debit_account']
+            credit_account = Account.objects.get(
+                id=form.cleaned_data['credit_account'])
+            debit_account = Account.objects.get(
+                id=form.cleaned_data['debit_account'])
 
-            transaction.credit_account = Account.objects.get(
-                id=credit_account)
-            transaction.debit_account = Account.objects.get(
-                id=debit_account)
+            # FIXME check that i havent mixed up debit/credit
+            transaction.entry_set.add(TransactionEntry(account=debit_account, debit=amount))
+            transaction.entry_set.add(TransactionEntry(account=credit_account, credit=amount))
+
+            transaction.set_registered(user=request.user, message=details)
 
             if 'payed' in form.data:
-                transaction.payed = datetime.now()
+                transaction.set_payed(user=request.user)
 
-            transaction.save()
+            if 'received' in form.data:
+                transaction.set_received(user=request.user)
+
             return HttpResponseRedirect(reverse(group_summary,
                 args=[group.slug]))
         else:
