@@ -308,10 +308,7 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 	padding: 0 !important;
 }
 #transactions .rejected a,
-#transactions .rejected {
-	color: #C66
-}
-#transactions .rejected .registered,
+#transactions .rejected, 
 #transactions .pending a,
 #transactions .pending {
 	color: gray;
@@ -324,3 +321,14 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 #transactions .rejected .credit {
 	text-decoration: line-through;
 }
+
+/* new list page */
+#new_list fieldset {
+	float: left;
+	margin-right: 2em;
+}
+#list_columns input {
+	width: auto;
+	background: transparent;
+}
+

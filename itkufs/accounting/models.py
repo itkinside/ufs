@@ -304,7 +304,7 @@ class Transaction(models.Model):
             log = TransactionLog(type='Reg', transaction=self)
             if user:
                 log.user = user
-            if message and message.strip() != '':
+            if message is not None and message.strip() != '':
                 log.message = message
             log.save()
         else:

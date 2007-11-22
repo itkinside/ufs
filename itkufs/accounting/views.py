@@ -11,6 +11,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _, ungettext
 from django.views.generic.list_detail import object_list
+from django.views.generic.create_update import create_object, update_object, delete_object
 
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
@@ -400,12 +401,41 @@ def income(request, group):
                               context_instance=RequestContext(request))
 
 @login_required
+def new_list(request, group):
+    try:
+        group = Group.objects.get(slug=group)
+    except Group.DoesNotExist:
+        raise Http404
+
+    if group.admins.filter(id=request.user.id).count():
+        is_admin = True
+    else:
+        return HttpResponseForbidden(_('Sorry, group admins only...'))
+
+    if request.method == 'POST':
+        if u'group' in request.POST:
+            if group.id != int(request.POST['group']):
+                return HttpResponseForbidden(_('Sorry, group admins only...'))
+        else:
+            raise Exception()
+
+    context={
+        'is_admin': is_admin,
+        'group': group,
+    }
+
+    return create_object(request, model=List, extra_context=context,
+        post_save_redirect=reverse('itkufs.accounting.views.group_summary',
+        args=(group.slug,)))
+
+@login_required
 def html_list(request, group, slug):
+    # TODO Limit to correct group...
     try:
         group = Group.objects.get(slug=group)
         accounts = Account.objects.filter(group=group)
         list = group.list_set.get(slug=slug)
-    except Group.DoesNotExist, Group.DoesNotExist:
+    except Group.DoesNotExist, List.DoesNotExist:
         raise Http404
 
     response = render_to_response('accounting/list.html',
@@ -415,6 +445,7 @@ def html_list(request, group, slug):
                                   'list': list,
                               },
                               context_instance=RequestContext(request))
+
     populate_xheaders(request, response, List, list.id)
     return response
 

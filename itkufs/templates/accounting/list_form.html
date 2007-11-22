@@ -1,0 +1,43 @@
+{% extends "accounting/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<form action="." method="post" id="new_list">
+<fieldset>
+<p>
+    <label>Name:</label> {{ form.name }}
+</p>
+<p>
+    <label>Slug:</label> {{ form.slug }}
+</p>
+<p>
+    <label>Account:</label> {{ form.account_width }}
+</p>
+<p>
+    <label>Balance:</label> {{ form.balance_width }}
+    <input type="hidden" name="group" value="{{ group.id }}" />
+</p>
+</fieldset>
+<fieldset>
+<table id="list_columns" class="tablelist">
+    <thead>
+        <tr>
+            <th>Name</th> <th>Width</th> <th>Order</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for column in form.listcolumn %}
+        <tr class="{% cycle evenrow,oddrow %}">
+            <td class="name">{{ column.name }}</td>
+            <td class="width">{{ column.width }}</td>
+            <td class="order">{{ column.order }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</fieldset>
+<p>
+<button type="submit">Create list</button>
+</p>
+</form>
+{% endblock %}

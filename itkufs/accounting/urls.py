@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from django.views.generic import create_update
 from itkufs.accounting.views import *
 
 urlpatterns = patterns('',
@@ -35,14 +36,15 @@ urlpatterns = patterns('',
         group_summary, name='group-summary-page'),
 
     # Lists
+    url(r'^(?P<group>[0-9a-z_-]+)/list/new/$',
+        new_list, name='new-list'),
+    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/edit/$',
+        html_list, {'type': 'delete'}, name='edit-list'),
+    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/delete/$',
+        html_list, {'type': 'delete'}, name='delete-list'),
+
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/$',
         html_list, name='view-list'),
-    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/new/$',
-        html_list, name='new-list'),
-    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/edit/$',
-        html_list, name='edit-list'),
-    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/delete/$',
-        html_list, name='delete-list'),
 
     # Admin: Transactions
     url(r'^(?P<group>[0-9a-z_-]+)/approve/$',

@@ -67,7 +67,7 @@ class BaseTransactionForm(forms.Form):
             self.fields['credit_account'].choices = _get_choices(credit_options)
 
     def clean(self):
-        if self.data.has_key('debit_account') and self.data.has_key('credit_account'):
+        if 'debit_account' in self.data and 'credit_account' in self.data:
             if self.data['debit_account'] == self.data['credit_account']:
                 raise ValidationError(_('Credit and debit is same account'))
 
