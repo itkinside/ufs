@@ -82,15 +82,15 @@
 <p>{% trans "No accounts found." %}</p>
 {% else %}
 
-<h2>{% trans "Accounts" %}
+<h3>{% trans "Accounts" %}
     <a href="{% url new-account group.slug %}">
         <img  src="{% url media "images/icons/text-x-generic-new.png" %}" alt="{% trans "Edit"%}" title="{% trans "Edit"%}"/>
     </a>
-</h2>
+</h3>
 
 <div class="coltwo">
-<h3>{% trans "User accounts" %}</h3>
 <table class="tablelist">
+    <caption>{% trans "User accounts" %}</caption>
     <tr>
         <th>{% trans "Account" %}</th>
         <th>{% trans "Type" %}</th>
@@ -106,8 +106,8 @@
 </table>
 </div>
 <div class="coltwo">
-<h2>{% trans "Group accounts" %}</h2>
 <table class="tablelist">
+    <caption>{% trans "Group accounts" %}</caption>
     <tr>
         <th>{% trans "Account" %}</th>
         <th>{% trans "Type" %}</th>
