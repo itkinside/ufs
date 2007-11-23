@@ -401,9 +401,13 @@ def income(request, group):
                               context_instance=RequestContext(request))
 
 @login_required
-def alter_list(request, group, slug=None):
+def alter_list(request, group, slug=None, type='new'):
+    # May this function could be made more genric so that it can limit acces
+    # to generic views for any object?
     try:
         group = Group.objects.get(slug=group)
+        if slug:
+            id = group.list_set.get(slug=slug).id
     except Group.DoesNotExist:
         raise Http404
 
@@ -424,12 +428,16 @@ def alter_list(request, group, slug=None):
         'group': group,
     }
 
-    if slug:
-        return update_object(request, model=List, extra_context=context, slug=slug,
+    if type == 'edit':
+        return update_object(request, model=List, extra_context=context, object_id=id,
             post_save_redirect='.')
-    else:
+    elif type == 'new':
         return create_object(request, model=List, extra_context=context,
             post_save_redirect=reverse('itkufs.accounting.views.group_summary',
+            args=(group.slug,)))
+    elif type == 'delete':
+        return delete_object(request, model=List, extra_context=context, object_id=id,
+            post_delete_redirect=reverse('itkufs.accounting.views.group_summary',
             args=(group.slug,)))
 
 @login_required

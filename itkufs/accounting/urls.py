@@ -37,11 +37,11 @@ urlpatterns = patterns('',
 
     # Lists
     url(r'^(?P<group>[0-9a-z_-]+)/list/new/$',
-        alter_list, name='new-list'),
+        alter_list, {'type': 'new'}, name='new-list'),
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/edit/$',
-        alter_list, name='edit-list'),
+        alter_list, {'type': 'edit'}, name='edit-list'),
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/delete/$',
-        alter_list, name='delete-list'),
+        alter_list, {'type': 'delete'}, name='delete-list'),
 
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/$',
         html_list, name='view-list'),

@@ -26,13 +26,13 @@ Views & Templates:
 New features:
 - Settlement
   * Invoice
-- Admin rejection of user claims, using TransactionMessage
+- Admin rejection of user claims, using TransactionMessage, only missing
+  emails, but perhaps messages is enough?
 - Account management, optionally connect with users
 
 SHOULD HAVE
 -----------
 
-- Admin should be able to edit lists (adamcik)
 - Respect active flag for accounts, or at least indicate that account is
   inactive
 
@@ -78,6 +78,7 @@ DONE
   ensure that entries can only be added to unregistered transactions, thus
   ensuring data integrity
 - TransactionLog needs to enforce that user is set.
+- Admin should be able to edit lists (adamcik)
 
 WONTFIX
 -------

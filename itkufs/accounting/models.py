@@ -497,7 +497,7 @@ class ListColumn(models.Model):
     width = models.PositiveSmallIntegerField(_('width'))
     order = models.PositiveSmallIntegerField(_('order'))
     list = models.ForeignKey(List, verbose_name=_('list'),
-        edit_inline=models.TABULAR, num_in_admin=5, related_name='column_set')
+        edit_inline=models.TABULAR, num_in_admin=5, num_extra_on_change=3, related_name='column_set')
 
     class Meta:
         ordering = ['order']
