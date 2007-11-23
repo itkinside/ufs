@@ -449,7 +449,7 @@ def html_list(request, group, slug):
         group = Group.objects.get(slug=group)
         accounts = Account.objects.filter(group=group)
         list = group.list_set.get(slug=slug)
-    except Group.DoesNotExist, List.DoesNotExist:
+    except (Group.DoesNotExist, List.DoesNotExist):
         raise Http404
 
     response = render_to_response('accounting/list.html',
