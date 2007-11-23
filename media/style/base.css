@@ -211,7 +211,10 @@ em {
 	color: #df8713;
 }
 .error, .blocked {
-color: #a10000;
+ color: #a10000;
+}
+.error input {
+	border: 1px solid #a10000;
 }
 
 /* Columns */

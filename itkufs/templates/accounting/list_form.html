@@ -4,15 +4,47 @@
 {% block content %}
 <form action="." method="post" id="new_list">
 <fieldset>
+{% if form.name.errors %}
+<ul class="errorlist">
+   {% for error in form.name.errors %}
+	<li>{{ error }}</li>
+   {% endfor%}
+</ul>
+{% endif %}
 <p>
     <label>Name:</label> {{ form.name }}
 </p>
+
+{% if form.slug.errors %}
+<ul class="errorlist">
+   {% for error in form.slug.errors %}
+	<li>{{ error }}</li>
+   {% endfor%}
+</ul>
+{% endif %}
+
 <p>
     <label>Slug:</label> {{ form.slug }}
 </p>
+
+{% if form.account_width.errors %}
+<ul class="errorlist">
+   {% for error in form.account_width.errors %}
+	<li>{{ error }}</li>
+   {% endfor%}
+</ul>
+{% endif %}
 <p>
     <label>Account:</label> {{ form.account_width }}
 </p>
+
+{% if form.balance_width.errors %}
+<ul class="errorlist">
+   {% for error in form.balance_width.errors %}
+	<li>{{ error }}</li>
+   {% endfor%}
+</ul>
+{% endif %}
 <p>
     <label>Balance:</label> {{ form.balance_width }}
     <input type="hidden" name="group" value="{{ group.id }}" />
@@ -20,24 +52,20 @@
 </fieldset>
 <fieldset>
 <table id="list_columns" class="tablelist">
-    <thead>
-        <tr>
-            <th>Name</th> <th>Width</th> <th>Order</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for column in form.listcolumn %}
-        <tr class="{% cycle evenrow,oddrow %}">
-            <td class="name">{{ column.name }}</td>
-            <td class="width">{{ column.width }}</td>
-            <td class="order">{{ column.order }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+    <tr>
+        <th>Name</th> <th>Width</th> <th>Order</th>
+    </tr>
+    {% for column in form.listcolumn %}
+    <tr class="{% cycle evenrow,oddrow %}">
+        <td{% if column.name.errors %} class="error"{% endif %}>{{ column.name }}</td>
+        <td{% if column.width.errors %} class="error"{% endif %}>{{ column.width }}</td>
+        <td{% if column.order.errors %} class="error"{% endif %}>{{ column.order }}</td>
+    </tr>
+    {% endfor %}
 </table>
 </fieldset>
 <p>
-<button type="submit">Create list</button>
+<button type="submit">{% if object.id %}Update list{% else %}Create list{% endif %}</button>
 </p>
 </form>
 {% endblock %}
