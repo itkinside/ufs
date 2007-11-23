@@ -36,7 +36,7 @@ urlpatterns = patterns('',
         group_summary, name='group-summary-page'),
 
     # Lists
-    url(r'^(?P<group>[0-9a-z_-]+)/list/new/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/list/$',
         alter_list, {'type': 'new'}, name='new-list'),
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/edit/$',
         alter_list, {'type': 'edit'}, name='edit-list'),

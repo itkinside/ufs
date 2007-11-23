@@ -428,17 +428,19 @@ def alter_list(request, group, slug=None, type='new'):
         'group': group,
     }
 
-    if type == 'edit':
-        return update_object(request, model=List, extra_context=context, object_id=id,
-            post_save_redirect='.')
-    elif type == 'new':
+    redirect = reverse('itkufs.accounting.views.group_summary',args=(group.slug,))
+
+    if type == 'new':
         return create_object(request, model=List, extra_context=context,
-            post_save_redirect=reverse('itkufs.accounting.views.group_summary',
-            args=(group.slug,)))
+            post_save_redirect=redirect)
+
+    elif type == 'edit':
+        return update_object(request, model=List, extra_context=context, object_id=id,
+            post_save_redirect=redirect)
+
     elif type == 'delete':
         return delete_object(request, model=List, extra_context=context, object_id=id,
-            post_delete_redirect=reverse('itkufs.accounting.views.group_summary',
-            args=(group.slug,)))
+            post_delete_redirect=redirect)
 
 @login_required
 def html_list(request, group, slug):
