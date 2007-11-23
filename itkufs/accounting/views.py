@@ -401,7 +401,7 @@ def income(request, group):
                               context_instance=RequestContext(request))
 
 @login_required
-def new_list(request, group):
+def alter_list(request, group, slug=None):
     try:
         group = Group.objects.get(slug=group)
     except Group.DoesNotExist:
@@ -424,9 +424,13 @@ def new_list(request, group):
         'group': group,
     }
 
-    return create_object(request, model=List, extra_context=context,
-        post_save_redirect=reverse('itkufs.accounting.views.group_summary',
-        args=(group.slug,)))
+    if slug:
+        return update_object(request, model=List, extra_context=context, slug=slug,
+            post_save_redirect='.')
+    else:
+        return create_object(request, model=List, extra_context=context,
+            post_save_redirect=reverse('itkufs.accounting.views.group_summary',
+            args=(group.slug,)))
 
 @login_required
 def html_list(request, group, slug):

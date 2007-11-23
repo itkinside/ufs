@@ -57,6 +57,7 @@
     </tr>
     {% for column in form.listcolumn %}
     <tr class="{% cycle evenrow,oddrow %}">
+    	{{ column.id }}
         <td{% if column.name.errors %} class="error"{% endif %}>{{ column.name }}</td>
         <td{% if column.width.errors %} class="error"{% endif %}>{{ column.width }}</td>
         <td{% if column.order.errors %} class="error"{% endif %}>{{ column.order }}</td>

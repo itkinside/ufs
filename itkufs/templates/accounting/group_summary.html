@@ -53,9 +53,9 @@
 <ul>
     {% for list in group.list_set.all %}
     <li>
-      <a href="{% url view-list group.slug,list.slug %}">{{ list.name }}</a>
-      <!--[<a href="{% url edit-list group.slug,list.slug %}">{% trans "Edit"%}</a>,
-       <a href="{% url delete-list group.slug,list.slug %}">{% trans "Delete"%}</a>]-->
+      <a href="{% url view-list group.slug,list.slug %}">{{ list.name }}</a>,
+      <a href="{% url edit-list group.slug,list.slug %}">{% trans "Edit"%}</a>,
+      <a href="{% url delete-list group.slug,list.slug %}">{% trans "Delete"%}</a>
     </li>
     {% endfor %}
     <li>[<a href="{% url new-list group.slug %}">{% trans "New"%}</a>]</li>
