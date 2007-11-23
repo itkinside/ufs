@@ -428,7 +428,7 @@ def alter_list(request, group, slug=None, type='new'):
         'group': group,
     }
 
-    redirect = reverse('itkufs.accounting.views.group_summary',args=(group.slug,))
+    redirect = reverse('group-summary',args=(group.slug,))
 
     if type == 'new':
         return create_object(request, model=List, extra_context=context,
@@ -439,6 +439,9 @@ def alter_list(request, group, slug=None, type='new'):
             post_save_redirect=redirect)
 
     elif type == 'delete':
+        if request.method == 'POST' and request.POST['submit'] != 'yes':
+            return HttpResponseRedirect(redirect)
+
         return delete_object(request, model=List, extra_context=context, object_id=id,
             post_delete_redirect=redirect)
 

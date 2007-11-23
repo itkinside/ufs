@@ -52,9 +52,6 @@
 
 <div id="lists">
 <h3>{% trans "Lists" %}</h3>
-{% if not group.list_set.count %}
-<p>{% trans "No lists configured for this group." %}</p>
-{% else %}
 <ul>
     {% for list in group.list_set.all %}
     <li>
@@ -68,11 +65,13 @@
       </a>
     </li>
     {% endfor %}
-    <li><a href="{% url new-list group.slug %}">
-        <img src="{% url media "images/icons/text-x-generic-new.png" %}" alt="{% trans "New"%}" title="{% trans "New"%}"/>
-    </a></li>
+    <li>
+        ({% trans "Create new list" %})
+        <a href="{% url new-list group.slug %}">
+           <img src="{% url media "images/icons/text-x-generic-new.png" %}" alt="{% trans "New"%}" title="{% trans "New"%}"/>
+        </a>
+    </li>
 </ul>
-{% endif %}
 </div>
 
 {% if is_admin %}
