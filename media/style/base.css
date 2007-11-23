@@ -58,6 +58,9 @@ a {
 em {
 	font-style: italic;
 }
+img {
+	vertical-align: text-bottom;
+}
 
 /* Page container */
 #container {
@@ -269,10 +272,6 @@ button {
 	margin-left: 0 !important;
 	margin-right: 0.5em;
 }
-table + p button {
-	margin-left: auto !important;
-	margin-right: auto !important;
-}
 input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 	width: auto;
 	border: 0;
@@ -326,12 +325,7 @@ input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
 }
 
 /* new list page */
-#new_list fieldset {
-	float: left;
-	margin-right: 2em;
-}
-#list_columns input {
+#listcolumns input {
 	width: auto;
 	background: transparent;
 }
-

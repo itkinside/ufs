@@ -3,7 +3,6 @@
 
 {% block content %}
 <form action="." method="post" id="new_list">
-<fieldset>
 {% if form.name.errors %}
 <ul class="errorlist">
    {% for error in form.name.errors %}
@@ -49,9 +48,9 @@
     <label>Balance:</label> {{ form.balance_width }}
     <input type="hidden" name="group" value="{{ group.id }}" />
 </p>
-</fieldset>
-<fieldset>
-<table id="list_columns" class="tablelist">
+
+<p><label>Columns:</label></p>
+<table id="listcolumns" class="tablelist">
     <tr>
         <th>Name</th> <th>Width</th> <th>Order</th>
     </tr>
@@ -64,7 +63,6 @@
     </tr>
     {% endfor %}
 </table>
-</fieldset>
 <p>
 <button type="submit">{% if object.id %}Update list{% else %}Create list{% endif %}</button>
 </p>
