@@ -1,5 +1,4 @@
 from django.conf.urls.defaults import *
-from django.views.generic import create_update
 from itkufs.accounting.views import *
 
 urlpatterns = patterns('',
@@ -35,17 +34,6 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/(?P<page>\d+)/$',
         group_summary, name='group-summary-page'),
 
-    # Lists
-    url(r'^(?P<group>[0-9a-z_-]+)/list/$',
-        alter_list, {'type': 'new'}, name='new-list'),
-    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/edit/$',
-        alter_list, {'type': 'edit'}, name='edit-list'),
-    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/delete/$',
-        alter_list, {'type': 'delete'}, name='delete-list'),
-
-    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/$',
-        html_list, name='view-list'),
-
     # Admin: Transactions
     url(r'^(?P<group>[0-9a-z_-]+)/approve/$',
         approve, name='approve-transactions'),
@@ -53,16 +41,4 @@ urlpatterns = patterns('',
         approve, name='approve-transactions-page'),
     url(r'^(?P<group>[0-9a-z_-]+)/register/$',
         transfer, {'transfer_type': 'register'}, name='register-transactions'),
-
-    # Admin: Settlements
-    url(r'^(?P<group>[0-9a-z_-]+)/settlement/$',
-        settlement_summary, name='settlement-summary'),
-    url(r'^(?P<group>[0-9a-z_-]+)/settlement/(?P<page>\d+)/$',
-        settlement_summary, name='settlement-summary-page'),
-
-    # Admin: Statements
-    url(r'^(?P<group>[0-9a-z_-]+)/balance/$',
-        balance, name='balance'),
-    url(r'^(?P<group>[0-9a-z_-]+)/income/$',
-        income, name='income'),
 )

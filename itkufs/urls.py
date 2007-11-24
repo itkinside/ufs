@@ -16,6 +16,7 @@ urlpatterns = patterns('',
 
     (r'^inventory/', include('itkufs.inventory.urls')),
     (r'^', include('itkufs.accounting.urls')),
+    (r'^', include('itkufs.reports.urls')),
 
 
     # Only reached using test server, but always used

@@ -88,6 +88,7 @@ INSTALLED_APPS = (
     'django.contrib.databrowse',
     'itkufs.accounting',
     'itkufs.inventory',
+    'itkufs.reports',
 )
 
 # Session
