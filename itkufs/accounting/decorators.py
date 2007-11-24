@@ -1,5 +1,5 @@
 from django.utils.translation import ugettext as _, ungettext
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, Http404
 
 from itkufs.accounting.models import *
 

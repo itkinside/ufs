@@ -33,6 +33,8 @@ urlpatterns = patterns('',
         group_summary, name='group-summary'),
     url(r'^(?P<group>[0-9a-z_-]+)/(?P<page>\d+)/$',
         group_summary, name='group-summary-page'),
+    url(r'^(?P<group>[0-9a-z_-]+)/edit/$',
+        alter_group, name='edit-group'),
 
     # Admin: Transactions
     url(r'^(?P<group>[0-9a-z_-]+)/approve/$',

@@ -7,9 +7,11 @@ from django.core.urlresolvers import reverse
 from django.core.xheaders import populate_xheaders
 from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
+from django.newforms import form_for_instance
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _, ungettext
+from django.views.generic.create_update import update_object
 from django.views.generic.list_detail import object_list
 
 from itkufs.accounting.decorators import *
@@ -345,5 +347,35 @@ def static_page(request, group, template, is_admin=False):
                               {
                                   'group': group,
                                   'is_admin': is_admin,
+                              },
+                              context_instance=RequestContext(request))
+
+@login_required
+@is_group_admin
+def alter_group(request, group, slug=None, is_admin=False):
+    if not is_admin:
+        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
+
+    try:
+        group = Group.objects.get(slug=group)
+    except Group.DoesNotExist:
+        raise Http404
+
+    GroupInstanceForm = form_for_instance(group)
+
+    if request.method == 'POST':
+        form = GroupInstanceForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('group-summary', args=(group.slug,)))
+    else:
+        form = GroupInstanceForm()
+
+
+    return render_to_response('accounting/group_form.html',
+                              {
+                                'is_admin': is_admin,
+                                'group': group,
+                                'form': form,
                               },
                               context_instance=RequestContext(request))
