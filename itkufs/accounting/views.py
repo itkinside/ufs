@@ -247,7 +247,6 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
 
         elif transfer_type == 'register' and is_admin:
             # General transaction by group admin
-            # FIXME needs alot more sanity checking
 
             credit_account = Account.objects.get(
                 id=form.cleaned_data['credit_account'])
@@ -258,11 +257,14 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
             transaction.entry_set.add(TransactionEntry(account=debit_account, debit=amount))
             transaction.entry_set.add(TransactionEntry(account=credit_account, credit=amount))
 
-            transaction.set_registered(user=request.user, message=details)
+            if 'registered' in form.data:
+                transaction.set_registered(user=request.user, message=details)
 
-            if 'payed' in form.data:
+            # FIXME sanity check please
+            if 'payed' in form.data: # and debit_account.group.admins.filter(id=request.user.id).count # elns
                 transaction.set_payed(user=request.user)
 
+            # FIXME sanity check please
             if 'received' in form.data:
                 transaction.set_received(user=request.user)
 

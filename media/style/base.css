@@ -280,7 +280,8 @@ button {
 	margin-left: 0 !important;
 	margin-right: 0.5em;
 }
-input#id_payed, #accounting_approve_transactions table input { /* checkboxes */
+input#id_payed, #accounting_approve_transactions table input,
+input#id_registered, input#id_received { /* checkboxes */
 	width: auto;
 	border: 0;
 }

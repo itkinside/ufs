@@ -77,7 +77,9 @@ class TransactionForm(BaseTransactionForm):
     debit_account = GroupedChoiceField(label=_('Debit'), required=True)
     credit_account = GroupedChoiceField(label=_('Credit'), required=True)
     amount = amount_field
+    registered = forms.BooleanField(label=_('Registered'), required=False)
     payed = forms.BooleanField(label=_('Payed'), required=False)
+    received = forms.BooleanField(label=_('Received'), required=False)
     details = details_field
 
 class DepositWithdrawForm(forms.Form):
