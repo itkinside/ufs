@@ -168,6 +168,9 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
     except (Group.DoesNotExist, Account.DoesNotExist):
         raise Http404
 
+    if transfer_type != 'register' and account.owner != request.user:
+        return HttpResponseForbidden(_('This page is only available to the owner of the account'))
+
     if request.method == 'POST':
         data = request.POST
     else:
