@@ -273,6 +273,8 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
         else:
             return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
+        request.user.message_set.create(message='Added transaction: %s' % transaction)
+
         return HttpResponseRedirect(reverse(account_summary,
             args=[account.group.slug, account.slug]))
 
