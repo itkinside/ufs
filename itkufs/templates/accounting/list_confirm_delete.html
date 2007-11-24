@@ -1,0 +1,15 @@
+{% extends "accounting/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<form method="post" action="." class="plainform">
+<input type="hidden" name="group" value="{{ group.id }}" />
+
+Are you sure you want to delete {{ group.name }}'s list {{ object.name}}?
+
+<button type="submit" name="submit" value="yes">Yes</button>
+<button type="submit" name="submit" value="no">No</button>
+
+</form>
+
+{% endblock %}
