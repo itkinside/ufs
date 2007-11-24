@@ -13,6 +13,7 @@ from django.utils.translation import ugettext as _, ungettext
 from django.views.generic.list_detail import object_list
 from django.views.generic.create_update import create_object, update_object, delete_object
 
+from itkufs.accounting.decorators import *
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
 
@@ -56,20 +57,17 @@ def group_list(request):
                               context_instance=RequestContext(request))
 
 @login_required
-def group_summary(request, group, page='1'):
+@is_group_admin
+def group_summary(request, group, page='1', is_admin=False):
     """Account group summary and paginated list of accounts"""
+    if not is_admin:
+        return HttpResponseForbidden(_('Sorry, group admins only...'))
 
     # Get account group
     try:
         group = Group.objects.get(slug=group)
     except Group.DoesNotExist:
         raise Http404
-
-    if group.admins.filter(id=request.user.id).count():
-        is_admin = True
-    else:
-        is_admin = False
-        return HttpResponseForbidden(_('Sorry, group admins only...'))
 
     # Get related transactions
     accounts = Account.objects.filter(group=group)
@@ -98,7 +96,8 @@ def group_summary(request, group, page='1'):
     return response
 
 @login_required
-def account_summary(request, group, account, page='1'):
+@is_group_admin
+def account_summary(request, group, account, page='1', is_admin=False):
     """Account details and a paginated list with recent transactions involving
     the user"""
 
@@ -108,6 +107,11 @@ def account_summary(request, group, account, page='1'):
         account = group.account_set.get(slug=account)
     except (Group.DoesNotExist, Account.DoesNotExist):
         raise Http404
+
+    # Check that user is owner of account or admin of account group
+    if request.user.id != account.owner.id and not is_admin:
+        return HttpResponseForbidden(_('Forbidden'))
+
 
     # Save account in session
     # I think it's a bit of hack to switch account when the referrer is the
@@ -119,13 +123,6 @@ def account_summary(request, group, account, page='1'):
     if request.user == account.owner:
         request.session['my_account'] = account
 
-    # Check that user is owner of account or admin of account group
-    if group.admins.filter(id=request.user.id).count():
-        is_admin = True
-    elif request.user.id == account.owner.id:
-        is_admin = False
-    else:
-        return HttpResponseForbidden(_('Forbidden'))
 
     # Get related transactions
     # FIXME order by registered
@@ -160,7 +157,8 @@ def account_summary(request, group, account, page='1'):
     return response
 
 @login_required
-def transfer(request, group, account=None, transfer_type=None):
+@is_group_admin
+def transfer(request, group, account=None, transfer_type=None, is_admin=False):
     """Deposit, withdraw or transfer money"""
 
     # Get account object
@@ -170,11 +168,6 @@ def transfer(request, group, account=None, transfer_type=None):
             account = group.account_set.get(slug=account)
     except (Group.DoesNotExist, Account.DoesNotExist):
         raise Http404
-
-    if group.admins.filter(id=request.user.id).count():
-        is_admin = True
-    else:
-        is_admin = False
 
     if request.method == 'POST':
         data = request.POST
@@ -291,18 +284,16 @@ def transfer(request, group, account=None, transfer_type=None):
                               context_instance=RequestContext(request))
 
 @login_required
-def balance(request, group):
+@is_group_admin
+def balance(request, group, is_admin=False):
     """Show balance sheet for the group"""
+    if not is_admin:
+        return HttpResponseForbidden(_('Sorry, group admins only...'))
 
     try:
         group = Group.objects.get(slug=group)
     except Group.DoesNotExist:
         raise Http404
-
-    if group.admins.filter(id=request.user.id).count():
-        is_admin = True
-    else:
-        return HttpResponseForbidden(_('Sorry, group admins only...'))
 
     # Balance sheet data struct
     accounts = {
@@ -356,8 +347,11 @@ def balance(request, group):
                               context_instance=RequestContext(request))
 
 @login_required
-def income(request, group):
+@is_group_admin
+def income(request, group, is_admin=False):
     """Show income statement for group"""
+    if not is_admin:
+        return HttpResponseForbidden(_('Sorry, group admins only...'))
 
     try:
         group = Group.objects.get(slug=group)
@@ -401,7 +395,11 @@ def income(request, group):
                               context_instance=RequestContext(request))
 
 @login_required
-def alter_list(request, group, slug=None, type='new'):
+@is_group_admin
+def alter_list(request, group, slug=None, type='new', is_admin=False):
+    if not is_admin:
+        return HttpResponseForbidden(_('Sorry group admins only.'))
+
     # May this function could be made more genric so that it can limit acces
     # to generic views for any object?
     try:
@@ -410,11 +408,6 @@ def alter_list(request, group, slug=None, type='new'):
             id = group.list_set.get(slug=slug).id
     except Group.DoesNotExist:
         raise Http404
-
-    if group.admins.filter(id=request.user.id).count():
-        is_admin = True
-    else:
-        return HttpResponseForbidden(_('Sorry, group admins only...'))
 
     if request.method == 'POST':
         if u'group' in request.POST:
@@ -467,16 +460,15 @@ def html_list(request, group, slug):
     return response
 
 @login_required
-def approve(request, group, page="1"):
+@is_group_admin
+def approve(request, group, page="1", is_admin=False):
+    if not is_admin:
+        return HttpResponseForbidden(_('Sorry, group admins only...'))
     try:
         group = Group.objects.get(slug=group)
     except Group.DoesNotExist:
         raise Http404
 
-    if group.admins.filter(id=request.user.id).count():
-        is_admin = True
-    else:
-        return HttpResponseForbidden(_('Sorry, group admins only...'))
 
     # Get related transactions
     # FIXME
@@ -512,30 +504,25 @@ def approve(request, group, page="1"):
                        template_object_name='transaction')
 
 @login_required
-def settlement_summary(request, group, page="1"):
+@is_group_admin
+def settlement_summary(request, group, page="1", is_admin=False):
+    if not is_admin:
+        return HttpResponseForbidden(_('Sorry, group admins only...'))
     try:
         group = Group.objects.get(slug=group)
     except Group.DoesNotExist:
         raise Http404
 
-    if group.admins.filter(id=request.user.id).count():
-        is_admin = True
-    else:
-        return HttpResponseForbidden(_('Sorry, group admins only...'))
 
     # FIXME: Finish view
 
 @login_required
-def static_page(request, group, template):
+@is_group_admin
+def static_page(request, group, template, is_admin=False):
     try:
         group = Group.objects.get(slug=group)
     except Group.DoesNotExist:
         raise Http404
-
-    if group.admins.filter(id=request.user.id).count():
-        is_admin = True
-    else:
-        is_admin = False
 
     return render_to_response(template,
                               {
