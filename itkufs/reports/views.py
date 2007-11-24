@@ -14,6 +14,7 @@ from itkufs.accounting.models import *
 from itkufs.reports.models import *
 
 @login_required
+@limit_to_group
 def html_list(request, group, slug):
     # TODO Limit to correct group...
     try:
