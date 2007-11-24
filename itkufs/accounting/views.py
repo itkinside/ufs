@@ -61,7 +61,7 @@ def group_list(request):
 def group_summary(request, group, page='1', is_admin=False):
     """Account group summary and paginated list of accounts"""
     if not is_admin:
-        return HttpResponseForbidden(_('Sorry, group admins only...'))
+        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
     # Get account group
     try:
@@ -200,7 +200,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
         title = _('Withdrawal from account')
         form = DepositWithdrawForm(data)
     else:
-        return HttpResponseForbidden(_('Sorry, group admins only...'))
+        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
     if request.method == 'POST' and form.is_valid():
         amount = form.cleaned_data['amount']
@@ -267,7 +267,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
             return HttpResponseRedirect(reverse(group_summary,
                 args=[group.slug]))
         else:
-            return HttpResponseForbidden(_('Sorry, group admins only...'))
+            return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
         return HttpResponseRedirect(reverse(account_summary,
             args=[account.group.slug, account.slug]))
@@ -288,7 +288,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
 def balance(request, group, is_admin=False):
     """Show balance sheet for the group"""
     if not is_admin:
-        return HttpResponseForbidden(_('Sorry, group admins only...'))
+        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
     try:
         group = Group.objects.get(slug=group)
@@ -351,17 +351,12 @@ def balance(request, group, is_admin=False):
 def income(request, group, is_admin=False):
     """Show income statement for group"""
     if not is_admin:
-        return HttpResponseForbidden(_('Sorry, group admins only...'))
+        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
     try:
         group = Group.objects.get(slug=group)
     except Group.DoesNotExist:
         raise Http404
-
-    if group.admins.filter(id=request.user.id).count():
-        is_admin = True
-    else:
-        return HttpResponseForbidden(_('Sorry, group admins only...'))
 
     # Balance sheet data struct
     accounts = {
@@ -398,7 +393,7 @@ def income(request, group, is_admin=False):
 @is_group_admin
 def alter_list(request, group, slug=None, type='new', is_admin=False):
     if not is_admin:
-        return HttpResponseForbidden(_('Sorry group admins only.'))
+        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
     # May this function could be made more genric so that it can limit acces
     # to generic views for any object?
@@ -412,7 +407,7 @@ def alter_list(request, group, slug=None, type='new', is_admin=False):
     if request.method == 'POST':
         if u'group' in request.POST:
             if group.id != int(request.POST['group']):
-                return HttpResponseForbidden(_('Sorry, group admins only...'))
+                return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
         else:
             raise Exception()
 
@@ -463,7 +458,7 @@ def html_list(request, group, slug):
 @is_group_admin
 def approve(request, group, page="1", is_admin=False):
     if not is_admin:
-        return HttpResponseForbidden(_('Sorry, group admins only...'))
+        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
     try:
         group = Group.objects.get(slug=group)
     except Group.DoesNotExist:
@@ -507,7 +502,7 @@ def approve(request, group, page="1", is_admin=False):
 @is_group_admin
 def settlement_summary(request, group, page="1", is_admin=False):
     if not is_admin:
-        return HttpResponseForbidden(_('Sorry, group admins only...'))
+        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
     try:
         group = Group.objects.get(slug=group)
     except Group.DoesNotExist:
