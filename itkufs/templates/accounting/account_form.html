@@ -1,0 +1,9 @@
+{% extends "accounting/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<form action="." method="post">
+	{{ form.as_p }}
+	<button type="submit">{% trans "Save changes to account" %}</button>
+</form>
+{% endblock %}

@@ -352,7 +352,7 @@ def static_page(request, group, template, is_admin=False):
 
 @login_required
 @is_group_admin
-def alter_group(request, group, slug=None, is_admin=False):
+def alter_group(request, group, is_admin=False):
     if not is_admin:
         return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
@@ -373,6 +373,37 @@ def alter_group(request, group, slug=None, is_admin=False):
 
 
     return render_to_response('accounting/group_form.html',
+                              {
+                                'is_admin': is_admin,
+                                'group': group,
+                                'form': form,
+                              },
+                              context_instance=RequestContext(request))
+
+@login_required
+@is_group_admin
+def alter_account(request, group, account, is_admin=False):
+    if not is_admin:
+        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
+
+    try:
+        group = Group.objects.get(slug=group)
+        account = group.account_set.get(slug=account)
+    except (Group.DoesNotExist, Account.DoesNotExist):
+        raise Http404
+
+    AccountInstanceForm = form_for_instance(account, fields=('name', 'slug', 'type', 'owner', 'active', 'ignore_block_limit'))
+
+    if request.method == 'POST':
+        form = AccountInstanceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('account-summary', args=(group.slug,account.slug)))
+    else:
+        form = AccountInstanceForm()
+
+
+    return render_to_response('accounting/account_form.html',
                               {
                                 'is_admin': is_admin,
                                 'group': group,

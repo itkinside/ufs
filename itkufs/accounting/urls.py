@@ -24,6 +24,9 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/transfer/$',
         transfer, {'transfer_type': 'transfer'}, name='account-transfer'),
 
+    url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/edit/$',
+        alter_account, name='edit-account'),
+
     # Help
     url(r'^(?P<group>[0-9a-z_-]+)/help/$',
         static_page, {'template': 'accounting/help.html'}, name='help'),
@@ -33,6 +36,8 @@ urlpatterns = patterns('',
         group_summary, name='group-summary'),
     url(r'^(?P<group>[0-9a-z_-]+)/(?P<page>\d+)/$',
         group_summary, name='group-summary-page'),
+
+    # Edit group
     url(r'^(?P<group>[0-9a-z_-]+)/edit/$',
         alter_group, name='edit-group'),
 
