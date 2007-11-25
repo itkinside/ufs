@@ -1,5 +1,6 @@
 from django.newforms import BaseForm
 from django.newforms.forms import BoundField
+#from django.utils.safestring import mark_safe
 
 class ColumnBaseForm(BaseForm):
     """Returns this form rendered as HTML <tr>s -- excluding the <table></table>."""

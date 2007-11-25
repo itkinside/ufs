@@ -45,18 +45,32 @@ def edit_list(request, group, slug=None, type='new', is_admin=False):
     try:
         group = Group.objects.get(slug=group)
         if slug:
-            id = group.list_set.get(slug=slug).id
+            list = group.list_set.get(slug=slug)
     except Group.DoesNotExist:
         raise Http404
 
-    ListForm = form_for_model(List, fields=('name', 'slug', 'account_width', 'balance_width'))
-    ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width', 'order'))
     columnforms = []
 
-    listform = ListForm()
+    if type == 'new':
+        ListForm = form_for_model(List, fields=('name', 'slug', 'account_width', 'balance_width'))
+        ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width', 'order'))
 
-    for i in range(0, 6):
-        columnforms.append( ColumnForm(prefix='new%s'%i) )
+        for i in range(0,5):
+            columnforms.append( ColumnForm(prefix='new%s'%i) )
+
+    elif type == 'edit':
+        ListForm = form_for_instance(list, fields=('name', 'slug', 'account_width', 'balance_width'))
+
+        for c in list.column_set.all():
+            ColumnForm = form_for_instance(c, form=ColumnBaseForm, fields=('name', 'width', 'order'))
+            columnforms.append( ColumnForm(prefix=c.id) )
+        for i in range(0,3):
+            ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width', 'order'))
+            columnforms.append( ColumnForm(prefix='new%s'%i) )
+    else:
+        raise Exception()
+
+    listform = ListForm()
 
     return render_to_response('reports/edit_list.html',
                               {
