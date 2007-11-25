@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from urlparse import urlparse
+import os
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -363,10 +364,13 @@ def alter_group(request, group, is_admin=False):
 
     GroupInstanceForm = form_for_instance(group)
 
+    old_logo = group.get_logo_filename()
+
     if request.method == 'POST':
         form = GroupInstanceForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            os.remove(old_logo)
             return HttpResponseRedirect(reverse('group-summary', args=(group.slug,)))
     else:
         form = GroupInstanceForm()
