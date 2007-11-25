@@ -250,6 +250,7 @@ label {
 	width: 6em;
 	font-weight: bold;
 	float: left;
+	clear: left;
 	text-align: right;
 	margin-right: 1em;
 }
@@ -270,6 +271,7 @@ input:hover, select:hover, textarea:hover, button:hover {
 button {
 	margin-left: 7em;
 	background: #DDD;
+	clear: left;
 }
 
 .plainform button {
@@ -285,7 +287,7 @@ input#id_registered, input#id_received { /* checkboxes */
 	width: auto;
 	border: 0;
 }
-#transactions table select {
+#transactions table select, #editlist table input {
 	width: auto;
 }
 

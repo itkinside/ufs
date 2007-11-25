@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/list/add/$',
         alter_list, {'type': 'new'}, name='new-list'),
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/edit/$',
-        alter_list, {'type': 'edit'}, name='edit-list'),
+        edit_list, {'type': 'edit'}, name='edit-list'),
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/delete/$',
         alter_list, {'type': 'delete'}, name='delete-list'),
 

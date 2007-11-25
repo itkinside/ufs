@@ -8,15 +8,16 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _, ungettext
 from django.views.generic.create_update import create_object, update_object, delete_object
+from django.newforms import form_for_instance, form_for_model
 
 from itkufs.accounting.decorators import *
 from itkufs.accounting.models import *
 from itkufs.reports.models import *
+from itkufs.reports.forms import *
 
 @login_required
 @limit_to_group
 def html_list(request, group, slug):
-    # TODO Limit to correct group...
     try:
         group = Group.objects.get(slug=group)
         accounts = Account.objects.filter(group=group)
@@ -34,6 +35,38 @@ def html_list(request, group, slug):
 
     populate_xheaders(request, response, List, list.id)
     return response
+
+@login_required
+@is_group_admin
+def edit_list(request, group, slug=None, type='new', is_admin=False):
+    if not is_admin:
+        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
+
+    try:
+        group = Group.objects.get(slug=group)
+        if slug:
+            id = group.list_set.get(slug=slug).id
+    except Group.DoesNotExist:
+        raise Http404
+
+    ListForm = form_for_model(List, fields=('name', 'slug', 'account_width', 'balance_width'))
+    ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width', 'order'))
+    columnforms = []
+
+    listform = ListForm()
+
+    for i in range(0, 6):
+        columnforms.append( ColumnForm(prefix='new%s'%i) )
+
+    return render_to_response('reports/edit_list.html',
+                              {
+                                  'is_admin': is_admin,
+                                  'listform': listform,
+                                  'columnforms': columnforms,
+
+                              },
+                              context_instance=RequestContext(request))
+
 
 @login_required
 @is_group_admin
