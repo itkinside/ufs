@@ -16,6 +16,11 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/(?P<page>\d+)/$',
         account_summary, name='account-summary-page'),
 
+    url(r'^(?P<group>[0-9a-z_-]+)/add/$',
+        alter_account, {'type': 'new'}, name='new-account'),
+    url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/edit/$',
+        alter_account, {'type': 'edit'}, name='edit-account'),
+
     # Account actions
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/deposit/$',
         transfer, {'transfer_type': 'deposit'}, name='account-deposit'),
@@ -23,9 +28,6 @@ urlpatterns = patterns('',
         transfer, {'transfer_type': 'withdraw'}, name='account-withdraw'),
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/transfer/$',
         transfer, {'transfer_type': 'transfer'}, name='account-transfer'),
-
-    url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/edit/$',
-        alter_account, name='edit-account'),
 
     # Help
     url(r'^(?P<group>[0-9a-z_-]+)/help/$',

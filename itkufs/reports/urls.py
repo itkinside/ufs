@@ -5,7 +5,7 @@ from itkufs.reports.views import *
 
 urlpatterns = patterns('',
     # Lists
-    url(r'^(?P<group>[0-9a-z_-]+)/list/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/list/add/$',
         alter_list, {'type': 'new'}, name='new-list'),
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/edit/$',
         alter_list, {'type': 'edit'}, name='edit-list'),

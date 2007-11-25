@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.core.xheaders import populate_xheaders
 from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
-from django.newforms import form_for_instance
+from django.newforms import form_for_instance, form_for_model
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _, ungettext
@@ -371,6 +371,7 @@ def alter_group(request, group, is_admin=False):
         if form.is_valid():
             form.save()
             os.remove(old_logo)
+            request.user.message_set.create(message=_('Group successfully updated'))
             return HttpResponseRedirect(reverse('group-summary', args=(group.slug,)))
     else:
         form = GroupInstanceForm()
@@ -386,25 +387,40 @@ def alter_group(request, group, is_admin=False):
 
 @login_required
 @is_group_admin
-def alter_account(request, group, account, is_admin=False):
+def alter_account(request, group, account=None, type='new', is_admin=False):
     if not is_admin:
         return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
     try:
         group = Group.objects.get(slug=group)
-        account = group.account_set.get(slug=account)
+        if type == 'edit':
+            account = group.account_set.get(slug=account)
+
     except (Group.DoesNotExist, Account.DoesNotExist):
         raise Http404
 
-    AccountInstanceForm = form_for_instance(account, fields=('name', 'slug', 'type', 'owner', 'active', 'ignore_block_limit'))
+    fields=('name', 'slug', 'type', 'owner', 'active', 'ignore_block_limit')
+
+    if type=='edit':
+        AccountForm = form_for_instance(account, fields=fields)
+    else:
+        AccountForm = form_for_model(Account, fields=fields)
 
     if request.method == 'POST':
-        form = AccountInstanceForm(request.POST)
+        form = AccountForm(request.POST)
+
         if form.is_valid():
-            form.save()
+            if type== 'edit':
+                form.save()
+                request.user.message_set.create(message=_('Account successfully updated'))
+            else:
+                account = form.save(commit=False)
+                account.group = group
+                account.save()
+                request.user.message_set.create(message=_('Account successfully created'))
             return HttpResponseRedirect(reverse('account-summary', args=(group.slug,account.slug)))
     else:
-        form = AccountInstanceForm()
+        form = AccountForm()
 
 
     return render_to_response('accounting/account_form.html',
