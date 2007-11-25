@@ -285,6 +285,9 @@ input#id_registered, input#id_received { /* checkboxes */
 	width: auto;
 	border: 0;
 }
+#transactions table select {
+	width: auto;
+}
 
 /* Account/group summary */
 #accountinfo, #groupinfo, #actions, #lists, #transaction_actions, #statements {

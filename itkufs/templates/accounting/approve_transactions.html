@@ -8,72 +8,130 @@
 <p>{% trans "No pending transactions found." %}</p>
 {% else %}
 
-{% if is_paginated %}
-<p>
-    {% if has_previous %}
-    <a href="{% url approve-transactions-page group.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
-    {% endif %}
-    {% blocktrans %}{{ hits }} hits{% endblocktrans %}
-    {% if has_next %}
-    | <a href="{% url approve-transactions-page group.slug,next %}">{% trans "Next" %} &raquo;</a>
-    {% endif %}
-</p>
-{% endif %}
+<form action="{% url approve-transactions group.slug %}" method="post" id="accounting_approve_transactions">
 
-<form action="{% url approve-transactions group.slug %}" method="post" class="togglecheckboxes" id="accounting_approve_transactions">
+<div id="transactions">
+
+
+{% load i18n %}
+<h3>{% trans "Transactions" %}</h3>
+
+{% if not transaction_list %}
+<p>{% trans "No transactions found." %}</p>
+{% else %}
+
+{% include "accounting/transaction_list_menu.html" %}
+
 <table class="tablelist">
-    <tr>
-        <th>{% trans "Registered" %}</th>
-        <th>{% trans "Debit account" %}</th>
-        <th>{% trans "Credit account" %}</th>
-        <th>{% trans "Amount" %}</th>
-        <th>{% trans "Details" %}</th>
-	<th>{% trans "Approve" %}</th>
-    </tr>
-    {% for t in transaction_list %}
-    <tr class="{% cycle evenrow,oddrow %}">
-        <td>{{ t.registered|date:"Y-m-d" }}</td>
-        <td>
-		<a href="{% url account-summary t.debit_account.group.slug,t.debit_account.slug %}">{{ t.debit_account.name }}</a>,
-                {{ t.debit_account.group.name }}
-        </td>
-        <td>
-		<a href="{% url account-summary t.debit_account.group.slug,t.debit_account.slug %}">{{ t.debit_account.name }}</a>,
-                {{ t.debit_account.group.name }}
-        </td>
+	<tr>
+            <th>{% trans "Status" %}</th>
+            <th>{% trans "Account" %}</th>
+            <th>{% trans "Debit" %}</th>
+            <th>{% trans "Credit" %}</th>
+            <th>{% trans "Details" %}</th>
+            <th>{% trans "Change to" %}</th>
 
-        <td class="align_right">{{ t.amount|stringformat:"0.2f" }}</td>
+	</tr>
+	{% for t in transaction_list %}
+	<tr class="{% cycle 'evenrow' 'oddrow' as trclass %}
+		{% if t.is_rejected %}rejected{% else %}
+		{% if not t.is_received %}pending{% endif %}{% endif %}">
+		<td rowspan="{{ t.entry_set.all.count }}" class="status">
+			<dl>
+				{% if t.is_registered %}
+				<dt>Registered:</dt>
+				<dd>{{ t.registered.timestamp|date:"Y-m-d H:i" }}</dd>
+				{% endif %}
+				{% if t.is_payed %}
+				<dt>Payed:</dt>
+				<dd>{{ t.payed.timestamp|date:"Y-m-d H:i" }}</dd>
+				{% endif %}
+				{% if t.is_received %}
+				<dt>Recieved:</dt>
+				<dd>{{ t.received.timestamp|date:"Y-m-d H:i" }}</dd>
+				{% endif %}
+				{% if t.is_rejected %}
+				<dt>Rejected:</dt>
+				<dd>{{ t.rejected.timestamp|date:"Y-m-d H:i" }}</dd>
+				{% endif %}
+			</dl>
+		</td>
+		{% for e in t.entry_set.all %}
+		<td class="account">
+			{% if is_admin %}
+			<a href="{% url group-summary e.account.group.slug %}">{{e.account.group.name}}</a>:
+			<a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{e.account.name}}</a>
+			{% else %}
+				{{ e.account.group.name }}: {{e.account.name}}
+			{% endif %}
+		</td>
+		<td class="align_right debit">
+			{% if e.debit %}
+			{{e.debit|stringformat:"0.2f"}}
+			{% endif %}
+		</td>
+		<td class="align_right credit">
+			{% if e.credit %}
+			{{e.credit|stringformat:"0.2f"}}
+			{% endif %}
+		</td>
+		{% if forloop.first %}
+		<td rowspan="{{ t.entry_set.all.count }}" class="details">
+			<dl>
+				<dt>{{ t.registered.user|default:"Unknown" }}: </dt>
+				<dd class="registered">{{ t.registered.message|default:"(None)" }}</dd>
+				{% if t.rejected %}
+				<dt>{{ t.rejected.user|default:"Unknown" }}: </dt>
+				<dd class="rejected">{{ t.rejected.message|default:"(None)" }}</dd>
+				{% endif %}
+			</dl>
+		</td>
+		<td rowspan="{{ t.entry_set.all.count }}" class="details">
+		{% if not t.is_rejected %}
+		{% if not t.is_received %}
+                    <select name="transaction_id_{{ t.id }}">
+		    	<option></option>
+                        {% if not t.is_registered %}
+                            <option value="Reg">Registered</option>
+                        {% endif %}
+                        {% if not t.is_rejected %}
+                            {% if not t.is_payed %}
+                            <option value="Pay">Payed</option>
+			    {% endif %}
+                            {% if not t.is_received %}
+                            <option value="Rec">Received</option>
+			    {% endif %}
 
-        <td>
-            {% if t.settlement %}
-            {{ t.settlement.date|date:"Y-m-d" }}
-            {% endif %}
-            {{ t.details|striptags|linebreaksbr }}
-        </td>
-	<td class="align_center">
-	    <input type="checkbox" name="transcation_id_{{ t.id }}"/>
-	</td>
-    </tr>
-    {% endfor %}
+                            {% if not t.is_payed %}
+                            {% if not t.is_received %}
+                            <option value="Rej">Rejected</option>
+			    {% endif %}
+			    {% endif %}
+                        {% endif %}
+                        </select>
+		{% endif %}
+		{% endif %}
+		</td>
+		{% endif %}
+	</tr>
+	<tr class="{{ trclass }}
+		{% if t.is_rejected %}rejected{% else %}
+		{% if not t.is_received %}pending{% endif %}{% endif %}">
+		{% endfor %}
+	</tr>
+	{% endfor %}
 </table>
 
+{% include "accounting/transaction_list_menu.html" %}
+
+{% endif %}
+
+</div>
+
 <p>
-    <button name="approve" type="submit">{% trans "Approve" %}</button>
-<!--<button name="reject" type="submit">{% trans "Reject" %}</button>-->
+    <button type="submit">{% trans "Update" %}</button>
 </p>
 </form>
-
-{% if is_paginated %}
-<p>
-    {% if has_previous %}
-    <a href="{% url approve-transactions-page group.slug,previous %}">&laquo; {% trans "Previous" %}</a> |
-    {% endif %}
-    {% blocktrans %}{{ hits }} hits{% endblocktrans %}
-    {% if has_next %}
-    | <a href="{% url approve-transactions-page group.slug,next %}">{% trans "Next" %} &raquo;</a>
-    {% endif %}
-</p>
-{% endif %}
 
 {% endif %}
 

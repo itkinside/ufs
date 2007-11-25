@@ -28,7 +28,6 @@ New features:
   * Invoice
 - Admin rejection of user claims, using TransactionMessage, only missing
   emails, but perhaps messages is enough?
-- Account management, optionally connect with users
 
 SHOULD HAVE
 -----------
@@ -79,6 +78,7 @@ DONE
   ensuring data integrity
 - TransactionLog needs to enforce that user is set.
 - Admin should be able to edit lists (adamcik)
+- Account management, optionally connect with users
 
 WONTFIX
 -------

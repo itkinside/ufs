@@ -306,23 +306,38 @@ def approve(request, group, page="1", is_admin=False):
     # Get related transactions
     # FIXME
     transactions = Transaction.objects.filter(
-        Q(credit_account__group=group) &
-        Q(debit_account__group=group) &
-        Q(payed__isnull=True)).order_by('-registered')
+        entry_set__account__group=group).distinct()
 
     if request.method == 'POST':
         count = 0
+        to_be_rejected = []
         for t in transactions:
-            if (u'transcation_id_%d' % t.id) in request.POST:
-                count += 1
-                t.payed = datetime.now()
-                t.save()
-        request.user.message_set.create(
-            message=ungettext('Approved %(count)d transaction.',
-                              'Approved %(count)d transactions.', count) %
-                             {'count': count})
+            match = 'transcation_id_%d' % t.id
+            if match in request.POST:
+                change_to = request.POST[match]
+                raise Exception(request.POST)
 
-    transactions = transactions.filter(Q(payed__isnull=True))
+
+                # FIXME should not be allowed to set_* on "external accounts"
+                if change_to == 'Reg':
+                    t.set_registered(user=request.user)
+                elif change_to == 'Pay':
+                    t.set_payed(user=request.user)
+                elif change_to == 'Rec':
+                    t.set_received(user=request.user)
+                elif change_to == 'Rej':
+                    to_be_rejected.append(t)
+                    count -= 1
+
+                count += 1
+
+        request.user.message_set.create(
+            message=ungettext('Updated %(count)d transaction.',
+                              'Updated %(count)d transactions.', count) %
+                             {'count': count})
+        if to_be_rejected:
+            raise Exception('FIXME, not implemented yet')
+
 
     # Pass on to generic view
     return object_list(request, transactions,
@@ -333,6 +348,7 @@ def approve(request, group, page="1", is_admin=False):
                        extra_context={
                             'is_admin': is_admin,
                             'group': group,
+                            'approve': True,
                        },
                        template_object_name='transaction')
 
