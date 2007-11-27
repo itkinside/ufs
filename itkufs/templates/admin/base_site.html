@@ -3,6 +3,10 @@
 
 {% block title %}{{ title|escape }} | µFS{% endblock %}
 
+{% block extrahead %}
+    <link rel="shortcut icon" type="image/png" href="{% url media "images/favicon.png" %}" />
+{% endblock %}
+
 {% block branding %}
 <h1 id="site-name">{% trans '&micro;FS administration' %}</h1>
 {% endblock %}

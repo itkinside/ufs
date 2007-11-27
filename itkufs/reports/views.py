@@ -196,7 +196,7 @@ def balance(request, group, is_admin=False):
     accounts['EqSum'] += curr_years_net_income
     accounts['LiEqSum'] += curr_years_net_income
 
-    return render_to_response('accounting/balance.html',
+    return render_to_response('reports/balance.html',
                               {
                                   'is_admin': is_admin,
                                   'group': group,
@@ -239,7 +239,7 @@ def income(request, group, is_admin=False):
     # Net income
     accounts['InExDiff'] = accounts['InSum'] - accounts['ExSum']
 
-    return render_to_response('accounting/income.html',
+    return render_to_response('reports/income.html',
                               {
                                   'is_admin': is_admin,
                                   'group': group,
