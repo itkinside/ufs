@@ -386,7 +386,8 @@ def alter_group(request, group, is_admin=False):
         form = GroupInstanceForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            os.remove(old_logo)
+            if old_logo and old_logo != group.get_logo_filename():
+                os.remove(old_logo)
             request.user.message_set.create(message=_('Group successfully updated'))
             return HttpResponseRedirect(reverse('group-summary', args=(group.slug,)))
     else:
