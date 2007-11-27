@@ -415,12 +415,13 @@ def alter_account(request, group, account=None, type='new', is_admin=False):
     except (Group.DoesNotExist, Account.DoesNotExist):
         raise Http404
 
-    fields=('name', 'slug', 'type', 'owner', 'active', 'ignore_block_limit')
 
     if type=='edit':
-        AccountForm = form_for_instance(account, fields=fields)
+        AccountForm = form_for_instance(account)
     else:
-        AccountForm = form_for_model(Account, fields=fields)
+        AccountForm = form_for_model(Account)
+
+    del AccountForm.base_fields['group']
 
     if request.method == 'POST':
         form = AccountForm(request.POST)

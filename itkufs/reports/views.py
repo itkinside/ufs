@@ -38,39 +38,55 @@ def html_list(request, group, slug):
 
 @login_required
 @is_group_admin
-def edit_list(request, group, slug=None, type='new', is_admin=False):
+def new_list(request, group, is_admin=False):
     if not is_admin:
         return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
     try:
         group = Group.objects.get(slug=group)
-        if slug:
-            list = group.list_set.get(slug=slug)
-    except Group.DoesNotExist:
+    except Group.DoesNotExist, List.DoesNotExist:
         raise Http404
 
     columnforms = []
 
-    if type == 'new':
-        ListForm = form_for_model(List, fields=('name', 'slug', 'account_width', 'balance_width'))
-        ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width', 'order'))
-
-        for i in range(0,5):
-            columnforms.append( ColumnForm(prefix='new%s'%i) )
-
-    elif type == 'edit':
-        ListForm = form_for_instance(list, fields=('name', 'slug', 'account_width', 'balance_width'))
-
-        for c in list.column_set.all():
-            ColumnForm = form_for_instance(c, form=ColumnBaseForm, fields=('name', 'width', 'order'))
-            columnforms.append( ColumnForm(prefix=c.id) )
-        for i in range(0,3):
-            ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width', 'order'))
-            columnforms.append( ColumnForm(prefix='new%s'%i) )
-    else:
-        raise Exception()
+    ListForm = form_for_model(List, fields=('name', 'slug', 'account_width', 'balance_width'))
+    ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width', 'order'))
 
     listform = ListForm()
+    for i in range(0,5):
+        columnforms.append( ColumnForm(prefix='new%s'%i) )
+
+    return render_to_response('reports/edit_list.html',
+                              {
+                                  'is_admin': is_admin,
+                                  'listform': listform,
+                                  'columnforms': columnforms,
+
+                              },
+                              context_instance=RequestContext(request))
+
+@login_required
+@is_group_admin
+def edit_list(request, group, slug, is_admin=False):
+    if not is_admin:
+        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
+
+    try:
+        group = Group.objects.get(slug=group)
+        list = group.list_set.get(slug=slug)
+    except Group.DoesNotExist, List.DoesNotExist:
+        raise Http404
+
+    ListForm = form_for_instance(list, fields=('name', 'slug', 'account_width', 'balance_width'))
+    listform = ListForm()
+
+    columnforms = []
+    for c in list.column_set.all():
+        ColumnForm = form_for_instance(c, form=ColumnBaseForm, fields=('name', 'width', 'order'))
+        columnforms.append( ColumnForm(prefix=c.id) )
+    for i in range(0,3):
+        ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width', 'order'))
+        columnforms.append( ColumnForm(prefix='new%s'%i) )
 
     return render_to_response('reports/edit_list.html',
                               {
