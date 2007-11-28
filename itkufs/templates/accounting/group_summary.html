@@ -51,7 +51,12 @@
 </div>
 
 <div id="lists">
-<h3>{% trans "Lists" %}</h3>
+<h3>{% trans "Lists" %}
+    <a href="{% url new-list group.slug %}">
+       <img src="{% url media "images/icons/text-x-generic-new.png" %}" alt="{% trans "New"%}" title="{% trans "New"%}"/>
+    </a>
+</ul>
+</h3>
 <ul>
     {% for list in group.list_set.all %}
     <li>
@@ -65,13 +70,6 @@
       </a>
     </li>
     {% endfor %}
-    <li>
-        ({% trans "Create new list" %})
-        <a href="{% url new-list group.slug %}">
-           <img src="{% url media "images/icons/text-x-generic-new.png" %}" alt="{% trans "New"%}" title="{% trans "New"%}"/>
-        </a>
-    </li>
-</ul>
 </div>
 
 {% if is_admin %}
@@ -84,7 +82,7 @@
 
 <h3>{% trans "Accounts" %}
     <a href="{% url new-account group.slug %}">
-        <img  src="{% url media "images/icons/text-x-generic-new.png" %}" alt="{% trans "Edit"%}" title="{% trans "Edit"%}"/>
+        <img  src="{% url media "images/icons/text-x-generic-new.png" %}" alt="{% trans "Add"%}" title="{% trans "Add"%}"/>
     </a>
 </h3>
 
@@ -104,6 +102,9 @@
     </tr>
 {% endfor %}
 </table>
+
+<p class="comment">{% trans "Please note, a negative balance in a liabilty account tells that the owner has money to spend, while a positive balance means it is time for a deposit." %}</p>
+
 </div>
 <div class="coltwo">
 <table class="tablelist">
@@ -122,8 +123,6 @@
 {% endfor %}
 </table>
 </div>
-
-<p class="comment">{% trans "Please note, a negative balance in a liabilty account tells that the owner has money to spend, while a positive balance means it is time for a deposit." %}</p>
 
 {% endif %}
 </div>
