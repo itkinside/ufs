@@ -45,8 +45,10 @@ td {
 }
 #logo {
 	float: right;
-	padding: 0.5em;
+	height: 3.5em;
+	overflow: hidden;
 }
+
 
 tfoot img {
 	vertical-align: middle;
@@ -61,7 +63,6 @@ tfoot img {
 .blacklisted td {
 	padding-left:0;
 	padding-right: 0;
-	background: #000;
 }
 .blacklisted .balance {
 	background: transparent;
