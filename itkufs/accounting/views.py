@@ -111,9 +111,12 @@ def account_summary(request, group, account, page='1', is_admin=False):
         raise Http404
 
     # Check that user is owner of account or admin of account group
-    if request.user.id != account.owner.id and not is_admin:
-        return HttpResponseForbidden(_('Forbidden'))
+    if not is_admin:
+        if request.user.id != account.owner.id:
+            return HttpResponseForbidden(_('Forbidden'))
 
+        if not account.active:
+            return HttpResponseForbidden(_('This account has been disabled.'))
 
     # Save account in session
     # I think it's a bit of hack to switch account when the referrer is the

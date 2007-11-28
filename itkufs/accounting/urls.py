@@ -50,4 +50,6 @@ urlpatterns = patterns('',
         approve, name='approve-transactions-page'),
     url(r'^(?P<group>[0-9a-z_-]+)/register/$',
         transfer, {'transfer_type': 'register'}, name='register-transactions'),
+    url(r'^(?P<group>[0-9a-z_-]+)/multiple/$',
+        transfer, {'transfer_type': 'multiple'}, name='multiple-transactions'),
 )

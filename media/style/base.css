@@ -222,6 +222,9 @@ img {
 .error input {
 	border: 1px solid #a10000;
 }
+.disabled td {
+	text-decoration: line-through;
+}
 
 /* Columns */
 div.coltwo {
@@ -324,7 +327,7 @@ input#id_registered, input#id_received { /* checkboxes */
 	padding: 0 !important;
 }
 #transactions .rejected a,
-#transactions .rejected, 
+#transactions .rejected,
 #transactions .pending a,
 #transactions .pending {
 	color: gray;
