@@ -90,3 +90,10 @@ class TransferForm(BaseTransactionForm):
     credit_account = GroupedChoiceField(label=_('To'), required=True)
     amount = amount_field
     details = details_field
+
+class ChangeTransactionStateForm(forms.Form):
+    def __init__(self, choices=None, *args, **kwargs):
+        super(forms.Form, self).__init__(*args, **kwargs)
+        self.fields['state'].widget = forms.Select(choices=choices)
+
+    state = forms.CharField(max_length=3, label='')

@@ -375,6 +375,23 @@ class Transaction(models.Model):
     rejected = property(get_rejected, None, None)
     payed = property(get_payed, None, None)
 
+    def get_possible_log_types_for_form(self):
+        posible_state = {}
+        for k,v in TRANSACTIONLOG_TYPE:
+            posible_state[k] = v
+
+        if self.is_rejected() or self.is_received():
+            return ()
+
+        if self.is_registered():
+            del posible_state['Reg']
+
+        if self.is_payed():
+            del posible_state['Pay']
+            del posible_state['Rej']
+
+        return posible_state.items()
+
     class Admin:
         pass
 databrowse.site.register(Transaction)
