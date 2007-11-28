@@ -21,11 +21,15 @@
 <p class="hidden">{% trans "<b>Invalid</b> list, do not use!" %}</p>
 
 <table>
-    <caption>
-        {% trans "Blacklisted accounts are marked with" %}
-        <img src="{% url media "images/black.png" %}"/>.
-        {% trans "Please remember to print with backgrounds and landscape orientation." %}
-    </caption>
+    <tfoot>
+        <tr>
+	    <td colspan="{{ list.total_column_count }}">
+                {% trans "Blacklisted accounts are marked with" %}
+                <img src="{% url media "images/black.png" %}"/>.
+                {% trans "Please remember to print with backgrounds and landscape orientation." %}
+           </td>
+        </tr>
+    </tfoot>
 
     <thead>
         <tr>
