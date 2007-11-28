@@ -17,21 +17,8 @@
 
 <body>
 
-<h1>{{ group.name }}: {{ list.name }}</h1>
 
 <p class="hidden">{% trans "<b>Invalid</b> list, do not use!" %}</p>
-
-{% if group.logo %}
-<p id="logo"><img src="{% url media group.logo %}" alt="logo" /></p>
-{% endif %}
-
-<p id="secondary">
-  {% now "Y-m-d" %}
-  {% if group.email %} &ndash;
-  <a href="mailto:{{ group.email }}">{{group.email}}</a>
-  {% endif %}
-</p>
-
 
 <table>
     <caption>
@@ -41,6 +28,21 @@
     </caption>
 
     <thead>
+        <tr>
+	    <th colspan="{{ list.total_column_count }}">
+                <h1>{{ group.name }}: {{ list.name }}</h1>
+                {% if group.logo %}
+                <p id="logo"><img src="{% url media group.logo %}" alt="logo" /></p>
+                {% endif %}
+
+                <p id="secondary">
+                  {% now "Y-m-d" %}
+                  {% if group.email %} &ndash;
+                  <a href="mailto:{{ group.email }}">{{group.email}}</a>
+                  {% endif %}
+                </p>
+	    </th>
+        </tr>
         <tr>
             <th style="width: {% widthratio list.account_width list.total_width 100 %}%">{% trans "Name" %}</th>
             {% ifnotequal list.balance_width 0 %}

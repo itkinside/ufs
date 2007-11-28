@@ -97,7 +97,7 @@
         <th>{% trans "Balance" %}</th>
     </tr>
 {% for account in group.user_account_set %}
-    <tr class="{% cycle evenrow,oddrow %}">
+    <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} disabled{% endif %}">
         <td><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.name }}</a></td>
         <td>{{ account.get_type_display }}</td>
         <td class="align_right{% if account.is_blocked %} blocked{% endif %}">{{ account.balance|stringformat:"0.2f" }}</td>
@@ -114,7 +114,7 @@
         <th>{% trans "Balance" %}</th>
     </tr>
 {% for account in group.group_account_set %}
-    <tr class="{% cycle evenrow,oddrow %}">
+    <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} disabled{% endif %}">
         <td><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.name }}</a></td>
         <td>{{ account.get_type_display }}</td>
         <td class="align_right{% if account.is_blocked %} blocked{% endif %}">{{ account.balance|stringformat:"0.2f" }}</td>

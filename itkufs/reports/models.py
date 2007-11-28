@@ -33,6 +33,13 @@ class List(models.Model):
         for column in self.column_set.all():
             sum += column.width
         return sum
+
+    def total_column_count(self):
+        count = self.column_set.all().count() + 1
+        if self.balance_width:
+            count += 1
+        return count
+
 databrowse.site.register(List)
 
 class ListColumn(models.Model):
