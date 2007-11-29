@@ -87,30 +87,10 @@
 			</dl>
 		</td>
 		<td rowspan="{{ t.entry_set.all.count }}" class="details">
-		{% if not t.is_rejected %}
-		{% if not t.is_received %}
-                    <select name="transaction_id_{{ t.id }}">
-		    	<option></option>
-                        {% if not t.is_registered %}
-                            <option value="Reg">Registered</option>
-                        {% endif %}
-                        {% if not t.is_rejected %}
-                            {% if not t.is_payed %}
-                            <option value="Pay">Payed</option>
-			    {% endif %}
-                            {% if not t.is_received %}
-                            <option value="Rec">Received</option>
-			    {% endif %}
-
-                            {% if not t.is_payed %}
-                            {% if not t.is_received %}
-                            <option value="Rej">Rejected</option>
-			    {% endif %}
-			    {% endif %}
-                        {% endif %}
-                        </select>
-		{% endif %}
-		{% endif %}
+		    {# FIXME!! #}
+		    {% for id, f in forms.items %}
+		    	{% ifequal id t.id %}{{ f.as_p }}{% endifequal %}
+	            {% endfor %}
 		</td>
 		{% endif %}
 	</tr>

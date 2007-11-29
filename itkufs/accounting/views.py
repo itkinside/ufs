@@ -311,16 +311,14 @@ def approve(request, group, page="1", is_admin=False):
     transactions = Transaction.objects.filter(
         entry_set__account__group=group).distinct()
 
-    if request.method == 'POST':
-        count = 0
-        to_be_rejected = []
-        for t in transactions:
-            match = 'transcation_id_%d' % t.id
-            if match in request.POST:
-                change_to = request.POST[match]
-                raise Exception(request.POST)
+    forms = {}
 
+    for t in transactions:
+        if request.method == 'POST':
+            form = ChangeTransactionForm(request.POST, prefix="transaction%d" % t.id, choices=t.get_valid_logtype_choices())
 
+            if form.is_valid():
+                change_to == ''
                 # FIXME should not be allowed to set_* on "external accounts"
                 if change_to == 'Reg':
                     t.set_registered(user=request.user)
@@ -330,17 +328,14 @@ def approve(request, group, page="1", is_admin=False):
                     t.set_received(user=request.user)
                 elif change_to == 'Rej':
                     to_be_rejected.append(t)
-                    count -= 1
+                raise Exception('FIXME, not implemented yet')
 
-                count += 1
+                if to_be_rejected:
+                    raise Exception('FIXME, not implemented yet')
+        else:
+            form = ChangeTransactionForm(prefix="transaction%d" % t.id, choices=t.get_valid_logtype_choices())
 
-        request.user.message_set.create(
-            message=ungettext('Updated %(count)d transaction.',
-                              'Updated %(count)d transactions.', count) %
-                             {'count': count})
-        if to_be_rejected:
-            raise Exception('FIXME, not implemented yet')
-
+        forms[t.id] = form
 
     # Pass on to generic view
     return object_list(request, transactions,
@@ -352,6 +347,7 @@ def approve(request, group, page="1", is_admin=False):
                             'is_admin': is_admin,
                             'group': group,
                             'approve': True,
+                            'forms': forms,
                        },
                        template_object_name='transaction')
 

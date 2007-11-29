@@ -91,7 +91,7 @@ class TransferForm(BaseTransactionForm):
     amount = amount_field
     details = details_field
 
-class ChangeTransactionStateForm(forms.Form):
+class ChangeTransactionForm(forms.Form):
     def __init__(self, choices=None, *args, **kwargs):
         super(forms.Form, self).__init__(*args, **kwargs)
         self.fields['state'].widget = forms.Select(choices=choices)

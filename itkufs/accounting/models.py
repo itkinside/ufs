@@ -253,8 +253,6 @@ databrowse.site.register(Settlement)
 class Transaction(models.Model):
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
-    user = None # Not a django field as we use this for a hack
-    message = ''
 
     class Meta:
         verbose_name = _('transaction')
@@ -375,7 +373,7 @@ class Transaction(models.Model):
     rejected = property(get_rejected, None, None)
     payed = property(get_payed, None, None)
 
-    def get_possible_log_types_for_form(self):
+    def get_valid_logtype_choices(self):
         posible_state = {}
         for k,v in TRANSACTIONLOG_TYPE:
             posible_state[k] = v
@@ -390,7 +388,9 @@ class Transaction(models.Model):
             del posible_state['Pay']
             del posible_state['Rej']
 
-        return posible_state.items()
+        posible_state = posible_state.items()
+        posible_state.insert(0, ('',''))
+        return posible_state
 
     class Admin:
         pass
