@@ -90,34 +90,34 @@ class Group(models.Model):
     def transaction_set(self):
         """Returns all transactions connected to group, that have not been
         rejected"""
-        return self.transaction_set_with_rejected().exclude(log_set__type='Rej')
+        return self.transaction_set_with_rejected().exclude(status='Rej')
 
     def registered_transaction_set(self):
-        """Returns all transactions connected to group, that are not rejected"""
-        return self.transaction_set().filter(log_set__type='Reg')
+        """Returns all transactions connected to group, that are registered and not rejected"""
+        return self.transaction_set().exclude(status='')
 
     def payed_transaction_set(self):
         """Returns all payed transactions connected to group, that are not
         rejected"""
-        return self.transaction_set().filter(log_set__type='Pay')
+        return self.transaction_set().filter(Q(status='Pay')|Q(status='Rec'))
 
     def not_payed_transaction_set(self):
         """Returns all unpayed transactions connected to group, that are not
         rejected"""
-        return self.transaction_set().exclude(log_set__type='Pay')
+        return self.transaction_set().filter(Q(status='')|Q(status='Reg'))
 
     def received_transaction_set(self):
         """Returns all received transactions connected to group"""
-        return self.transaction_set().filter(log_set__type='Rec')
+        return self.transaction_set().filter(status='Rec')
 
     def not_received_transaction_set(self):
         """Returns all transactions that have not been received connected to
         group"""
-        return self.transaction_set().exclude(log_set__type='Rec')
+        return self.transaction_set().exclude(status='Rec')
 
     def rejected_transaction_set(self):
         """Returns all rejected transactions connected to group"""
-        return self.transaction_set().filter(log_set__type='Rej')
+        return self.transaction_set_with_rejected().filter(status='Rej')
 
     not_rejected_transaction_set = transaction_set
     not_rejected_transaction_set.__doc__ = """Returns all transactions that

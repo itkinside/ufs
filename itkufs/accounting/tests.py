@@ -59,7 +59,6 @@ class GroupTestCase(unittest.TestCase):
         rejected"""
 
         set = self.group.transaction_set()
-        self.fail(set)
         self.assertEqual(set.count(), 3)
 
     def testTransactionSetWithRejected(self):
@@ -74,7 +73,7 @@ class GroupTestCase(unittest.TestCase):
         transactions that is not rejected"""
 
         set = self.group.registered_transaction_set()
-        self.assertEqual(set.count(), 1)
+        self.assertEqual(set.count(), 3)
 
     def testPayedTransactionSet(self):
         """Checks that payed_transaction_set returns all payed
