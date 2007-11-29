@@ -73,9 +73,7 @@ def group_summary(request, group, page='1', is_admin=False):
 
     # Get related transactions
     accounts = Account.objects.filter(group=group)
-    # FIXME
-    # transactions = group.transaction_set()
-    transactions = Transaction.objects.filter(entry_set__account__group=group).distinct()
+    transactions = group.transaction_set()
 
     if is_admin and group.not_payed_transaction_set().count():
         request.user.message_set.create(
@@ -307,9 +305,7 @@ def approve(request, group, page="1", is_admin=False):
 
 
     # Get related transactions
-    # FIXME
-    transactions = Transaction.objects.filter(
-        entry_set__account__group=group).distinct()
+    transactions = group.not_received_transaction_set()
 
     forms = {}
 

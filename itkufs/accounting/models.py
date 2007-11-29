@@ -270,6 +270,7 @@ class Transaction(models.Model):
     class Meta:
         verbose_name = _('transaction')
         verbose_name_plural = _('transactions')
+        ordering = ['last_modifed']
 
 #    class Admin:
 #        list_display = ['status']
