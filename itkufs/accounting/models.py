@@ -379,7 +379,7 @@ class Transaction(models.Model):
             posible_state[k] = v
 
         if self.is_rejected() or self.is_received():
-            return ()
+            return [('','')]
 
         if self.is_registered():
             del posible_state['Reg']

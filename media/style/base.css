@@ -290,7 +290,10 @@ input#id_registered, input#id_received { /* checkboxes */
 	width: auto;
 	border: 0;
 }
-#transactions table select, #editlist table input {
+#transactions table select {
+	width: 6em;
+}
+#editlist table input {
 	width: auto;
 }
 

@@ -314,8 +314,10 @@ def approve(request, group, page="1", is_admin=False):
     forms = {}
 
     for t in transactions:
+        choices = t.get_valid_logtype_choices()
+
         if request.method == 'POST':
-            form = ChangeTransactionForm(request.POST, prefix="transaction%d" % t.id, choices=t.get_valid_logtype_choices())
+            form = ChangeTransactionForm(request.POST, prefix="transaction%d" % t.id, choices=choices)
 
             if form.is_valid():
                 change_to == ''
@@ -333,7 +335,7 @@ def approve(request, group, page="1", is_admin=False):
                 if to_be_rejected:
                     raise Exception('FIXME, not implemented yet')
         else:
-            form = ChangeTransactionForm(prefix="transaction%d" % t.id, choices=t.get_valid_logtype_choices())
+            form = ChangeTransactionForm(prefix="transaction%d" % t.id, choices=choices)
 
         forms[t.id] = form
 
