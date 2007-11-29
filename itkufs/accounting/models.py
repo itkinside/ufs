@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models, transaction
 from django.db.models import Q
 from django.contrib import databrowse
@@ -250,16 +252,28 @@ class Settlement(models.Model):
             return smart_unicode(self.date)
 databrowse.site.register(Settlement)
 
+# FIXME change to more generic name
+TRANSACTIONLOG_TYPE = (
+    ('Reg', _('Registered')),
+    ('Pay', _('Payed')),
+    ('Rec', _('Received')),
+    ('Rej', _('Rejected')),
+)
+
 class Transaction(models.Model):
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
+
+    last_modifed = models.DateTimeField(_('Last modified'), auto_now_add=True)
+    status = models.CharField(_('status'), max_length=3, choices=TRANSACTIONLOG_TYPE, blank=True)
 
     class Meta:
         verbose_name = _('transaction')
         verbose_name_plural = _('transactions')
 
-    #class Admin:
-    #    pass
+#    class Admin:
+#        list_display = ['status']
+#        list_filter = ['status']
 
     def __unicode__(self):
         if self.entry_set.all().count():
@@ -284,6 +298,8 @@ class Transaction(models.Model):
            if debit_sum != credit_sum:
                raise InvalidTransaction(_('Credit and debit do not match'))
 
+           self.last_modifed = datetime.now()
+
            super(Transaction, self).save()
 
         except InvalidTransaction, e:
@@ -305,6 +321,9 @@ class Transaction(models.Model):
             if message is not None and message.strip() != '':
                 log.message = message
             log.save()
+            self.status = 'Reg'
+            self.last_modifed = datetime.now()
+            self.save()
         else:
             raise InvalidTransaction(_('Could not set transaction as registered'))
 
@@ -316,6 +335,9 @@ class Transaction(models.Model):
             if message.strip() != '':
                 log.message = message
             log.save()
+            self.status = 'Pay'
+            self.last_modifed = datetime.now()
+            self.save()
         else:
             raise InvalidTransaction(_('Could not set transaction as payed'))
 
@@ -327,6 +349,9 @@ class Transaction(models.Model):
             if message.strip() != '':
                 log.message = message
             log.save()
+            self.status = 'Rec'
+            self.last_modifed = datetime.now()
+            self.save()
         else:
             raise InvalidTransaction(_('Could not set transaction as received'))
 
@@ -338,6 +363,9 @@ class Transaction(models.Model):
             if message.strip() != '':
                 log.message = message
             log.save()
+            self.status = 'Rej'
+            self.last_modifed = datetime.now()
+            self.save()
         else:
             raise InvalidTransaction(_('Could not set transaction as rejected'))
     set_rejected = reject
@@ -395,13 +423,6 @@ class Transaction(models.Model):
     class Admin:
         pass
 databrowse.site.register(Transaction)
-
-TRANSACTIONLOG_TYPE = (
-    ('Reg', _('Registered')),
-    ('Pay', _('Payed')),
-    ('Rec', _('Received')),
-    ('Rej', _('Rejected')),
-)
 
 class TransactionLog(models.Model):
     transaction = models.ForeignKey(Transaction,
