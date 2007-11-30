@@ -385,6 +385,11 @@ def alter_group(request, group, is_admin=False):
             form.save()
             if old_logo and old_logo != group.get_logo_filename():
                 os.remove(old_logo)
+
+            if 'delete_logo' in request.POST:
+                os.remove(group.get_logo_filename())
+                group.logo = ''
+                group.save()
             request.user.message_set.create(message=_('Group successfully updated'))
             return HttpResponseRedirect(reverse('group-summary', args=(group.slug,)))
     else:
