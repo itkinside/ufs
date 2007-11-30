@@ -3,6 +3,9 @@
 
 {% block content %}
 <form action="." method="post" id="new_list">
+
+<input type="hidden" name="group" value="{{ group.id }}" />
+
 {% if form.name.errors %}
 <ul class="errorlist">
    {% for error in form.name.errors %}
@@ -34,7 +37,7 @@
 </ul>
 {% endif %}
 <p>
-    <label>Account:</label> {{ form.account_width }}
+    <label>Account Width:</label> {{ form.account_width }}
 </p>
 
 {% if form.balance_width.errors %}
@@ -45,8 +48,7 @@
 </ul>
 {% endif %}
 <p>
-    <label>Balance:</label> {{ form.balance_width }}
-    <input type="hidden" name="group" value="{{ group.id }}" />
+    <label>Balance Width:</label> {{ form.balance_width }}
 </p>
 
 {% if form.accounts.errors %}

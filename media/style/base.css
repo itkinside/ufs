@@ -250,7 +250,7 @@ ul.errorlist {
 /* Forms */
 label {
 	display: block;
-	width: 6em;
+	width: 8em;
 	font-weight: bold;
 	float: left;
 	clear: both;
@@ -272,7 +272,7 @@ input:hover, select:hover, textarea:hover, button:hover {
 }
 
 button {
-	margin-left: 7em;
+	margin-left: 9em;
 	background: #DDD;
 	clear: left;
 }
