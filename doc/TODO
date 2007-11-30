@@ -39,9 +39,6 @@ MAY HAVE
 --------
 
 - User registration of expenses
-- Lists:
-  * Who to include on the list?
-- Refactor of lists, statements, invoice etc to report app
 
 DONE
 ----
@@ -79,6 +76,9 @@ DONE
 - TransactionLog needs to enforce that user is set.
 - Admin should be able to edit lists (adamcik)
 - Account management, optionally connect with users
+- Refactor of lists, statements, invoice etc to report app
+- Lists:
+  * Who to include on the list?
 
 WONTFIX
 -------

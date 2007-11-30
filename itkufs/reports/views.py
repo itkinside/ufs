@@ -22,6 +22,8 @@ def html_list(request, group, slug):
         group = Group.objects.get(slug=group)
         accounts = Account.objects.filter(group=group)
         list = group.list_set.get(slug=slug)
+        if list.accounts.all().count():
+            accounts = list.accounts.filter(group=group)
     except (Group.DoesNotExist, List.DoesNotExist):
         raise Http404
 

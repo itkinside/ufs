@@ -253,7 +253,7 @@ label {
 	width: 6em;
 	font-weight: bold;
 	float: left;
-	clear: left;
+	clear: both;
 	text-align: right;
 	margin-right: 1em;
 }

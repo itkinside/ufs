@@ -13,6 +13,7 @@ class List(models.Model):
         help_text=_('Zero value indicates that balance should be left out.'))
     group = models.ForeignKey(Group,
         verbose_name=_('group'), related_name='list_set')
+    accounts = models.ManyToManyField(Account, blank="true")
 
     class Meta:
         #unique_together = (('slug', 'account_group'),)

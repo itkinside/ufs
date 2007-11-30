@@ -49,6 +49,18 @@
     <input type="hidden" name="group" value="{{ group.id }}" />
 </p>
 
+{% if form.accounts.errors %}
+<ul class="errorlist">
+   {% for error in form.accounts.errors %}
+	<li>{{ error }}</li>
+   {% endfor%}
+</ul>
+{% endif %}
+<p>
+    <label>Accounts:</label> {{ form.accounts }}
+    *FIXME*: This needs newforms for us to be able to limit the accounts
+</p>
+
 <p><label>Columns:</label></p>
 <table id="listcolumns" class="tablelist">
     <tr>
