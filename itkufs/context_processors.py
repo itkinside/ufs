@@ -5,10 +5,8 @@ from django.conf import settings
 
 def bzrRev(request):
     try:
-        tree = WorkingTree.open_containing(settings.BZR_BRANCH_DIR)[0]
-        rev  = tree.branch.revision_id_to_revno(tree.last_revision())
-
-        return {'REV': rev}
+        rev = WorkingTree.open_containing(settings.BZR_BRANCH_DIR)[0].branch.revno()
+        return {'BZRREV': rev}
     except (AttributeError, NotBranchError):
         pass
 
