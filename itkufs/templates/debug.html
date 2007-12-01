@@ -1,27 +1,29 @@
 <div id="debug">
-  <p style="color: grey">
-    Debug: {{ sql_queries|length }} Quer{{ sql_queries|pluralize:"y,ies" }}
-    {% ifnotequal sql_queries|length 0 %}
-    (<span style="cursor: pointer;" onclick="var s=document.getElementById('debugQueryTable').style;s.display=s.display=='none'?'':'none';this.innerHTML=this.innerHTML=='Show'?'Hide':'Show';">Show</span>)
-    {% endifnotequal %}
-  </p>
-  <table id="debugQueryTable" style="display: none; background: white;">
-    <col width="1"></col>
-    <col></col>
-    <col width="1"></col>
+
+<p style="color: grey">
+Debug: {{ sql_queries|length }} Quer{{ sql_queries|pluralize:"y,ies" }}
+{% ifnotequal sql_queries|length 0 %}
+(<span style="cursor: pointer;" onclick="var s=document.getElementById('query_table').style; s.display=s.display=='none' ? '' : 'none'; this.innerHTML=this.innerHTML=='Show' ? 'Hide' : 'Show';">Show</span>)
+{% endifnotequal %}
+</p>
+
+<table id="query_table" style="display: none;">
     <thead>
-    <tr>
-      <th>#</th>
-      <th style="text-align: left;">SQL</th>
-      <th>Time</th>
-    </tr>
+        <tr>
+          <th>#</th>
+          <th>Query</th>
+          <th>Time</th>
+        </tr>
     </thead>
     <tbody>
-    {% for query in sql_queries %}<tr class="{% cycle odd,even %}">
-      <td>{{ forloop.counter }}</td>
-      <td style="text-align: left;">{{ query.sql|escape }}</td>
-      <td>{{ query.time }}</td>
-    </tr>{% endfor %}
+        {% for query in sql_queries %}
+        <tr class="{% cycle oddrow,evenrow %}">
+            <td>{{ forloop.counter }}</td>
+            <td>{{ query.sql|escape }}</td>
+            <td>{{ query.time }}</td>
+        </tr>
+        {% endfor %}
     </tbody>
-  </table>
+</table>
+
 </div>

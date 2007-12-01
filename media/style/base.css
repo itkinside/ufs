@@ -180,11 +180,11 @@ img {
 	padding: 0.3em;
 	vertical-align: top;
 }
-.tablelist tr.evenrow {
+tr.evenrow {
 	background: white;
 	color: black;
 }
-.tablelist tr.oddrow {
+tr.oddrow {
 	background: #eee;
 	color: black;
 }
@@ -344,8 +344,26 @@ input#id_registered, input#id_received, form #delete_logo { /* checkboxes */
 	text-decoration: line-through;
 }
 
-/* new list page */
+/* New list page */
 #listcolumns input {
 	width: auto;
 	background: transparent;
+}
+
+/* Query debug */
+div#debug {
+	margin: 1em;
+}
+div#debug table#query_table, div#debug table#query_table thead {
+	background: white;
+}
+div#debug table#query_table th {
+	font-weight: bolder;
+	padding: 0.5em;
+	text-align: left;
+}
+div#debug table#query_table td {
+	padding: 0.5em;
+	text-align: left;
+	vertical-align: top;
 }
