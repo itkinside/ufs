@@ -28,7 +28,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.core.context_processors.request',
-    'itkufs.context_processors.bzrRev',
+    'itkufs.context_processors.bzr',
+    'itkufs.context_processors.debug',
 )
 
 BZR_BRANCH_DIR = '/home/cassarossa/itk/felles/itkufs/'

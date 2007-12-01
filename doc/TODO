@@ -22,6 +22,7 @@ Templates:
 
 Views & Templates:
 - Use new convenience functions for transaction_sets in Group model
+- Finish rewrite of approve/change transaction state form.
 
 New features:
 - Settlement
@@ -34,6 +35,7 @@ SHOULD HAVE
 
 - Respect active flag for accounts, or at least indicate that account is
   inactive
+- http://www.b-list.org/weblog/2007/nov/02/handle-choices-right-way/
 
 MAY HAVE
 --------
