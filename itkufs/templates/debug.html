@@ -11,15 +11,15 @@
     <col width="1"></col>
     <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">SQL</th>
-      <th scope="col">Time</th>
+      <th>#</th>
+      <th style="text-align: left;">SQL</th>
+      <th>Time</th>
     </tr>
     </thead>
     <tbody>
     {% for query in sql_queries %}<tr class="{% cycle odd,even %}">
       <td>{{ forloop.counter }}</td>
-      <td>{{ query.sql|escape }}</td>
+      <td style="text-align: left;">{{ query.sql|escape }}</td>
       <td>{{ query.time }}</td>
     </tr>{% endfor %}
     </tbody>
