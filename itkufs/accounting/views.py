@@ -386,7 +386,7 @@ def alter_group(request, group, is_admin=False):
             if old_logo and old_logo != group.get_logo_filename():
                 os.remove(old_logo)
 
-            if 'delete_logo' in request.POST:
+            elif 'delete_logo' in request.POST:
                 os.remove(group.get_logo_filename())
                 group.logo = ''
                 group.save()
