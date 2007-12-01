@@ -1,12 +1,11 @@
-<div id="debug" style="background: white">
-  <h2>Queries</h2>
-  <p>
-    {{ sql_queries|length }} Quer{{ sql_queries|pluralize:"y,ies" }}
+<div id="debug">
+  <p style="color: grey">
+    Debug: {{ sql_queries|length }} Quer{{ sql_queries|pluralize:"y,ies" }}
     {% ifnotequal sql_queries|length 0 %}
     (<span style="cursor: pointer;" onclick="var s=document.getElementById('debugQueryTable').style;s.display=s.display=='none'?'':'none';this.innerHTML=this.innerHTML=='Show'?'Hide':'Show';">Show</span>)
     {% endifnotequal %}
   </p>
-  <table id="debugQueryTable" style="display: none;">
+  <table id="debugQueryTable" style="display: none; background: white;">
     <col width="1"></col>
     <col></col>
     <col width="1"></col>
