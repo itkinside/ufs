@@ -4,13 +4,8 @@ import unittest
 
 from itkufs.accounting.models import *
 
-# FIXME Write more tests
-#       * all group properties need to be checked
-#       * same goes for account
-#       * missing test to check that user get set in log.
-# FIXME Add docstrings explaining purpose of all tests
-
 class GroupTestCase(unittest.TestCase):
+    # FIXME: Test all group properties
     # FIXME: Check more than count in the set tests?
 
     def setUp(self):
@@ -118,6 +113,8 @@ class GroupTestCase(unittest.TestCase):
         self.assertEqual(set.count(), 3)
 
 class AccountTestCase(unittest.TestCase):
+    # FIXME: Test all account properties
+
     def setUp(self):
         pass
 
@@ -248,7 +245,7 @@ class TransactionTestCase(unittest.TestCase):
         transaction = self.transaction
         transaction.set_payed(user=self.user)
 
-        #FIXME different error type perhaps?
+        # FIXME: Maybe raise a different exception?
         self.assertEqual(transaction.is_registered(), True)
         self.assertEqual(transaction.is_payed(), True)
         self.assertRaises(InvalidTransaction, transaction.reject,
@@ -287,10 +284,12 @@ class TransactionTestCase(unittest.TestCase):
         """Checks that receiving a transaction that is not payed fails"""
         transaction = self.transaction
 
-        self.assertRaises(InvalidTransaction, transaction.set_received, user=self.user)
+        self.assertRaises(InvalidTransaction, transaction.set_received,
+            user=self.user)
 
     def testUserGetsPassedOnToLog(self):
-        # FIXME
+        """FIXME: Write docstring"""
+        # FIXME: Implement test
         self.fail('Test not implemented')
 
 class LogTestCase(unittest.TestCase):
@@ -308,8 +307,10 @@ class LogTestCase(unittest.TestCase):
         """Checks that only one log entry of each type is allowed"""
 
         for key, value in TRANSACTIONLOG_TYPE:
-            log1 = TransactionLog(type=key, transaction=self.transaction, user=self.user)
-            log2 = TransactionLog(type=key, transaction=self.transaction, user=self.user)
+            log1 = TransactionLog(type=key, transaction=self.transaction,
+                                  user=self.user)
+            log2 = TransactionLog(type=key, transaction=self.transaction,
+                                  user=self.user)
 
             if key != 'Reg':
                 log1.save()
@@ -322,7 +323,8 @@ class LogTestCase(unittest.TestCase):
             self.transaction.log_set.filter(type='Reg')[0].save)
 
         for key, value in TRANSACTIONLOG_TYPE:
-            log1 = TransactionLog(type=key, transaction=self.transaction, user=self.user)
+            log1 = TransactionLog(type=key, transaction=self.transaction,
+                                  user=self.user)
 
             if key != 'Reg':
                 log1.save()
@@ -377,4 +379,10 @@ class EntryTestCase(unittest.TestCase):
         self.entry.debit = 0
         self.entry.credit = 0
         self.assertRaises(InvalidTransactionEntry, self.entry.save)
+
+class SettlementTestCase(unittest.TestCase):
+    # FIXME: Test all settlement properties
+
+    def setUp(self):
+        pass
 
