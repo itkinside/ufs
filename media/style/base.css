@@ -354,6 +354,10 @@ input#id_registered, input#id_received, form #delete_logo { /* checkboxes */
 div#debug {
 	margin: 1em;
 }
+div#debug table {
+	border: 5px solid #444;
+}
+
 div#debug table#query_table, div#debug table#query_table thead {
 	background: white;
 }
