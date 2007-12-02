@@ -33,7 +33,7 @@ class Group(models.Model):
     slug = models.SlugField(_('slug'), prepopulate_from=['name'], unique=True,
         help_text=_('A shortname used in URLs etc.'))
     warn_limit = models.IntegerField(_('warn limit'), null=True, blank=True,
-        help_text=_('Limit for waring user, leave blank for no limit.'))
+        help_text=_('Limit for warning user, leave blank for no limit.'))
     block_limit = models.IntegerField(_('block limit'), null=True, blank=True,
         help_text=_('Limit for blacklisting user, leave blank for no limit.'))
     admins = models.ManyToManyField(User, verbose_name=_('admins'),
