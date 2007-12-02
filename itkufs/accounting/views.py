@@ -376,6 +376,7 @@ def alter_group(request, group, is_admin=False):
         raise Http404
 
     GroupInstanceForm = form_for_instance(group)
+    del GroupInstanceForm.base_fields['slug']
 
     old_logo = group.get_logo_filename()
 
