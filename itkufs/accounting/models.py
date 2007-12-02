@@ -32,8 +32,10 @@ class Group(models.Model):
     name = models.CharField(_('name'), max_length=100)
     slug = models.SlugField(_('slug'), prepopulate_from=['name'], unique=True,
         help_text=_('A shortname used in URLs etc.'))
-    warn_limit = models.IntegerField(_('warn limit'), null=True, blank=True)
-    block_limit = models.IntegerField(_('block limit'), null=True, blank=True)
+    warn_limit = models.IntegerField(_('warn limit'), null=True, blank=True,
+        help_text=_('Limit for waring user, leave blank for no limit.'))
+    block_limit = models.IntegerField(_('block limit'), null=True, blank=True,
+        help_text=_('Limit for blacklisting user, leave blank for no limit.'))
     admins = models.ManyToManyField(User, verbose_name=_('admins'),
         null=True, blank=True)
     bank_account = models.ForeignKey('Account', verbose_name=_('bank account'),
@@ -44,7 +46,7 @@ class Group(models.Model):
     # FIXME: Probably needs to add sales_account etc.
 
     logo = models.ImageField(upload_to='logos', null=True, blank=True)
-    email = models.EmailField(null=True, blank=True)
+    email = models.EmailField(null=True, blank=True, help_text=_('Contact address for group.'))
 
     class Meta:
         ordering = ['name']
