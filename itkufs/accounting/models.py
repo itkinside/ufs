@@ -375,16 +375,16 @@ class Transaction(models.Model):
     set_rejected.__doc__ = 'set_rejected() is an alias for reject()'
 
     def is_registered(self):
-        return self.log_set.filter(type='Reg').count() > 0
+        return self.status in ['Reg', 'Pay', 'Rec']
 
     def is_payed(self):
-        return self.log_set.filter(type='Pay').count() > 0
+        return self.status in ['Pay', 'Rec']
 
     def is_received(self):
-        return self.log_set.filter(type='Rec').count() > 0
+        return self.status == 'Rec'
 
     def is_rejected(self):
-        return self.log_set.filter(type='Rej').count() > 0
+        return self.status == 'Rej'
 
     def get_registered(self):
         if self.is_registered():

@@ -79,8 +79,8 @@ DONE
 - Admin should be able to edit lists (adamcik)
 - Account management, optionally connect with users
 - Refactor of lists, statements, invoice etc to report app
-- Lists:
-  * Who to include on the list?
+- Lists: Who to include on the list?
+- is_* for Transaction need to check against status not log
 
 WONTFIX
 -------
