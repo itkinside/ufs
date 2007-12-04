@@ -39,7 +39,6 @@ SHOULD HAVE
 
 - Respect active flag for accounts, or at least indicate that account is
   inactive
-- http://www.b-list.org/weblog/2007/nov/02/handle-choices-right-way/
 
 MAY HAVE
 --------
@@ -85,6 +84,7 @@ DONE
 - Refactor of lists, statements, invoice etc to report app
 - Lists: Who to include on the list?
 - is_* for Transaction need to check against status not log
+- http://www.b-list.org/weblog/2007/nov/02/handle-choices-right-way/
 
 WONTFIX
 -------

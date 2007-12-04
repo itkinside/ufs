@@ -53,63 +53,63 @@ class GroupTestCase(unittest.TestCase):
         """Checks that transaction_set returns all transactions that is not
         rejected"""
 
-        set = self.group.transaction_set()
+        set = self.group.transaction_set
         self.assertEqual(set.count(), 3)
 
     def testTransactionSetWithRejected(self):
         """Checks that transaction_set_with_rejected returns all
         transactions"""
 
-        set = self.group.transaction_set_with_rejected()
+        set = self.group.transaction_set_with_rejected
         self.assertEqual(set.count(), 4)
 
     def testRegisteredTransactionSet(self):
         """Checks that registered_transaction_set returns all registered
         transactions that is not rejected"""
 
-        set = self.group.registered_transaction_set()
+        set = self.group.registered_transaction_set
         self.assertEqual(set.count(), 3)
 
     def testPayedTransactionSet(self):
         """Checks that payed_transaction_set returns all payed
         transactions that is not rejected"""
 
-        set = self.group.payed_transaction_set()
+        set = self.group.payed_transaction_set
         self.assertEqual(set.count(), 2)
 
     def testNotPayedTransactionSet(self):
         """Checks that not_payed_transaction_set returns all unpayed
         transactions that is not rejected"""
 
-        set = self.group.not_payed_transaction_set()
+        set = self.group.not_payed_transaction_set
         self.assertEqual(set.count(), 1)
 
     def testReceivedTransactionSet(self):
         """Checks that received_transaction_set returns all received
         transactions that is not rejected"""
 
-        set = self.group.received_transaction_set()
+        set = self.group.received_transaction_set
         self.assertEqual(set.count(), 1)
 
     def testNotReceivedTransactionSet(self):
         """Checks that not_received_transaction_set returns all transactions
         that has not been received, that is not rejected"""
 
-        set = self.group.not_received_transaction_set()
+        set = self.group.not_received_transaction_set
         self.assertEqual(set.count(), 2)
 
     def testRejectedTransactionSet(self):
         """Checks that rejected_transaction_set returns all rejected
         transactions"""
 
-        set = self.group.rejected_transaction_set()
+        set = self.group.rejected_transaction_set
         self.assertEqual(set.count(), 1)
 
     def testNotReceivedTransactionSet(self):
         """Checks that rejected_transaction_set returns all transactions that
         is not rejected"""
 
-        set = self.group.not_rejected_transaction_set()
+        set = self.group.not_rejected_transaction_set
         self.assertEqual(set.count(), 3)
 
 class AccountTestCase(unittest.TestCase):

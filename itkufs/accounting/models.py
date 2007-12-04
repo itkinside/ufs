@@ -29,7 +29,8 @@ class Group(models.Model):
     # FIXME: Probably needs to add sales_account etc.
 
     logo = models.ImageField(upload_to='logos', null=True, blank=True)
-    email = models.EmailField(null=True, blank=True, help_text=_('Contact address for group.'))
+    email = models.EmailField(null=True, blank=True,
+        help_text=_('Contact address for group.'))
 
     class Meta:
         ordering = ['name']
@@ -48,82 +49,113 @@ class Group(models.Model):
         if not self.account_set.count():
             # FIXME _('Bank') and _('Cash') does not seem to work here...
             # Could the problem be related to lazy/non-lazy ugettext?
-            bank = Account(name='Bank', slug='bank', type='As', group=self)
+            bank = Account(name='Bank', slug='bank',
+                           type=Account.ASSET_ACCOUNT, group=self)
             bank.save()
-            cash = Account(name='Cash', slug='cash', type='As', group=self)
+            cash = Account(name='Cash', slug='cash',
+                           type=Account.ASSET_ACCOUNT, group=self)
             cash.save()
 
             self.bank_account = bank;
             self.cash_account = cash;
             super(Group, self).save()
 
-    # FIXME Use property for all elements?
     def get_user_account_set(self):
         """Returns queryset of user accounts"""
-        return self.account_set.filter(type='Li', owner__isnull=False)
-    user_account_set = property(get_user_account_set,None,None)
+        return self.account_set.filter(type=Account.LIABILITY_ACCOUNT,
+                                       owner__isnull=False)
+    user_account_set = property(get_user_account_set, None, None)
 
-    def group_account_set(self):
+    def get_group_account_set(self):
         """Returns array of group accounts"""
-        return self.account_set.exclude(type='Li', owner__isnull=False)
+        return self.account_set.exclude(type=Account.LIABILITY_ACCOUNT,
+                                        owner__isnull=False)
+    group_account_set = property(get_group_account_set, None, None)
 
-    def transaction_set_with_rejected(self):
+    def get_transaction_set_with_rejected(self):
         """Returns all transactions connected to group, including rejected"""
         return Transaction.objects.filter(
             entry_set__account__group=self).distinct()
+    transaction_set_with_rejected = property(get_transaction_set_with_rejected,
+                                             None, None)
 
-    def transaction_set(self):
+    def get_transaction_set(self):
         """Returns all transactions connected to group, that have not been
         rejected"""
-        return self.transaction_set_with_rejected().exclude(status='Rej')
+        return self.transaction_set_with_rejected.exclude(
+            status=Transaction.REJECTED_STATE)
+    transaction_set = property(get_transaction_set, None, None)
 
-    def registered_transaction_set(self):
+    def get_registered_transaction_set(self):
         """Returns all transactions connected to group, that are registered and not rejected"""
-        return self.transaction_set().exclude(status='')
+        return self.transaction_set.exclude(status='')
+    registered_transaction_set = property(get_registered_transaction_set,
+                                          None, None)
 
-    def payed_transaction_set(self):
+    def get_payed_transaction_set(self):
         """Returns all payed transactions connected to group, that are not
         rejected"""
-        return self.transaction_set().filter(Q(status='Pay')|Q(status='Rec'))
+        return self.transaction_set.filter(
+            Q(status=Transaction.PAYED_STATE) |
+            Q(status=Transaction.RECEIVED_STATE))
+    payed_transaction_set = property(get_payed_transaction_set, None, None)
 
-    def not_payed_transaction_set(self):
+    def get_not_payed_transaction_set(self):
         """Returns all unpayed transactions connected to group, that are not
         rejected"""
-        return self.transaction_set().filter(Q(status='')|Q(status='Reg'))
+        return self.transaction_set.filter(
+            Q(status='') | Q(status=Transaction.REGISTERED_STATE))
+    not_payed_transaction_set = property(get_not_payed_transaction_set,
+                                         None, None)
 
-    def received_transaction_set(self):
+    def get_received_transaction_set(self):
         """Returns all received transactions connected to group"""
-        return self.transaction_set().filter(status='Rec')
+        return self.transaction_set.filter(
+            status=Transaction.RECEIVED_STATE)
+    received_transaction_set = property(get_received_transaction_set,
+                                        None, None)
 
-    def not_received_transaction_set(self):
+    def get_not_received_transaction_set(self):
         """Returns all transactions that have not been received connected to
         group"""
-        return self.transaction_set().exclude(status='Rec')
+        return self.transaction_set.exclude(
+            status=Transaction.RECEIVED_STATE)
+    not_received_transaction_set = property(get_not_received_transaction_set,
+                                            None, None)
 
-    def rejected_transaction_set(self):
+    def get_rejected_transaction_set(self):
         """Returns all rejected transactions connected to group"""
-        return self.transaction_set_with_rejected().filter(status='Rej')
+        return self.transaction_set_with_rejected.filter(
+            status=Transaction.REJECTED_STATE)
+    rejected_transaction_set = property(get_rejected_transaction_set,
+                                        None, None)
 
-    not_rejected_transaction_set = transaction_set
-    not_rejected_transaction_set.__doc__ = """Returns all transactions that
-    have not been rejected connected to group. Same as transaction_set()."""
+    get_not_rejected_transaction_set = get_transaction_set
+    get_not_rejected_transaction_set.__doc__ = """Returns all transactions that
+    have not been rejected connected to group. Same as get_transaction_set()."""
+    not_rejected_transaction_set = property(get_transaction_set, None, None)
 databrowse.site.register(Group)
 
-ACCOUNT_TYPE = (
-    ('As', _('Asset')),     # Eiendeler/aktiva
-    ('Li', _('Liability')), # Gjeld/passiva
-    ('Eq', _('Equity')),    # Egenkapital
-    ('In', _('Income')),    # Inntekt
-    ('Ex', _('Expense')),   # Utgift
-)
-
 class Account(models.Model):
+    ASSET_ACCOUNT = 'As'        # Eiendeler/aktiva
+    LIABILITY_ACCOUNT = 'Li'    # Gjeld/passiv
+    EQUITY_ACCOUNT = 'Eq'       # Egenkapital
+    INCOME_ACCOUNT = 'In'       # Inntekt
+    EXPENSE_ACCOUNT = 'Ex'      # Utgift
+    ACCOUNT_TYPE = (
+        (ASSET_ACCOUNT, _('Asset')),
+        (LIABILITY_ACCOUNT, _('Liability')),
+        (EQUITY_ACCOUNT, _('Equity')),
+        (INCOME_ACCOUNT, _('Income')),
+        (EXPENSE_ACCOUNT, _('Expense')),
+    )
+
     name = models.CharField(_('name'), max_length=100)
     slug = models.SlugField(_('slug'), prepopulate_from=['name'],
         help_text=_('A shortname used in URLs etc.'))
     group = models.ForeignKey(Group, verbose_name=_('group'))
     type = models.CharField(_('type'), max_length=2, choices=ACCOUNT_TYPE,
-        default='Li')
+        default=LIABILITY_ACCOUNT)
     owner = models.ForeignKey(User, verbose_name=_('owner'),
         null=True, blank=True)
     active = models.BooleanField(_('active'), default=True)
@@ -158,10 +190,10 @@ class Account(models.Model):
         """Returns True if account type uses debit to increase, False if using
         credit to increase, and None for all equity accounts."""
 
-        if self.type in ('Li', 'In'):
+        if self.type in (self.LIABILITY_ACCOUNT, self.INCOME_ACCOUNT):
             # Credit to increase
             return False
-        elif self.type in ('As', 'Ex'):
+        elif self.type in (self.ASSET_ACCOUNT, self.EXPENSE_ACCOUNT):
             # Debit to increase
             return True
         else:
@@ -174,7 +206,8 @@ class Account(models.Model):
 
         balance = 0
 
-        for e in self.transactionentry_set.filter(transaction__log_set__type='Rec'):
+        for e in self.transactionentry_set.filter(
+            transaction__log_set__type=Transaction.RECEIVED_STATE):
             balance -= e.debit
             balance += e.credit
 
@@ -193,7 +226,7 @@ class Account(models.Model):
     def is_user_account(self):
         """Returns true if a user account"""
 
-        if self.owner is not None and self.type == 'Li':
+        if self.owner is not None and self.type == self.LIABILITY_ACCOUNT:
             return True
         else:
             return False
@@ -253,18 +286,23 @@ class Settlement(models.Model):
 databrowse.site.register(Settlement)
 
 class Transaction(models.Model):
+    REGISTERED_STATE = 'Reg'
+    PAYED_STATE = 'Pay'
+    RECEIVED_STATE = 'Rec'
+    REJECTED_STATE = 'Rej'
     TRANSACTION_STATE = (
-        ('Reg', _('Registered')),
-        ('Pay', _('Payed')),
-        ('Rec', _('Received')),
-        ('Rej', _('Rejected')),
+        (REGISTERED_STATE, _('Registered')),
+        (PAYED_STATE, _('Payed')),
+        (RECEIVED_STATE, _('Received')),
+        (REJECTED_STATE, _('Rejected')),
     )
 
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
 
     last_modified = models.DateTimeField(_('Last modified'), auto_now_add=True)
-    status = models.CharField(_('status'), max_length=3, choices=TRANSACTION_STATE, blank=True)
+    status = models.CharField(_('status'), max_length=3,
+        choices=TRANSACTION_STATE, blank=True)
 
     class Meta:
         verbose_name = _('transaction')
@@ -280,9 +318,11 @@ class Transaction(models.Model):
             entries = []
             for entry in self.entry_set.all():
                 if entry.debit:
-                    entries.append("%s debit %.2f" % (entry.account, entry.debit))
+                    entries.append('%s debit %.2f' %
+                        (entry.account, entry.debit))
                 else:
-                    entries.append("%s credit %.2f" % (entry.account, entry.credit))
+                    entries.append('%s credit %.2f' %
+                        (entry.account, entry.credit))
 
             return ', '.join(entries)
         else:
@@ -322,13 +362,13 @@ class Transaction(models.Model):
             self.save()
 
         if not self.is_registered():
-            log = TransactionLog(type='Reg', transaction=self)
+            log = TransactionLog(type=self.REGISTERED_STATE, transaction=self)
             if user:
                 log.user = user
             if message is not None and message.strip() != '':
                 log.message = message
             log.save()
-            self.status = 'Reg'
+            self.status = self.REGISTERED_STATE
             self.last_modifed = datetime.now()
             self.save()
         else:
@@ -336,13 +376,13 @@ class Transaction(models.Model):
 
     def set_payed(self, user=None, message=''):
         if not self.is_rejected() and self.is_registered():
-            log = TransactionLog(type='Pay', transaction=self)
+            log = TransactionLog(type=self.PAYED_STATE, transaction=self)
             if user:
                 log.user = user
             if message.strip() != '':
                 log.message = message
             log.save()
-            self.status = 'Pay'
+            self.status = self.PAYED_STATE
             self.last_modifed = datetime.now()
             self.save()
         else:
@@ -350,13 +390,13 @@ class Transaction(models.Model):
 
     def set_received(self, user=None, message=''):
         if not self.is_rejected() and self.is_registered() and self.is_payed():
-            log = TransactionLog(type='Rec', transaction=self)
+            log = TransactionLog(type=self.RECEIVED_STATE, transaction=self)
             if user:
                 log.user = user
             if message.strip() != '':
                 log.message = message
             log.save()
-            self.status = 'Rec'
+            self.status = self.RECEIVED_STATE
             self.last_modifed = datetime.now()
             self.save()
         else:
@@ -364,13 +404,13 @@ class Transaction(models.Model):
 
     def reject(self, user=None, message=''):
         if self.is_registered() and not self.is_payed() and not self.is_received():
-            log = TransactionLog(type='Rej', transaction=self)
+            log = TransactionLog(type=self.REJECTED_STATE, transaction=self)
             if user:
                 log.user = user
             if message.strip() != '':
                 log.message = message
             log.save()
-            self.status = 'Rej'
+            self.status = self.REJECTED_STATE
             self.last_modifed = datetime.now()
             self.save()
         else:
@@ -379,29 +419,42 @@ class Transaction(models.Model):
     set_rejected.__doc__ = 'set_rejected() is an alias for reject()'
 
     def is_registered(self):
-        return self.status in ['Reg', 'Pay', 'Rec']
+        return self.status in (self.REGISTERED_STATE,
+                               self.PAYED_STATE,
+                               self.RECEIVED_STATE)
 
     def is_payed(self):
-        return self.status in ['Pay', 'Rec']
+        return self.status in (self.PAYED_STATE, self.RECEIVED_STATE)
 
     def is_received(self):
-        return self.status == 'Rec'
+        return self.status == self.RECEIVED_STATE
 
     def is_rejected(self):
-        return self.status == 'Rej'
+        return self.status == self.REJECTED_STATE
 
     def get_registered(self):
-        if self.is_registered():
-            return self.log_set.filter(type='Reg')[0];
+        try:
+            return self.log_set.filter(type=self.REGISTERED_STATE)[0];
+        except IndexError:
+            pass
+
     def get_payed(self):
-        if self.is_payed():
-            return self.log_set.filter(type='Pay')[0];
+        try:
+            return self.log_set.filter(type=self.PAYED_STATE)[0];
+        except IndexError:
+            pass
+
     def get_received(self):
-        if self.is_received():
-            return self.log_set.filter(type='Rec')[0];
+        try:
+            return self.log_set.filter(type=self.RECEIVED_STATE)[0];
+        except IndexError:
+            pass
+
     def get_rejected(self):
-        if self.is_rejected():
-            return self.log_set.filter(type='Rej')[0];
+        try:
+            return self.log_set.filter(type=self.REJECTED_STATE)[0];
+        except IndexError:
+            pass
 
     registered = property(get_registered, None, None)
     received = property(get_received, None, None)
@@ -414,23 +467,21 @@ class Transaction(models.Model):
         debit_group = self.entry_set.filter(debit__gt=0)[0]
         credit_group = self.entry_set.filter(credit__gt=0)[0]
 
-        posible_state = {}
-        for k,v in self.TRANSACTION_STATE:
-            posible_state[k] = v
+        possible_state = dict(self.TRANSACTION_STATE)
 
         if self.is_rejected() or self.is_received():
             return [('','')]
 
         if self.is_registered():
-            del posible_state['Reg']
+            del possible_state[self.REGISTERED_STATE]
 
         if self.is_payed():
-            del posible_state['Pay']
-            del posible_state['Rej']
+            del possible_state[self.PAYED_STATE]
+            del possible_state[self.REJECTED_STATE]
 
-        posible_state = posible_state.items()
-        posible_state.insert(0, ('',''))
-        return posible_state
+        possible_state = possible_state.items()
+        possible_state.insert(0, ('',''))
+        return possible_state
 
     class Admin:
         pass

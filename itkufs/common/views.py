@@ -72,9 +72,9 @@ def group_summary(request, group, page='1', is_admin=False):
 
     # Get related transactions
     accounts = Account.objects.filter(group=group)
-    transactions = group.transaction_set()
+    transactions = group.transaction_set
 
-    if is_admin and group.not_payed_transaction_set().count():
+    if is_admin and group.not_payed_transaction_set.count():
         request.user.message_set.create(
             message=_('You have pending transactions in the group: %s') \
                 % group.name)
@@ -127,9 +127,8 @@ def account_summary(request, group, account, page='1', is_admin=False):
 
 
     # Get related transactions
-    # FIXME order by registered
     # FIXME
-    # transactions = account.transaction_set()
+    # transactions = account.transaction_set
     transactions = Transaction.objects.filter(entry_set__account=account)
 
     # Warn owner of account about a low balance
