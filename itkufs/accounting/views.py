@@ -16,7 +16,6 @@ from django.views.generic.create_update import update_object
 from django.views.generic.list_detail import object_list
 
 from itkufs.common.decorators import is_group_admin, limit_to_group
-from itkufs.common.models import Group, Account
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
 
@@ -133,7 +132,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
             if 'received' in form.data:
                 transaction.set_received(user=request.user)
 
-            return HttpResponseRedirect(reverse(group_summary,
+            return HttpResponseRedirect(reverse('group_summary',
                 args=[group.slug]))
         else:
             return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))

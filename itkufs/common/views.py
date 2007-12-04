@@ -16,7 +16,7 @@ from django.views.generic.create_update import update_object
 from django.views.generic.list_detail import object_list
 
 from itkufs.common.decorators import *
-from itkufs.common.models import *
+from itkufs.accounting.models import Group, Account, Transaction
 
 def login_user(request):
     """Login user"""
