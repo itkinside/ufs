@@ -334,7 +334,15 @@ def approve(request, group, page="1", is_admin=False):
         forms.append(form)
 
     if to_be_rejected:
-        raise Exception('FIXME, not implemented yet')
+        form = RejectTransactionForm()
+        return render_to_response('accounting/reject_transactions.html',
+                           {
+                                'is_admin': is_admin,
+                                'group': group,
+                                'transactions': to_be_rejected,
+                                'form': form,
+                           },
+                           context_instance=RequestContext(request))
 
     transactions = zip(transactions,forms)
 
@@ -449,3 +457,9 @@ def alter_account(request, group, account=None, type='new', is_admin=False):
                                 'form': form,
                               },
                               context_instance=RequestContext(request))
+
+
+def reject_transactions(request, group):
+    numbers = [int(i) for i in request.POST['transaction']]
+
+    raise Exception([numbers, request.POST])

@@ -98,3 +98,7 @@ class ChangeTransactionForm(forms.Form):
         self.fields['state'].widget = forms.Select(choices=choices)
 
     state = forms.CharField(max_length=3, label='')
+
+class RejectTransactionForm(forms.Form):
+    reason = forms.CharField(label=_('Reason'),
+        widget=forms.widgets.Textarea(attrs={'rows': 2}), required=True)
