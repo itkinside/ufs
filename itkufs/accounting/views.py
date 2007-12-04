@@ -307,7 +307,7 @@ def approve(request, group, page="1", is_admin=False):
     # Get related transactions
     transactions = group.not_received_transaction_set()
 
-    forms = {}
+    forms = []
     to_be_rejected = []
 
     for t in transactions:
@@ -331,24 +331,21 @@ def approve(request, group, page="1", is_admin=False):
         else:
             form = ChangeTransactionForm(prefix="transaction%d" % t.id, choices=choices)
 
-        forms[t.id] = form
+        forms.append(form)
 
     if to_be_rejected:
         raise Exception('FIXME, not implemented yet')
 
-    # Pass on to generic view
-    return object_list(request, transactions,
-                       paginate_by=20,
-                       page=page,
-                       allow_empty=True,
-                       template_name='accounting/approve_transactions.html',
-                       extra_context={
+    transactions = zip(transactions,forms)
+
+    return render_to_response('accounting/approve_transactions.html',
+                       {
                             'is_admin': is_admin,
                             'group': group,
                             'approve': True,
-                            'forms': forms,
+                            'transaction_list': transactions,
                        },
-                       template_object_name='transaction')
+                       context_instance=RequestContext(request))
 
 @login_required
 @is_group_admin
