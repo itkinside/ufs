@@ -15,6 +15,9 @@ class Group(models.Model):
     name = models.CharField(_('name'), max_length=100)
     slug = models.SlugField(_('slug'), prepopulate_from=['name'], unique=True,
         help_text=_('A shortname used in URLs etc.'))
+    placeholder = models.BooleanField(default=False,
+        help_text=_('If the group is not real, but a placeholder for ' +
+                    'receiving transfers.'))
     warn_limit = models.IntegerField(_('warn limit'), null=True, blank=True,
         help_text=_('Limit for warning user, leave blank for no limit.'))
     block_limit = models.IntegerField(_('block limit'), null=True, blank=True,

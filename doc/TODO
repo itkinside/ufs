@@ -10,7 +10,6 @@ Model:
 - Update code with the new Transaction model
 - Do not allow saving Transaction with accounts from different groups in debit
   or credit
-- Placeholder flag for group
 - set_reject, etc, need to be aware of placeholders and enfore who is allowed
   to alter state
 
@@ -88,6 +87,7 @@ DONE
 - Lists: Who to include on the list?
 - is_* for Transaction need to check against status not log
 - http://www.b-list.org/weblog/2007/nov/02/handle-choices-right-way/
+- Placeholder flag for group
 
 WONTFIX
 -------
