@@ -20,7 +20,7 @@
 		{% if t.is_rejected %}rejected{% else %}
 		{% if not t.is_received %}pending{% endif %}{% endif %}">
 		<td rowspan="{{ t.entry_set.all.count }}" class="status">
-				<b>{{ t.last_modified|date:"Y-m-d H:i" }}:</b> {{ t.get_status_display }}
+				{{ t.get_status_display }} at {{ t.last_modified|date:"Y-m-d H:i" }}
 		</td>
 		{% for e in t.entry_set.all %}
 		<td class="account">
