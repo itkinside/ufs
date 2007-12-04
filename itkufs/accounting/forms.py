@@ -102,3 +102,4 @@ class ChangeTransactionForm(forms.Form):
 class RejectTransactionForm(forms.Form):
     reason = forms.CharField(label=_('Reason'),
         widget=forms.widgets.Textarea(attrs={'rows': 2}), required=True)
+

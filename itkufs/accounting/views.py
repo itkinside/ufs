@@ -165,7 +165,7 @@ def approve(request, group, page="1", is_admin=False):
 
 
     # Get related transactions
-    transactions = group.not_received_transaction_set()
+    transactions = group.not_received_transaction_set
 
     forms = []
     to_be_rejected = []
@@ -216,6 +216,26 @@ def approve(request, group, page="1", is_admin=False):
                        context_instance=RequestContext(request))
 
 def reject_transactions(request, group):
-    numbers = [int(i) for i in request.POST['transaction']]
+    #HACK!!! needs more work ;)
 
-    raise Exception([numbers, request.POST])
+    if request.method != 'POST':
+        raise Exception()
+
+    if request.POST['reason'].strip() == '':
+        raise Exception()
+
+
+    transaction = []
+    for key in request.POST.keys():
+        parts = key.split('_')
+        if parts[0] == 'transaction' and parts[1].isdecimal():
+            transaction.append(int(parts[1]))
+
+    for id in transaction:
+        t = Transaction.objects.get(id=id)
+
+        # FIXME check the we are allowed to reject this transaction
+
+        t.set_rejected(user=request.user, message=request.POST['reason'])
+
+    raise Exception('done')
