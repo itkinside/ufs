@@ -287,9 +287,8 @@ class TransactionTestCase(unittest.TestCase):
         self.assertRaises(InvalidTransaction, transaction.set_received,
             user=self.user)
 
-    def testUserGetsPassedOnToLog(self):
+    def testOnlyOneGroupOnEachSideOfTransaction(self):
         """FIXME: Write docstring"""
-        # FIXME: Implement test
         self.fail('Test not implemented')
 
 class LogTestCase(unittest.TestCase):
