@@ -105,7 +105,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
 
             transaction.set_registered(user=request.user, message=details)
 
-            if amount <= account.balance_credit_reversed():
+            if amount <= account.user_balance():
                 transaction.set_payed(user=request.user)
                 transaction.set_received(user=request.user)
 

@@ -166,25 +166,25 @@ def balance(request, group, is_admin=False):
 
     # Assets
     for account in group.account_set.filter(type='As'):
-        balance = account.balance_credit_reversed()
+        balance = account.user_balance()
         accounts['As'].append((account.name, balance))
         accounts['AsSum'] += balance
 
     # Liabilities
     for account in group.account_set.filter(type='Li', owner__isnull=True):
-        balance = account.balance_credit_reversed()
+        balance = account.user_balance()
         accounts['Li'].append((account.name, balance))
         accounts['LiSum'] += balance
 
     # Accumulated member accounts liabilities
-    member_balance_sum = sum([a.balance_credit_reversed()
+    member_balance_sum = sum([a.user_balance()
         for a in group.account_set.filter(type='Li', owner__isnull=False)])
     accounts['Li'].append((_('Member accounts'), member_balance_sum))
     accounts['LiSum'] += member_balance_sum
 
     # Equities
     for account in group.account_set.filter(type='Eq'):
-        balance = account.balance_credit_reversed()
+        balance = account.user_balance()
         accounts['Eq'].append((account.name, balance))
         accounts['EqSum'] += balance
 
@@ -228,13 +228,13 @@ def income(request, group, is_admin=False):
 
     # Incomes
     for account in group.account_set.filter(type='In'):
-        balance = account.balance_credit_reversed()
+        balance = account.user_balance()
         accounts['In'].append((account.name, balance))
         accounts['InSum'] += balance
 
     # Expenses
     for account in group.account_set.filter(type='Ex'):
-        balance = account.balance_credit_reversed()
+        balance = account.user_balance()
         accounts['Ex'].append((account.name, balance))
         accounts['ExSum'] += balance
 

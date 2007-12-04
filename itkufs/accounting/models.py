@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 databrowse.site.register(User)
 
-# TODO: replace custom save method with validator_lists when Django supports
+# TODO: Replace custom save methods with validator_lists when Django supports
 # this good enough
 
 class Group(models.Model):
@@ -186,21 +186,6 @@ class Account(models.Model):
     def __unicode__(self):
         return "%s: %s" % (self.group, self.name)
 
-    def debit_to_increase(self):
-        """Returns True if account type uses debit to increase, False if using
-        credit to increase, and None for all equity accounts."""
-
-        if self.type in (self.LIABILITY_ACCOUNT, self.INCOME_ACCOUNT):
-            # Credit to increase
-            return False
-        elif self.type in (self.ASSET_ACCOUNT, self.EXPENSE_ACCOUNT):
-            # Debit to increase
-            return True
-        else:
-            # Equity accounts: Credit to increase for capital accounts, debit
-            # to increase of drawing accounts
-            return None
-
     def balance(self):
         """Returns account balance"""
 
@@ -213,12 +198,12 @@ class Account(models.Model):
 
         return balance
 
-    def balance_credit_reversed(self):
-        """Returns account balance. If the account is an credit account, the
-        balance is multiplied with -1."""
+    def user_balance(self):
+        """Returns account balance, but multiplies by -1 if the account is a
+        liability account."""
 
         balance = self.balance()
-        if balance == 0 or self.debit_to_increase():
+        if balance == 0 or self.type != self.LIABILITY_ACCOUNT:
             return balance
         else:
             return -1 * balance
@@ -238,7 +223,7 @@ class Account(models.Model):
             or self.ignore_block_limit
             or self.group.block_limit is None):
             return False
-        return self.balance_credit_reversed() < self.group.block_limit
+        return self.user_balance() < self.group.block_limit
 
     def needs_warning(self):
         """Returns true if user account balance is below group warn limit"""
@@ -247,7 +232,7 @@ class Account(models.Model):
             or self.ignore_block_limit
             or self.group.warn_limit is None):
             return False
-        return self.balance_credit_reversed() < self.group.warn_limit
+        return self.user_balance() < self.group.warn_limit
 databrowse.site.register(Account)
 
 class InvalidTransaction(Exception):
