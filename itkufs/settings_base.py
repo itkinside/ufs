@@ -87,6 +87,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.webdesign',
     'django.contrib.databrowse',
+    'itkufs.common',
     'itkufs.accounting',
     'itkufs.inventory',
     'itkufs.reports',
