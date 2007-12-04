@@ -2,7 +2,6 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 from django.contrib import databrowse
 from django.contrib.auth.decorators import user_passes_test
-from itkufs.accounting.models import *
 
 urlpatterns = patterns('',
     (r'^admin/', include('django.contrib.admin.urls')),
@@ -15,9 +14,9 @@ urlpatterns = patterns('',
     (r'^i18n/', include('django.conf.urls.i18n')),
 
     (r'^inventory/', include('itkufs.inventory.urls')),
+    (r'^', include('itkufs.common.urls')),
     (r'^', include('itkufs.accounting.urls')),
     (r'^', include('itkufs.reports.urls')),
-
 
     # Only reached using test server, but always used
     # for reverse lookup of URLs from views and templates

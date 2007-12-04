@@ -3,7 +3,7 @@ from settings_base import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-TEMPLATE_STRING_IF_INVALID = '<b>!!INVALID VAR!!</b>'
+#TEMPLATE_STRING_IF_INVALID = ''
 
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
 DATABASE_NAME = '/home/cassarossa/itk/felles/itkufs/itkufs.sqlite'             # Or path to database file if using sqlite3.

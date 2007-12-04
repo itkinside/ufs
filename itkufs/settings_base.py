@@ -2,6 +2,7 @@
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+TEMPLATE_STRING_IF_INVALID = '!!INVALID VAR!!'
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
