@@ -64,7 +64,7 @@
         <tr class="{% cycle even,odd %}{% if account.is_blocked %} blacklisted{% endif %}">
             <th class="name">{{ account.name }}</th>
             {% ifnotequal list.balance_width 0 %}
-            <td class="balance">{{ account.balance_credit_reversed }}</td>
+            <td class="balance">{{ account.user_balance }}</td>
             {% endifnotequal %}
             {% for item in list.column_set.all %}
                 {% if not account.is_blocked %}
