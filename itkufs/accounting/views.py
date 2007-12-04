@@ -308,6 +308,7 @@ def approve(request, group, page="1", is_admin=False):
     transactions = group.not_received_transaction_set()
 
     forms = {}
+    to_be_rejected = []
 
     for t in transactions:
         choices = t.get_valid_logtype_choices()
@@ -316,8 +317,8 @@ def approve(request, group, page="1", is_admin=False):
             form = ChangeTransactionForm(request.POST, prefix="transaction%d" % t.id, choices=choices)
 
             if form.is_valid():
-                change_to == ''
-                # FIXME should not be allowed to set_* on "external accounts"
+                change_to = form.cleaned_data['state']
+
                 if change_to == 'Reg':
                     t.set_registered(user=request.user)
                 elif change_to == 'Pay':
@@ -326,14 +327,14 @@ def approve(request, group, page="1", is_admin=False):
                     t.set_received(user=request.user)
                 elif change_to == 'Rej':
                     to_be_rejected.append(t)
-                raise Exception('FIXME, not implemented yet')
 
-                if to_be_rejected:
-                    raise Exception('FIXME, not implemented yet')
         else:
             form = ChangeTransactionForm(prefix="transaction%d" % t.id, choices=choices)
 
         forms[t.id] = form
+
+    if to_be_rejected:
+        raise Exception('FIXME, not implemented yet')
 
     # Pass on to generic view
     return object_list(request, transactions,

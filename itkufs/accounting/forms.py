@@ -92,7 +92,8 @@ class TransferForm(BaseTransactionForm):
     details = details_field
 
 class ChangeTransactionForm(forms.Form):
-    def __init__(self, choices=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        choices = kwargs.pop('choices', (('',''),))
         super(forms.Form, self).__init__(*args, **kwargs)
         self.fields['state'].widget = forms.Select(choices=choices)
 

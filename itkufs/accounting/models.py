@@ -405,6 +405,7 @@ class Transaction(models.Model):
     payed = property(get_payed, None, None)
 
     def get_valid_logtype_choices(self):
+        # FIXME remove choices that set status for other group...
         posible_state = {}
         for k,v in TRANSACTIONLOG_TYPE:
             posible_state[k] = v
