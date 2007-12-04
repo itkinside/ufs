@@ -266,13 +266,13 @@ class Transaction(models.Model):
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
 
-    last_modifed = models.DateTimeField(_('Last modified'), auto_now_add=True)
+    last_modified = models.DateTimeField(_('Last modified'), auto_now_add=True)
     status = models.CharField(_('status'), max_length=3, choices=TRANSACTIONLOG_TYPE, blank=True)
 
     class Meta:
         verbose_name = _('transaction')
         verbose_name_plural = _('transactions')
-        ordering = ['last_modifed']
+        ordering = ['last_modified']
 
 #    class Admin:
 #        list_display = ['status']
