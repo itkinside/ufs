@@ -11,16 +11,18 @@
 	<tr>
 		<th>{% trans "Status" %}</th>
 		<th>{% trans "Account" %}</th>
-    <th>{% trans "Debit" %}</th>
-    <th>{% trans "Credit" %}</th>
-    <th>{% trans "Details" %}</th>
+		<th>{% trans "Debit" %}</th>
+		<th>{% trans "Credit" %}</th>
+		<th>{% trans "Details" %}</th>
 	</tr>
 	{% for t in transaction_list %}
 	<tr class="{% cycle 'evenrow' 'oddrow' as trclass %}
 		{% if t.is_rejected %}rejected{% else %}
 		{% if not t.is_received %}pending{% endif %}{% endif %}">
-		<td rowspan="{{ t.entry_set.all.count }}" class="status">
-				{{ t.get_status_display }} at {{ t.last_modified|date:"Y-m-d H:i" }}
+		<td rowspan="{{ t.entry_set.all.count }}">
+				{% blocktrans with t.get_status_display as status and t.last_modified|date:"Y-m-d H:i" as last_modified %}
+				{{ status }} at {{ last_modified }}
+				{% endblocktrans %}
 		</td>
 		{% for e in t.entry_set.all %}
 		<td class="account">
