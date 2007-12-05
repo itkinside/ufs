@@ -457,9 +457,9 @@ def create_transaction(request, group, other_group, is_admin=False):
     form = TransactionForm()
     other_forms, group_forms = [], []
 
-    for account in group.user_account_set:
+    for account in group.account_set.all():
         group_forms.append((account, EntryForm(prefix=account.id)))
-    for account in other.user_account_set:
+    for account in other.account_set.all():
         other_forms.append((account, EntryForm(prefix=account.id)))
 
 
