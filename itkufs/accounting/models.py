@@ -421,28 +421,20 @@ class Transaction(models.Model):
         return self.status == self.REJECTED_STATE
 
     def get_registered(self):
-        try:
+        if self.is_registered():
             return self.log_set.filter(type=self.REGISTERED_STATE)[0];
-        except IndexError:
-            pass
 
     def get_payed(self):
-        try:
+        if self.is_payed():
             return self.log_set.filter(type=self.PAYED_STATE)[0];
-        except IndexError:
-            pass
 
     def get_received(self):
-        try:
+        if self.is_received():
             return self.log_set.filter(type=self.RECEIVED_STATE)[0];
-        except IndexError:
-            pass
 
     def get_rejected(self):
-        try:
+        if self.is_rejected():
             return self.log_set.filter(type=self.REJECTED_STATE)[0];
-        except IndexError:
-            pass
 
     registered = property(get_registered, None, None)
     received = property(get_received, None, None)
