@@ -28,33 +28,18 @@ def login_user(request):
         else:
             return HttpResponseForbidden(_('Login failed'))
 
-    return HttpResponseRedirect(reverse('group-list'))
-
-@login_required
-def group_list(request):
-    """Lists the user's account groups and accounts, including admin accounts"""
-
-    # Build account struct
-    accounts = []
-    for account in request.user.account_set.all().order_by('name'):
-        is_admin = bool(account.group.admins.filter(
-            username=request.user.username).count())
-        accounts.append((account, is_admin))
-
-    # If not coming from inside and user only got one account,
-    # jump directly to account summary
-    request_from_inside = ('HTTP_REFERER' in request.META and
-        urlparse(request.META['HTTP_REFERER'])[2].startswith(reverse('group-list')))
-    if len(accounts) == 1 and not request_from_inside:
+    try:
+        # Redirect to one of the user's accounts
+        account = request.user.account_set.all()[0]
         url = reverse('account-summary',
-                      kwargs={'group': accounts[0][0].group.slug,
-                              'account': accounts[0][0].slug})
+                      kwargs={'group': account.group.slug,
+                              'account': account.slug})
         return HttpResponseRedirect(url)
+    except IndexError:
+        pass
 
-    return render_to_response('accounting/group_list.html',
-                              {
-                                  'accounts': accounts,
-                              },
+    # Tell the user he has a user, but not an account
+    return render_to_response('accounting/no_account.html',
                               context_instance=RequestContext(request))
 
 @login_required
@@ -115,16 +100,8 @@ def account_summary(request, group, account, page='1', is_admin=False):
         if not account.active:
             return HttpResponseForbidden(_('This account has been disabled.'))
 
-    # Save account in session
-    # I think it's a bit of hack to switch account when the referrer is the
-    # group-list view, but that view is in fact only used for selecting between
-    # your own accounts.
-    request_from_group_list = ('HTTP_REFERER' in request.META and
-        urlparse(request.META['HTTP_REFERER'])[2] == reverse('group-list'))
-
     if request.user == account.owner:
         request.session['my_account'] = account
-
 
     # Get related transactions
     # FIXME

@@ -8,7 +8,7 @@ urlpatterns = patterns('',
 
     # Account list
     url(r'^$',
-        group_list, name='group-list'),
+        login_user, name='index'),
 
     # Account summary
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/$',
