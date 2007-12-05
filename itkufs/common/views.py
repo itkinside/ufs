@@ -185,6 +185,7 @@ def alter_group(request, group, is_admin=False):
 
     GroupInstanceForm = form_for_instance(group)
     del GroupInstanceForm.base_fields['slug']
+    del GroupInstanceForm.base_fields['placeholder']
 
     old_logo = group.get_logo_filename()
 
