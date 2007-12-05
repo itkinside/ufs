@@ -274,7 +274,6 @@ input:hover, select:hover, textarea:hover, button:hover {
 button {
 	margin-left: 9em;
 	background: #DDD;
-	clear: left;
 }
 #rejectionlist {
 	margin-left: 9em;
@@ -289,7 +288,9 @@ button {
 	margin-right: 0.5em;
 }
 input#id_payed, #accounting_approve_transactions table input,
-input#id_registered, input#id_received, form #delete_logo { /* checkboxes */
+input#id_registered, input#id_received, form #delete_logo,
+input#id_placeholder, input#id_active, input#id_ignore_block_limit {
+  /* checkboxes */
 	width: auto;
 	border: 0;
 }
@@ -298,6 +299,10 @@ input#id_registered, input#id_received, form #delete_logo { /* checkboxes */
 }
 #editlist table input {
 	width: auto;
+}
+
+form p {
+	clear: left;
 }
 
 /* Account/group summary */
