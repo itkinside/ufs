@@ -26,11 +26,10 @@ class Group(models.Model):
     admins = models.ManyToManyField(User, verbose_name=_('admins'),
         null=True, blank=True)
     bank_account = models.ForeignKey('Account', verbose_name=_('bank account'),
-        null=True, blank=True, related_name='foo', editable=False)
+        null=True, blank=True, related_name='bank_account_for', editable=False)
     cash_account = models.ForeignKey('Account', verbose_name=_('cash account'),
-        null=True, blank=True, related_name='bar', editable=False)
-    # FIXME: Fix related name of *_account
-    # FIXME: Probably needs to add sales_account etc.
+        null=True, blank=True, related_name='cash_account_for', editable=False)
+    # TODO: Probably needs to add sales_account etc.
 
     logo = models.ImageField(upload_to='logos', null=True, blank=True)
     email = models.EmailField(null=True, blank=True,
