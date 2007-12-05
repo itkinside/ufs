@@ -196,8 +196,8 @@ class Account(models.Model):
 
         for e in self.transactionentry_set.filter(
             transaction__status=Transaction.RECEIVED_STATE):
-            balance -= e.debit
-            balance += e.credit
+            balance += e.debit
+            balance -= e.credit
 
         return balance
 

@@ -91,8 +91,8 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
         if transfer_type == 'deposit':
             # Deposit to user account
 
-            transaction.entry_set.add(TransactionEntry(account=account, debit=amount))
-            transaction.entry_set.add(TransactionEntry(account=group.bank_account, credit=amount))
+            transaction.entry_set.add(TransactionEntry(account=account, credit=amount))
+            transaction.entry_set.add(TransactionEntry(account=group.bank_account, debit=amount))
 
             transaction.set_registered(user=request.user, message=details)
             transaction.set_payed(user=request.user)
@@ -100,8 +100,8 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
         elif transfer_type == 'withdraw':
             # Withdraw from user account
 
-            transaction.entry_set.add(TransactionEntry(account=account, credit=amount))
-            transaction.entry_set.add(TransactionEntry(account=group.bank_account, debit=amount))
+            transaction.entry_set.add(TransactionEntry(account=account, debit=amount))
+            transaction.entry_set.add(TransactionEntry(account=group.bank_account, credit=amount))
 
             transaction.set_registered(user=request.user, message=details)
 
@@ -110,8 +110,8 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
 
             credit_account = Account.objects.get(id=form.cleaned_data['credit_account'])
 
-            transaction.entry_set.add(TransactionEntry(account=account, credit=amount))
-            transaction.entry_set.add(TransactionEntry(account=credit_account, debit=amount))
+            transaction.entry_set.add(TransactionEntry(account=account, debit=amount))
+            transaction.entry_set.add(TransactionEntry(account=credit_account, credit=amount))
 
             transaction.set_registered(user=request.user, message=details)
 
