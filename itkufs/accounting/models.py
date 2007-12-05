@@ -88,7 +88,8 @@ class Group(models.Model):
     transaction_set = property(get_transaction_set, None, None)
 
     def get_registered_transaction_set(self):
-        """Returns all transactions connected to group, that are registered and not rejected"""
+        """Returns all transactions connected to group, that are registered and
+        not rejected"""
         return self.transaction_set.exclude(status='')
     registered_transaction_set = property(get_registered_transaction_set,
                                           None, None)
@@ -236,6 +237,9 @@ class Account(models.Model):
         return self.user_balance() < self.group.warn_limit
 databrowse.site.register(Account)
 
+
+### Transaction models
+
 class InvalidTransaction(Exception):
     def __init__(self, value):
         self.value = value
@@ -295,10 +299,6 @@ class Transaction(models.Model):
         verbose_name_plural = _('transactions')
         ordering = ['last_modified']
 
-#    class Admin:
-#        list_display = ['status']
-#        list_filter = ['status']
-
     def __unicode__(self):
         if self.entry_set.all().count():
             entries = []
@@ -318,7 +318,7 @@ class Transaction(models.Model):
         status = self.log_set.all()
         return "%s %s" % (self.__unicode__(), status)
 
-    @transaction.commit_manually # TODO check how the state is code fails...
+    @transaction.commit_manually # TODO check how the state is if code fails
     def save(self):
         try:
            debit_sum = 0
@@ -358,7 +358,8 @@ class Transaction(models.Model):
             self.last_modifed = datetime.now()
             self.save()
         else:
-            raise InvalidTransaction(_('Could not set transaction as registered'))
+            raise InvalidTransaction(
+                _('Could not set transaction as registered'))
 
     def set_payed(self, user=None, message=''):
         if not self.is_rejected() and self.is_registered():
@@ -389,7 +390,9 @@ class Transaction(models.Model):
             raise InvalidTransaction(_('Could not set transaction as received'))
 
     def reject(self, user=None, message=''):
-        if self.is_registered() and not self.is_payed() and not self.is_received():
+        if (self.is_registered()
+            and not self.is_payed()
+            and not self.is_received()):
             log = TransactionLog(type=self.REJECTED_STATE, transaction=self)
             if user:
                 log.user = user
@@ -511,7 +514,7 @@ class TransactionEntry(models.Model):
     def save(self):
         if self.transaction.is_registered():
             raise InvalidTransactionEntry(
-                _("Can't add entries to registered transactions"))
+                _('Can not add entries to registered transactions'))
 
         if self.debit < 0 or self.credit < 0:
             raise InvalidTransactionEntry(
