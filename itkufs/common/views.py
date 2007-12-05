@@ -1,22 +1,13 @@
-from datetime import date, datetime
-from urlparse import urlparse
-import os
-
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.core.xheaders import populate_xheaders
-from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
-from django.newforms import form_for_instance, form_for_model
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _, ungettext
-from django.views.generic.create_update import update_object
-from django.views.generic.list_detail import object_list
 
-from itkufs.common.decorators import *
-from itkufs.accounting.models import Group, Account, Transaction
+from itkufs.common.decorators import is_group_admin
+from itkufs.accounting.models import Group
 
 def login_user(request):
     """Login user"""
