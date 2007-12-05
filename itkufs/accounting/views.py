@@ -21,6 +21,16 @@ from itkufs.accounting.forms import *
 
 @login_required
 @is_group_admin
+def transaction_list(request, group, account):
+    """Lists an account's transactions"""
+    pass # FIXME
+
+def transaction_details(request, group, account, transaction):
+    """Shows all details about a transaction"""
+    pass # FIXME
+
+@login_required
+@is_group_admin
 def transfer(request, group, account=None, transfer_type=None, is_admin=False):
     """Deposit, withdraw or transfer money"""
 
@@ -156,6 +166,8 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
 @login_required
 @is_group_admin
 def approve(request, group, page="1", is_admin=False):
+    # FIXME: Rename to approve_transactions
+
     if not is_admin:
         return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
     try:
