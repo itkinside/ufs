@@ -206,7 +206,7 @@ class Account(models.Model):
         liability account."""
 
         balance = self.balance()
-        if balance == 0 or self.type != self.LIABILITY_ACCOUNT:
+        if balance == 0 or not self.is_user_account():
             return balance
         else:
             return -1 * balance
