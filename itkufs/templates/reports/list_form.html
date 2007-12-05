@@ -9,7 +9,7 @@
 {% if form.name.errors %}
 <ul class="errorlist">
    {% for error in form.name.errors %}
-	<li>{{ error }}</li>
+    <li>{{ error }}</li>
    {% endfor%}
 </ul>
 {% endif %}
@@ -20,7 +20,7 @@
 {% if form.slug.errors %}
 <ul class="errorlist">
    {% for error in form.slug.errors %}
-	<li>{{ error }}</li>
+    <li>{{ error }}</li>
    {% endfor%}
 </ul>
 {% endif %}
@@ -32,7 +32,7 @@
 {% if form.account_width.errors %}
 <ul class="errorlist">
    {% for error in form.account_width.errors %}
-	<li>{{ error }}</li>
+    <li>{{ error }}</li>
    {% endfor%}
 </ul>
 {% endif %}
@@ -43,7 +43,7 @@
 {% if form.balance_width.errors %}
 <ul class="errorlist">
    {% for error in form.balance_width.errors %}
-	<li>{{ error }}</li>
+    <li>{{ error }}</li>
    {% endfor%}
 </ul>
 {% endif %}
@@ -54,7 +54,7 @@
 {% if form.double.errors %}
 <ul class="errorlist">
    {% for error in form.double.errors %}
-	<li>{{ error }}</li>
+    <li>{{ error }}</li>
    {% endfor%}
 </ul>
 {% endif %}
@@ -65,7 +65,7 @@
 {% if form.accounts.errors %}
 <ul class="errorlist">
    {% for error in form.accounts.errors %}
-	<li>{{ error }}</li>
+    <li>{{ error }}</li>
    {% endfor%}
 </ul>
 {% endif %}
@@ -81,7 +81,7 @@
     </tr>
     {% for column in form.listcolumn %}
     <tr class="{% cycle evenrow,oddrow %}">
-    	{{ column.id }}
+        {{ column.id }}
         <td{% if column.name.errors %} class="error"{% endif %}>{{ column.name }}</td>
         <td{% if column.width.errors %} class="error"{% endif %}>{{ column.width }}</td>
         <td{% if column.order.errors %} class="error"{% endif %}>{{ column.order }}</td>

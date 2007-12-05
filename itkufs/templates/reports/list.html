@@ -26,7 +26,7 @@
 <table>
     <tfoot>
         <tr>
-	    <td colspan="{{ colspan }}">
+        <td colspan="{{ colspan }}">
                 {% trans "Blacklisted accounts are marked with" %}
                 <img src="{% url media "images/black.png" %}"/>.
                 {% trans "Please remember to print with backgrounds and landscape orientation." %}
@@ -36,7 +36,7 @@
 
     <thead>
         <tr>
-	    <th colspan="{{ colspan }}">
+        <th colspan="{{ colspan }}">
                 <h1>{{ group.name }}: {{ list.name }}</h1>
                 {% if group.logo %}
                 <p id="logo"><img src="{% url media group.logo %}" alt="logo" /></p>
@@ -48,7 +48,7 @@
                   <a href="mailto:{{ group.email }}">{{group.email}}</a>
                   {% endif %}
                 </p>
-	    </th>
+        </th>
         </tr>
         <tr>
             <th style="width: {% widthratio list.account_width width 100 %}%">{% trans "Name" %}</th>
@@ -75,19 +75,19 @@
                 {% else %}
             <td><img src="{% url media "images/black.png" %}"/></td>
                 {% endif %}
-	    {% endfor %}
+        {% endfor %}
         </tr>
-	{% if list.double and not account.is_blocked  %}
-	<tr class="{{ row }}">
+    {% if list.double and not account.is_blocked  %}
+    <tr class="{{ row }}">
             {% for item in columns %}
                 {% if not account.is_blocked %}
             <td></td>
                 {% else %}
             <td><img src="{% url media "images/black.png" %}"/></td>
                 {% endif %}
-	    {% endfor %}
+        {% endfor %}
         </tr>
-	{% endif %}
+    {% endif %}
         {% endif %}
     {% endfor %}
     </tbody>

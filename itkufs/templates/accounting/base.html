@@ -7,15 +7,15 @@
 {% block menu %}
 <ul id="menulist">
     <li><a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">{% trans "My account" %}</a>
-    	{% ifnotequal request.user.account_set.count 0 %}
-    	{% ifnotequal request.user.account_set.count 1 %}
-	<ul>
-	{% for account in request.user.account_set.all %}
-		<li><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.group.name }}</a></li>
-	{% endfor %}
-	</ul>
-	{% endifnotequal %}
-	{% endifnotequal %}
+        {% ifnotequal request.user.account_set.count 0 %}
+        {% ifnotequal request.user.account_set.count 1 %}
+    <ul>
+    {% for account in request.user.account_set.all %}
+        <li><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.group.name }}</a></li>
+    {% endfor %}
+    </ul>
+    {% endifnotequal %}
+    {% endifnotequal %}
     </li>
 {% if is_admin %}
     <li class="admin">
