@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.contrib import databrowse
 from django.contrib.auth.models import User
 from django.utils.encoding import smart_unicode
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 databrowse.site.register(User)
 
@@ -50,12 +50,10 @@ class Group(models.Model):
         super(Group, self).save()
         # Create default accounts
         if not self.account_set.count():
-            # FIXME _('Bank') and _('Cash') does not seem to work here...
-            # Could the problem be related to lazy/non-lazy ugettext?
-            bank = Account(name='Bank', slug='bank',
+            bank = Account(name=ugettext('Bank'), slug='bank',
                            type=Account.ASSET_ACCOUNT, group=self)
             bank.save()
-            cash = Account(name='Cash', slug='cash',
+            cash = Account(name=ugettext('Cash'), slug='cash',
                            type=Account.ASSET_ACCOUNT, group=self)
             cash.save()
 
