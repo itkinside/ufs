@@ -174,7 +174,7 @@ def static_page(request, group, template, is_admin=False):
 
 @login_required
 @is_group_admin
-def alter_group(request, group, is_admin=False):
+def edit_group(request, group, is_admin=False):
     if not is_admin:
         return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
@@ -216,7 +216,7 @@ def alter_group(request, group, is_admin=False):
 
 @login_required
 @is_group_admin
-def alter_account(request, group, account=None, type='new', is_admin=False):
+def edit_account(request, group, account=None, type='new', is_admin=False):
     if not is_admin:
         return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 

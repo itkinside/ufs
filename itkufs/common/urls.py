@@ -17,9 +17,9 @@ urlpatterns = patterns('',
         account_summary, name='account-summary-page'),
 
     url(r'^(?P<group>[0-9a-z_-]+)/add/$',
-        alter_account, {'type': 'new'}, name='new-account'),
+        edit_account, {'type': 'new'}, name='new-account'),
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/edit/$',
-        alter_account, {'type': 'edit'}, name='edit-account'),
+        edit_account, {'type': 'edit'}, name='edit-account'),
 
     # Help
     url(r'^(?P<group>[0-9a-z_-]+)/help/$',
@@ -33,5 +33,5 @@ urlpatterns = patterns('',
 
     # Edit group
     url(r'^(?P<group>[0-9a-z_-]+)/edit/$',
-        alter_group, name='edit-group'),
+        edit_group, name='edit-group'),
 )
