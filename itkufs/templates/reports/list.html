@@ -71,7 +71,7 @@
             {% endifnotequal %}
             {% for item in columns %}
                 {% if not account.is_blocked %}
-            <td>&nbsp;</td>
+            <td></td>
                 {% else %}
             <td><img src="{% url media "images/black.png" %}"/></td>
                 {% endif %}
@@ -81,7 +81,7 @@
 	<tr class="{{ row }}">
             {% for item in columns %}
                 {% if not account.is_blocked %}
-            <td>&nbsp;</td>
+            <td></td>
                 {% else %}
             <td><img src="{% url media "images/black.png" %}"/></td>
                 {% endif %}
