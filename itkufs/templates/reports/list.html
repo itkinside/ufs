@@ -64,30 +64,32 @@
     <tbody>
     {% for account in accounts %}
         {% if account.is_user_account %}
+        {% with account.is_blocked as blocked %}
         <tr class="{% cycle even,odd as row %}{% if account.is_blocked %} blacklisted{% endif %}">
-            <th class="name"{% if list.double and not account.is_blocked %} rowspan="2"{% endif %}>{{ account.name }}</th>
+            <th class="name"{% if list.double and not blocked %} rowspan="2"{% endif %}>{{ account.name }}</th>
             {% ifnotequal list.balance_width 0 %}
-            <td class="balance"{% if list.double and not account.is_blocked %} rowspan="2"{% endif %}>{{ account.user_balance }}</td>
+            <td class="balance"{% if list.double and not blocked %} rowspan="2"{% endif %}>{{ account.user_balance }}</td>
             {% endifnotequal %}
             {% for item in columns %}
-                {% if not account.is_blocked %}
-            <td{% if list.double and not account.is_blocked %} class="double"{% endif %}></td>
+                {% if not blocked %}
+            <td{% if list.double and not blocked %} class="double"{% endif %}></td>
                 {% else %}
             <td><img src="{% url media "images/black.png" %}"/></td>
                 {% endif %}
         {% endfor %}
         </tr>
-    {% if list.double and not account.is_blocked  %}
-    <tr class="{{ row }}">
+        {% if list.double and not account.is_blocked  %}
+        <tr class="{{ row }}">
             {% for item in columns %}
-                {% if not account.is_blocked %}
+                {% if not blocked %}
             <td></td>
                 {% else %}
             <td><img src="{% url media "images/black.png" %}"/></td>
                 {% endif %}
         {% endfor %}
         </tr>
-    {% endif %}
+        {% endif %}
+        {% endwith %}
         {% endif %}
     {% endfor %}
     </tbody>
