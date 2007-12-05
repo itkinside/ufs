@@ -10,10 +10,10 @@ from django.utils.translation import ugettext as _, ungettext
 from django.views.generic.create_update import create_object, update_object, delete_object
 from django.newforms import form_for_instance, form_for_model
 
+from itkufs.common.forms import BaseForm
 from itkufs.common.decorators import is_group_admin, limit_to_group
 from itkufs.accounting.models import Group, Account
 from itkufs.reports.models import *
-from itkufs.reports.forms import *
 
 @login_required
 @limit_to_group

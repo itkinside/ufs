@@ -21,8 +21,8 @@ urlpatterns = patterns('',
         reject_transactions, name='reject-transactions'),
     url(r'^(?P<group>[0-9a-z_-]+)/register/$',
         transfer, {'transfer_type': 'register'}, name='register-transactions'),
-    url(r'^(?P<group>[0-9a-z_-]+)/multiple/$',
-        transfer, {'transfer_type': 'multiple'}, name='multiple-transactions'),
+    url(r'^(?P<group>[0-9a-z_-]+)/register/(?P<other_group>[0-9a-z_-]+)/$',
+        create_transaction, name='multiple-transactions'),
 
     ### Account
 

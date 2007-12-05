@@ -1,0 +1,43 @@
+{% extends "accounting/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<form action="." method="post">
+    {{ form.as_p }}
+    <label>{{ group }}:</label>
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th>Account</th><th>Debit</th><th>Credit</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for a,f in group_forms %}
+            <tr class="{% cycle evenrow,oddrow %}">
+                <td>{{ a.name }}</td>
+                {{ f.as_table_row }}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <label>{{ other }}:</label>
+    <table class="tablelist">
+        <thead>
+            <tr>
+                <th>Account</th><th>Debit</th><th>Credit</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for a,f in other_forms %}
+            <tr class="{% cycle evenrow,oddrow %}">
+                <td>{{ a.name }}</td>
+                {{ f.as_table_row }}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <p>
+        <button type="submit">{% trans "Save transaction" %}</button>
+    </p>
+</form>
+{% endblock %}

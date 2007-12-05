@@ -15,6 +15,8 @@ from django.utils.translation import ugettext as _, ungettext
 from django.views.generic.create_update import update_object
 from django.views.generic.list_detail import object_list
 
+from itkufs.common.forms import BaseForm
+
 from itkufs.common.decorators import is_group_admin, limit_to_group
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
@@ -406,8 +408,11 @@ def approve(request, group, page="1", is_admin=False):
                             'transaction_list': transactions,
                        },
                        context_instance=RequestContext(request))
-
-def reject_transactions(request, group):
+@login_required
+@is_group_admin
+def reject_transactions(request, group, is_admin=False):
+    if not is_admin:
+        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
     #HACK!!! needs more work ;)
 
     if request.method != 'POST':
@@ -431,3 +436,40 @@ def reject_transactions(request, group):
         t.set_rejected(user=request.user, message=request.POST['reason'])
 
     raise Exception('done')
+
+@login_required
+@is_group_admin
+def create_transaction(request, group, other_group, is_admin=False):
+    if not is_admin:
+        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
+
+    try:
+        group = Group.objects.get(slug=group)
+        other = Group.objects.get(slug=other_group)
+    except Group.DoesNotExist:
+        raise Http404
+
+    TransactionForm =  form_for_model(Transaction)
+    EntryForm =  form_for_model(TransactionEntry, form=BaseForm)
+    del EntryForm.base_fields['account']
+    del EntryForm.base_fields['transaction']
+
+    form = TransactionForm()
+    other_forms, group_forms = [], []
+
+    for account in group.user_account_set:
+        group_forms.append((account, EntryForm(prefix=account.id)))
+    for account in other.user_account_set:
+        other_forms.append((account, EntryForm(prefix=account.id)))
+
+
+    return render_to_response('accounting/transaction_form.html',
+                              {
+                                'is_admin': is_admin,
+                                'group': group,
+                                'other': other,
+                                'form': form,
+                                'group_forms': group_forms,
+                                'other_forms': other_forms,
+                              },
+                              context_instance=RequestContext(request))

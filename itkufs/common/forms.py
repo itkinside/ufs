@@ -1,8 +1,8 @@
 from django.newforms import BaseForm
 from django.newforms.forms import BoundField
-#from django.utils.safestring import mark_safe
+from django.utils.safestring import mark_safe
 
-class ColumnBaseForm(BaseForm):
+class BaseForm(BaseForm):
     """Returns this form rendered as HTML <tr>s -- excluding the <table></table>."""
     def as_table_row(self):
         output = []
@@ -16,4 +16,4 @@ class ColumnBaseForm(BaseForm):
 
             output.append("<td%s>%s</td>" %(error, bf))
 
-        return u'\n'.join(output)
+        return mark_safe(u'\n'.join(output))

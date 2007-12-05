@@ -3,10 +3,28 @@ import unittest
 from itkufs.accounting.views import *
 
 class UserViewsTestCase(unittest.TestCase):
-    """Test the views as an unprivileged user"""
+    """Tests the views as an unprivileged user"""
+
+    # FIXME: Add missing view tests
 
     def setUp(self):
         pass
+
+    # Account views
+
+    def testAccountSummary(self):
+        """FIXME: Write docstring"""
+        # FIXME: Implement test
+        self.fail('Test not implemented')
+
+    # Group views
+
+    def testGroupSummary(self):
+        """FIXME: Write docstring"""
+        # FIXME: Implement test
+        self.fail('Test not implemented')
+
+    # Transaction views
 
     def testTransfer(self):
         """FIXME: Write docstring"""
@@ -14,10 +32,38 @@ class UserViewsTestCase(unittest.TestCase):
         self.fail('Test not implemented')
 
 class AdminViewsTestCase(unittest.TestCase):
-    """Test the views as a group admin"""
+    """Tests the views as a group admin"""
+
+    # FIXME: Add missing view tests
 
     def setUp(self):
         pass
+
+    # Account views
+
+    def testAccountSummary(self):
+        """FIXME: Write docstring"""
+        # FIXME: Implement test
+        self.fail('Test not implemented')
+
+    def testEditAccount(self):
+        """FIXME: Write docstring"""
+        # FIXME: Implement test
+        self.fail('Test not implemented')
+
+    # Group views
+
+    def testGroupSummary(self):
+        """FIXME: Write docstring"""
+        # FIXME: Implement test
+        self.fail('Test not implemented')
+
+    def testEditGroup(self):
+        """FIXME: Write docstring"""
+        # FIXME: Implement test
+        self.fail('Test not implemented')
+
+    # Transaction views
 
     def testTransfer(self):
         """FIXME: Write docstring"""
