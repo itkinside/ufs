@@ -142,14 +142,14 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
             if 'received' in form.data:
                 transaction.set_received(user=request.user)
 
-            return HttpResponseRedirect(reverse('group_summary',
+            return HttpResponseRedirect(reverse('group-summary',
                 args=[group.slug]))
         else:
             return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
         request.user.message_set.create(message='Added transaction: %s' % transaction)
 
-        return HttpResponseRedirect(reverse(account_summary,
+        return HttpResponseRedirect(reverse('account-summary',
             args=[account.group.slug, account.slug]))
 
     return render_to_response('accounting/transfer.html',
