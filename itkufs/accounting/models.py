@@ -4,6 +4,7 @@ from django.db import models, transaction
 from django.db.models import Q
 from django.contrib import databrowse
 from django.contrib.auth.models import User
+from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _
 
 databrowse.site.register(User)
@@ -541,3 +542,4 @@ class TransactionEntry(models.Model):
             'credit': self.credit,
         }
 databrowse.site.register(TransactionEntry)
+
