@@ -16,15 +16,18 @@
         <th>{% trans "Details" %}</th>
     </tr>
     {% for t in transaction_list %}
+    {% with t.entry_set.all.count as rowspan %}
     <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}
         {% if t.is_rejected %}rejected{% else %}
         {% if not t.is_received %}pending{% endif %}{% endif %}">
-        <td rowspan="{{ t.entry_set.all.count }}">
+        {% for e in t.entry_set.all %}
+        {% if forloop.first %}
+        <td rowspan="{{ rowspan }}">
                 {% blocktrans with t.get_status_display as status and t.last_modified|date:"Y-m-d H:i" as last_modified %}
                 {{ status }} at {{ last_modified }}
                 {% endblocktrans %}
         </td>
-        {% for e in t.entry_set.all %}
+        {% endif %}
         <td class="account">
             {% if is_admin %}
             <a href="{% url group-summary e.account.group.slug %}">{{e.account.group.name}}</a>:
@@ -44,7 +47,7 @@
             {% endif %}
         </td>
         {% if forloop.first %}
-        <td rowspan="{{ t.entry_set.all.count }}" class="details">
+        <td rowspan="{{ rowspan }}" class="details">
             *FIXME* Details link
         </td>
         {% endif %}
@@ -54,6 +57,7 @@
         {% if not t.is_received %}pending{% endif %}{% endif %}">
         {% endfor %}
     </tr>
+    {% endwith %}
     {% endfor %}
 </table>
 
