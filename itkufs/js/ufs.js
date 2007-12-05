@@ -100,12 +100,12 @@ var Select = {
     to_set.style.display = "inline";
 
     var available = document.createElement('legend');
-    var chossen = document.createElement('legend');
+    var chosen = document.createElement('legend');
     available.appendChild(document.createTextNode('Available:'));
-    chossen.appendChild(document.createTextNode('Chossen:'));
+    chosen.appendChild(document.createTextNode('Chosen:'));
 
     from_set.appendChild(available);
-    to_set.appendChild(chossen);
+    to_set.appendChild(chosen);
     to_set.appendChild(to_box);
 
     from_box.parentNode.insertBefore(to_set, from_box.nextSibling);
@@ -129,7 +129,7 @@ var Select = {
   }
 };
 
-// SelectBox is stolen directly from django as is addEvent and findNode
+// SelectBox is stolen directly from django, as is addEvent and findNode
 var SelectBox = {
     cache: new Object(),
     init: function(id) {
