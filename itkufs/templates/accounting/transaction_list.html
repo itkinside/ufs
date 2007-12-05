@@ -30,10 +30,15 @@
         {% endif %}
         <td class="account">
             {% if is_admin %}
-            <a href="{% url group-summary e.account.group.slug %}">{{e.account.group.name}}</a>:
-            <a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{e.account.name}}</a>
+								{% ifnotequal e.account.group group %}
+                    <a href="{% url group-summary e.account.group.slug %}">{{e.account.group.name}}</a>:
+								{% endifnotequal %}
+                <a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{e.account.name}}</a>
             {% else %}
-                {{ e.account.group.name }}: {{e.account.name}}
+								{% ifnotequal e.account.group group %}
+                	{{ e.account.group.name }}:
+								{% endifnotequal %}
+								{{e.account.name}}
             {% endif %}
         </td>
         <td class="align_right debit">
