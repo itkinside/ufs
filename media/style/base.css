@@ -306,6 +306,11 @@ form p {
 	clear: left;
 }
 
+#createtransaction input {
+	width: 4em;
+	text-align: right;
+}
+
 /* Account/group summary */
 #accountinfo, #groupinfo, #actions, #lists, #transaction_actions, #statements {
 	float: left;
