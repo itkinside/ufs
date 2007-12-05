@@ -17,13 +17,16 @@
 
 <body>
 
-
 <p class="hidden">{% trans "<b>Invalid</b> list, do not use!" %}</p>
+
+{% with list.column_set.all as columns %}
+{% with list.total_width as width %}
+{% with list.total_column_count as colspan %}
 
 <table>
     <tfoot>
         <tr>
-	    <td colspan="{{ list.total_column_count }}">
+	    <td colspan="{{ colspan }}">
                 {% trans "Blacklisted accounts are marked with" %}
                 <img src="{% url media "images/black.png" %}"/>.
                 {% trans "Please remember to print with backgrounds and landscape orientation." %}
@@ -33,7 +36,7 @@
 
     <thead>
         <tr>
-	    <th colspan="{{ list.total_column_count }}">
+	    <th colspan="{{ colspan }}">
                 <h1>{{ group.name }}: {{ list.name }}</h1>
                 {% if group.logo %}
                 <p id="logo"><img src="{% url media group.logo %}" alt="logo" /></p>
@@ -48,12 +51,12 @@
 	    </th>
         </tr>
         <tr>
-            <th style="width: {% widthratio list.account_width list.total_width 100 %}%">{% trans "Name" %}</th>
+            <th style="width: {% widthratio list.account_width width 100 %}%">{% trans "Name" %}</th>
             {% ifnotequal list.balance_width 0 %}
-            <th style="width: {% widthratio list.balance_width list.total_width 100 %}%">{% trans "Balance" %}</th>
+            <th style="width: {% widthratio list.balance_width width 100 %}%">{% trans "Balance" %}</th>
             {% endifnotequal %}
-        {% for column in list.column_set.all %}
-            <th style="width: {% widthratio column.width list.total_width 100 %}%">{{ column.name }}</th>
+        {% for column in columns %}
+            <th style="width: {% widthratio column.width width 100 %}%">{{ column.name }}</th>
         {% endfor %}
         </tr>
     </thead>
@@ -61,23 +64,38 @@
     <tbody>
     {% for account in accounts %}
         {% if account.is_user_account %}
-        <tr class="{% cycle even,odd %}{% if account.is_blocked %} blacklisted{% endif %}">
-            <th class="name">{{ account.name }}</th>
+        <tr class="{% cycle even,odd as row %}{% if account.is_blocked %} blacklisted{% endif %}">
+            <th class="name"{% if list.double %} rowspan="2"{% endif %}>{{ account.name }}</th>
             {% ifnotequal list.balance_width 0 %}
-            <td class="balance">{{ account.user_balance }}</td>
+            <td class="balance"{% if list.double %} rowspan="2"{% endif %}>{{ account.user_balance }}</td>
             {% endifnotequal %}
-            {% for item in list.column_set.all %}
+            {% for item in columns %}
                 {% if not account.is_blocked %}
-            <td></td>
+            <td>&nbsp;</td>
                 {% else %}
             <td><img src="{% url media "images/black.png" %}"/></td>
                 {% endif %}
 	    {% endfor %}
         </tr>
+	{% if list.double %}
+	<tr class="{{ row }}">
+            {% for item in columns %}
+                {% if not account.is_blocked %}
+            <td>&nbsp;</td>
+                {% else %}
+            <td><img src="{% url media "images/black.png" %}"/></td>
+                {% endif %}
+	    {% endfor %}
+        </tr>
+	{% endif %}
         {% endif %}
     {% endfor %}
     </tbody>
 </table>
+
+{% endwith %}
+{% endwith %}
+{% endwith %}
 
 {% if debug %}
     {% include 'debug.html' %}

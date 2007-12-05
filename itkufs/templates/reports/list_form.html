@@ -51,6 +51,17 @@
     <label>Balance Width:</label> {{ form.balance_width }}
 </p>
 
+{% if form.double.errors %}
+<ul class="errorlist">
+   {% for error in form.double.errors %}
+	<li>{{ error }}</li>
+   {% endfor%}
+</ul>
+{% endif %}
+<p>
+    <label>Double:</label> {{ form.double }}
+</p>
+
 {% if form.accounts.errors %}
 <ul class="errorlist">
    {% for error in form.accounts.errors %}

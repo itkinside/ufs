@@ -14,6 +14,7 @@ class List(models.Model):
     group = models.ForeignKey(Group,
         verbose_name=_('group'), related_name='list_set')
     accounts = models.ManyToManyField(Account, blank="true")
+    double = models.BooleanField(help_text=_("Indicates that two rows should be used per account"))
 
     class Meta:
         #unique_together = (('slug', 'account_group'),)
