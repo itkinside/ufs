@@ -87,7 +87,6 @@ img {
 	border-top:    2px solid #eee;
 }
 #menu a {
-	background: #e6e6e6;
 	color: black;
 	font-size: 116%;
 
@@ -99,15 +98,15 @@ img {
 	padding: 0.3em 0.5em;
 	text-decoration: none;
 }
+#menu li li a {
+	background: #e6e6e6;
+}
+
 #menu a:hover {
 	background: #ccc;
 }
 #menu .admin a {
-	background: #e6e6e6;
 	color: #a10000;
-}
-#menu .admin a:hover {
-	background: #ccc;
 }
 #menu ul {
 	list-style: none;
