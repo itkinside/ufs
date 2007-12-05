@@ -65,19 +65,19 @@
     {% for account in accounts %}
         {% if account.is_user_account %}
         <tr class="{% cycle even,odd as row %}{% if account.is_blocked %} blacklisted{% endif %}">
-            <th class="name"{% if list.double %} rowspan="2"{% endif %}>{{ account.name }}</th>
+            <th class="name"{% if list.double and not account.is_blocked %} rowspan="2"{% endif %}>{{ account.name }}</th>
             {% ifnotequal list.balance_width 0 %}
-            <td class="balance"{% if list.double %} rowspan="2"{% endif %}>{{ account.user_balance }}</td>
+            <td class="balance"{% if list.double and not account.is_blocked %} rowspan="2"{% endif %}>{{ account.user_balance }}</td>
             {% endifnotequal %}
             {% for item in columns %}
                 {% if not account.is_blocked %}
-            <td></td>
+            <td{% if list.double and not account.is_blocked %} class="double"{% endif %}></td>
                 {% else %}
             <td><img src="{% url media "images/black.png" %}"/></td>
                 {% endif %}
 	    {% endfor %}
         </tr>
-	{% if list.double %}
+	{% if list.double and not account.is_blocked  %}
 	<tr class="{{ row }}">
             {% for item in columns %}
                 {% if not account.is_blocked %}

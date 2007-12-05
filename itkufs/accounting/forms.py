@@ -97,7 +97,7 @@ class ChangeTransactionForm(forms.Form):
         super(forms.Form, self).__init__(*args, **kwargs)
         self.fields['state'].widget = forms.Select(choices=choices)
 
-    state = forms.CharField(max_length=3, label='')
+    state = forms.CharField(max_length=3, label='', required=False)
 
 class RejectTransactionForm(forms.Form):
     reason = forms.CharField(label=_('Reason'),
