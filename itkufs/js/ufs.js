@@ -86,23 +86,44 @@ var Select = {
     var from_box = document.getElementById(field_id);
     if (from_box == null) return;
     from_box.id += '_from'; // change its ID
+
     // Create the TO box
     var to_box = document.createElement('select');
     to_box.id = field_id + '_to';
     to_box.setAttribute('multiple', 'multiple');
     to_box.setAttribute('size', from_box.size);
-    from_box.parentNode.insertBefore(to_box, from_box.nextSibling);
+
+    var from_set = document.createElement('fieldset');
+    var to_set   = document.createElement('fieldset');
+
+    from_set.style.display = "inline";
+    to_set.style.display = "inline";
+
+    var available = document.createElement('legend');
+    var chossen = document.createElement('legend');
+    available.appendChild(document.createTextNode('Available:'));
+    chossen.appendChild(document.createTextNode('Chossen:'));
+
+    from_set.appendChild(available);
+    to_set.appendChild(chossen);
+    to_set.appendChild(to_box);
+
+    from_box.parentNode.insertBefore(to_set, from_box.nextSibling);
+    from_box.parentNode.replaceChild(from_set, from_box);
+
+    from_set.appendChild(from_box);
+
     to_box.setAttribute('name', from_box.getAttribute('name'));
     from_box.setAttribute('name', from_box.getAttribute('name') + '_old');
-    // Give the filters a CSS hook
-    from_box.setAttribute('class', 'filtered');
-    to_box.setAttribute('class', 'filtered');
+
+
     // Set up the JavaScript event handlers for the select box filter interface
     addEvent(from_box, 'dblclick', function() { SelectBox.move(field_id + '_from', field_id + '_to'); });
     addEvent(to_box, 'dblclick', function() { SelectBox.move(field_id + '_to', field_id + '_from'); });
     addEvent(findForm(from_box), 'submit', function() { SelectBox.select_all(field_id + '_to'); });
     SelectBox.init(field_id + '_from');
     SelectBox.init(field_id + '_to');
+
     // Move selected from_box options to to_box
     SelectBox.move(field_id + '_from', field_id + '_to');
   }
