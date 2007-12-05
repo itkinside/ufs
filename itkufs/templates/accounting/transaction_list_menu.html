@@ -9,20 +9,20 @@
     <a href="{% url group-summary-page group.slug,previous %}">&lt; {% trans "Previous" %}</a> |
         {% endif %}
     {% endif %}
-		{% for i in page_range %}
-				{% ifequal i page %}
-		{{ i }}
-				{% else %}
-      	  {% if account %}
+        {% for i in page_range %}
+                {% ifequal i page %}
+        {{ i }}
+                {% else %}
+            {% if account %}
     <a href="{% url account-summary-page account.group.slug,account.slug,i %}">{{ i }}</a>
-       	 {% else %}
+            {% else %}
     <a href="{% url group-summary-page group.slug,i %}">{{ i }}</a>
-    		{% endif %}
-				{% endifequal %}
-				{% if not forloop.last %}
-		&bull;
-				{% endif %}
-		{% endfor %}
+            {% endif %}
+                {% endifequal %}
+                {% if not forloop.last %}
+        &bull;
+                {% endif %}
+        {% endfor %}
     {% if has_next %}
         {% if account %}
     | <a href="{% url account-summary-page account.group.slug,account.slug,next %}">{% trans "Next" %} &gt;</a>
