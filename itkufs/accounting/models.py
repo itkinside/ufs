@@ -289,7 +289,6 @@ class Transaction(models.Model):
 
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
-
     last_modified = models.DateTimeField(_('Last modified'), auto_now_add=True)
     status = models.CharField(_('status'), max_length=3,
         choices=TRANSACTION_STATE, blank=True)
@@ -297,7 +296,7 @@ class Transaction(models.Model):
     class Meta:
         verbose_name = _('transaction')
         verbose_name_plural = _('transactions')
-        ordering = ['last_modified']
+        ordering = ['-last_modified']
 
     def __unicode__(self):
         if self.entry_set.all().count():
