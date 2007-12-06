@@ -310,6 +310,12 @@ form p {
 	width: 4em;
 	text-align: right;
 }
+#createtransaction .sum {
+	font-weight: bold;
+}
+#createtransaction #debit_sum, #createtransaction #credit_sum {
+	text-align: right;
+}
 
 /* Account/group summary */
 #accountinfo, #groupinfo, #actions, #lists, #transaction_actions, #statements {

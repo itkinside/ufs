@@ -2,8 +2,72 @@ var UFS = {
   init: function() {
     Menu.init();
     Checkbox.init();
+    Transaction.init();
     Select.init('id_admins');
     Select.init('id_accounts');
+  }
+};
+
+var Transaction = {
+  init: function() {
+    var form = document.getElementById('createtransaction');
+    if (form == null) return;
+
+    var tables = form.getElementsByTagName('table');
+
+    for (var i=0; i<tables.length; i++) {
+      var tbody = tables[i].getElementsByTagName('tbody')[0];
+
+      var row = document.createElement('tr');
+      var td1 = document.createElement('td');
+      var td2 = document.createElement('td');
+      var td3 = document.createElement('td');
+
+      row.className = 'sum';
+      td2.id = 'debit_sum'+i;
+      td3.id = 'credit_sum'+i;
+
+      td1.appendChild(document.createTextNode('Sum'));
+      td2.appendChild(document.createTextNode(0));
+      td3.appendChild(document.createTextNode(0));
+      row.appendChild(td1); row.appendChild(td2); row.appendChild(td3);
+
+      tbody.appendChild(row);
+
+      addEvent(tables[i], 'keyup', Transaction.update);
+    }
+    Transaction.update();
+  },
+  update: function() {
+    var form = document.getElementById('createtransaction');
+    if (form == null) return;
+
+    var tables = form.getElementsByTagName('table');
+
+    for (var i=0; i<tables.length; i++) {
+      var inputs = tables[i].getElementsByTagName('input');
+
+      var debit = 0;
+      var credit = 0;
+      for (var j=0; j<inputs.length; j++) {
+      	var input = inputs[j];
+	var value = input.value;
+
+	if (isNaN(value)) {
+          input.className = "error";
+	} else {
+          if (input.id.match(/debit/))
+	    debit += Number(input.value);
+	  else if (input.id.match(/credit/))
+	    credit += Number(input.value);
+          input.className = "";
+	}
+      }
+
+      document.getElementById('debit_sum'+i).innerHTML = debit;
+      document.getElementById('credit_sum'+i).innerHTML = credit;
+    }
+
   }
 };
 
@@ -19,9 +83,9 @@ var Checkbox = {
 
       // Argh... IE sucks, tried using DOM but IE has a broken setAttribute :(
       button_parent.innerHTML += gettext('Checkboxes: ')
-      	+ '<a href="#" onclick="checkbox.all(this)">'    + gettext('All')    + '</a> '
-      	+ '<a href="#" onclick="checkbox.none(this)">'   + gettext('None')   + '</a> '
-      	+ '<a href="#" onclick="checkbox.invert(this)">' + gettext('Invert') + '</a> ';
+      	+ '<a href="#" onclick="Checkbox.all(this)">'    + gettext('All')    + '</a> '
+      	+ '<a href="#" onclick="Checkbox.none(this)">'   + gettext('None')   + '</a> '
+      	+ '<a href="#" onclick="Checkbox.invert(this)">' + gettext('Invert') + '</a> ';
     }
   },
   all: function(node) { checkbox.toggle(node,'all'); },

@@ -451,6 +451,7 @@ def create_transaction(request, group, other_group, is_admin=False):
 
     TransactionForm =  form_for_model(Transaction)
     del TransactionForm.base_fields['status']
+
     EntryForm =  form_for_model(TransactionEntry, form=BaseForm)
     del EntryForm.base_fields['account']
     del EntryForm.base_fields['transaction']
