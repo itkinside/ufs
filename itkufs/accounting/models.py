@@ -80,7 +80,8 @@ class Group(models.Model):
     def get_transaction_set_with_rejected(self):
         """Returns all transactions connected to group, including rejected"""
         return Transaction.objects.filter(
-            entry_set__account__group=self).distinct()
+            entry_set__account__group=self).exclude(
+            status=Transaction.UNDEFINED_STATE).distinct()
     transaction_set_with_rejected = property(get_transaction_set_with_rejected,
                                              None, None)
 
@@ -249,7 +250,8 @@ class Account(models.Model):
     def get_transaction_set_with_rejected(self):
         """Returns all transactions connected to account, including rejected"""
         return Transaction.objects.filter(
-            entry_set__account=self).distinct()
+            entry_set__account=self).exclude(
+            status=Transaction.UNDEFINED_STATE).distinct()
     transaction_set_with_rejected = property(get_transaction_set_with_rejected,
                                              None, None)
 
