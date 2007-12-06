@@ -1,5 +1,5 @@
 body {
-	background: #333;
+	background: #babdb6;
 	color: black;
 	margin: 0;
 }
@@ -11,17 +11,17 @@ h1#head {
 
 h1 {
 	/* background: ...; */ /* Defined in template, as logo url is needed */
-	font-size:  200%;
+	font-size: 200%;
 	margin: 0.2em 0;
 }
 h2 {
-	font-size:  138.5%;
+	font-size: 138.5%;
 	margin: 0.5em 0;
 }
 h3 {
 	font-size: 123.1%;
 	font-weight: bold;
-	margin-top: 0.5em;
+	margin: 0.5em 0 0.3em 0;
 }
 
 /* Block elements */
@@ -72,19 +72,19 @@ img {
 	min-width: 740px;
 	max-width: 60em;
 	padding: 1em;
-	border-left:   5px solid #444;
-	border-right:  5px solid #444;
-	border-bottom: 5px solid #444;
+	border-left: 5px solid #d3d7cf;
+	border-right: 5px solid #d3d7cf;
+	border-bottom: 5px solid #d3d7cf;
 }
 
 /* Drop-down menu */
 #menu {
-	background: #e6e6e6; /* To fill width of menu with color */
+	background: #eeeeec; /* To fill width of menu with color */
 	margin: 0 -1em;
 	padding: 0 1em;
 	height: 1.85em; /* Text height + menu top/bottom padding */
-	border-bottom: 2px solid #eee;
-	border-top:    2px solid #eee;
+	border-bottom: 2px solid #d3d7cf;
+	border-top: 2px solid #d3d7cf;
 }
 #menu a {
 	color: black;
@@ -99,14 +99,14 @@ img {
 	text-decoration: none;
 }
 #menu li li a {
-	background: #e6e6e6;
+	background: #eeeeec;
 }
 
 #menu a:hover {
-	background: #ccc;
+	background: #d3d7cf;
 }
 #menu .admin a {
-	color: #a10000;
+	color: #cc0000;
 }
 #menu ul {
 	list-style: none;
@@ -169,7 +169,7 @@ img {
 
 /* Tables */
 .tablelist th, .tabledetails th {
-	background: #e6e6e6;
+	background: #d3d7cf;
 	border: 1px solid gray;
 	padding: 0.3em;
 	font-weight: bolder;
@@ -184,7 +184,7 @@ tr.evenrow {
 	color: black;
 }
 tr.oddrow {
-	background: #eee;
+	background: #eeeeec;
 	color: black;
 }
 
@@ -213,13 +213,13 @@ tr.oddrow {
 	color: gray;
 }
 .warning {
-	color: #df8713;
+	color: #ce5c00;
 }
 .error, .blocked {
- color: #a10000;
+	color: #cc0000;
 }
 .error input {
-	border: 1px solid #a10000;
+	border: 1px solid #cc0000;
 }
 .disabled td {
 	text-decoration: line-through;
@@ -239,11 +239,11 @@ div.colthree {
 
 /* Error list */
 ul.errorlist {
+	color: #cc0000;
 	padding: 0;
 	margin-left: 7em;
 	margin-bottom: -0.6em;
 	list-style-type: none;
-	color: #a10000;
 }
 
 /* Forms */
@@ -260,19 +260,19 @@ input, select, textarea {
 	width: 15em;
 }
 input, select, textarea, button {
-	border: 1px solid gray;
+	border: 1px solid #2e3436;
 	font-size: 100%;
 }
 input:focus, select:focus, textarea:focus {
-	background: #FFFFF0;;
+	background: #eeeeec;
 }
 input:hover, select:hover, textarea:hover, button:hover {
-	border: 1px solid #444;
+	border: 1px solid #555753;
 }
 
 button {
 	margin-left: 9em;
-	background: #DDD;
+	background: #d3d7cf;
 }
 
 #rejectionlist {
@@ -379,7 +379,7 @@ div#debug {
 	margin: 1em;
 }
 div#debug table {
-	border: 5px solid #444;
+	border: 5px solid #d3d7cf;
 }
 
 div#debug table#query_table, div#debug table#query_table thead {
