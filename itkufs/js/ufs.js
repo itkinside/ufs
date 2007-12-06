@@ -9,6 +9,7 @@ var UFS = {
 };
 
 var Transaction = {
+  // Add a sumrow to tables in form#createtransaction
   init: function() {
     var form = document.getElementById('createtransaction');
     if (form == null) return;
@@ -78,6 +79,8 @@ var Transaction = {
 };
 
 var Checkbox = {
+  // Functions to add all, none and invert buttons to modify checkboxes in
+  // forms with class togglecheckboxes
   init: function() {
     var forms = document.getElementsByTagName('form');
 
@@ -186,6 +189,9 @@ var Select = {
     to_box.setAttribute('name', from_box.getAttribute('name'));
     from_box.setAttribute('name', from_box.getAttribute('name') + '_old');
 
+    to_box.style.height = '8em';
+    from_box.style.height = '8em';
+    to_set.style.margin = '0 0 0 0.5em';
 
     // Set up the JavaScript event handlers for the select box filter interface
     addEvent(from_box, 'dblclick', function() { SelectBox.move(field_id + '_from', field_id + '_to'); });
