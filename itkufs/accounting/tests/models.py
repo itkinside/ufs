@@ -37,6 +37,9 @@ class GroupTestCase(unittest.TestCase):
                 TransactionEntry(account=self.accounts[1], debit=100))
             transaction.set_registered(user=self.user)
 
+        self.transactions['Undef'] = Transaction()
+        self.transactions['Undef'].save()
+
         self.transactions['Pay'].set_payed(user=self.user)
         self.transactions['Rec'].set_payed(user=self.user)
         self.transactions['Rec'].set_received(user=self.user)
@@ -148,6 +151,9 @@ class AccountTestCase(unittest.TestCase):
             transaction.entry_set.add(
                 TransactionEntry(account=self.accounts[1], debit=100))
             transaction.set_registered(user=self.user)
+
+        self.transactions['Undef'] = Transaction()
+        self.transactions['Undef'].save()
 
         self.transactions['Pay'].set_payed(user=self.user)
         self.transactions['Rec'].set_payed(user=self.user)
