@@ -94,7 +94,7 @@ class Group(models.Model):
     def get_registered_transaction_set(self):
         """Returns all transactions connected to group, that are registered and
         not rejected"""
-        return self.transaction_set.exclude(status='')
+        return self.transaction_set.exclude(status=Transaction.UNDEFINED_STATE)
     registered_transaction_set = property(get_registered_transaction_set,
                                           None, None)
 
@@ -110,7 +110,8 @@ class Group(models.Model):
         """Returns all unpayed transactions connected to group, that are not
         rejected"""
         return self.transaction_set.filter(
-            Q(status='') | Q(status=Transaction.REGISTERED_STATE))
+            Q(status=Transaction.UNDEFINED_STATE) |
+            Q(status=Transaction.REGISTERED_STATE))
     not_payed_transaction_set = property(get_not_payed_transaction_set,
                                          None, None)
 
@@ -262,7 +263,7 @@ class Account(models.Model):
     def get_registered_transaction_set(self):
         """Returns all transactions connected to account, that are registered
         and not rejected"""
-        return self.transaction_set.exclude(status='')
+        return self.transaction_set.exclude(status=Transaction.UNDEFINED_STATE)
     registered_transaction_set = property(get_registered_transaction_set,
                                           None, None)
 
@@ -278,7 +279,8 @@ class Account(models.Model):
         """Returns all unpayed transactions connected to account, that are not
         rejected"""
         return self.transaction_set.filter(
-            Q(status='') | Q(status=Transaction.REGISTERED_STATE))
+            Q(status=Transaction.UNDEFINED_STATE) |
+            Q(status=Transaction.REGISTERED_STATE))
     not_payed_transaction_set = property(get_not_payed_transaction_set,
                                          None, None)
 
@@ -352,6 +354,7 @@ class Settlement(models.Model):
 databrowse.site.register(Settlement)
 
 class Transaction(models.Model):
+    UNDEFINED_STATE = ''
     REGISTERED_STATE = 'Reg'
     PAYED_STATE = 'Pay'
     RECEIVED_STATE = 'Rec'
