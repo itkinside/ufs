@@ -27,30 +27,30 @@ urlpatterns = patterns('',
     ### Account
 
     # Summary
-    url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/$',
         account_summary, name='account-summary'),
-    url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/(?P<page>\d+)/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/(?P<page>\d+)/$',
         account_summary, name='account-summary-page'),
 
     # New and edit
     url(r'^(?P<group>[0-9a-z_-]+)/add/$',
         edit_account, {'type': 'new'}, name='new-account'),
-    url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/edit/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/edit/$',
         edit_account, {'type': 'edit'}, name='edit-account'),
 
     # User actions
-    url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/deposit/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/deposit/$',
         transfer, {'transfer_type': 'deposit'}, name='account-deposit'),
-    url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/withdraw/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/withdraw/$',
         transfer, {'transfer_type': 'withdraw'}, name='account-withdraw'),
-    url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/transfer/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/transfer/$',
         transfer, {'transfer_type': 'transfer'}, name='account-transfer'),
 
     ### Transactions
 
     url(r'^(?P<group>[0-9a-z_-]+)/transaction/$',
         transaction_list, name='transaction-list-group'),
-    url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/transaction/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/transaction/$',
         transaction_list, name='transaction-list-account'),
     url(r'^(?P<group>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/$',
         transaction_details, name='transaction-details'),
