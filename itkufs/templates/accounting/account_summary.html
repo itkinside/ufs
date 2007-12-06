@@ -17,7 +17,7 @@
 <table class="tabledetails">
     <tr>
         <th>{% trans "Balance" %}</th>
-        <td>{{ account.user_balance|stringformat:"0.2f" }}</td>
+        <td>{{ account.user_balance|floatformat:2 }}</td>
     </tr>
 
     <tr>
@@ -44,13 +44,17 @@
 <table class="tabledetails">
     <tr>
         <th>{% trans "Name" %}</th>
+        {% if is_admin %}
         <td><a href="{% url group-summary account.group.slug %}">{{ account.group.name }}</a></td>
+        {% else %}
+        <td>{{ account.group.name }}</td>
+        {% endif %}
     </tr>
 
     <tr>
         <th>{% trans "Warning limit" %}</th>
         {% if group.warn_limit %}
-        <td>{{ group.warn_limit|stringformat:"0.2f" }}</td>
+        <td>{{ group.warn_limit|floatformat:2 }}</td>
         {% else %}
         <td>{{ group.warn_limit }}</td>
         {% endif %}
@@ -58,7 +62,7 @@
     <tr>
         <th>{% trans "Blocking limit" %}</th>
         {% if group.block_limit %}
-        <td>{{ group.block_limit|stringformat:"0.2f" }}</td>
+        <td>{{ group.block_limit|floatformat:2 }}</td>
         {% else %}
         <td>{{ group.block_limit }}</td>
         {% endif %}
@@ -80,7 +84,7 @@
 <div id="lists">
 <h3>{% trans "Lists" %}</h3>
 {% if not group.list_set.count %}
-<p>{% trans "No lists configured for this group." %}</p>
+<p>{% trans "No lists configured." %}</p>
 {% else %}
 <ul>
     {% for list in group.list_set.all %}
