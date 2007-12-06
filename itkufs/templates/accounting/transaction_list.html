@@ -2,7 +2,9 @@
 <h3>{% trans "Transactions" %}</h3>
 
 {% if not transaction_list %}
+
 <p>{% trans "No transactions found." %}</p>
+
 {% else %}
 
 {% include "accounting/transaction_list_menu.html" %}
@@ -30,30 +32,30 @@
         {% endif %}
         <td class="account">
             {% if is_admin %}
-                                {% ifnotequal e.account.group group %}
-                    <a href="{% url group-summary e.account.group.slug %}">{{e.account.group.name}}</a>:
-                                {% endifnotequal %}
-                <a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{e.account.name}}</a>
+                {% ifnotequal e.account.group group %}
+                <a href="{% url group-summary e.account.group.slug %}">{{ e.account.group.name }}</a>:
+                {% endifnotequal %}
+                <a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{ e.account.name }}</a>
             {% else %}
-                                {% ifnotequal e.account.group group %}
-                    {{ e.account.group.name }}:
-                                {% endifnotequal %}
-                                {{e.account.name}}
+                {% ifnotequal e.account.group group %}
+                {{ e.account.group.name }}:
+                {% endifnotequal %}
+                {{ e.account.name }}
             {% endif %}
         </td>
         <td class="align_right debit">
             {% if e.debit %}
-            {{e.debit|stringformat:"0.2f"}}
+            {{ e.debit|stringformat:"0.2f" }}
             {% endif %}
         </td>
         <td class="align_right credit">
             {% if e.credit %}
-            {{e.credit|stringformat:"0.2f"}}
+            {{ e.credit|stringformat:"0.2f" }}
             {% endif %}
         </td>
         {% if forloop.first %}
         <td rowspan="{{ rowspan }}" class="details">
-            *FIXME* Details link
+            <a href="{% url transaction-details e.account.group.slug,e.account.slug,t.id %}">Details</a>
         </td>
         {% endif %}
     </tr>
