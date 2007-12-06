@@ -381,11 +381,13 @@ def approve(request, group, page="1", is_admin=False):
                     t.set_received(user=request.user)
                 elif change_to == 'Rej':
                     to_be_rejected.append(t)
+            else:
+                forms.append(form)
 
         else:
             form = ChangeTransactionForm(prefix="transaction%d" % t.id, choices=choices)
+            forms.append(form)
 
-        forms.append(form)
 
     if to_be_rejected:
         form = RejectTransactionForm()

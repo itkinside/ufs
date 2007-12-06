@@ -49,6 +49,10 @@ td {
 	text-align: center;
 	height: 1.6em;
 }
+td.balance {
+	text-align: right;
+	padding-right: 0.5em;
+}
 
 #secondary {
 	float: left;

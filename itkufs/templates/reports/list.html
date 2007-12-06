@@ -68,7 +68,7 @@
         <tr class="{% cycle even,odd as row %}{% if account.is_blocked %} blacklisted{% endif %}">
             <th class="name"{% if list.double and not blocked %} rowspan="2"{% endif %}>{{ account.name }}</th>
             {% ifnotequal list.balance_width 0 %}
-            <td class="balance"{% if list.double and not blocked %} rowspan="2"{% endif %}>{{ account.user_balance }}</td>
+            <td class="balance"{% if list.double and not blocked %} rowspan="2"{% endif %}>{{ account.user_balance|floatformat:2 }}</td>
             {% endifnotequal %}
             {% for item in columns %}
                 {% if not blocked %}
