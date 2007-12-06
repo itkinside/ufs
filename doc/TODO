@@ -6,8 +6,6 @@ MUST HAVE
 
 Model:
 - Unit tests of account balance
-- Do not allow saving Transaction with accounts from different groups in debit
-  or credit
 - set_reject, etc, need to be aware of placeholders and enfore who is allowed
   to alter state
 
@@ -88,6 +86,8 @@ DONE
 - Placeholder flag for group
 - Convenience functions in Account model to match *transaction_set in group
 - Update code with the new Transaction model
+- Do not allow saving Transaction with accounts from different groups in debit
+  or credit
 
 WONTFIX
 -------

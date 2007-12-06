@@ -397,30 +397,36 @@ class Transaction(models.Model):
 
     def debug(self):
         status = self.log_set.all()
-        return "%s %s" % (self.__unicode__(), status)
+        return '%s %s' % (self.__unicode__(), status)
 
-    @transaction.commit_manually # TODO check how the state is if code fails
+    @transaction.commit_on_success
     def save(self):
-        try:
-           debit_sum = 0
-           credit_sum = 0
+        debit_sum = 0
+        credit_sum = 0
+        debit_groups = []
+        credit_groups = []
 
-           for entry in self.entry_set.all():
-               debit_sum += float(entry.debit)
-               credit_sum += float(entry.credit)
+        for entry in self.entry_set.all():
+            if entry.debit > 0:
+                debit_sum += float(entry.debit)
+                debit_groups.append(entry.account.group)
+            if entry.credit > 0:
+                credit_sum += float(entry.credit)
+                credit_groups.append(entry.account.group)
 
-           if debit_sum != credit_sum:
-               raise InvalidTransaction(_('Credit and debit do not match'))
+        if debit_sum != credit_sum:
+            raise InvalidTransaction(_('Credit and debit do not match.'))
 
-           self.last_modified = datetime.now()
+        if len(debit_groups) > 1:
+            raise InvalidTransaction(
+                _('Accounts from different groups on debit side.'))
 
-           super(Transaction, self).save()
+        if len(credit_groups) > 1:
+            raise InvalidTransaction(
+                _('Accounts from different groups on credt side.'))
 
-        except InvalidTransaction, e:
-            transaction.rollback()
-            raise e
-        else:
-            transaction.commit()
+        self.last_modified = datetime.now()
+        super(Transaction, self).save()
 
     def set_registered(self, user=None, message=''):
         self.save()
