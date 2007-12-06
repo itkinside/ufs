@@ -203,11 +203,11 @@ def edit_account(request, group, account=None, type='new', is_admin=False):
 
 @login_required
 @is_group_admin
-def transaction_list(request, group, account):
+def transaction_list(request, group, account=None):
     """Lists an account's transactions"""
     pass # FIXME
 
-def transaction_details(request, group, account, transaction):
+def transaction_details(request, group, transaction):
     """Shows all details about a transaction"""
     pass # FIXME
 
@@ -450,6 +450,7 @@ def create_transaction(request, group, other_group, is_admin=False):
         raise Http404
 
     TransactionForm =  form_for_model(Transaction)
+    del TransactionForm.base_fields['status']
     EntryForm =  form_for_model(TransactionEntry, form=BaseForm)
     del EntryForm.base_fields['account']
     del EntryForm.base_fields['transaction']

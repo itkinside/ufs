@@ -55,7 +55,7 @@
         </td>
         {% if forloop.first %}
         <td rowspan="{{ rowspan }}" class="details">
-            <a href="{% url transaction-details e.account.group.slug,e.account.slug,t.id %}">Details</a>
+            <a href="{% url transaction-details e.account.group.slug,t.id %}">Details</a>
         </td>
         {% endif %}
     </tr>

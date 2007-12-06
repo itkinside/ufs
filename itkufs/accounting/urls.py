@@ -48,8 +48,10 @@ urlpatterns = patterns('',
 
     ### Transactions
 
+    url(r'^(?P<group>[0-9a-z_-]+)/transaction/$',
+        transaction_list, name='transaction-list-group'),
     url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/transaction/$',
-        transaction_list, name='transaction-list'),
-    url(r'^(?P<group>[0-9a-z_-]+)/a/(?P<account>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/$',
+        transaction_list, name='transaction-list-account'),
+    url(r'^(?P<group>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/$',
         transaction_details, name='transaction-details'),
 )
