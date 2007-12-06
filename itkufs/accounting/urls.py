@@ -16,7 +16,7 @@ urlpatterns = patterns('',
 
     # Actions
     url(r'^(?P<group>[0-9a-z_-]+)/approve/$',
-        approve, name='approve-transactions'),
+        approve_transactions, name='approve-transactions'),
     url(r'^(?P<group>[0-9a-z_-]+)/reject/$',
         reject_transactions, name='reject-transactions'),
     url(r'^(?P<group>[0-9a-z_-]+)/register/$',
