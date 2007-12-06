@@ -1,0 +1,85 @@
+{% extends "accounting/base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<h2>{% trans "Transaction" %}</h2>
+
+<table class="tabledetails">
+{% if is_admin %}
+    <tr>
+        <th>Transaction ID</th>
+        <td>{{ transaction.id }}</th>
+    </tr>
+{% endif %}
+    <tr>
+        <th>Status</th>
+        <td>{{ transaction.get_status_display }}</th>
+    </tr>
+    <tr>
+        <th>Last modified</th>
+        <td>{{ transaction.last_modified|date:"Y-m-d H:i" }}</th>
+    </tr>
+</table>
+
+<h3>{% trans "Entries" %}</h3>
+
+<table class="tablelist">
+    <tr>
+        <th>{% trans "Account" %}</th>
+        <th>{% trans "Debit" %}</th>
+        <th>{% trans "Credit" %}</th>
+    </tr>
+
+    {% for e in transaction.entry_set.all %}
+    <tr class="{% cycle 'evenrow' 'oddrow' %}
+        {% if transaction.is_rejected %}rejected{% else %}
+        {% if not transaction.is_received %}pending{% endif %}{% endif %}">
+        <td class="account">
+            {% if is_admin %}
+                {% ifnotequal e.account.group group %}
+                <a href="{% url group-summary e.account.group.slug %}">{{ e.account.group.name }}</a>:
+                {% endifnotequal %}
+                <a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{ e.account.name }}</a>
+            {% else %}
+                {% ifnotequal e.account.group group %}
+                {{ e.account.group.name }}:
+                {% endifnotequal %}
+                {{ e.account.name }}
+            {% endif %}
+        </td>
+        <td class="align_right debit">
+            {% if e.debit %}
+            {{ e.debit|floatformat:2 }}
+            {% endif %}
+        </td>
+        <td class="align_right credit">
+            {% if e.credit %}
+            {{ e.credit|floatformat:2 }}
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>{% trans "Log" %}</h3>
+
+<table class="tablelist">
+    <tr>
+        <th>{% trans "Status" %}</th>
+        <th>{% trans "When" %}</th>
+        <th>{% trans "Who" %}</th>
+        <th>{% trans "Message" %}</th>
+    </tr>
+
+    {% for l in transaction.log_set.all %}
+    <tr class="{% cycle 'evenrow' 'oddrow' %}">
+        <td>{{ l.get_type_display }}</td>
+        <td>{{ l.timestamp|date:"Y-m-d H:i" }}</td>
+        <td><a href="mailto:{{ l.user.email }}">{{ l.user }}</a></td>
+        <td>{{ l.message }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

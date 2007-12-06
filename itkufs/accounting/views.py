@@ -13,7 +13,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _, ungettext
 from django.views.generic.create_update import update_object
-from django.views.generic.list_detail import object_list
+from django.views.generic.list_detail import object_list, object_detail
 
 from itkufs.common.decorators import is_group_admin, limit_to_group
 from itkufs.common.forms import BaseForm
@@ -209,15 +209,39 @@ def edit_account(request, group, account=None, type='new', is_admin=False):
 
 @login_required
 @is_group_admin
-def transaction_list(request, group, account=None):
+def transaction_list(request, group, account=None, is_admin=False):
     """Lists a group or an account's transactions"""
     pass # FIXME
 
 @login_required
 @is_group_admin
-def transaction_details(request, group, transaction):
+def transaction_details(request, group, transaction, is_admin=False):
     """Shows all details about a transaction"""
-    pass # FIXME
+
+    # Get group and transaction
+    try:
+        group = Group.objects.get(slug=group)
+        transaction_set = Transaction.objects.filter(id=transaction)
+        transaction = transaction_set[0]
+    except (Group.DoesNotExist, Transaction.DoesNotExist):
+        raise Http404
+
+    # Check that user is party of transaction or admin of group
+    if not is_admin and transaction.entry_set.filter(
+        account__owner__id=request.user.id).count() == 0:
+        return HttpResponseForbidden(_('The transaction may only be'
+            ' viewed by group admins or a party of the transaction.'))
+
+    # Pass on to generic view
+    response = object_detail(request, transaction_set, transaction.id,
+                       template_name='accounting/transaction_details.html',
+                       extra_context={
+                            'is_admin': is_admin,
+                            'group': group,
+                       },
+                       template_object_name='transaction')
+    populate_xheaders(request, response, Transaction, transaction.id)
+    return response
 
 @login_required
 @is_group_admin
