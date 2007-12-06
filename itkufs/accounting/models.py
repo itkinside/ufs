@@ -62,16 +62,20 @@ class Group(models.Model):
             super(Group, self).save()
 
     def get_user_account_set(self):
-        """Returns queryset of user accounts"""
+        """Returns all user accounts belonging to group"""
         return self.account_set.filter(type=Account.LIABILITY_ACCOUNT,
                                        owner__isnull=False)
     user_account_set = property(get_user_account_set, None, None)
 
     def get_group_account_set(self):
-        """Returns array of group accounts"""
+        """Returns all non-user accounts belonging to group"""
         return self.account_set.exclude(type=Account.LIABILITY_ACCOUNT,
                                         owner__isnull=False)
     group_account_set = property(get_group_account_set, None, None)
+
+
+    ### Transaction set methods
+    # Please keep in sync with Account's set methods
 
     def get_transaction_set_with_rejected(self):
         """Returns all transactions connected to group, including rejected"""
@@ -136,6 +140,7 @@ class Group(models.Model):
     get_not_rejected_transaction_set.__doc__ = """Returns all transactions that
     have not been rejected connected to group. Same as get_transaction_set()."""
     not_rejected_transaction_set = property(get_transaction_set, None, None)
+
 databrowse.site.register(Group)
 
 class Account(models.Model):
@@ -235,6 +240,76 @@ class Account(models.Model):
             or self.group.warn_limit is None):
             return False
         return self.user_balance() < self.group.warn_limit
+
+
+    ### Transaction set methods
+    # Please keep in sync with Group's set methods
+
+    def get_transaction_set_with_rejected(self):
+        """Returns all transactions connected to account, including rejected"""
+        return Transaction.objects.filter(
+            entry_set__account=self).distinct()
+    transaction_set_with_rejected = property(get_transaction_set_with_rejected,
+                                             None, None)
+
+    def get_transaction_set(self):
+        """Returns all transactions connected to account, that have not been
+        rejected"""
+        return self.transaction_set_with_rejected.exclude(
+            status=Transaction.REJECTED_STATE)
+    transaction_set = property(get_transaction_set, None, None)
+
+    def get_registered_transaction_set(self):
+        """Returns all transactions connected to account, that are registered
+        and not rejected"""
+        return self.transaction_set.exclude(status='')
+    registered_transaction_set = property(get_registered_transaction_set,
+                                          None, None)
+
+    def get_payed_transaction_set(self):
+        """Returns all payed transactions connected to account, that are not
+        rejected"""
+        return self.transaction_set.filter(
+            Q(status=Transaction.PAYED_STATE) |
+            Q(status=Transaction.RECEIVED_STATE))
+    payed_transaction_set = property(get_payed_transaction_set, None, None)
+
+    def get_not_payed_transaction_set(self):
+        """Returns all unpayed transactions connected to account, that are not
+        rejected"""
+        return self.transaction_set.filter(
+            Q(status='') | Q(status=Transaction.REGISTERED_STATE))
+    not_payed_transaction_set = property(get_not_payed_transaction_set,
+                                         None, None)
+
+    def get_received_transaction_set(self):
+        """Returns all received transactions connected to account"""
+        return self.transaction_set.filter(
+            status=Transaction.RECEIVED_STATE)
+    received_transaction_set = property(get_received_transaction_set,
+                                        None, None)
+
+    def get_not_received_transaction_set(self):
+        """Returns all transactions that have not been received connected to
+        account"""
+        return self.transaction_set.exclude(
+            status=Transaction.RECEIVED_STATE)
+    not_received_transaction_set = property(get_not_received_transaction_set,
+                                            None, None)
+
+    def get_rejected_transaction_set(self):
+        """Returns all rejected transactions connected to account"""
+        return self.transaction_set_with_rejected.filter(
+            status=Transaction.REJECTED_STATE)
+    rejected_transaction_set = property(get_rejected_transaction_set,
+                                        None, None)
+
+    get_not_rejected_transaction_set = get_transaction_set
+    get_not_rejected_transaction_set.__doc__ = """Returns all transactions that
+    have not been rejected connected to account. Same as
+    get_transaction_set()."""
+    not_rejected_transaction_set = property(get_transaction_set, None, None)
+
 databrowse.site.register(Account)
 
 
@@ -273,6 +348,7 @@ class Settlement(models.Model):
             return smart_unicode("%s: %s" % (self.date, self.comment))
         else:
             return smart_unicode(self.date)
+
 databrowse.site.register(Settlement)
 
 class Transaction(models.Model):
@@ -297,6 +373,9 @@ class Transaction(models.Model):
         verbose_name = _('transaction')
         verbose_name_plural = _('transactions')
         ordering = ['-last_modified']
+
+    class Admin:
+        pass
 
     def __unicode__(self):
         if self.entry_set.all().count():
@@ -463,8 +542,6 @@ class Transaction(models.Model):
         possible_state.insert(0, ('',''))
         return possible_state
 
-    class Admin:
-        pass
 databrowse.site.register(Transaction)
 
 class TransactionLog(models.Model):
@@ -498,6 +575,7 @@ class TransactionLog(models.Model):
             'user': self.user,
             'message': self.message,
         }
+
 databrowse.site.register(TransactionLog)
 
 class TransactionEntry(models.Model):
@@ -540,5 +618,6 @@ class TransactionEntry(models.Model):
             'debit': self.debit,
             'credit': self.credit,
         }
+
 databrowse.site.register(TransactionEntry)
 

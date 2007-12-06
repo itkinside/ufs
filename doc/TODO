@@ -6,7 +6,6 @@ MUST HAVE
 
 Model:
 - Unit tests of model layer, especially transaction and account balance
-- Convenience functions in Account model to match *transaction_set in group
 - Update code with the new Transaction model
 - Do not allow saving Transaction with accounts from different groups in debit
   or credit
@@ -88,6 +87,7 @@ DONE
 - is_* for Transaction need to check against status not log
 - http://www.b-list.org/weblog/2007/nov/02/handle-choices-right-way/
 - Placeholder flag for group
+- Convenience functions in Account model to match *transaction_set in group
 
 WONTFIX
 -------
