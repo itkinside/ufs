@@ -25,7 +25,9 @@ var Transaction = {
 
       row.className = 'sum';
       td2.id = 'debit_sum'+i;
+      td2.className = 'debit_sum';
       td3.id = 'credit_sum'+i;
+      td3.className = 'credit_sum';
 
       td1.appendChild(document.createTextNode('Sum'));
       td2.appendChild(document.createTextNode(0));
@@ -33,8 +35,12 @@ var Transaction = {
       row.appendChild(td1); row.appendChild(td2); row.appendChild(td3);
 
       tbody.appendChild(row);
+      addEvent(tbody, 'keyup', Transaction.update);
 
-      addEvent(tables[i], 'keyup', Transaction.update);
+      var inputs = tbody.getElementsByTagName('input');
+      for (var j=0; j<inputs.length; j++) {
+        addEvent(inputs[j], 'change', Transaction.update);
+      }
     }
     Transaction.update();
   },

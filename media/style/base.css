@@ -310,6 +310,10 @@ form p {
 	width: 4em;
 	text-align: right;
 }
+#createtransaction .debit_sum,
+#createtransaction .credit_sum {
+	text-align: right;
+}
 #createtransaction .sum {
 	font-weight: bold;
 }
