@@ -170,12 +170,12 @@ img {
 /* Tables */
 .tablelist th, .tabledetails th {
 	background: #d3d7cf;
-	border: 1px solid gray;
+	border: 1px solid #babdb6;
 	padding: 0.3em;
 	font-weight: bolder;
 }
 .tablelist td, .tabledetails td {
-	border: 1px solid gray;
+	border: 1px solid #babdb6;
 	padding: 0.3em;
 	vertical-align: top;
 }
@@ -210,7 +210,7 @@ tr.oddrow {
 
 /* Colorization */
 .pending, .comment, .comment a, .none {
-	color: gray;
+	color: #888a85;
 }
 .warning {
 	color: #ce5c00;
@@ -357,7 +357,7 @@ form p {
 #transactions .rejected,
 #transactions .pending a,
 #transactions .pending {
-	color: gray;
+	color: #888a85;
 }
 #transactions .status {
 	color: black;
