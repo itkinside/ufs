@@ -2,3 +2,4 @@ itkufs/settings.py
 itkufs.sqlite
 itkufs/locale/no/LC_MESSAGES/*.mo
 itkufs/locale/en/LC_MESSAGES/*.mo
+media/logos/*
