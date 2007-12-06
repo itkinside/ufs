@@ -1,6 +1,5 @@
 <div id="debug">
-
-<p style="color: grey">
+<p>
 Debug: {{ sql_queries|length }} Quer{{ sql_queries|pluralize:"y,ies" }}
 {% ifnotequal sql_queries|length 0 %}
 (<span style="cursor: pointer;" onclick="var s=document.getElementById('query_table').style; s.display=s.display=='none' ? '' : 'none'; this.innerHTML=this.innerHTML=='Show' ? 'Hide' : 'Show';">Show</span>)

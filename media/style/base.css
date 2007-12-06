@@ -72,9 +72,9 @@ img {
 	min-width: 740px;
 	max-width: 60em;
 	padding: 1em;
-	border-left: 5px solid #d3d7cf;
-	border-right: 5px solid #d3d7cf;
-	border-bottom: 5px solid #d3d7cf;
+	border-left: 3px solid #d3d7cf;
+	border-right: 3px solid #d3d7cf;
+	border-bottom: 3px solid #d3d7cf;
 }
 
 /* Drop-down menu */
@@ -83,8 +83,8 @@ img {
 	margin: 0 -1em;
 	padding: 0 1em;
 	height: 1.85em; /* Text height + menu top/bottom padding */
-	border-bottom: 2px solid #d3d7cf;
-	border-top: 2px solid #d3d7cf;
+	border-bottom: 1px solid #d3d7cf;
+	border-top: 1px solid #d3d7cf;
 }
 #menu a {
 	color: black;
@@ -377,9 +377,11 @@ form p {
 /* Query debug */
 div#debug {
 	margin: 1em;
+	color: white;
 }
 div#debug table {
-	border: 5px solid #d3d7cf;
+	border: 2px solid #d3d7cf;
+	color: black;
 }
 
 div#debug table#query_table, div#debug table#query_table thead {
