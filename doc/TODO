@@ -5,7 +5,7 @@ MUST HAVE
 ---------
 
 Model:
-- Unit tests of model layer, especially transaction and account balance
+- Unit tests of account balance
 - Update code with the new Transaction model
 - Do not allow saving Transaction with accounts from different groups in debit
   or credit
