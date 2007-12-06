@@ -409,7 +409,7 @@ class Transaction(models.Model):
            if debit_sum != credit_sum:
                raise InvalidTransaction(_('Credit and debit do not match'))
 
-           self.last_modifed = datetime.now()
+           self.last_modified = datetime.now()
 
            super(Transaction, self).save()
 
@@ -433,7 +433,7 @@ class Transaction(models.Model):
                 log.message = message
             log.save()
             self.status = self.REGISTERED_STATE
-            self.last_modifed = datetime.now()
+            self.last_modified = datetime.now()
             self.save()
         else:
             raise InvalidTransaction(
@@ -448,7 +448,7 @@ class Transaction(models.Model):
                 log.message = message
             log.save()
             self.status = self.PAYED_STATE
-            self.last_modifed = datetime.now()
+            self.last_modified = datetime.now()
             self.save()
         else:
             raise InvalidTransaction(_('Could not set transaction as payed'))
@@ -462,7 +462,7 @@ class Transaction(models.Model):
                 log.message = message
             log.save()
             self.status = self.RECEIVED_STATE
-            self.last_modifed = datetime.now()
+            self.last_modified = datetime.now()
             self.save()
         else:
             raise InvalidTransaction(_('Could not set transaction as received'))
@@ -478,7 +478,7 @@ class Transaction(models.Model):
                 log.message = message
             log.save()
             self.status = self.REJECTED_STATE
-            self.last_modifed = datetime.now()
+            self.last_modified = datetime.now()
             self.save()
         else:
             raise InvalidTransaction(_('Could not set transaction as rejected'))
