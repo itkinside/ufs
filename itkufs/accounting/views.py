@@ -34,17 +34,13 @@ def group_summary(request, group, page='1', is_admin=False):
     except Group.DoesNotExist:
         raise Http404
 
-    # Get related transactions
-    accounts = Account.objects.filter(group=group)
-    transactions = group.transaction_set
-
     if is_admin and group.not_payed_transaction_set.count():
         request.user.message_set.create(
             message=_('You have pending transactions in the group: %s') \
                 % group.name)
 
     # Pass on to generic view
-    response = object_list(request, transactions,
+    response = object_list(request, group.transaction_set,
                        paginate_by=20,
                        page=page,
                        allow_empty=True,
@@ -82,11 +78,6 @@ def account_summary(request, group, account, page='1', is_admin=False):
     if request.user == account.owner:
         request.session['my_account'] = account
 
-    # Get related transactions
-    # FIXME
-    # transactions = account.transaction_set
-    transactions = Transaction.objects.filter(entry_set__account=account)
-
     # Warn owner of account about a low balance
     if request.user == account.owner:
         if account.is_blocked():
@@ -99,7 +90,7 @@ def account_summary(request, group, account, page='1', is_admin=False):
                 message=_('The account balance is below the warning limit.'))
 
     # Pass on to generic view
-    response = object_list(request, transactions,
+    response = object_list(request, account.transaction_set_with_rejected,
                        paginate_by=20,
                        page=page,
                        allow_empty=True,
