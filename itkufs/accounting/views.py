@@ -39,7 +39,7 @@ def group_summary(request, group, page='1', is_admin=False):
     # Check pending transactions
     if is_admin and group.not_payed_transaction_set.count():
         request.user.message_set.create(
-            message=_('You have pending transactions in &ldquo;%s&rdquo;."') \
+            message=_('You have pending transactions in "%s".') \
                 % group.name)
 
     # Pass on to generic view
