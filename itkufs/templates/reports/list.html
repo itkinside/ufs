@@ -23,6 +23,10 @@
 {% with list.total_width as width %}
 {% with list.total_column_count as colspan %}
 
+<p class="noprint" id="reminder">
+    {% trans "Please remember to print with backgrounds and landscape orientation if prefered." %}
+</p>
+
 <table>
     <thead>
         <tr>
@@ -88,8 +92,7 @@
         <tr>
         <td colspan="{{ colspan }}">
                 {% trans "Blacklisted accounts are marked with" %}
-                <img src="{% url media "images/black.png" %}"/>.
-                {% trans "Please remember to print with backgrounds and landscape orientation if prefered." %}
+                <img src="{% url media "images/black.png" %}"/>
            </td>
         </tr>
     </tfoot>

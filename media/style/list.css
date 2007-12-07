@@ -63,6 +63,10 @@ td.balance {
 	height: 3.5em;
 	overflow: hidden;
 }
+#reminder {
+	font-weight: bold;
+	text-align: center;
+}
 
 
 tfoot img {
@@ -96,4 +100,10 @@ tfoot img {
 
 @page {
 	size: landscape;
+}
+
+@media print {
+	.noprint, #debug {
+		display: none;
+	}
 }
