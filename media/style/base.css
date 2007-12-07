@@ -264,7 +264,7 @@ input, select, textarea, button {
 	font-size: 100%;
 }
 input:focus, select:focus, textarea:focus {
-	background: #eeeeec;
+	background: #ffd;
 }
 input:hover, select:hover, textarea:hover, button:hover {
 	border: 1px solid #555753;
@@ -272,6 +272,7 @@ input:hover, select:hover, textarea:hover, button:hover {
 
 button {
 	margin-left: 9em;
+	color: #000;
 	background: #d3d7cf;
 }
 
