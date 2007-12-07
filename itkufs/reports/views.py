@@ -52,7 +52,7 @@ def new_list(request, group, is_admin=False):
     columnforms = []
 
     ListForm = form_for_model(List, fields=('name', 'slug', 'account_width', 'balance_width'))
-    ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width', 'order'))
+    ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width'))
 
     listform = ListForm()
     for i in range(0,5):
@@ -84,10 +84,10 @@ def edit_list(request, group, slug, is_admin=False):
 
     columnforms = []
     for c in list.column_set.all():
-        ColumnForm = form_for_instance(c, form=ColumnBaseForm, fields=('name', 'width', 'order'))
+        ColumnForm = form_for_instance(c, form=ColumnBaseForm, fields=('name', 'width'))
         columnforms.append( ColumnForm(prefix=c.id) )
     for i in range(0,3):
-        ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width', 'order'))
+        ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width'))
         columnforms.append( ColumnForm(prefix='new%s'%i) )
 
     return render_to_response('reports/edit_list.html',

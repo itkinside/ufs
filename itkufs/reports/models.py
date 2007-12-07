@@ -46,13 +46,12 @@ databrowse.site.register(List)
 class ListColumn(models.Model):
     name = models.CharField(_('name'), max_length=200, core=True)
     width = models.PositiveSmallIntegerField(_('width'))
-    order = models.PositiveSmallIntegerField(_('order'))
     list = models.ForeignKey(List, verbose_name=_('list'),
         edit_inline=models.TABULAR, num_in_admin=5, num_extra_on_change=3,
         related_name='column_set')
 
     class Meta:
-        ordering = ['order']
+        ordering = ['id']
         #unique_together = (('name', 'list'),)
         verbose_name = _('list item')
         verbose_name_plural = _('list items')
