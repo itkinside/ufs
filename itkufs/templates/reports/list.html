@@ -24,16 +24,6 @@
 {% with list.total_column_count as colspan %}
 
 <table>
-    <tfoot>
-        <tr>
-        <td colspan="{{ colspan }}">
-                {% trans "Blacklisted accounts are marked with" %}
-                <img src="{% url media "images/black.png" %}"/>.
-                {% trans "Please remember to print with backgrounds and landscape orientation." %}
-           </td>
-        </tr>
-    </tfoot>
-
     <thead>
         <tr>
         <th colspan="{{ colspan }}">
@@ -93,6 +83,16 @@
         {% endif %}
     {% endfor %}
     </tbody>
+
+    <tfoot>
+        <tr>
+        <td colspan="{{ colspan }}">
+                {% trans "Blacklisted accounts are marked with" %}
+                <img src="{% url media "images/black.png" %}"/>.
+                {% trans "Please remember to print with backgrounds and landscape orientation if prefered." %}
+           </td>
+        </tr>
+    </tfoot>
 </table>
 
 {% endwith %}
