@@ -1,16 +1,12 @@
 # Django settings for itkufs project.
 from settings_base import *
+from settings_local import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-#TEMPLATE_STRING_IF_INVALID = ''
+TEMPLATE_STRING_IF_INVALID = ''
 
-DATABASE_ENGINE = 'sqlite3'           # 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
-DATABASE_NAME = '/home/cassarossa/itk/felles/itkufs/itkufs.sqlite'             # Or path to database file if using sqlite3.
-DATABASE_USER = ''             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+# DB stuff moved to setting_local which is not versioned
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
