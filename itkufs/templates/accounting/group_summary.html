@@ -60,14 +60,14 @@
 <ul>
     {% for list in group.list_set.all %}
     <li>
-      <a href="{% url view-list group.slug,list.slug %}">{{ list.name }}</a>
-      &ndash;
       <a href="{% url edit-list group.slug,list.slug %}">
           <img  src="{% url media "images/icons/text-x-generic-edit.png" %}" alt="{% trans "Edit"%}" title="{% trans "Edit"%}"/>
       </a>
       <a href="{% url delete-list group.slug,list.slug %}">
            <img src="{% url media "images/icons/text-x-generic-delete.png" %}" alt="{% trans "Delete"%}" title="{% trans "Delete"%}"/>
       </a>
+      &ndash;
+      <a href="{% url view-list group.slug,list.slug %}">{{ list.name }}</a>
     </li>
     {% endfor %}
 </div>
