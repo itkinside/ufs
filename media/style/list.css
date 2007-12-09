@@ -72,7 +72,7 @@ td.balance {
 tfoot img {
 	vertical-align: middle;
 	width: 3em;
-	height: 3px
+	height: 1em;
 }
 
 .evenrow {
@@ -80,8 +80,8 @@ tfoot img {
 }
 
 .blacklisted td {
-	padding-left:0;
-	padding-right: 0;
+	padding: 0;
+	background: #000;
 }
 .blacklisted .balance {
 	background: transparent;
@@ -90,8 +90,9 @@ tfoot img {
 
 .blacklisted img {
 	vertical-align: middle;
-	height: 3px;
+	height: 1.2em;
 	width: 100%;
+	margin: 0;
 }
 
 .hidden {
