@@ -15,6 +15,7 @@ class List(models.Model):
         verbose_name=_('group'), related_name='list_set')
     accounts = models.ManyToManyField(Account, blank="true")
     double = models.BooleanField(help_text=_("Indicates that two rows should be used per account"))
+    ignore_blocked = models.BooleanField(help_text=_("Should this list exclude blocked accounts?"))
 
     class Meta:
         #unique_together = (('slug', 'account_group'),)
@@ -47,7 +48,7 @@ class ListColumn(models.Model):
     name = models.CharField(_('name'), max_length=200, core=True)
     width = models.PositiveSmallIntegerField(_('width'))
     list = models.ForeignKey(List, verbose_name=_('list'),
-        edit_inline=models.TABULAR, num_in_admin=5, num_extra_on_change=3,
+        edit_inline=models.TABULAR, num_in_admin=8, num_extra_on_change=3,
         related_name='column_set')
 
     class Meta:

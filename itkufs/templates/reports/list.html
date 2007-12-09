@@ -59,29 +59,31 @@
     {% for account in accounts %}
         {% if account.is_user_account %}
         {% with account.is_blocked as blocked %}
-        <tr class="{% cycle evenrow,oddrow as row %}{% if account.is_blocked %} blacklisted{% endif %}">
-            <th class="name"{% if list.double and not blocked %} rowspan="2"{% endif %}>{{ account.name }}</th>
+        <tr class="{% cycle evenrow,oddrow as row %}{% if account.is_blocked and not list.ignore_blocked %} blacklisted{% endif %}">
+            <th class="name"{% if list.double %}{% if not blocked or list.ignore_blocked %} rowspan="2"{% endif %}{%endif%}>{{ account.name }}</th>
             {% ifnotequal list.balance_width 0 %}
-            <td class="balance"{% if list.double and not blocked %} rowspan="2"{% endif %}>{{ account.user_balance|floatformat:2 }}</td>
+            <td class="balance"{% if list.double %}{% if not blocked or list.ignore_blocked %} rowspan="2"{% endif %}{%endif%}>{{ account.user_balance|floatformat:2 }}</td>
             {% endifnotequal %}
             {% for item in columns %}
-                {% if not blocked %}
-            <td{% if list.double and not blocked %} class="double"{% endif %}></td>
+                {% if not blocked or list.ignore_blocked %}
+            <td{% if list.double %}{% if not blocked or list.ignore_blocked %} class="double"{% endif %}{% endif %}></td>
                 {% else %}
             <td><img src="{% url media "images/black.png" %}"/></td>
                 {% endif %}
         {% endfor %}
         </tr>
-        {% if list.double and not account.is_blocked  %}
+        {% if list.double %}
+        {% if list.ignore_blocked or not account.is_blocked %}
         <tr class="{{ row }}">
             {% for item in columns %}
-                {% if not blocked %}
+                {% if not blocked or list.ignore_blocked %}
             <td></td>
                 {% else %}
             <td><img src="{% url media "images/black.png" %}"/></td>
                 {% endif %}
         {% endfor %}
         </tr>
+        {% endif %}
         {% endif %}
         {% endwith %}
         {% endif %}
