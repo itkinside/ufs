@@ -14,7 +14,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _, ungettext
 from django.views.generic.list_detail import object_list, object_detail
 
-from itkufs.common.decorators import is_group_admin, limit_to_group
+from itkufs.common.decorators import is_group_admin
 from itkufs.common.forms import BaseForm
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
