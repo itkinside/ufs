@@ -367,46 +367,6 @@ form p {
 	clear: both;
 }
 
-#transactions dl {
-	font-size: 85%;
-}
-#transactions dt {
-	width: 6em;
-	text-align: right;
-	float: left;
-	color: black;
-}
-#transactions .details dt {
-	font-weight: normal;
-	width: auto;
-}
-#transactions dd {
-	margin-left: 6.5em;
-}
-#transactions .details dd {
-	margin-left: auto;
-}
-#transactions p {
-	margin: 0 !important;
-	padding: 0 !important;
-}
-#transactions .rejected a,
-#transactions .rejected,
-#transactions .pending a,
-#transactions .pending {
-	background: transparent;
-	color: #888a85;
-}
-#transactions .status {
-	background: transparent;
-	color: black;
-}
-#transactions .rejected .account,
-#transactions .rejected .debit,
-#transactions .rejected .credit {
-	text-decoration: line-through;
-}
-
 /* New list page */
 #listcolumns input {
 	background: transparent;
