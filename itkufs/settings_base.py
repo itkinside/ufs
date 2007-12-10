@@ -62,6 +62,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'itkufs.common.middleware.UfsMiddleware',
 )
 
 ROOT_URLCONF = 'itkufs.urls'
