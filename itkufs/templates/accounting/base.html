@@ -1,4 +1,11 @@
 {% extends "base.html" %}
 
 {% block title %}{{ request.session.my_account.group.name }}{% endblock %}
-{% block header %}{{ request.session.my_account.group.name }}{% endblock %}
+{% block header %}
+    {% if account %}
+        Account {{ account.name }} in {{ account.group.name }}
+    {% else %}
+        {% firstof group.name request.session.my_account.group.name %}
+    {% endif %}
+{% endblock %}
+

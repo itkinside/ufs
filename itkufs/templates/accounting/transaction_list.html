@@ -3,14 +3,6 @@
 
 {% block content %}
 
-<h2>
-{% if account %}
-    {% trans "Account" %}: &ldquo;{{ account.name }}&rdquo;
-{% else %}
-    {% trans "Group" %}: &ldquo;{{ group.name }}&rdquo;
-{% endif %}
-</h2>
-
 <div id="tabs">
 <ul>
 {% if account %}
@@ -22,8 +14,6 @@
 {% endif %}
 </ul>
 </div>
-
-<h3>Transactions</h3>
 
 {% if not transaction_list %}
 

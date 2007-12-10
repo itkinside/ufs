@@ -1,16 +1,17 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 
-{% block content %}
 
-<h2>
-    {% blocktrans with account.name as account_name %}Account: &ldquo;{{ account_name }}&rdquo;{% endblocktrans %}
+{% block header %}
+    {{ block.super }}
     {% if is_admin %}
     <a href="{% url edit-account account.group.slug,account.slug %}">
         <img  src="{% url media "images/icons/text-x-generic-edit.png" %}" alt="{% trans "Edit"%}" title="{% trans "Edit"%}"/>
     </a>
     {% endif %}
-</h2>
+{% endblock %}
+
+{% block content %}
 
 <div id="tabs">
 <ul>

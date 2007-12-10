@@ -1,14 +1,14 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 
-{% block content %}
-
-<h2>
-    {% blocktrans with group.name as group_name %}Group: &ldquo;{{ group_name }}&rdquo;{% endblocktrans %}
+{% block header %}
+    {{ block.super }}
     <a href="{% url edit-group group.slug %}">
         <img  src="{% url media "images/icons/text-x-generic-edit.png" %}" alt="{% trans "Edit"%}" title="{% trans "Edit"%}"/>
     </a>
-</h2>
+{% endblock %}
+
+{% block content %}
 
 <div id="tabs">
 <ul>
