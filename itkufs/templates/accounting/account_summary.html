@@ -87,7 +87,6 @@
     <li><a href="{% url account-transfer account.group.slug,account.slug %}">{% trans "Transfer" %}</a></li>
 </ul>
 </div>
-{% endifequal %}
 
 <div id="lists">
 <h3>{% trans "Lists" %}</h3>
@@ -101,5 +100,6 @@
 </ul>
 {% endif %}
 </div>
+{% endifequal %}
 
 {% endblock %}
