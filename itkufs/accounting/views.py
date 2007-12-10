@@ -20,15 +20,9 @@ from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
 
 @login_required
-@limit_to_admin
+@limit_to_group
 def group_summary(request, group, is_admin=False):
     """Show group summary"""
-
-    # Check pending transactions
-    if is_admin and group.not_payed_transaction_set.count():
-        request.user.message_set.create(
-            message=_('You have pending transactions in "%s".') \
-                % group.name)
 
     # Pass on to generic view
     response = render_to_response('accounting/group_summary.html',
@@ -159,12 +153,6 @@ def transaction_list(request, group, account=None, page='1', is_admin=False):
         transactions = account.transaction_set
     else:
         transactions = group.transaction_set
-
-    # Check pending transactions
-    # FIXME: When should we display the pending-transactions-warning?
-    if is_admin and group.not_payed_transaction_set.count():
-        request.user.message_set.create(
-            message=_('You have pending transactions in "%s".') % group.name)
 
     # Pass on to generic view
     response = object_list(request, transactions,

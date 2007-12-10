@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.utils.translation import ugettext as _
 
 from itkufs.accounting.models import Group, Account
 
@@ -27,5 +28,10 @@ class UfsMiddleware:
             # Add group admin flag
             if view_kwargs['group'].admins.filter(id=request.user.id).count():
                 view_kwargs['is_admin'] = True
+                # Check for pending transactions
+                if view_kwargs['group'].not_received_transaction_set.count():
+                    request.user.message_set.create(
+                        message=_('You have pending transactions in "%s".') \
+                        % view_kwargs['group'].name)
             else:
                 view_kwargs['is_admin'] = False
