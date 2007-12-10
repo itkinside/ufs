@@ -14,18 +14,15 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _, ungettext
 from django.views.generic.list_detail import object_list, object_detail
 
+from itkufs.common.decorators import limit_to_group, limit_to_owner, limit_to_admin
 from itkufs.common.forms import BaseForm
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
 
 @login_required
+@limit_to_admin
 def group_summary(request, group, is_admin=False):
     """Show group summary"""
-
-    # Admins only
-    if not is_admin:
-        return HttpResponseForbidden(
-            _('This page may only be viewed by group admins.'))
 
     # Check pending transactions
     if is_admin and group.not_payed_transaction_set.count():
@@ -44,19 +41,15 @@ def group_summary(request, group, is_admin=False):
     return response
 
 @login_required
+@limit_to_owner
 def account_summary(request, group, account, is_admin=False):
     """Show account summary"""
 
-    # Check that user is owner of account or admin of account group
-    if not is_admin:
-        if request.user.id != account.owner.id:
-            return HttpResponseForbidden(_('The account may only be viewed' +
-                ' by group admins and the account owner.'))
+    if request.user == account.owner:
+        # Check if active
         if not account.active:
             return HttpResponseForbidden(_('This account has been disabled.'))
 
-    # If owner
-    if request.user == account.owner:
         # Set active account in session
         request.session['my_account'] = account
 
@@ -81,13 +74,9 @@ def account_summary(request, group, account, is_admin=False):
     return response
 
 @login_required
+@limit_to_admin
 def edit_group(request, group, is_admin=False):
     """Edit group properties"""
-
-    # Admins only
-    if not is_admin:
-        return HttpResponseForbidden(
-            _('This page may only be viewed by group admins.'))
 
     GroupInstanceForm = form_for_instance(group)
     del GroupInstanceForm.base_fields['slug']
@@ -122,13 +111,9 @@ def edit_group(request, group, is_admin=False):
                               context_instance=RequestContext(request))
 
 @login_required
+@limit_to_admin
 def edit_account(request, group, account=None, type='new', is_admin=False):
     """Create account or edit account properties"""
-
-    # Admins only
-    if not is_admin:
-        return HttpResponseForbidden(
-            _('This page may only be viewed by group admins.'))
 
     if type=='edit':
         AccountForm = form_for_instance(account)
@@ -165,14 +150,9 @@ def edit_account(request, group, account=None, type='new', is_admin=False):
                               context_instance=RequestContext(request))
 
 @login_required
+@limit_to_owner
 def transaction_list(request, group, account=None, page='1', is_admin=False):
     """Lists a group or an account's transactions"""
-
-    # Admins only
-    # FIXME: Allow account owners to see their own transactions
-    if not is_admin:
-        return HttpResponseForbidden(
-            _('This page may only be viewed by group admins.'))
 
     # Get transactions
     if account is not None:
@@ -206,6 +186,8 @@ def transaction_details(request, group, transaction, is_admin=False):
     """Shows all details about a transaction"""
 
     # Get transaction
+    # TODO: Look into letting the middleware replace the transaction id with
+    # the transaction object or set
     try:
         transaction_set = Transaction.objects.filter(id=transaction)
         transaction = transaction_set[0]
@@ -213,6 +195,7 @@ def transaction_details(request, group, transaction, is_admin=False):
         raise Http404
 
     # Check that user is party of transaction or admin of group
+    # TODO: Look into doing this with a decorator
     if not is_admin and transaction.entry_set.filter(
         account__owner__id=request.user.id).count() == 0:
         return HttpResponseForbidden(_('The transaction may only be'
@@ -230,12 +213,9 @@ def transaction_details(request, group, transaction, is_admin=False):
     return response
 
 @login_required
+@limit_to_owner
 def transfer(request, group, account=None, transfer_type=None, is_admin=False):
     """Deposit, withdraw or transfer money"""
-
-    if transfer_type != 'register' and account.owner != request.user:
-        return HttpResponseForbidden(
-            _('This page is only available to the account owner.'))
 
     if request.method == 'POST':
         data = request.POST
@@ -370,12 +350,9 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
                               context_instance=RequestContext(request))
 
 @login_required
-def approve_transactions(request, group, page="1", is_admin=False):
-
-    # Admins only
-    if not is_admin:
-        return HttpResponseForbidden(
-            _('This page may only be viewed by group admins.'))
+@limit_to_admin
+def approve_transactions(request, group, page='1', is_admin=False):
+    """Approve transactions from members and other groups"""
 
     # Get related transactions
     transactions = group.not_received_transaction_set
@@ -431,13 +408,9 @@ def approve_transactions(request, group, page="1", is_admin=False):
                        },
                        context_instance=RequestContext(request))
 @login_required
+@limit_to_admin
 def reject_transactions(request, group, is_admin=False):
-    """Admin view for rejecting transactions"""
-
-    # Admins only
-    if not is_admin:
-        return HttpResponseForbidden(
-            _('This page may only be viewed by group admins.'))
+    """Reject transactions from members and other groups"""
 
     # XXX: HACK!!! needs more work ;)
 
@@ -463,13 +436,9 @@ def reject_transactions(request, group, is_admin=False):
     raise Exception('done')
 
 @login_required
+@limit_to_admin
 def create_transaction(request, group, other_group, is_admin=False):
     """Admin view for creating transactions"""
-
-    # Admins only
-    if not is_admin:
-        return HttpResponseForbidden(
-            _('This page may only be viewed by group admins.'))
 
     # Get other group
     try:
