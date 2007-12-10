@@ -12,6 +12,13 @@
     </a>
 </h2>
 
+<div id="tabs">
+<ul>
+    <li><a href="{% url group-summary group.slug %}" class="active">Summary</a></li>
+    <li><a href="{% url transaction-list-group group.slug %}">Transactions</a></li>
+</ul>
+</div>
+
 <div id="groupinfo">
 <h3>{% trans "Group info" %}</h3>
 <table class="tabledetails">

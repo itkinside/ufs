@@ -137,6 +137,34 @@ img {
 	text-align: right;
 }
 
+/* Tab menu */
+#tabs ul {
+	border-bottom: 1px solid #d3d7cf;
+	margin: 0;
+	padding: 0.5em 0 0.3em 0.5em;
+}
+#tabs ul li {
+	display: inline;
+	list-style: none;
+	margin: 0;
+	padding: 0 0.5em 0 0;
+}
+#tabs ul li a {
+	background: #eeeeec;
+	border: 1px solid #d3d7cf;
+	margin: 0;
+	padding: 0.3em 1em;
+	text-decoration: none;
+}
+#tabs ul li a:hover {
+	background: #d3d7cf;
+	color: black;
+}
+#tabs ul li a.active {
+	background: #d3d7cf;
+	font-weight: bold;
+}
+
 /* Main content block */
 #content {
 	/* Get clear of the floating menu */
