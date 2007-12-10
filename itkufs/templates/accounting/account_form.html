@@ -2,10 +2,14 @@
 {% load i18n %}
 
 {% block content %}
+
+<h2>Create or edit account</h2>
+
 <form action="." method="post">
     {{ form.as_p }}
     <p>
         <button type="submit">{% trans "Save changes to account" %}</button>
     </p>
 </form>
+
 {% endblock %}
