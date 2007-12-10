@@ -11,20 +11,23 @@ from django.views.generic.create_update import create_object, update_object, del
 from django.newforms import form_for_instance, form_for_model
 
 from itkufs.common.forms import BaseForm
-from itkufs.common.decorators import is_group_admin, limit_to_group
+from itkufs.common.decorators import limit_to_group
 from itkufs.accounting.models import Group, Account
 from itkufs.reports.models import *
 
 @login_required
 @limit_to_group
-def html_list(request, group, slug):
+def html_list(request, group, slug, is_admin=False):
+    # FIXME: Rename to show_list
+    # FIXME: Rename slug to list and let middleware switch the slug with an
+    # object
+
     try:
-        group = Group.objects.get(slug=group)
-        accounts = Account.objects.filter(group=group)
+        accounts = group.user_account_set
         list = group.list_set.get(slug=slug)
         if list.accounts.all().count():
             accounts = list.accounts.filter(group=group)
-    except (Group.DoesNotExist, List.DoesNotExist):
+    except List.DoesNotExist:
         raise Http404
 
     response = render_to_response('reports/list.html',
@@ -39,15 +42,9 @@ def html_list(request, group, slug):
     return response
 
 @login_required
-@is_group_admin
 def new_list(request, group, is_admin=False):
     if not is_admin:
         return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
-
-    try:
-        group = Group.objects.get(slug=group)
-    except Group.DoesNotExist, List.DoesNotExist:
-        raise Http404
 
     columnforms = []
 
@@ -68,15 +65,13 @@ def new_list(request, group, is_admin=False):
                               context_instance=RequestContext(request))
 
 @login_required
-@is_group_admin
 def edit_list(request, group, slug, is_admin=False):
     if not is_admin:
         return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
     try:
-        group = Group.objects.get(slug=group)
         list = group.list_set.get(slug=slug)
-    except Group.DoesNotExist, List.DoesNotExist:
+    except List.DoesNotExist:
         raise Http404
 
     ListForm = form_for_instance(list, fields=('name', 'slug', 'account_width', 'balance_width'))
@@ -101,19 +96,18 @@ def edit_list(request, group, slug, is_admin=False):
 
 
 @login_required
-@is_group_admin
 def alter_list(request, group, slug=None, type='new', is_admin=False):
+    # FIXME: Rename to edit_list
     if not is_admin:
         return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
-    # May this function could be made more genric so that it can limit acces
-    # to generic views for any object?
-    try:
-        group = Group.objects.get(slug=group)
-        if slug:
+    # TODO: Maybe this function could be made more generic so that it can limit
+    # access to generic views for any object?
+    if slug is not None:
+        try:
             id = group.list_set.get(slug=slug).id
-    except Group.DoesNotExist:
-        raise Http404
+        except Group.DoesNotExist:
+            raise Http404
 
     if request.method == 'POST':
         if u'group' in request.POST:
@@ -145,16 +139,13 @@ def alter_list(request, group, slug=None, type='new', is_admin=False):
             post_delete_redirect=redirect)
 
 @login_required
-@is_group_admin
 def balance(request, group, is_admin=False):
     """Show balance sheet for the group"""
-    if not is_admin:
-        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
-    try:
-        group = Group.objects.get(slug=group)
-    except Group.DoesNotExist:
-        raise Http404
+    # Admins only
+    if not is_admin:
+        return HttpResponseForbidden(
+            _('This page may only be viewed by group admins.'))
 
     # Balance sheet data struct
     accounts = {
@@ -208,16 +199,13 @@ def balance(request, group, is_admin=False):
                               context_instance=RequestContext(request))
 
 @login_required
-@is_group_admin
 def income(request, group, is_admin=False):
     """Show income statement for group"""
-    if not is_admin:
-        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
 
-    try:
-        group = Group.objects.get(slug=group)
-    except Group.DoesNotExist:
-        raise Http404
+    # Admins only
+    if not is_admin:
+        return HttpResponseForbidden(
+            _('This page may only be viewed by group admins.'))
 
     # Balance sheet data struct
     accounts = {
@@ -251,15 +239,11 @@ def income(request, group, is_admin=False):
                               context_instance=RequestContext(request))
 
 @login_required
-@is_group_admin
-def settlement_summary(request, group, page="1", is_admin=False):
-    if not is_admin:
-        return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
-    try:
-        group = Group.objects.get(slug=group)
-    except Group.DoesNotExist:
-        raise Http404
+def settlement_summary(request, group, page='1', is_admin=False):
 
+    # Admins only
+    if not is_admin:
+        return HttpResponseForbidden(
+            _('This page may only be viewed by group admins.'))
 
     # FIXME: Finish view
-

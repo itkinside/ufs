@@ -14,13 +14,11 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _, ungettext
 from django.views.generic.list_detail import object_list, object_detail
 
-from itkufs.common.decorators import is_group_admin
 from itkufs.common.forms import BaseForm
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
 
 @login_required
-@is_group_admin
 def group_summary(request, group, is_admin=False):
     """Show group summary"""
 
@@ -28,12 +26,6 @@ def group_summary(request, group, is_admin=False):
     if not is_admin:
         return HttpResponseForbidden(
             _('This page may only be viewed by group admins.'))
-
-    # Get group
-    try:
-        group = Group.objects.get(slug=group)
-    except Group.DoesNotExist:
-        raise Http404
 
     # Check pending transactions
     if is_admin and group.not_payed_transaction_set.count():
@@ -52,16 +44,8 @@ def group_summary(request, group, is_admin=False):
     return response
 
 @login_required
-@is_group_admin
 def account_summary(request, group, account, is_admin=False):
     """Show account summary"""
-
-    # Get group and account
-    try:
-        group = Group.objects.get(slug=group)
-        account = group.account_set.get(slug=account)
-    except (Group.DoesNotExist, Account.DoesNotExist):
-        raise Http404
 
     # Check that user is owner of account or admin of account group
     if not is_admin:
@@ -97,7 +81,6 @@ def account_summary(request, group, account, is_admin=False):
     return response
 
 @login_required
-@is_group_admin
 def edit_group(request, group, is_admin=False):
     """Edit group properties"""
 
@@ -105,12 +88,6 @@ def edit_group(request, group, is_admin=False):
     if not is_admin:
         return HttpResponseForbidden(
             _('This page may only be viewed by group admins.'))
-
-    # Get group
-    try:
-        group = Group.objects.get(slug=group)
-    except Group.DoesNotExist:
-        raise Http404
 
     GroupInstanceForm = form_for_instance(group)
     del GroupInstanceForm.base_fields['slug']
@@ -145,7 +122,6 @@ def edit_group(request, group, is_admin=False):
                               context_instance=RequestContext(request))
 
 @login_required
-@is_group_admin
 def edit_account(request, group, account=None, type='new', is_admin=False):
     """Create account or edit account properties"""
 
@@ -153,14 +129,6 @@ def edit_account(request, group, account=None, type='new', is_admin=False):
     if not is_admin:
         return HttpResponseForbidden(
             _('This page may only be viewed by group admins.'))
-
-    # Get group and account
-    try:
-        group = Group.objects.get(slug=group)
-        if type == 'edit':
-            account = group.account_set.get(slug=account)
-    except (Group.DoesNotExist, Account.DoesNotExist):
-        raise Http404
 
     if type=='edit':
         AccountForm = form_for_instance(account)
@@ -197,7 +165,6 @@ def edit_account(request, group, account=None, type='new', is_admin=False):
                               context_instance=RequestContext(request))
 
 @login_required
-@is_group_admin
 def transaction_list(request, group, account=None, page='1', is_admin=False):
     """Lists a group or an account's transactions"""
 
@@ -206,14 +173,6 @@ def transaction_list(request, group, account=None, page='1', is_admin=False):
     if not is_admin:
         return HttpResponseForbidden(
             _('This page may only be viewed by group admins.'))
-
-    # Get group and account
-    try:
-        group = Group.objects.get(slug=group)
-        if account is not None:
-            account = group.account_set.get(slug=account)
-    except (Group.DoesNotExist, Account.DoesNotExist):
-        raise Http404
 
     # Get transactions
     if account is not None:
@@ -243,16 +202,14 @@ def transaction_list(request, group, account=None, page='1', is_admin=False):
     return response
 
 @login_required
-@is_group_admin
 def transaction_details(request, group, transaction, is_admin=False):
     """Shows all details about a transaction"""
 
-    # Get group and transaction
+    # Get transaction
     try:
-        group = Group.objects.get(slug=group)
         transaction_set = Transaction.objects.filter(id=transaction)
         transaction = transaction_set[0]
-    except (Group.DoesNotExist, Transaction.DoesNotExist):
+    except Transaction.DoesNotExist:
         raise Http404
 
     # Check that user is party of transaction or admin of group
@@ -273,17 +230,8 @@ def transaction_details(request, group, transaction, is_admin=False):
     return response
 
 @login_required
-@is_group_admin
 def transfer(request, group, account=None, transfer_type=None, is_admin=False):
     """Deposit, withdraw or transfer money"""
-
-    # Get group and account
-    try:
-        group = Group.objects.get(slug=group)
-        if transfer_type != 'register':
-            account = group.account_set.get(slug=account)
-    except (Group.DoesNotExist, Account.DoesNotExist):
-        raise Http404
 
     if transfer_type != 'register' and account.owner != request.user:
         return HttpResponseForbidden(
@@ -422,19 +370,12 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
                               context_instance=RequestContext(request))
 
 @login_required
-@is_group_admin
 def approve_transactions(request, group, page="1", is_admin=False):
 
     # Admins only
     if not is_admin:
         return HttpResponseForbidden(
             _('This page may only be viewed by group admins.'))
-
-    # Get group
-    try:
-        group = Group.objects.get(slug=group)
-    except Group.DoesNotExist:
-        raise Http404
 
     # Get related transactions
     transactions = group.not_received_transaction_set
@@ -490,7 +431,6 @@ def approve_transactions(request, group, page="1", is_admin=False):
                        },
                        context_instance=RequestContext(request))
 @login_required
-@is_group_admin
 def reject_transactions(request, group, is_admin=False):
     """Admin view for rejecting transactions"""
 
@@ -523,7 +463,6 @@ def reject_transactions(request, group, is_admin=False):
     raise Exception('done')
 
 @login_required
-@is_group_admin
 def create_transaction(request, group, other_group, is_admin=False):
     """Admin view for creating transactions"""
 
@@ -532,9 +471,8 @@ def create_transaction(request, group, other_group, is_admin=False):
         return HttpResponseForbidden(
             _('This page may only be viewed by group admins.'))
 
-    # Get groups
+    # Get other group
     try:
-        group = Group.objects.get(slug=group)
         other = Group.objects.get(slug=other_group)
     except Group.DoesNotExist:
         raise Http404

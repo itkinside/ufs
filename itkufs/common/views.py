@@ -6,7 +6,6 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _, ungettext
 
-from itkufs.common.decorators import is_group_admin
 from itkufs.accounting.models import Group
 
 def login_user(request):
@@ -34,13 +33,7 @@ def login_user(request):
                               context_instance=RequestContext(request))
 
 @login_required
-@is_group_admin
 def static_page(request, group, template, is_admin=False):
-    try:
-        group = Group.objects.get(slug=group)
-    except Group.DoesNotExist:
-        raise Http404
-
     return render_to_response(template,
                               {
                                   'group': group,
