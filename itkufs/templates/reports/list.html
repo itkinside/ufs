@@ -23,9 +23,19 @@
 {% with list.total_width as width %}
 {% with list.total_column_count as colspan %}
 
+{% if is_admin %}
+<p class="noprint" id="admin">
+      <b>Admin:</b>
+      <a href="{% url edit-list group.slug,list.slug %}">Edit</a>,
+      <a href="{% url delete-list group.slug,list.slug %}">Delete</a>
+</p>
+{% endif %}
+
 <p class="noprint" id="reminder">
     {% trans "Please remember to print with backgrounds and landscape orientation if prefered." %}
 </p>
+
+<hr class="noprint" />
 
 <table>
     <thead>

@@ -36,6 +36,7 @@ def html_list(request, group, slug, is_admin=False):
                                   'accounts': accounts,
                                   'group': group,
                                   'list': list,
+                                  'is_admin': is_admin,
                               },
                               context_instance=RequestContext(request))
 

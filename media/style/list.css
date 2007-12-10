@@ -14,6 +14,13 @@ a:hover {
 	text-decoration: underline;
 }
 
+hr {
+	color: gray;
+	background: gray;
+	border: 0;
+	height: 1px;
+}
+
 table {
 	width: 100%;
 	clear: both;
@@ -54,7 +61,7 @@ td.balance {
 	padding-right: 0.5em !important;
 }
 
-#secondary {
+#admin, #secondary {
 	float: left;
 	clear: left;
 }

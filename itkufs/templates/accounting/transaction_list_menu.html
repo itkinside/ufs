@@ -1,6 +1,7 @@
 {% load i18n %}
 
 {% if is_paginated %}
+<div class="pagination_menu">
 <p class="float_left">
     {% if has_previous %}
         {% if account %}
@@ -32,4 +33,5 @@
     {% endif %}
 </p>
 <p class="float_right">{% blocktrans %}{{ hits }} hits{% endblocktrans %}</p>
+</div>
 {% endif %}

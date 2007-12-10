@@ -1,22 +1,13 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 
-
-{% block header %}
-    {{ block.super }}
-    {% if is_admin %}
-    <a href="{% url edit-account account.group.slug,account.slug %}">
-        <img  src="{% url media "images/icons/text-x-generic-edit.png" %}" alt="{% trans "Edit"%}" title="{% trans "Edit"%}"/>
-    </a>
-    {% endif %}
-{% endblock %}
-
 {% block content %}
 
 <div id="tabs">
 <ul>
     <li><a href="{% url account-summary account.group.slug,account.slug %}" class="active">Summary</a></li>
     <li><a href="{% url transaction-list-account account.group.slug,account.slug %}">Transactions</a></li>
+    <li><a href="{% url edit-account account.group.slug,account.slug %}">Edit account</a></li>
 </ul>
 </div>
 
