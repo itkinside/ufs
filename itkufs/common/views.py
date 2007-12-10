@@ -29,7 +29,7 @@ def login_user(request):
         pass
 
     # Tell the user he has a user, but not an account
-    return render_to_response('accounting/no_account.html',
+    return render_to_response('common/no_account.html',
                               context_instance=RequestContext(request))
 
 @login_required
