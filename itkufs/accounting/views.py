@@ -12,7 +12,6 @@ from django.newforms import form_for_instance, form_for_model
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _, ungettext
-from django.views.generic.create_update import update_object
 from django.views.generic.list_detail import object_list, object_detail
 
 from itkufs.common.decorators import is_group_admin, limit_to_group
