@@ -7,21 +7,19 @@ urlpatterns = patterns('',
     # Summary
     url(r'^(?P<group>[0-9a-z_-]+)/$',
         group_summary, name='group-summary'),
-    url(r'^(?P<group>[0-9a-z_-]+)/(?P<page>\d+)/$',
-        group_summary, name='group-summary-page'),
 
     # Edit
     url(r'^(?P<group>[0-9a-z_-]+)/edit/$',
         edit_group, name='edit-group'),
 
     # Actions
-    url(r'^(?P<group>[0-9a-z_-]+)/approve/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/approve-transaction/$',
         approve_transactions, name='approve-transactions'),
-    url(r'^(?P<group>[0-9a-z_-]+)/reject/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/reject_transaction/$',
         reject_transactions, name='reject-transactions'),
-    url(r'^(?P<group>[0-9a-z_-]+)/register/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/register-transaction/$',
         transfer, {'transfer_type': 'register'}, name='register-transactions'),
-    url(r'^(?P<group>[0-9a-z_-]+)/register/(?P<other_group>[0-9a-z_-]+)/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/group-transaction/$',
         create_transaction, name='multiple-transactions'),
 
     ### Account
@@ -29,8 +27,6 @@ urlpatterns = patterns('',
     # Summary
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/$',
         account_summary, name='account-summary'),
-    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/(?P<page>\d+)/$',
-        account_summary, name='account-summary-page'),
 
     # New and edit
     url(r'^(?P<group>[0-9a-z_-]+)/add/$',
@@ -48,10 +44,19 @@ urlpatterns = patterns('',
 
     ### Transactions
 
+    # Group
     url(r'^(?P<group>[0-9a-z_-]+)/transaction/$',
         transaction_list, name='transaction-list-group'),
+    url(r'^(?P<group>[0-9a-z_-]+)/transaction/p(?P<page>\d+)/$',
+        transaction_list, name='transaction-list-group-page'),
+
+    # Account
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/transaction/$',
         transaction_list, name='transaction-list-account'),
+    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/transaction/p(?P<page>\d+)/$',
+        transaction_list, name='transaction-list-account-page'),
+
+    # Details
     url(r'^(?P<group>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/$',
         transaction_details, name='transaction-details'),
 )

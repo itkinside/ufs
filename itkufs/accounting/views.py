@@ -21,8 +21,8 @@ from itkufs.accounting.forms import *
 
 @login_required
 @is_group_admin
-def group_summary(request, group, page='1', is_admin=False):
-    """Account group summary and paginated list of accounts"""
+def group_summary(request, group, is_admin=False):
+    """Show group summary"""
 
     # Admins only
     if not is_admin:
@@ -42,24 +42,19 @@ def group_summary(request, group, page='1', is_admin=False):
                 % group.name)
 
     # Pass on to generic view
-    response = object_list(request, group.transaction_set,
-                       paginate_by=20,
-                       page=page,
-                       allow_empty=True,
-                       template_name='accounting/group_summary.html',
-                       extra_context={
-                            'is_admin': is_admin,
-                            'group': group,
-                       },
-                       template_object_name='transaction')
+    response = render_to_response('accounting/group_summary.html',
+                                  {
+                                      'is_admin': is_admin,
+                                      'group': group,
+                                  },
+                                  context_instance=RequestContext(request))
     populate_xheaders(request, response, Group, group.id)
     return response
 
 @login_required
 @is_group_admin
-def account_summary(request, group, account, page='1', is_admin=False):
-    """Account details and a paginated list with recent transactions involving
-    the user"""
+def account_summary(request, group, account, is_admin=False):
+    """Show account summary"""
 
     # Get group and account
     try:
@@ -92,17 +87,12 @@ def account_summary(request, group, account, page='1', is_admin=False):
                 message=_('The account balance is below the warning limit.'))
 
     # Pass on to generic view
-    response = object_list(request, account.transaction_set_with_rejected,
-                       paginate_by=20,
-                       page=page,
-                       allow_empty=True,
-                       template_name='accounting/account_summary.html',
-                       extra_context={
-                            'is_admin': is_admin,
-                            'account': account,
-                            'group': group,
-                       },
-                       template_object_name='transaction')
+    response = render_to_response('accounting/account_summary.html',
+                                  {
+                                      'is_admin': is_admin,
+                                      'account': account,
+                                  },
+                                  context_instance=RequestContext(request))
     populate_xheaders(request, response, Account, account.id)
     return response
 
@@ -208,9 +198,49 @@ def edit_account(request, group, account=None, type='new', is_admin=False):
 
 @login_required
 @is_group_admin
-def transaction_list(request, group, account=None, is_admin=False):
+def transaction_list(request, group, account=None, page='1', is_admin=False):
     """Lists a group or an account's transactions"""
-    pass # FIXME
+
+    # Admins only
+    # FIXME: Allow account owners to see their own transactions
+    if not is_admin:
+        return HttpResponseForbidden(
+            _('This page may only be viewed by group admins.'))
+
+    # Get group and account
+    try:
+        group = Group.objects.get(slug=group)
+        if account is not None:
+            account = group.account_set.get(slug=account)
+    except (Group.DoesNotExist, Account.DoesNotExist):
+        raise Http404
+
+    # Get transactions
+    if account is not None:
+        transactions = account.transaction_set
+    else:
+        transactions = group.transaction_set
+
+    # Check pending transactions
+    # FIXME: When should we display the pending-transactions-warning?
+    if is_admin and group.not_payed_transaction_set.count():
+        request.user.message_set.create(
+            message=_('You have pending transactions in "%s".') % group.name)
+
+    # Pass on to generic view
+    response = object_list(request, transactions,
+                       paginate_by=20,
+                       page=page,
+                       allow_empty=True,
+                       template_name='accounting/transaction_list.html',
+                       extra_context={
+                            'is_admin': is_admin,
+                            'group': group,
+                            'account': account,
+                       },
+                       template_object_name='transaction')
+    populate_xheaders(request, response, Group, group.id)
+    return response
 
 @login_required
 @is_group_admin

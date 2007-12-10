@@ -4,13 +4,20 @@
 {% block content %}
 
 <h2>
-    {% blocktrans with account.name as account_name %}Account summary for &ldquo;{{ account_name }}&rdquo;{% endblocktrans %}
+    {% blocktrans with account.name as account_name %}Account: &ldquo;{{ account_name }}&rdquo;{% endblocktrans %}
     {% if is_admin %}
-    <a href="{% url edit-account group.slug,account.slug %}">
+    <a href="{% url edit-account account.group.slug,account.slug %}">
         <img  src="{% url media "images/icons/text-x-generic-edit.png" %}" alt="{% trans "Edit"%}" title="{% trans "Edit"%}"/>
     </a>
     {% endif %}
 </h2>
+
+<div id="tabs">
+<ul>
+    <li><a href="{% url account-summary account.group.slug,account.slug %}" class="active">Summary</a></li>
+    <li><a href="{% url transaction-list-account account.group.slug,account.slug %}">Transactions</a></li>
+</ul>
+</div>
 
 <div id="accountinfo">
 <h3>{% trans "Account info" %}</h3>
@@ -53,18 +60,18 @@
 
     <tr>
         <th>{% trans "Warning limit" %}</th>
-        {% if group.warn_limit %}
-        <td>{{ group.warn_limit|floatformat:2 }}</td>
+        {% if account.group.warn_limit %}
+        <td>{{ account.group.warn_limit|floatformat:2 }}</td>
         {% else %}
-        <td>{{ group.warn_limit }}</td>
+        <td>{{ account.group.warn_limit }}</td>
         {% endif %}
     </tr>
     <tr>
         <th>{% trans "Blocking limit" %}</th>
-        {% if group.block_limit %}
-        <td>{{ group.block_limit|floatformat:2 }}</td>
+        {% if account.group.block_limit %}
+        <td>{{ account.group.block_limit|floatformat:2 }}</td>
         {% else %}
-        <td>{{ group.block_limit }}</td>
+        <td>{{ account.group.block_limit }}</td>
         {% endif %}
     </tr>
 </table>
@@ -74,28 +81,24 @@
 <div id="actions">
 <h3>{% trans "Actions" %}</h3>
 <ul>
-    <li><a href="{% url account-deposit group.slug,account.slug %}">{% trans "Deposit" %}</a></li>
-    <li><a href="{% url account-withdraw group.slug,account.slug %}">{% trans "Withdraw" %}</a></li>
-    <li><a href="{% url account-transfer group.slug,account.slug %}">{% trans "Transfer" %}</a></li>
+    <li><a href="{% url account-deposit account.group.slug,account.slug %}">{% trans "Deposit" %}</a></li>
+    <li><a href="{% url account-withdraw account.group.slug,account.slug %}">{% trans "Withdraw" %}</a></li>
+    <li><a href="{% url account-transfer account.group.slug,account.slug %}">{% trans "Transfer" %}</a></li>
 </ul>
 </div>
 {% endifequal %}
 
 <div id="lists">
 <h3>{% trans "Lists" %}</h3>
-{% if not group.list_set.count %}
+{% if not account.group.list_set.count %}
 <p>{% trans "No lists configured." %}</p>
 {% else %}
 <ul>
-    {% for list in group.list_set.all %}
-    <li><a href="{% url view-list group.slug,list.slug %}">{{ list.name }}</a></li>
+    {% for list in account.group.list_set.all %}
+    <li><a href="{% url view-list account.group.slug,list.slug %}">{{ list.name }}</a></li>
     {% endfor %}
 </ul>
 {% endif %}
-</div>
-
-<div id="transactions">
-{% include "accounting/transaction_list.html" %}
 </div>
 
 {% endblock %}

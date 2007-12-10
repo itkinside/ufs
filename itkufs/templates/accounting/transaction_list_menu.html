@@ -4,9 +4,9 @@
 <p class="float_left">
     {% if has_previous %}
         {% if account %}
-    <a href="{% url account-summary-page account.group.slug,account.slug,previous %}">&lt; {% trans "Previous" %}</a> |
+    <a href="{% url transaction-list-account-page account.group.slug,account.slug,previous %}">&lt; {% trans "Previous" %}</a> |
         {% else %}
-    <a href="{% url group-summary-page group.slug,previous %}">&lt; {% trans "Previous" %}</a> |
+    <a href="{% url transaction-list-group-page group.slug,previous %}">&lt; {% trans "Previous" %}</a> |
         {% endif %}
     {% endif %}
         {% for i in page_range %}
@@ -14,9 +14,9 @@
         {{ i }}
                 {% else %}
             {% if account %}
-    <a href="{% url account-summary-page account.group.slug,account.slug,i %}">{{ i }}</a>
+    <a href="{% url transaction-list-account-page account.group.slug,account.slug,i %}">{{ i }}</a>
             {% else %}
-    <a href="{% url group-summary-page group.slug,i %}">{{ i }}</a>
+    <a href="{% url transaction-list-group-page group.slug,i %}">{{ i }}</a>
             {% endif %}
                 {% endifequal %}
                 {% if not forloop.last %}
@@ -25,9 +25,9 @@
         {% endfor %}
     {% if has_next %}
         {% if account %}
-    | <a href="{% url account-summary-page account.group.slug,account.slug,next %}">{% trans "Next" %} &gt;</a>
+    | <a href="{% url transaction-list-account-page account.group.slug,account.slug,next %}">{% trans "Next" %} &gt;</a>
         {% else %}
-    | <a href="{% url group-summary-page group.slug,next %}">{% trans "Next" %} &gt;</a>
+    | <a href="{% url transaction-list-group-page group.slug,next %}">{% trans "Next" %} &gt;</a>
         {% endif %}
     {% endif %}
 </p>

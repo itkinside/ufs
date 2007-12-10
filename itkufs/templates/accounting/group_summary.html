@@ -1,12 +1,10 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 
-{% block title %}{{ group.name }}{% endblock %}
-
 {% block content %}
 
 <h2>
-    {% blocktrans with group.name as group_name %}Group summary for &ldquo;{{ group_name }}&rdquo;{% endblocktrans %}
+    {% blocktrans with group.name as group_name %}Group: &ldquo;{{ group_name }}&rdquo;{% endblocktrans %}
     <a href="{% url edit-group group.slug %}">
         <img  src="{% url media "images/icons/text-x-generic-edit.png" %}" alt="{% trans "Edit"%}" title="{% trans "Edit"%}"/>
     </a>
@@ -132,10 +130,6 @@
 </div>
 
 {% endif %}
-</div>
-
-<div id="transactions">
-{% include "accounting/transaction_list.html" %}
 </div>
 
 {% endif %}
