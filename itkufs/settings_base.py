@@ -29,7 +29,7 @@ LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = (
-    'itkufs.kerberos.KerberosBackend',
+    'itkufs.common.kerberos.KerberosBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 

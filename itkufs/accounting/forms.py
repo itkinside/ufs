@@ -3,7 +3,7 @@ from django.utils.translation import ugettext as _
 from django.newforms.util import ValidationError
 
 from itkufs.accounting.models import *
-from itkufs.widgets import *
+from itkufs.common.widgets import *
 
 amount_field = forms.DecimalField(label=_('Amount'), required=True, min_value=0)
 details_field = forms.CharField(label=_('Details'),
