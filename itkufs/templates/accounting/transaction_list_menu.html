@@ -1,14 +1,14 @@
 {% load i18n %}
 
 {% if is_paginated %}
-<div class="pagination_menu">
-<p class="float_left">
+<p>
     {% if has_previous %}
         {% if account %}
-    <a href="{% url transaction-list-account-page account.group.slug,account.slug,previous %}">&lt; {% trans "Previous" %}</a> |
+    <a href="{% url transaction-list-account-page account.group.slug,account.slug,previous %}">&lt;&lt; {% trans "Previous" %}</a>
         {% else %}
-    <a href="{% url transaction-list-group-page group.slug,previous %}">&lt; {% trans "Previous" %}</a> |
+    <a href="{% url transaction-list-group-page group.slug,previous %}">&lt;&lt; {% trans "Previous" %}</a>
         {% endif %}
+    &mdash;
     {% endif %}
         {% for i in page_range %}
                 {% ifequal i page %}
@@ -25,13 +25,13 @@
                 {% endif %}
         {% endfor %}
     {% if has_next %}
+    &mdash;
         {% if account %}
-    | <a href="{% url transaction-list-account-page account.group.slug,account.slug,next %}">{% trans "Next" %} &gt;</a>
+    <a href="{% url transaction-list-account-page account.group.slug,account.slug,next %}">{% trans "Next" %} &gt;&gt;</a>
         {% else %}
-    | <a href="{% url transaction-list-group-page group.slug,next %}">{% trans "Next" %} &gt;</a>
+    <a href="{% url transaction-list-group-page group.slug,next %}">{% trans "Next" %} &gt;&gt;</a>
         {% endif %}
     {% endif %}
+&mdash; {% blocktrans %}{{ hits }} hits{% endblocktrans %}
 </p>
-<p class="float_right">{% blocktrans %}{{ hits }} hits{% endblocktrans %}</p>
-</div>
 {% endif %}
