@@ -66,30 +66,42 @@ Transaction between person and the person's account (deposit and withdrawal)
 
 Deposits:
 
-OLD: If from field is NULL and to field a person's account, it is a deposit
+OLDER: If from field is NULL and to field a person's account, it is a deposit
 from the person to the person's account.
 
-NEW: If from field is a person's account and to field is a bar's bank account,
+OLD: If from field is a person's account and to field is a bar's bank account,
 it is a deposit from the person to the person's account. Note: This gives that
 a negative amount on a liability account means that the person has money to
 spend. A positive amount means that the person owes the bar money.
 
+NEW: If the credit entry is a person's account and the debit entry is a bar's
+bank account, it is a deposit from the person to the person's account. Note:
+This gives that a negative amount on a liability account means that the person
+has money to spend. A positive amount means that the person owes the bar money.
+
 
 Withdrawals:
 
-OLD: If from field is a person's account and the to field is NULL, it is a
+OLDER: If from field is a person's account and the to field is NULL, it is a
 withdrawal from the person's account to the person.
 
-NEW: If from field is a bar's bank account and to field is a person's account,
+OLD: If from field is a bar's bank account and to field is a person's account,
 it is a withdrawal from the person's account to the person.
+
+NEW: If the credit entry is a bar's bank account and the debit entry is a
+person's account, it is a withdrawal from the person's account to the person.
+
 
 
 Null-transactions:
 
-OLD: A transaction with NULL in both to and from has no meaning and will be
+OLDER: A transaction with NULL in both to and from has no meaning and will be
 refused by the models save() method.
 
-NEW: Neither from or to allow blank or null, thus this is never a problem.
+OLD: Neither from or to allow blank or null, thus this is never a problem.
+
+NEW: All transactions must have positive sums on both the debit and credit
+side.
 
 
 Deposit and withdrawal to/from other persons' accounts:
@@ -101,9 +113,9 @@ transfer to the other person's account.
 
 Pending transactions:
 
-All users can register deposits and withdrawals, but the payed date will not be
-set before the group admin has approved the transaction and, if necessary,
-transfered the money in the real world.
+All users can register deposits and withdrawals, but the recieved/payed date
+will not be set before the group admin has approved the transaction and, if
+necessary, transfered the money in the real world.
 
 E.g. a user can request a withdrawal by registering it himself. Then the group
 admin will transfer the money in the real world bank system, and at last
@@ -142,4 +154,4 @@ transactions. It is intended for BSF and similar settlements between bars
 
 
 :Authors: Stein Magnus Jodal, Thomas Adamcik
-:Version: 2007-08-06-1
+:Version: 2007-12-11-1
