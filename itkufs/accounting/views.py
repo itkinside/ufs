@@ -425,12 +425,13 @@ def reject_transactions(request, group, is_admin=False):
 
 @login_required
 @limit_to_admin
-def create_transaction(request, group, other_group, is_admin=False):
+def create_transaction(request, group, is_admin=False):
     """Admin view for creating transactions"""
 
     # Get other group
     try:
-        other = Group.objects.get(slug=other_group)
+        other = request.GET.get('other')
+        other = Group.objects.get(slug=other)
     except Group.DoesNotExist:
         raise Http404
 
