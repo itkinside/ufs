@@ -5,30 +5,37 @@ MUST HAVE
 ---------
 
 Model:
-- Unit tests of account balance
+- !!! Document the transaction semantics before developing further.
 - set_reject, etc, need to be aware of placeholders and enfore who is allowed
-  to alter state
+  to alter state. Only needs to care about changes internally in a group. A
+  user may reject his withdrawal request. An admin may reject everything not
+  already recieved or rejected.
+- Unit tests of account balance and lots of properties. See FIXMEs.
+- Add group.sales_account or something. Must know what account to register
+  sales and expenses on.
 
 Views:
-- Use decorators to control commit/rollback of transactions
+- Use decorators to control commit/rollback of transactions. What views?
+- Cleanup reports.views.
+- Finish group-transaction view, it doesn't know what to do with POST data yet.
 
 Forms:
 - More sanity checking, prevent admin from performing transactions that he does
   not have enough privileges to invoke (should be done in form and/or model)
   * get_valid_choices() must check session user before returning
   * Use get_valid_choices() in "Register transaction"
-
-Templates:
-- Updated transaction lists and detail views, differentiated for admins and
-  users
-
-Views & Templates:
-- Use new convenience functions for transaction_sets in Group model
+- Use newforms on lists.
 - Finish rewrite of approve/change transaction state form.
 
+Templates:
+- Transaction list and approve transaction view et al. should resemble each
+  other more.
+- Generalize tabs somehow. Do not repeat code in all templates. Mark active tab
+  dynamically.
+- Update Norwegian translation.
+- Add missing {% trans %} tags on tabs, etc.
+
 New features:
-- Settlement
-  * Invoice
 - Admin rejection of user claims, using TransactionMessage, only missing
   emails, but perhaps messages is enough?
 
@@ -36,12 +43,18 @@ SHOULD HAVE
 -----------
 
 - Respect active flag for accounts, or at least indicate that account is
-  inactive
+  inactive. I think the account summary does not allow showing disabled
+  accounts, as of now.
+
+New features:
+- Settlement
+- Invoice (printing and/or registering transactions at the other group)
 
 MAY HAVE
 --------
 
 - User registration of expenses
+- Create correction transactions in non-manual manner.
 
 DONE
 ----
@@ -88,6 +101,8 @@ DONE
 - Update code with the new Transaction model
 - Do not allow saving Transaction with accounts from different groups in debit
   or credit
+- Updated transaction lists and detail views.
+- Use new convenience functions for transaction_sets in Group model.
 
 WONTFIX
 -------
