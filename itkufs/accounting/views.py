@@ -135,12 +135,17 @@ def edit_account(request, group, account=None, type='new', is_admin=False):
     else:
         form = AccountForm()
 
-    return render_to_response('accounting/account_form.html',
-                              {
-                                'is_admin': is_admin,
-                                'group': group,
-                                'form': form,
-                              },
+    extra = {
+        'is_admin': is_admin,
+        'form': form,
+    }
+
+    if type == 'new':
+        extra['group'] = group
+    else:
+        extra['account'] = account
+
+    return render_to_response('accounting/account_form.html', extra,
                               context_instance=RequestContext(request))
 
 @login_required

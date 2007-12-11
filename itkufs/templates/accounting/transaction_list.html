@@ -3,18 +3,6 @@
 
 {% block content %}
 
-<div id="tabs">
-<ul>
-{% if account %}
-    <li><a href="{% url account-summary account.group.slug,account.slug %}">Summary</a></li>
-    <li><a href="{% url transaction-list-account account.group.slug,account.slug %}" class="active">Transactions</a></li>
-{% else %}
-    <li><a href="{% url group-summary group.slug %}">Summary</a></li>
-    <li><a href="{% url transaction-list-group group.slug %}" class="active">Transactions</a></li>
-{% endif %}
-</ul>
-</div>
-
 {% if not transaction_list %}
 
 <p>{% trans "No transactions found." %}</p>

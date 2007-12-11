@@ -9,3 +9,21 @@
     {% endif %}
 {% endblock %}
 
+{% block tabs %}
+<ul>
+    {% if account %}
+    <li><a href="{% url account-summary account.group.slug,account.slug %}">Summary</a></li>
+    <li><a href="{% url transaction-list-account account.group.slug,account.slug %}">Transactions</a></li>
+        {% if is_admin %}
+        <li><a href="{% url edit-account account.group.slug,account.slug %}">Edit account</a></li>
+        {% endif %}
+    {% else %}
+    <li><a href="{% url group-summary group.slug %}">Summary</a></li>
+    <li><a href="{% url transaction-list-group group.slug %}">Transactions</a></li>
+    <li><a href="{% url edit-group group.slug %}">Edit group</a></li>
+    <li><a href="{% url new-account group.slug %}">Add account</a></li>
+    <li><a href="{% url new-list group.slug %}">Add list</a></li>
+    {% endif %}
+
+</ul>
+{% endblock %}
