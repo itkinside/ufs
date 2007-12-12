@@ -14,13 +14,6 @@ a:hover {
 	text-decoration: underline;
 }
 
-hr {
-	color: gray;
-	background: gray;
-	border: 0;
-	height: 1px;
-}
-
 table {
 	width: 100%;
 	clear: both;
@@ -61,7 +54,7 @@ td.balance {
 	padding-right: 0.5em !important;
 }
 
-#admin, #secondary {
+#secondary {
 	float: left;
 	clear: left;
 }
@@ -74,7 +67,24 @@ td.balance {
 	font-weight: bold;
 	text-align: center;
 }
-
+#top {
+	background: #eeeeec;
+	border-bottom: 1px dashed gray;
+	margin: -2px; /* counter padding on body */
+	margin-bottom: 0.3em;
+	padding: 0.3em;
+}
+#admin {
+	float: right;
+}
+#admin a {
+	text-decoration: underline;
+}
+#print {
+	float: left;
+	cursor: pointer;
+	text-decoration: underline;
+}
 
 tfoot img {
 	vertical-align: text-bottom;
