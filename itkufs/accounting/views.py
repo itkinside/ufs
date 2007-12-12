@@ -24,7 +24,7 @@ from itkufs.accounting.forms import *
 def group_summary(request, group, is_admin=False):
     """Show group summary"""
 
-    # Pass on to generic view
+    # FIXME: Pass on to generic view
     response = render_to_response('accounting/group_summary.html',
                                   {
                                       'is_admin': is_admin,
@@ -57,7 +57,7 @@ def account_summary(request, group, account, is_admin=False):
             request.user.message_set.create(
                 message=_('The account balance is below the warning limit.'))
 
-    # Pass on to generic view
+    # FIXME: Pass on to generic view
     response = render_to_response('accounting/account_summary.html',
                                   {
                                       'is_admin': is_admin,
@@ -178,31 +178,23 @@ def transaction_list(request, group, account=None, page='1', is_admin=False):
 def transaction_details(request, group, transaction, is_admin=False):
     """Shows all details about a transaction"""
 
-    # Get transaction
-    # TODO: Look into letting the middleware replace the transaction id with
-    # the transaction object or set
-    try:
-        transaction_set = Transaction.objects.filter(id=transaction)
-        transaction = transaction_set[0]
-    except Transaction.DoesNotExist:
-        raise Http404
-
     # Check that user is party of transaction or admin of group
     # TODO: Look into doing this with a decorator
-    if not is_admin and transaction.entry_set.filter(
+    if not is_admin and TransactionEntry.objects.filter(
+        transaction__id=transaction,
         account__owner__id=request.user.id).count() == 0:
         return HttpResponseForbidden(_('The transaction may only be'
             ' viewed by group admins or a party of the transaction.'))
 
     # Pass on to generic view
-    response = object_detail(request, transaction_set, transaction.id,
+    response = object_detail(request, Transaction.objects.all(), transaction,
                        template_name='accounting/transaction_details.html',
                        extra_context={
                             'is_admin': is_admin,
                             'group': group,
                        },
                        template_object_name='transaction')
-    populate_xheaders(request, response, Transaction, transaction.id)
+    populate_xheaders(request, response, Transaction, transaction)
     return response
 
 @login_required
