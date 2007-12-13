@@ -399,3 +399,20 @@ div#debug table#query_table td {
 	text-align: left;
 	vertical-align: top;
 }
+
+@media print {
+	#head, #menu, #debug {
+		display: none;
+	}
+	#container {
+		border: 0;
+	}
+	#tabs ul li a {
+		display: none;
+	}
+	#tabs ul li a.active {
+		display: inline;
+		border: 0;
+		font-size: 150%;
+	}
+}
