@@ -148,11 +148,16 @@ databrowse.site.register(Group)
 class AccountManager(models.Manager):
     def get_query_set(self):
         return super(AccountManager,self).get_query_set().extra(
-            select={'balance_sql':
+            select={
+            'balance_sql':
                 """
                 SELECT sum(debit)-sum(credit) FROM accounting_transactionentry
                 WHERE account_id = accounting_account.id
+                """,
+            'is_user_account_sql':
                 """
+                (accounting_account.owner_id IS NOT NULL AND accounting_account.type = '%s')
+                """ % Account.LIABILITY_ACCOUNT
             }
         )
 class Account(models.Model):
@@ -225,11 +230,7 @@ class Account(models.Model):
 
     def is_user_account(self):
         """Returns true if a user account"""
-
-        if self.owner is not None and self.type == self.LIABILITY_ACCOUNT:
-            return True
-        else:
-            return False
+        return self.is_user_account_sql
 
     def is_blocked(self):
         """Returns true if user account balance is below group block limit"""
