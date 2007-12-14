@@ -237,7 +237,7 @@ class Account(models.Model):
 
         if (not self.is_user_account()
             or self.ignore_block_limit
-            or self.group.block_limit is None):
+            or self.select_related(depth=1).group.block_limit is None):
             return False
         return self.user_balance() < self.group.block_limit
 
