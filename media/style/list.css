@@ -19,6 +19,13 @@ table {
 	clear: both;
 }
 
+thead {
+	display: table-header-group
+}
+tfoot {
+	display: table-footer-group;
+}
+
 thead th {
 	padding: 2px 5px;
 	font-weight: bolder;
@@ -34,6 +41,7 @@ tbody th, tfoot th, td {
 tbody {
 	border-top: 1px solid gray;
 	border-right: 1px solid gray;
+	display: table-row-group;
 }
 
 tbody td.double {
