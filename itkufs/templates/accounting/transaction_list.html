@@ -24,7 +24,7 @@
     <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}
         {% if t.is_rejected %}rejected{% else %}
         {% if not t.is_received %}pending{% endif %}{% endif %}">
-        {% for e in t.entry_set.all %}
+        {% for e in t.entry_set.select_related %}
         {% if forloop.first %}
         <td rowspan="{{ rowspan }}">
                 {% blocktrans with t.get_status_display as status and t.last_modified|date:"Y-m-d H:i" as last_modified %}
