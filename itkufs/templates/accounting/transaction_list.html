@@ -20,7 +20,7 @@
         <th>{% trans "Details" %}</th>
     </tr>
     {% for t in transaction_list %}
-    {% with t.entry_set.all.count as rowspan %}
+    {% with t.entry_count_sql as rowspan %}
     <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}
         {% if t.is_rejected %}rejected{% else %}
         {% if not t.is_received %}pending{% endif %}{% endif %}">

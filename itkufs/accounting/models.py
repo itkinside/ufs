@@ -366,6 +366,19 @@ class Settlement(models.Model):
 
 databrowse.site.register(Settlement)
 
+class TransactionManager(models.Manager):
+    def get_query_set(self):
+        return super(TransactionManager,self).get_query_set().extra(
+            select={
+            'entry_count_sql':
+                """
+                SELECT COUNT(*) FROM accounting_transactionentry WHERE
+                accounting_transactionentry.transaction_id =
+                accounting_transaction.id
+                """
+            }
+        )
+
 class Transaction(models.Model):
     UNDEFINED_STATE = ''
     REGISTERED_STATE = 'Reg'
@@ -378,6 +391,8 @@ class Transaction(models.Model):
         (RECEIVED_STATE, _('Received')),
         (REJECTED_STATE, _('Rejected')),
     )
+
+    objects = TransactionManager()
 
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
