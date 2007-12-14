@@ -157,7 +157,11 @@ class AccountManager(models.Manager):
             'is_user_account_sql':
                 """
                 (accounting_account.owner_id IS NOT NULL AND accounting_account.type = '%s')
-                """ % Account.LIABILITY_ACCOUNT
+                """ % Account.LIABILITY_ACCOUNT,
+            'group_block_limit_sql':
+                """
+                SELECT accounting_group.block_limit FROM accounting_group WHERE accounting_group.id = accounting_account.group_id
+                """
             }
         )
 class Account(models.Model):
@@ -237,9 +241,9 @@ class Account(models.Model):
 
         if (not self.is_user_account()
             or self.ignore_block_limit
-            or self.select_related(depth=1).group.block_limit is None):
+            or self.group_block_limit_sql is None):
             return False
-        return self.user_balance() < self.group.block_limit
+        return self.user_balance() < self.group_block_limit_sql
 
     def needs_warning(self):
         """Returns true if user account balance is below group warn limit"""
