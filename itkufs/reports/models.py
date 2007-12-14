@@ -4,7 +4,25 @@ from django.utils.translation import ugettext_lazy as _
 
 from itkufs.accounting.models import Group, Account
 
+class ListManager(models.Manager):
+    def get_query_set(self):
+        return super(ListManager,self).get_query_set().extra(
+            select={
+            'listcolumn_count':
+                """
+                SELECT COUNT(*) FROM reports_listcolumn
+                WHERE reports_listcolumn.list_id = reports_list.id
+                """,
+            'listcolumn_width':
+                """
+                    SELECT SUM(reports_listcolumn.width) FROM reports_listcolumn
+                    WHERE reports_listcolumn.list_id = reports_list.id
+                """
+            }
+        )
 class List(models.Model):
+    objects = ListManager()
+
     name = models.CharField(_('name'), max_length=200)
     slug = models.SlugField(_('slug'), prepopulate_from=['name'])
     account_width = models.PositiveSmallIntegerField(_('account width'),
@@ -32,16 +50,13 @@ class List(models.Model):
         return u'%s: %s' % (self.group, self.name)
 
     def total_width(self):
-        sum = self.account_width + self.balance_width
-        for column in self.column_set.all():
-            sum += column.width
-        return sum
+        return int(self.account_width + self.balance_width + self.listcolumn_width)
 
     def total_column_count(self):
-        count = self.column_set.all().count() + 1
+        count = self.listcolumn_count + 1
         if self.balance_width:
             count += 1
-        return count
+        return int(count)
 databrowse.site.register(List)
 
 class ListColumn(models.Model):

@@ -24,10 +24,10 @@ def html_list(request, group, slug, is_admin=False):
     # object
 
     try:
-        accounts = group.user_account_set
+        accounts = group.user_account_set.select_related(depth=1)
         list = group.list_set.get(slug=slug)
         if list.accounts.all().count():
-            accounts = list.accounts.filter(group=group)
+            accounts = list.accounts.filter(group=group).select_related(depth=1)
     except List.DoesNotExist:
         raise Http404
 
