@@ -145,6 +145,16 @@ class Group(models.Model):
 
 databrowse.site.register(Group)
 
+class AccountManager(models.Manager):
+    def get_query_set(self):
+        return super(AccountManager,self).get_query_set().extra(
+            select={'balance_sql':
+                """
+                SELECT sum(debit)-sum(credit) FROM accounting_transactionentry
+                WHERE account_id = accounting_account.id
+                """
+            }
+        )
 class Account(models.Model):
     ASSET_ACCOUNT = 'As'        # Eiendeler/aktiva
     LIABILITY_ACCOUNT = 'Li'    # Gjeld/passiv
@@ -158,6 +168,8 @@ class Account(models.Model):
         (INCOME_ACCOUNT, _('Income')),
         (EXPENSE_ACCOUNT, _('Expense')),
     )
+
+    objects = AccountManager()
 
     name = models.CharField(_('name'), max_length=100)
     slug = models.SlugField(_('slug'), prepopulate_from=['name'],
@@ -196,16 +208,10 @@ class Account(models.Model):
         return "%s: %s" % (self.group, self.name)
 
     def balance(self):
-        """Returns account balance"""
-
-        balance = 0
-
-        for e in self.transactionentry_set.filter(
-            transaction__status=Transaction.RECEIVED_STATE):
-            balance += e.debit
-            balance -= e.credit
-
-        return balance
+        if self.balance_sql:
+            return self.balance_sql
+        else:
+            return 0
 
     def user_balance(self):
         """Returns account balance, but multiplies by -1 if the account is a
