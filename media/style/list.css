@@ -82,8 +82,6 @@ td.balance {
 }
 #print {
 	float: left;
-	cursor: pointer;
-	text-decoration: underline;
 }
 
 tfoot img {

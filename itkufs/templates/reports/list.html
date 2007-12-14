@@ -13,18 +13,6 @@
     <link rel="stylesheet" type="text/css" href="{% url media "style/fonts-min.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% url media "style/list.css" %}" media="print,screen" />
     <link rel="shortcut icon" type="image/png" href="{% url media "images/favicon.png" %}" />
-    <script type="text/javascript">
-        function init() {
-            var admin = document.getElementById('admin');
-            var print = document.createElement('p');
-            print.onclick = 'window.print()';
-            print.id = 'print';
-
-            print.appendChild(document.createTextNode('Click here to print'));
-            admin.parentNode.insertBefore(print,admin);
-        }
-        window.onload = init;
-    </script>
 </head>
 
 <body>
@@ -36,6 +24,8 @@
 {% with list.total_column_count as colspan %}
 
 <div id="top" class="noprint">
+<p id="print">{% trans "Push CTRL+P to print"%}</p>
+
 {% if is_admin %}
 <p id="admin">
       <b>Admin:</b>
@@ -52,19 +42,19 @@
 <table>
     <thead>
         <tr>
-        <th colspan="{{ colspan }}">
-                <h1>{{ group.name }}: {{ list.name }}</h1>
-                {% if group.logo %}
-                <p id="logo"><img src="{% url media group.logo %}" alt="logo" /></p>
-                {% endif %}
+            <th colspan="{{ colspan }}">
+                    <h1>{{ group.name }}: {{ list.name }}</h1>
+                    {% if group.logo %}
+                    <p id="logo"><img src="{% url media group.logo %}" alt="logo" /></p>
+                    {% endif %}
 
-                <p id="secondary">
-                  {% now "Y-m-d" %}
-                  {% if group.email %} &ndash;
-                  <a href="mailto:{{ group.email }}">{{group.email}}</a>
-                  {% endif %}
-                </p>
-        </th>
+                    <p id="secondary">
+                      {% now "Y-m-d" %}
+                      {% if group.email %} &ndash;
+                      <a href="mailto:{{ group.email }}">{{group.email}}</a>
+                      {% endif %}
+                    </p>
+            </th>
         </tr>
         <tr>
             <th style="width: {% widthratio list.account_width width 100 %}%">{% trans "Name" %}</th>
