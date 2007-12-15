@@ -1,7 +1,6 @@
 The accounting models
 =====================
 
-G
 Groups
 ------
 
@@ -96,11 +95,11 @@ General restrictions:
 
   E.g., one can never create transactions on with transaction entries connected
   to accounts in different groups. However, one can create corresponding
-  transactionsin two groups at the same time.
+  transactions in two groups at the same time.
 
 - All transactions must have positive sums on both the debit and credit side.
 
-- All users can register deposits and withdrawals, but the payed/recieved date
+- All users can register deposits and withdrawals, but the payed/received date
   will not be set before the group admin has approved the transaction and, if
   necessary, transfered the money in the real world.
 
@@ -127,7 +126,7 @@ account, it is a withdrawal from the person's account to the person.
 Typically a user registers a transactions of this kind when he wants to
 withdraw money, then a group admin transfers the real-world money and completes
 the transaction in µFS by setting the transaction's status to 'received' to
-signal that the debitor has recieved the money.
+signal that the debtor has received the money.
 
 
 Transaction between user accounts:
@@ -191,7 +190,7 @@ the transaction in step three.
 
 The group admin of the other group must in each case approve the transaction in
 his own group, either when he accepts the invoice in step two (if not,
-real-world communcation is needed) or when he has recieved payment of an
+real-world communication is needed) or when he has received payment of an
 invoice in step four (if not, real-world communication is needed).
 
 
