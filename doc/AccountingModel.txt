@@ -1,16 +1,42 @@
-The accounting model
-====================
+The accounting models
+=====================
+
+G
+Groups
+------
+
+Groups are basically bars. It is used for grouping the bars own accounts and
+the accounts of the bar's members.
+
+In addition to its name and slug it has several fields:
 
 
-Account groups
---------------
+Placeholder:
 
-Account groups are basically bars. It is used for grouping the bars own
-accounts and the accounts of the bar's members.
+If the group is not used by a real-world group (because they are not using
+µFS), but just is a placeholder for paying receiving transfers, the placeholder
+field is set to True. This is used when creating transactions related to other
+groups.
 
-In addition to its name it has two integer fields, warn_limit and block_limit,
-which can be used to warn and block accounts if their balance is below the
-given limit.
+
+Limits:
+
+warn_limit and block_limit can be used to warn and block accounts if their
+balance is below the given limit.
+
+
+Admins:
+
+This is a many-to-many field, containing the user names of all users with admin
+access to the group and all of its accounts.
+
+
+Typical accounts:
+
+bank_account and cash_account are pointers to two arbitrary accounts held by
+the group which works as bank and cash accounts. These are needed to receive
+transfers from other groups. Additional typical accounts, like sales_account,
+will probably be added in the future.
 
 
 User Accounts
@@ -26,19 +52,19 @@ User Accounts
 - The balance method gives the accounts balance at any time.
 
 
-Bar Accounts
-------------
+Group Accounts
+--------------
 
 Ownership:
 
-Bar accounts do not have an owner, but belongs to a bar, defined by its account
-group. Owner is NULL for all bar accounts.
+Group accounts do not have an owner, but belongs to a group. Owner is NULL for
+all group accounts.
 
 
 Typical accounts:
 
-Most bars will at least have the two accounts 'Bank' and 'Cash'. Other accounts
-may for example be 'Income', 'Expense', 'Inventory' and 'Result'.
+Most groups will at least have the two accounts 'Bank' and 'Cash'. Other
+accounts may for example be 'Income', 'Expense', 'Inventory' and 'Result'.
 
 
 Account types:
@@ -61,97 +87,122 @@ changes it's real world bank account number, one would maybe create a new
 account for it and deactivate the old one.
 
 
-Transaction between person and the person's account (deposit and withdrawal)
-----------------------------------------------------------------------------
+Transactions
+------------
+
+General restrictions:
+
+- A transaction may only include accounts belonging to a single group.
+
+  E.g., one can never create transactions on with transaction entries connected
+  to accounts in different groups. However, one can create corresponding
+  transactionsin two groups at the same time.
+
+- All transactions must have positive sums on both the debit and credit side.
+
+- All users can register deposits and withdrawals, but the payed/recieved date
+  will not be set before the group admin has approved the transaction and, if
+  necessary, transfered the money in the real world.
+
+  E.g. a user can request a withdrawal by registering it himself. Then the
+  group admin will transfer the money in the real world bank system, and
+  approve the µFS transaction (that is, set the status to 'payed').
+
 
 Deposits:
 
-OLDER: If from field is NULL and to field a person's account, it is a deposit
-from the person to the person's account.
+If the credit entry is a person's account and the debit entry is the bank
+account of the group the user account belongs to, it is a deposit from the
+person to the person's account.
 
-OLD: If from field is a person's account and to field is a bar's bank account,
-it is a deposit from the person to the person's account. Note: This gives that
-a negative amount on a liability account means that the person has money to
-spend. A positive amount means that the person owes the bar money.
-
-NEW: If the credit entry is a person's account and the debit entry is a bar's
-bank account, it is a deposit from the person to the person's account. Note:
 This gives that a negative amount on a liability account means that the person
 has money to spend. A positive amount means that the person owes the bar money.
 
 
 Withdrawals:
 
-OLDER: If from field is a person's account and the to field is NULL, it is a
-withdrawal from the person's account to the person.
+If the credit entry is a bar's bank account and the debit entry is a person's
+account, it is a withdrawal from the person's account to the person.
 
-OLD: If from field is a bar's bank account and to field is a person's account,
-it is a withdrawal from the person's account to the person.
-
-NEW: If the credit entry is a bar's bank account and the debit entry is a
-person's account, it is a withdrawal from the person's account to the person.
-
+Typically a user registers a transactions of this kind when he wants to
+withdraw money, then a group admin transfers the real-world money and completes
+the transaction in µFS by setting the transaction's status to 'received' to
+signal that the debitor has recieved the money.
 
 
-Null-transactions:
+Transaction between user accounts:
 
-OLDER: A transaction with NULL in both to and from has no meaning and will be
-refused by the models save() method.
-
-OLD: Neither from or to allow blank or null, thus this is never a problem.
-
-NEW: All transactions must have positive sums on both the debit and credit
-side.
+All users can transfer money to all other users within the same group. The
+group admin does not have to approve the transaction.
 
 
-Deposit and withdrawal to/from other persons' accounts:
+Registering sales:
 
-A person is not allowed to deposit or withdraw from another person's account.
-To deposit to another person's account, deposit to you own account and make a
-transfer to the other person's account.
-
-
-Pending transactions:
-
-All users can register deposits and withdrawals, but the recieved/payed date
-will not be set before the group admin has approved the transaction and, if
-necessary, transfered the money in the real world.
-
-E.g. a user can request a withdrawal by registering it himself. Then the group
-admin will transfer the money in the real world bank system, and at last
-approve the µFS transaction (that is, set the payed date).
+When a person buys anything from his own bar the corresponding sum will be
+registered as a transaction debiting the person's account and crediting the
+group's sale account.
 
 
-Transaction from account to account within an account group
-----------------------------------------------------------
+Claiming expenses:
 
-All persons can transfer money to all other persons with the same parent (e.g.
-within the same bar). The group admin does not have to approve this.
-
-When a person buys anything from a bar the corresponding sum will be registered
-as a transaction between the person's account and the bar's sale account.
+When a person has bought anything in the real-world for the bar, the
+corresponding sum will be registered as a transaction crediting the person's
+account and debiting the group's expenses account.
 
 
-Transaction from account to account in another account group
-------------------------------------------------------------
+Settlements (aka 'BSF')
+-----------------------
 
-A group admin can transfer money, end-to-end, from accounts in his own account
-group to accounts in other account groups, typically to the 'Bank' or 'Cash'
-accounts. This is usually done as part of a settlement, see below.
-
-One the sending side, each user can check what he has spent at every other bar
-between two settlements. On the receiving side, the bars are not interested in
-what persons the payment comes from, only that a bar has payed, so in the views
-we want combine payments by account groups.
+When people buy stuff at other bars, they build up debt between the bars. This
+debt is settled in 'settlements' also known as 'BSF'.
 
 
-Settlement
-----------
+Example:
 
-Settlement is an optional part of an transaction to group a set of
-transactions. It is intended for BSF and similar settlements between bars
-(account groups). Its only field is a date and comment.
+The admin of group B creates an invoice for group A listing what each person in
+group A owes group B. The admin of group A then registers the amount to debit
+each user in group A and transfers the total to group B. Transactions-wise this
+is done in two-by-two steps:
+
+Upon creation of an invoice by group B,
+
+1. in group B, a transaction with an income account, e.g. 'Sales' at the debit
+   side, and an asset account, e.g. 'Owed by Group A' on the credit side.
+2. in group A, a transaction with one or more user accounts of group A on the
+   debit side, and a liability account, e.g. 'Debt to Group B' at the credit
+   side.
+
+Upon payment of an invoice by group A,
+
+3. in group A, a transaction with an asset account, e.g. 'Bank' or 'Cash', at
+   the credit side, and the liability account from step one on the debit side.
+   When all debts are payed, all the non-user-liability accounts should have a
+   balance of zero.
+4. in group B, a transaction with an asset account, e.g. 'Sold to Group A', at
+   the credit side, and an income account, e.g. 'Income', at the debit side.
+
+
+Workflow optimization:
+
+To optimize the workflow, the transaction in step two can be registered
+(status: registered) when group B creates the transaction in step one, and the
+transaction in step four can be registered (status: payed) when group A creates
+the transaction in step three.
+
+The group admin of the other group must in each case approve the transaction in
+his own group, either when he accepts the invoice in step two (if not,
+real-world communcation is needed) or when he has recieved payment of an
+invoice in step four (if not, real-world communication is needed).
+
+
+Workflow optimization pros:
+
+The admin in step two does not have to enter all the people owing group B
+money, while the admin in step four is alerted that group A has transfered
+money in the real-world, and may then check if he has received them. This
+reduces the need for pull-checking the real-world bank for new incoming
+payments.
 
 
 :Authors: Stein Magnus Jodal, Thomas Adamcik
-:Version: 2007-12-11-1
+:Version: 2007-12-16-1

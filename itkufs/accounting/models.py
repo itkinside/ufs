@@ -166,7 +166,7 @@ class AccountManager(models.Manager):
         )
 class Account(models.Model):
     ASSET_ACCOUNT = 'As'        # Eiendeler/aktiva
-    LIABILITY_ACCOUNT = 'Li'    # Gjeld/passiv
+    LIABILITY_ACCOUNT = 'Li'    # Gjeld/passiva
     EQUITY_ACCOUNT = 'Eq'       # Egenkapital
     INCOME_ACCOUNT = 'In'       # Inntekt
     EXPENSE_ACCOUNT = 'Ex'      # Utgift
