@@ -398,6 +398,7 @@ def reject_transactions(request, group, is_admin=False):
     """Reject transactions from members and other groups"""
 
     # XXX: HACK!!! needs more work ;)
+    # request.POST.getlist('a')
 
     if request.method != 'POST':
         raise Exception()
