@@ -93,9 +93,9 @@ General restrictions:
 
 - A transaction may only include accounts belonging to a single group.
 
-  E.g., one can never create transactions on with transaction entries connected
-  to accounts in different groups. However, one can create corresponding
-  transactions in two groups at the same time.
+  E.g., one can never create transactions with entries for accounts in
+  different groups. However, one can create corresponding transactions in two
+  groups at the same time.
 
 - All transactions must have positive sums on both the debit and credit side.
 
