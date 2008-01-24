@@ -10,7 +10,7 @@
     <tr>
         <th colspan="2">{% trans "Revenues and gains" %}</th>
     </tr>
-{% for name, balance in accounts.In %}
+{% for name, balance in accounts.in %}
     <tr>
         <td>&nbsp;&nbsp;{{ name }}</td>
         <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
@@ -19,14 +19,14 @@
     <tr>
         <td><em>{% trans "Total revenues and gains" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.InSum|stringformat:"0.2f" }}</em>
+            <em>{{ accounts.in_sum|stringformat:"0.2f" }}</em>
         </td>
     </tr>
 
     <tr>
         <th colspan="2">{% trans "Expenses and losses" %}</th>
     </tr>
-{% for name, balance in accounts.Ex %}
+{% for name, balance in accounts.ex %}
     <tr>
         <td>&nbsp;&nbsp;{{ name }}</td>
         <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
@@ -35,13 +35,13 @@
     <tr>
         <td><em>{% trans "Total expenses and losses" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.ExSum|stringformat:"0.2f" }}</em>
+            <em>{{ accounts.ex_sum|stringformat:"0.2f" }}</em>
         </td>
     </tr>
 
     <tr>
         <th>{% trans "Net income" %}</th>
-        <th class="align_right">{{ accounts.InExDiff|stringformat:"0.2f" }}</th>
+        <th class="align_right">{{ accounts.in_ex_diff|stringformat:"0.2f" }}</th>
     </tr>
 </table>
 

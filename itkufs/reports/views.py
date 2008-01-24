@@ -141,45 +141,48 @@ def balance(request, group, is_admin=False):
 
     # Balance sheet data struct
     accounts = {
-        'As': [], 'AsSum': 0,
-        'Li': [], 'LiSum': 0,
-        'Eq': [], 'EqSum': 0,
-        'LiEqSum': 0,
+        'as': [], 'as_sum': 0,
+        'li': [], 'li_sum': 0,
+        'eq': [], 'eq_sum': 0,
+        'li_eq_sum': 0,
     }
 
     # Assets
-    for account in group.account_set.filter(type='As'):
+    for account in group.account_set.filter(type=Account.ASSET_ACCOUNT):
         balance = account.user_balance()
-        accounts['As'].append((account.name, balance))
-        accounts['AsSum'] += balance
+        accounts['as'].append((account.name, balance))
+        accounts['as_sum'] += balance
 
     # Liabilities
-    for account in group.account_set.filter(type='Li', owner__isnull=True):
+    for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
+                                            owner__isnull=True):
         balance = account.user_balance()
-        accounts['Li'].append((account.name, balance))
-        accounts['LiSum'] += balance
+        accounts['li'].append((account.name, balance))
+        accounts['li_sum'] += balance
 
     # Accumulated member accounts liabilities
-    member_balance_sum = sum([a.user_balance()
-        for a in group.account_set.filter(type='Li', owner__isnull=False)])
-    accounts['Li'].append((_('Member accounts'), member_balance_sum))
-    accounts['LiSum'] += member_balance_sum
+    member_balance_sum = 0
+    for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
+                                            owner__isnull=False):
+        member_balance_sum += account.user_balance()
+    accounts['li'].append((_('Member accounts'), member_balance_sum))
+    accounts['li_sum'] += member_balance_sum
 
     # Equities
-    for account in group.account_set.filter(type='Eq'):
+    for account in group.account_set.filter(type=Account.EQUITY_ACCOUNT):
         balance = account.user_balance()
-        accounts['Eq'].append((account.name, balance))
-        accounts['EqSum'] += balance
+        accounts['eq'].append((account.name, balance))
+        accounts['eq_sum'] += balance
 
     # Total liabilities and equities
-    accounts['LiEqSum'] = accounts['LiSum'] + accounts['EqSum']
+    accounts['li_eq_sum'] = accounts['li_sum'] + accounts['eq_sum']
 
     # Current year's net income
-    curr_years_net_income = accounts['AsSum'] - accounts['LiEqSum']
-    accounts['Eq'].append((_("Current year's net income"),
-                           curr_years_net_income))
-    accounts['EqSum'] += curr_years_net_income
-    accounts['LiEqSum'] += curr_years_net_income
+    curr_year_net_income = accounts['as_sum'] - accounts['li_eq_sum']
+    accounts['eq'].append((_("Current year's net income"),
+                           curr_year_net_income))
+    accounts['eq_sum'] += curr_year_net_income
+    accounts['li_eq_sum'] += curr_year_net_income
 
     return render_to_response('reports/balance.html',
                               {
@@ -197,25 +200,25 @@ def income(request, group, is_admin=False):
 
     # Balance sheet data struct
     accounts = {
-        'In': [], 'InSum': 0,
-        'Ex': [], 'ExSum': 0,
-        'InExDiff': 0,
+        'in': [], 'in_sum': 0,
+        'ex': [], 'ex_sum': 0,
+        'in_ex_diff': 0,
     }
 
     # Incomes
-    for account in group.account_set.filter(type='In'):
+    for account in group.account_set.filter(type=Account.INCOME_ACCOUNT):
         balance = account.user_balance()
-        accounts['In'].append((account.name, balance))
-        accounts['InSum'] += balance
+        accounts['in'].append((account.name, balance))
+        accounts['in_sum'] += balance
 
     # Expenses
-    for account in group.account_set.filter(type='Ex'):
+    for account in group.account_set.filter(type=Account.EXPENSE_ACCOUNT):
         balance = account.user_balance()
-        accounts['Ex'].append((account.name, balance))
-        accounts['ExSum'] += balance
+        accounts['ex'].append((account.name, balance))
+        accounts['ex_sum'] += balance
 
     # Net income
-    accounts['InExDiff'] = accounts['InSum'] - accounts['ExSum']
+    accounts['in_ex_diff'] = accounts['in_sum'] - accounts['ex_sum']
 
     return render_to_response('reports/income.html',
                               {

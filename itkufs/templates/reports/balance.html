@@ -9,7 +9,7 @@
     <tr>
         <th colspan="2">{% trans "Assets" %}</th>
     </tr>
-{% for name, balance in accounts.As %}
+{% for name, balance in accounts.as %}
     <tr>
         <td>&nbsp;&nbsp;{{ name }}</td>
         <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
@@ -18,7 +18,7 @@
     <tr>
         <td><em>{% trans "Total assets" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.AsSum|stringformat:"0.2f" }}</em>
+            <em>{{ accounts.as_sum|stringformat:"0.2f" }}</em>
         </td>
     </tr>
 </table>
@@ -33,7 +33,7 @@
     <tr>
         <th colspan="2">&nbsp;&nbsp;{% trans "Liabilities" %}</th>
     </tr>
-{% for name, balance in accounts.Li %}
+{% for name, balance in accounts.li %}
     <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}</td>
         <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
@@ -42,14 +42,14 @@
     <tr>
         <td><em>&nbsp;&nbsp;{% trans "Total liabilities" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.LiSum|stringformat:"0.2f" }}</em>
+            <em>{{ accounts.li_sum|stringformat:"0.2f" }}</em>
         </td>
     </tr>
 
     <tr>
         <th colspan="2">&nbsp;&nbsp;{% trans "Equities" %}</th>
     </tr>
-{% for name, balance in accounts.Eq %}
+{% for name, balance in accounts.eq %}
     <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}</td>
         <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
@@ -58,14 +58,14 @@
     <tr>
         <td><em>&nbsp;&nbsp;{% trans "Total equities (Net worth)" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.EqSum|stringformat:"0.2f" }}</em>
+            <em>{{ accounts.eq_sum|stringformat:"0.2f" }}</em>
         </td>
     </tr>
 
     <tr>
         <td><em>{% trans "Total liabilities and equities" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.LiEqSum|stringformat:"0.2f" }}</em>
+            <em>{{ accounts.li_eq_sum|stringformat:"0.2f" }}</em>
         </td>
     </tr>
 </table>
