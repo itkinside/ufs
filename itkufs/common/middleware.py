@@ -2,6 +2,7 @@ from django.http import Http404
 from django.utils.translation import ugettext as _
 
 from itkufs.accounting.models import Group, Account
+from itkufs.reports.models import List
 
 class UfsMiddleware:
     def process_view(self, request, view_func, view_args, view_kwargs):
@@ -22,7 +23,16 @@ class UfsMiddleware:
                     view_kwargs['account'] = \
                         view_kwargs['group'].account_set.get(
                             slug=view_kwargs['account'])
-                except Account.DoesNotExist, e:
+                except Account.DoesNotExist:
+                    raise Http404
+
+            if 'list' in view_kwargs:
+                # Replace list slug with list object
+                try:
+                    view_kwargs['list'] = \
+                        view_kwargs['group'].list_set.get(
+                            slug=view_kwargs['list'])
+                except List.DoesNotExist:
                     raise Http404
 
             # Add group admin flag

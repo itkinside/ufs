@@ -17,19 +17,13 @@ from itkufs.reports.models import *
 
 @login_required
 @limit_to_group
-def html_list(request, group, slug, is_admin=False):
-    """FIXME"""
-    # FIXME: Rename to show_list
-    # FIXME: Rename slug to list and let middleware switch the slug with an
-    # object
+def show_list(request, group, list, is_admin=False):
+    """Show list for printing"""
 
-    try:
+    if list.accounts.all().count():
+        accounts = list.accounts.filter(group=group).select_related(depth=1)
+    else:
         accounts = group.user_account_set.select_related(depth=1)
-        list = group.list_set.get(slug=slug)
-        if list.accounts.all().count():
-            accounts = list.accounts.filter(group=group).select_related(depth=1)
-    except List.DoesNotExist:
-        raise Http404
 
     response = render_to_response('reports/list.html',
                               {

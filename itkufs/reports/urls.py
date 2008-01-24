@@ -12,9 +12,8 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/delete/$',
         alter_list, {'type': 'delete'}, name='delete-list'),
 
-    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/$',
-        html_list, name='view-list'),
-
+    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<list>[0-9a-z_-]+)/$',
+        show_list, name='view-list'),
 
     # Admin: Settlements
     url(r'^(?P<group>[0-9a-z_-]+)/settlement/$',
