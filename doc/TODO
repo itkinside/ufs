@@ -5,7 +5,7 @@ MUST HAVE
 ---------
 
 Model:
-- !!! Document the transaction semantics before developing further.
+- Implement the new transaction semantics. See docs.
 - set_reject, etc, need to be aware of placeholders and enfore who is allowed
   to alter state. Only needs to care about changes internally in a group. A
   user may reject his withdrawal request. An admin may reject everything not
