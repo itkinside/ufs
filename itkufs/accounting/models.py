@@ -24,7 +24,7 @@ class Group(models.Model):
     block_limit = models.IntegerField(_('block limit'), null=True, blank=True,
         help_text=_('Limit for blacklisting user, leave blank for no limit.'))
     admins = models.ManyToManyField(User, verbose_name=_('admins'),
-        null=True, blank=True)
+        null=True, blank=True, filter_interface=models.HORIZONTAL)
     bank_account = models.ForeignKey('Account', verbose_name=_('bank account'),
         null=True, blank=True, related_name='bank_account_for', editable=False)
     cash_account = models.ForeignKey('Account', verbose_name=_('cash account'),
