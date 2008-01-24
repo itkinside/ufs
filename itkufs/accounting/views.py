@@ -24,13 +24,10 @@ from itkufs.accounting.forms import *
 def group_summary(request, group, is_admin=False):
     """Show group summary"""
 
-    # FIXME: Pass on to generic view
-    response = render_to_response('accounting/group_summary.html',
-                                  {
-                                      'is_admin': is_admin,
-                                      'group': group,
-                                  },
-                                  context_instance=RequestContext(request))
+    response = object_detail(request, Group.objects.all(), group.id,
+        template_name='accounting/group_summary.html',
+        template_object_name='group',
+        extra_context={'is_admin': is_admin})
     populate_xheaders(request, response, Group, group.id)
     return response
 
@@ -57,13 +54,10 @@ def account_summary(request, group, account, is_admin=False):
             request.user.message_set.create(
                 message=_('The account balance is below the warning limit.'))
 
-    # FIXME: Pass on to generic view
-    response = render_to_response('accounting/account_summary.html',
-                                  {
-                                      'is_admin': is_admin,
-                                      'account': account,
-                                  },
-                                  context_instance=RequestContext(request))
+    response = object_detail(request, Account.objects.all(), account.id,
+        template_name='accounting/account_summary.html',
+        template_object_name='account',
+        extra_context={'is_admin': is_admin})
     populate_xheaders(request, response, Account, account.id)
     return response
 
