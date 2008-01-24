@@ -33,14 +33,13 @@ def show_list(request, group, list, is_admin=False):
                                   'is_admin': is_admin,
                               },
                               context_instance=RequestContext(request))
-
     populate_xheaders(request, response, List, list.id)
     return response
 
 @login_required
 @limit_to_admin
 def new_list(request, group, is_admin=False):
-    """FIXME"""
+    """Create new list"""
 
     columnforms = []
 
@@ -63,7 +62,7 @@ def new_list(request, group, is_admin=False):
 @login_required
 @limit_to_admin
 def edit_list(request, group, slug, is_admin=False):
-    """FIXME"""
+    """Edit list"""
 
     try:
         list = group.list_set.get(slug=slug)
@@ -96,6 +95,7 @@ def edit_list(request, group, slug, is_admin=False):
 def alter_list(request, group, slug=None, type='new', is_admin=False):
     """FIXME"""
     # FIXME: Rename to edit_list
+    # FIXME: Err, we already got a view named edit_list? adamcik?
 
     # TODO: Maybe this function could be made more generic so that it can limit
     # access to generic views for any object?
@@ -229,6 +229,6 @@ def income(request, group, is_admin=False):
 @login_required
 @limit_to_admin
 def settlement_summary(request, group, page='1', is_admin=False):
-    """FIXME"""
+    """Show settlement summary"""
 
     pass # FIXME
