@@ -8,8 +8,9 @@ class GroupTestCase(unittest.TestCase):
     # FIXME: Test all group properties
 
     def setUp(self):
-        self.user = User(username='user')
+        self.user = User(username='alice')
         self.user.save()
+
         self.group = Group(name='Group 1', slug='group1')
         self.group.save()
 
@@ -21,13 +22,14 @@ class GroupTestCase(unittest.TestCase):
         for account in self.accounts:
             account.save()
 
-        Transaction.objects.all().delete()
+        # FIXME
+        #Transaction.objects.all().delete()
 
         self.transactions = {
-            'Reg': Transaction(),
-            'Pay': Transaction(),
-            'Rec': Transaction(),
-            'Rej': Transaction(),
+            'Reg': Transaction(group=self.group),
+            'Pay': Transaction(group=self.group),
+            'Rec': Transaction(group=self.group),
+            'Rej': Transaction(group=self.group),
         }
         for transaction in self.transactions.values():
             transaction.save()
@@ -37,7 +39,7 @@ class GroupTestCase(unittest.TestCase):
                 TransactionEntry(account=self.accounts[1], debit=100))
             transaction.set_registered(user=self.user)
 
-        self.transactions['Undef'] = Transaction()
+        self.transactions['Undef'] = Transaction(group=self.group)
         self.transactions['Undef'].save()
 
         self.transactions['Pay'].set_payed(user=self.user)
@@ -46,10 +48,12 @@ class GroupTestCase(unittest.TestCase):
         self.transactions['Rej'].set_rejected(user=self.user)
 
     def tearDown(self):
-        self.group.delete()
-        self.user.delete()
         for transaction in self.transactions.values():
             transaction.delete()
+        for account in self.accounts:
+            account.delete()
+        self.group.delete()
+        self.user.delete()
 
     ### Transaction set tests
     # Please keep in sync with Account's set tests
@@ -122,8 +126,9 @@ class AccountTestCase(unittest.TestCase):
     # FIXME: Test all account properties
 
     def setUp(self):
-        self.user = User(username='user')
+        self.user = User(username='alice')
         self.user.save()
+
         self.group = Group(name='Group 1', slug='group1')
         self.group.save()
 
@@ -136,13 +141,14 @@ class AccountTestCase(unittest.TestCase):
             account.save()
         self.account = self.accounts[0]
 
-        Transaction.objects.all().delete()
+        # FIXME
+        #Transaction.objects.all().delete()
 
         self.transactions = {
-            'Reg': Transaction(),
-            'Pay': Transaction(),
-            'Rec': Transaction(),
-            'Rej': Transaction(),
+            'Reg': Transaction(group=self.group),
+            'Pay': Transaction(group=self.group),
+            'Rec': Transaction(group=self.group),
+            'Rej': Transaction(group=self.group),
         }
         for transaction in self.transactions.values():
             transaction.save()
@@ -152,7 +158,7 @@ class AccountTestCase(unittest.TestCase):
                 TransactionEntry(account=self.accounts[1], debit=100))
             transaction.set_registered(user=self.user)
 
-        self.transactions['Undef'] = Transaction()
+        self.transactions['Undef'] = Transaction(group=self.group)
         self.transactions['Undef'].save()
 
         self.transactions['Pay'].set_payed(user=self.user)
@@ -161,10 +167,12 @@ class AccountTestCase(unittest.TestCase):
         self.transactions['Rej'].set_rejected(user=self.user)
 
     def tearDown(self):
-        self.group.delete()
-        self.user.delete()
         for transaction in self.transactions.values():
             transaction.delete()
+        for account in self.accounts:
+            account.delete()
+        self.group.delete()
+        self.user.delete()
 
     ### Transaction set tests
     # Please keep in sync with Group's set tests
@@ -235,11 +243,13 @@ class AccountTestCase(unittest.TestCase):
 
 class TransactionTestCase(unittest.TestCase):
     def setUp(self):
-        User.objects.all().delete()
-        self.user = User(username='user')
+        # FIXME
+        #User.objects.all().delete()
+        self.user = User(username='alice')
         self.user.save()
 
-        Group.objects.all().delete()
+        # FIXME
+        #Group.objects.all().delete()
         self.group = Group(name='Group 1', slug='group1')
         self.group.save()
 
@@ -253,7 +263,7 @@ class TransactionTestCase(unittest.TestCase):
 
         self.before = datetime.now()
 
-        self.transaction = Transaction()
+        self.transaction = Transaction(group=self.group)
         self.transaction.save()
         self.transaction.entry_set.add(TransactionEntry(
             account=self.accounts[0], debit=100))
@@ -265,11 +275,11 @@ class TransactionTestCase(unittest.TestCase):
         self.after = datetime.now()
 
     def tearDown(self):
-        self.user.delete()
         self.transaction.delete()
         for account in self.accounts:
             account.delete()
         self.group.delete()
+        self.user.delete()
 
     def testEmptyTransaction(self):
         """Checks that empty transactions are accepted"""
@@ -408,13 +418,18 @@ class TransactionTestCase(unittest.TestCase):
 
 class LogTestCase(unittest.TestCase):
     def setUp(self):
-        self.user = User(username='user')
+        self.user = User(username='alice')
         self.user.save()
-        self.transaction = Transaction()
+
+        self.group = Group(name='Group 1', slug='group1')
+        self.group.save()
+
+        self.transaction = Transaction(group=self.group)
         self.transaction.set_registered(user=self.user)
 
     def tearDown(self):
         self.transaction.delete()
+        self.group.delete()
         self.user.delete()
 
     def testLogEntryUniqePerType(self):
@@ -429,7 +444,6 @@ class LogTestCase(unittest.TestCase):
             if key != 'Reg':
                 log1.save()
             self.assertRaises(IntegrityError, log2.save)
-
 
     def testLogEntryModify(self):
         """Checks that modifying log entry raises error"""
@@ -446,7 +460,7 @@ class LogTestCase(unittest.TestCase):
 
 class EntryTestCase(unittest.TestCase):
     def setUp(self):
-        self.user = User(username='user')
+        self.user = User(username='alice')
         self.user.save()
 
         self.group = Group(name='group1', slug='group1')
@@ -456,7 +470,7 @@ class EntryTestCase(unittest.TestCase):
             group=self.group)
         self.account.save()
 
-        self.transaction = Transaction()
+        self.transaction = Transaction(group=self.group)
         self.transaction.save()
 
         self.entry = TransactionEntry(account=self.account,
