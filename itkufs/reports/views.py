@@ -135,7 +135,7 @@ def alter_list(request, group, slug=None, type='new', is_admin=False):
             post_delete_redirect=redirect)
 
 @login_required
-@limit_to_admin
+@limit_to_group
 def balance(request, group, is_admin=False):
     """Show balance sheet for the group"""
 
@@ -194,7 +194,7 @@ def balance(request, group, is_admin=False):
                               context_instance=RequestContext(request))
 
 @login_required
-@limit_to_admin
+@limit_to_group
 def income(request, group, is_admin=False):
     """Show income statement for group"""
 
