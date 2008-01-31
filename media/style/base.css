@@ -108,9 +108,6 @@ img {
 	background: #d3d7cf;
 	color: black;
 }
-#menu .admin a {
-	color: #c00;
-}
 #menu ul {
 	list-style: none;
 	margin: 0;
@@ -159,10 +156,6 @@ img {
 #tabs ul li a:hover {
 	background: #d3d7cf;
 	color: black;
-}
-#tabs ul li a.active {
-	background: #d3d7cf;
-	font-weight: bold;
 }
 
 /* Main content block */
@@ -258,6 +251,9 @@ tr.oddrow {
 }
 .disabled td {
 	text-decoration: line-through;
+}
+.admin a, .admin a:hover {
+	color: #c00 !important;
 }
 
 /* Columns */
