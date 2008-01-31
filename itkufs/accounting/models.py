@@ -56,8 +56,8 @@ class Group(models.Model):
                            type=Account.ASSET_ACCOUNT, group=self)
             cash.save()
 
-            self.bank_account = bank;
-            self.cash_account = cash;
+            self.bank_account = bank
+            self.cash_account = cash
             super(Group, self).save()
 
     def get_user_account_set(self):
@@ -78,8 +78,7 @@ class Group(models.Model):
 
     def get_transaction_set_with_rejected(self):
         """Returns all transactions connected to group, including rejected"""
-        return Transaction.objects.filter(
-            entry_set__account__group=self).exclude(
+        return self.real_transaction_set.exclude(
             status=Transaction.UNDEFINED_STATE).distinct()
     transaction_set_with_rejected = property(get_transaction_set_with_rejected,
                                              None, None)
@@ -395,7 +394,8 @@ class Transaction(models.Model):
 
     objects = TransactionManager()
 
-    group = models.ForeignKey(Group, verbose_name=_('group'))
+    group = models.ForeignKey(Group, verbose_name=_('group'),
+        related_name='real_transaction_set')
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
     last_modified = models.DateTimeField(_('Last modified'), auto_now_add=True)
