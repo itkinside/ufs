@@ -28,21 +28,22 @@
 {% block menu %}
 <ul id="menulist">
     <li><a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">{% trans "My account" %}</a>
-        {% ifnotequal request.user.account_set.count 0 %}
-        {% ifnotequal request.user.account_set.count 1 %}
+    {% ifnotequal request.user.account_set.count 0 %}
+    {% ifnotequal request.user.account_set.count 1 %}
     <ul>
-    {% for account in request.user.account_set.all %}
+        {% for account in request.user.account_set.all %}
         <li><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.group.name }}</a></li>
-    {% endfor %}
+        {% endfor %}
     </ul>
     {% endifnotequal %}
     {% endifnotequal %}
     </li>
-<li{% if is_admin %} class="admin"{% endif %}>
-      <a href="{% url group-summary request.session.my_account.group.slug %}">
-        {% trans "My group" %}{% if group.not_payed_transaction_set.count and is_admin %}*{% endif %}
-      </a>
+{% if not request.session.my_account.group.admin_only or is_admin %}
+    <li{% if request.session.my_account.group.admin_only %} class="admin"{% endif %}>
+        <a href="{% url group-summary request.session.my_account.group.slug %}">
+        {% trans "My group" %}{% if is_admin and group.not_payed_transaction_set.count %}*{% endif %}</a>
     </li>
+    {% endif %}
     <li id="help"><a href="{% url help request.session.my_account.group.slug %}">{% trans "Help" %}</a></li>
 </ul>
 {% endblock %}
