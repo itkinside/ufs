@@ -10,6 +10,11 @@ def limit_to_group(function):
         if kwargs['is_admin']:
             return function(request, *args, **kwargs)
 
+        # Disallow all other if the group is admin-only
+        if kwargs['group'].admin_only:
+            return HttpResponseForbidden(
+                _('Forbidden if not group admin.'))
+
         # Check if non-admin are members of the group
         assert('group' in kwargs and isinstance(kwargs['group'], Group))
         is_member = bool(kwargs['group'].account_set.filter(
