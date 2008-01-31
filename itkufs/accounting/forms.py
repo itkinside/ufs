@@ -1,8 +1,8 @@
 from django import newforms as forms
-from django.utils.translation import ugettext as _
-from django.newforms.util import ValidationError
 from django.newforms.models import ModelForm
+from django.newforms.util import ValidationError
 from django.template.defaultfilters import slugify
+from django.utils.translation import ugettext as _
 
 from itkufs.accounting.models import *
 from itkufs.common.widgets import *
