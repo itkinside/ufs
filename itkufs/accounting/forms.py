@@ -1,9 +1,28 @@
 from django import newforms as forms
 from django.utils.translation import ugettext as _
 from django.newforms.util import ValidationError
+from django.newforms.models import ModelForm
+from django.template.defaultfilters import slugify
 
 from itkufs.accounting.models import *
 from itkufs.common.widgets import *
+
+class AccountForm(ModelForm):
+    class Meta:
+        model = Account
+        exclude = ('slug', 'group')
+
+    def save(self, group=None, **kwargs):
+        account = super(AccountForm, self).save(commit=False, **kwargs)
+
+        if not account.slug:
+            account.slug = slugify(account.name)
+        if group:
+            account.group = group
+
+        account.save()
+        return account
+
 
 amount_field = forms.DecimalField(label=_('Amount'), required=True, min_value=0)
 details_field = forms.CharField(label=_('Details'),

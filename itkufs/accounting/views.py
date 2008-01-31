@@ -38,7 +38,7 @@ def account_summary(request, group, account, is_admin=False):
 
     if request.user == account.owner:
         # Check if active
-        if not account.active:
+        if not account.active and not is_admin:
             return HttpResponseForbidden(_('This account has been disabled.'))
 
         # Set active account in session
@@ -102,31 +102,27 @@ def edit_group(request, group, is_admin=False):
 def edit_account(request, group, account=None, type='new', is_admin=False):
     """Create account or edit account properties"""
 
-    if type=='edit':
-        AccountForm = form_for_instance(account)
-    else:
-        AccountForm = form_for_model(Account)
-
-    del AccountForm.base_fields['group']
-
     if request.method == 'POST':
-        form = AccountForm(request.POST)
-
+        if type == 'edit':
+            form = AccountForm(instance=account, data=request.POST)
+        else:
+            form = AccountForm(data=request.POST)
         if form.is_valid():
             if type== 'edit':
                 form.save()
                 request.user.message_set.create(
                     message=_('Account successfully updated'))
             else:
-                account = form.save(commit=False)
-                account.group = group
-                account.save()
+                account = form.save(group=group)
                 request.user.message_set.create(
                     message=_('Account successfully created'))
             return HttpResponseRedirect(reverse('account-summary',
                 args=(group.slug, account.slug)))
     else:
-        form = AccountForm()
+        if type == 'edit':
+            form = AccountForm(instance=account)
+        else:
+            form = AccountForm()
 
     extra = {
         'is_admin': is_admin,
