@@ -35,7 +35,7 @@
 <table class="tabledetails">
     <tr>
         <th>{% trans "Name" %}</th>
-        {% if is_admin %}
+        {% if not account.group.admin_only or is_admin %}
         <td><a href="{% url group-summary account.group.slug %}">{{ account.group.name }}</a></td>
         {% else %}
         <td>{{ account.group.name }}</td>
