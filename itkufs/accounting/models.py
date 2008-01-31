@@ -16,9 +16,8 @@ class Group(models.Model):
     name = models.CharField(_('name'), max_length=100)
     slug = models.SlugField(_('slug'), prepopulate_from=['name'], unique=True,
         help_text=_('A shortname used in URLs etc.'))
-    placeholder = models.BooleanField(default=False,
-        help_text=_('If the group is not real, but a placeholder for ' +
-                    'receiving transfers.'))
+    admin_only = models.BooleanField(default=True,
+        help_text=_('Only allow admins to view group details.'))
     warn_limit = models.IntegerField(_('warn limit'), null=True, blank=True,
         help_text=_('Limit for warning user, leave blank for no limit.'))
     block_limit = models.IntegerField(_('block limit'), null=True, blank=True,
@@ -29,7 +28,7 @@ class Group(models.Model):
         null=True, blank=True, related_name='bank_account_for', editable=False)
     cash_account = models.ForeignKey('Account', verbose_name=_('cash account'),
         null=True, blank=True, related_name='cash_account_for', editable=False)
-    # TODO: Probably needs to add sales_account etc.
+    # TODO: Probably needs to add sales_account etc. Can wait for inventory.
 
     logo = models.ImageField(upload_to='logos', null=True, blank=True)
     email = models.EmailField(null=True, blank=True,
@@ -164,6 +163,7 @@ class AccountManager(models.Manager):
                 """
             }
         )
+
 class Account(models.Model):
     ASSET_ACCOUNT = 'As'        # Eiendeler/aktiva
     LIABILITY_ACCOUNT = 'Li'    # Gjeld/passiva
@@ -346,6 +346,7 @@ class InvalidTransactionLog(InvalidTransaction):
         return u'Invalid transaction log: %s' % self.value
 
 class Settlement(models.Model):
+    group = models.ForeignKey(Group, verbose_name=_('group'))
     date = models.DateField(_('date'))
     comment = models.CharField(_('comment'), max_length=200,
         blank=True, null=True)
@@ -394,6 +395,7 @@ class Transaction(models.Model):
 
     objects = TransactionManager()
 
+    group = models.ForeignKey(Group, verbose_name=_('group'))
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
     last_modified = models.DateTimeField(_('Last modified'), auto_now_add=True)
