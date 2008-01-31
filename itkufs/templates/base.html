@@ -61,7 +61,16 @@
 </ul>
 {% endif %}
 
-<div id="tabs">{% block tabs %}{% endblock %}</div>
+{% block outertabs %}
+<div id="tabs">
+    <ul>
+    {% block tabs %}
+        <li>Foo</li>
+        <li>Bar</li>
+    {% endblock %}
+    </ul>
+</div>
+{% endblock %}
 
 {% block content %}
 <h2>Header 2</h2>

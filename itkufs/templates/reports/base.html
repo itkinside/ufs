@@ -1,4 +1,8 @@
 {% extends "base.html" %}
 
+{% block tabs %}
+    <li><a href="{% url group-summary group.slug %}">Back to group</a></li>
+{% endblock %}
+
 {% block title %}{{ request.session.my_account.group.name }}{% endblock %}
 {% block header %}{{ request.session.my_account.group.name }}{% endblock %}
