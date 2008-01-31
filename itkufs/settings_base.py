@@ -2,10 +2,10 @@
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-TEMPLATE_STRING_IF_INVALID = '!!INVALID VAR!!'
+TEMPLATE_STRING_IF_INVALID = ''
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    ('ITK uFS', 'itk-ufs@samfundet.no'),
 )
 
 MANAGERS = ADMINS
@@ -79,6 +79,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.core.context_processors.request',
+    'itkufs.common.context_processors.bzr',
+    'itkufs.common.context_processors.debug',
 )
 
 INSTALLED_APPS = (
@@ -108,3 +110,6 @@ LANGUAGES = (
     ('en', ugettext('English')),
     ('no', ugettext('Norwegian')),
 )
+
+# Development version numbering
+BZR_BRANCH_DIR = '/home/cassarossa/itk/felles/itkufs/'
