@@ -38,13 +38,11 @@
     {% endifnotequal %}
     {% endifnotequal %}
     </li>
-{% if is_admin %}
-    <li class="admin">
+<li{% if is_admin %} class="admin"{% endif %}>
       <a href="{% url group-summary request.session.my_account.group.slug %}">
-        {% trans "Admin" %}{% if group.not_payed_transaction_set.count %}*{% endif %}
+        {% trans "My group" %}{% if group.not_payed_transaction_set.count and is_admin %}*{% endif %}
       </a>
     </li>
-{% endif %}
     <li id="help"><a href="{% url help request.session.my_account.group.slug %}">{% trans "Help" %}</a></li>
 </ul>
 {% endblock %}
