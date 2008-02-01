@@ -23,7 +23,6 @@ class AccountForm(ModelForm):
         account.save()
         return account
 
-
 amount_field = forms.DecimalField(label=_('Amount'), required=True, min_value=0)
 details_field = forms.CharField(label=_('Details'),
     widget=forms.widgets.Textarea(attrs={'rows': 2}), required=False)
