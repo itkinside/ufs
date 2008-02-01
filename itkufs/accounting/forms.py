@@ -1,14 +1,12 @@
 from django import newforms as forms
-from django.newforms.models import ModelForm
 from django.newforms.util import ValidationError
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 
 from itkufs.accounting.models import *
-from itkufs.common.widgets import *
 from itkufs.common.forms import CustomModelForm
 
-class AccountForm(ModelForm):
+class AccountForm(CustomModelForm):
     class Meta:
         model = Account
         exclude = ('slug', 'group')
@@ -25,7 +23,7 @@ class AccountForm(ModelForm):
         account.save()
         return account
 
-class GroupForm(ModelForm):
+class GroupForm(CustomModelForm):
     delete_logo = forms.BooleanField()
 
     class Meta:
@@ -42,7 +40,7 @@ class GroupForm(ModelForm):
         group.save()
         return group
 
-class TransactionForm(ModelForm):
+class TransactionForm(CustomModelForm):
     class Meta:
         model = Transaction
         fields = ('settlement',)
@@ -51,6 +49,24 @@ class EntryForm(CustomModelForm):
     class Meta:
         model = TransactionEntry
         fields = ('debit', 'credit')
+
+class DepositWithdrawForm(forms.Form):
+    amount = forms.DecimalField(label=_('Amount'), required=True, min_value=0)
+    details = forms.CharField(label=_('Details'), required=False,
+        widget=forms.widgets.Textarea(attrs={'rows': 2}))
+
+class TransferForm(DepositWithdrawForm):
+    to = forms.ChoiceField(label=_('To'), required=True)
+
+    def __init__(self, *args, **kwargs):
+        # FIXME check that group is set
+        group = kwargs.pop('group')
+
+        super(DepositWithdrawForm, self).__init__(*args, **kwargs)
+
+        self.fields['to'].choices = [(account.id, account.name) for account in group.user_account_set]
+
+
 
 """
 amount_field = forms.DecimalField(label=_('Amount'), required=True, min_value=0)

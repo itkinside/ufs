@@ -195,12 +195,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
 
     if transfer_type == 'transfer':
         title = _('Transfer from account')
-        form = TransferForm(data,
-            credit_options={
-                'limit_to_groups': [group],
-                'user_accounts': True,
-                'exclude_accounts': [account],
-            })
+        form = TransferForm(data, group=group)
     elif transfer_type == 'register' and is_admin:
         title = 'This string is not used'
         form = TransactionForm(data,
