@@ -66,28 +66,26 @@ def account_summary(request, group, account, is_admin=False):
 def edit_group(request, group, is_admin=False):
     """Edit group properties"""
 
-    GroupInstanceForm = form_for_instance(group)
-    del GroupInstanceForm.base_fields['slug']
-
     old_logo = group.get_logo_filename()
 
     if request.method == 'POST':
-        form = GroupInstanceForm(request.POST, request.FILES)
+        form = GroupForm(data=request.POST, files=request.FILES, instance=group)
         if form.is_valid():
             form.save()
             if old_logo and old_logo != group.get_logo_filename():
                 os.remove(old_logo)
 
-            elif 'delete_logo' in request.POST:
+            elif 'delete_logo' in form.cleaned_data:
                 os.remove(group.get_logo_filename())
                 group.logo = ''
                 group.save()
-            request.user.message_set.create(
-                message=_('Group successfully updated'))
+
+            request.user.message_set.create(message=_('Group successfully updated'))
+
             return HttpResponseRedirect(reverse('group-summary',
                 args=(group.slug,)))
     else:
-        form = GroupInstanceForm()
+        form = GroupForm(instance=group)
 
     return render_to_response('accounting/group_form.html',
                               {

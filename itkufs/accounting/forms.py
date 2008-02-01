@@ -13,7 +13,8 @@ class AccountForm(ModelForm):
         exclude = ('slug', 'group')
 
     def save(self, group=None, **kwargs):
-        account = super(AccountForm, self).save(commit=False, **kwargs)
+        kwargs['commit'] = False
+        account = super(AccountForm, self).save(**kwargs)
 
         if not account.slug:
             account.slug = slugify(account.name)
@@ -22,6 +23,23 @@ class AccountForm(ModelForm):
 
         account.save()
         return account
+
+class GroupForm(ModelForm):
+    delete_logo = forms.BooleanField()
+
+    class Meta:
+        model = Group
+        exclude = ('slug',)
+
+    def save(self, **kwargs):
+        kwargs['commit'] = False
+        group = super(GroupForm, self).save(**kwargs)
+
+        if not group.slug:
+            group.slug = slugify(group.name)
+
+        group.save()
+        return group
 
 amount_field = forms.DecimalField(label=_('Amount'), required=True, min_value=0)
 details_field = forms.CharField(label=_('Details'),

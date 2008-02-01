@@ -4,13 +4,6 @@
 {% block content %}
 <form action="." method="post" enctype="multipart/form-data">
     {{ form.as_p }}
-    {% if group.logo %}
-    <p>
-        <label for="delete_logo">Delete logo?</label>
-        <input type="checkbox" name="delete_logo" id="delete_logo" />
-        <img src="{% url media group.logo %}" alt="logo" />
-    </p>
-    {% endif %}
     <p>
         <button type="submit">{% trans "Save changes to group" %}</button>
     </p>
