@@ -2,12 +2,13 @@ var UFS = {
   init: function() {
     Menu.init();
     Checkbox.init();
-    Transaction.init();
+//    Transaction.init();
     Select.init('id_admins');
     Select.init('id_accounts');
   }
 };
 
+/*
 var Transaction = {
   // Add a sumrow to tables in form#createtransaction
   init: function() {
@@ -77,6 +78,7 @@ var Transaction = {
 
   }
 };
+*/
 
 var Checkbox = {
   // Functions to add all, none and invert buttons to modify checkboxes in
