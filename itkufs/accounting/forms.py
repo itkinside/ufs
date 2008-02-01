@@ -6,6 +6,7 @@ from django.utils.translation import ugettext as _
 
 from itkufs.accounting.models import *
 from itkufs.common.widgets import *
+from itkufs.common.forms import CustomModelForm
 
 class AccountForm(ModelForm):
     class Meta:
@@ -41,6 +42,17 @@ class GroupForm(ModelForm):
         group.save()
         return group
 
+class TransactionForm(ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ('settlement',)
+
+class EntryForm(CustomModelForm):
+    class Meta:
+        model = TransactionEntry
+        fields = ('debit', 'credit')
+
+"""
 amount_field = forms.DecimalField(label=_('Amount'), required=True, min_value=0)
 details_field = forms.CharField(label=_('Details'),
     widget=forms.widgets.Textarea(attrs={'rows': 2}), required=False)
@@ -139,3 +151,4 @@ class RejectTransactionForm(forms.Form):
     reason = forms.CharField(label=_('Reason'),
         widget=forms.widgets.Textarea(attrs={'rows': 2}), required=True)
 
+"""

@@ -1,8 +1,8 @@
-from django.newforms import BaseForm
+from django.newforms.models import ModelForm
 from django.newforms.forms import BoundField
 from django.utils.safestring import mark_safe
 
-class BaseForm(BaseForm):
+class CustomModelForm(ModelForm):
     """Returns this form rendered as HTML <tr>s -- excluding the <table></table>."""
     def as_table_row(self):
         output = []

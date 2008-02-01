@@ -7,7 +7,6 @@
     <label>{% trans "Account:" %}</label>
     <div class="colthree">
         <table class="tablelist">
-            <caption>{{ group }}:</caption>
             <thead>
                 <tr>
                     <th>Account</th><th>Debit</th><th>Credit</th>
@@ -25,14 +24,13 @@
     </div>
     <div class="colthree">
         <table class="tablelist">
-            <caption>{{ other }}:</caption>
             <thead>
                 <tr>
                     <th>Account</th><th>Debit</th><th>Credit</th>
                 </tr>
             </thead>
             <tbody>
-            {% for a,f in other_forms %}
+            {% for a,f in user_forms %}
                 <tr class="{% cycle evenrow,oddrow %}">
                     <td>{{ a.name }}</td>
                     {{ f.as_table_row }}

@@ -15,7 +15,6 @@ from django.utils.translation import ugettext as _, ungettext
 from django.views.generic.list_detail import object_list, object_detail
 
 from itkufs.common.decorators import limit_to_group, limit_to_owner, limit_to_admin
-from itkufs.common.forms import BaseForm
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
 
@@ -413,35 +412,17 @@ def reject_transactions(request, group, is_admin=False):
 def create_transaction(request, group, is_admin=False):
     """Admin view for creating transactions"""
 
-    # Get other group
-    try:
-        other = request.GET.get('other')
-        other = Group.objects.get(slug=other)
-    except Group.DoesNotExist:
-        raise Http404
-
-    TransactionForm =  form_for_model(Transaction)
-    del TransactionForm.base_fields['status']
-
-    EntryForm =  form_for_model(TransactionEntry, form=BaseForm)
-    del EntryForm.base_fields['account']
-    del EntryForm.base_fields['transaction']
-
+    # FIXME Handle post
     form = TransactionForm()
-    other_forms, group_forms = [], []
-
-    for account in group.account_set.all():
-        group_forms.append((account, EntryForm(prefix=account.id)))
-    for account in other.account_set.all():
-        other_forms.append((account, EntryForm(prefix=account.id)))
+    user_forms = [(account, EntryForm(prefix=account.id, auto_id=False)) for account in group.user_account_set]
+    group_forms = [(account, EntryForm(prefix=account.id, auto_id=False)) for account in group.group_account_set]
 
     return render_to_response('accounting/transaction_form.html',
                               {
                                 'is_admin': is_admin,
                                 'group': group,
-                                'other': other,
                                 'form': form,
                                 'group_forms': group_forms,
-                                'other_forms': other_forms,
+                                'user_forms': user_forms,
                               },
                               context_instance=RequestContext(request))
