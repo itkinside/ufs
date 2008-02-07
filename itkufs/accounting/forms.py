@@ -12,6 +12,7 @@ class AccountForm(CustomModelForm):
         exclude = ('slug', 'group')
 
     def save(self, group=None, **kwargs):
+        original_commit = kwargs['commit']
         kwargs['commit'] = False
         account = super(AccountForm, self).save(**kwargs)
 
@@ -20,7 +21,8 @@ class AccountForm(CustomModelForm):
         if group:
             account.group = group
 
-        account.save()
+        if original_commit:
+            account.save()
         return account
 
 
