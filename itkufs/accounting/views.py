@@ -213,7 +213,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
         if details == '':
             details = None
 
-        transaction = Transaction()
+        transaction = Transaction(group=group)
         # FIXME this shouldn't be need if we figure out a reasonable hack
         transaction.save()
 
