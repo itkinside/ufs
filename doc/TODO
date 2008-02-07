@@ -6,13 +6,10 @@ MUST HAVE
 
 Model:
 - Implement the new transaction semantics. See docs.
-- set_reject, etc, need to be aware of placeholders and enfore who is allowed
-  to alter state. Only needs to care about changes internally in a group. A
-  user may reject his withdrawal request. An admin may reject everything not
-  already recieved or rejected.
+- set_reject, etc, need to be enforce who is allowed to alter state. A user may
+  reject his withdrawal request. An admin may reject everything not already
+  recieved or rejected.
 - Unit tests of account balance and lots of properties. See FIXMEs.
-- Add group.sales_account or something. Must know what account to register
-  sales and expenses on.
 
 Views:
 - Use decorators to control commit/rollback of transactions. What views?
@@ -110,3 +107,5 @@ WONTFIX
 - Custom base.html for each accountgroups lists?
 - Account list in admin menu
 - Serial number to lists (somewhat in doubt...)
+- Add group.sales_account or something. Must know what account to register
+  sales and expenses on.
