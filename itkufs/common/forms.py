@@ -10,7 +10,7 @@ class CustomModelForm(ModelForm):
             bf = BoundField(self, field, name)
 
             if bf.errors:
-                error = u'class="error"'
+                error = u' class="error"'
             else:
                 error = u''
 
