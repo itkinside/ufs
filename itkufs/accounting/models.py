@@ -452,15 +452,15 @@ class Transaction(models.Model):
                 credit_groups.append(entry.account.group)
 
         if debit_sum != credit_sum:
-            raise InvalidTransaction(_('Credit and debit do not match.'))
+            raise InvalidTransaction('Credit and debit do not match.')
 
         if len(debit_groups) > 1:
             raise InvalidTransaction(
-                _('Accounts from different groups on debit side.'))
+                'Accounts from different groups on debit side.')
 
         if len(credit_groups) > 1:
             raise InvalidTransaction(
-                _('Accounts from different groups on credt side.'))
+                'Accounts from different groups on credt side.')
 
         self.last_modified = datetime.now()
         super(Transaction, self).save()
@@ -480,7 +480,7 @@ class Transaction(models.Model):
             self.save()
         else:
             raise InvalidTransaction(
-                _('Could not set transaction as registered'))
+                'Could not set transaction as registered')
 
     def set_payed(self, user, message=''):
         if not self.is_rejected() and self.is_registered():
@@ -493,7 +493,8 @@ class Transaction(models.Model):
             self.last_modified = datetime.now()
             self.save()
         else:
-            raise InvalidTransaction(_('Could not set transaction as payed'))
+            raise InvalidTransaction(
+                'Could not set transaction as payed')
 
     def set_received(self, user, message=''):
         if not self.is_rejected() and self.is_registered():
@@ -509,7 +510,8 @@ class Transaction(models.Model):
             self.last_modified = datetime.now()
             self.save()
         else:
-            raise InvalidTransaction(_('Could not set transaction as received'))
+            raise InvalidTransaction(
+                'Could not set transaction as received')
 
     def reject(self, user, message=''):
         if (self.is_registered()
@@ -524,7 +526,8 @@ class Transaction(models.Model):
             self.last_modified = datetime.now()
             self.save()
         else:
-            raise InvalidTransaction(_('Could not set transaction as rejected'))
+            raise InvalidTransaction(
+                'Could not set transaction as rejected')
     set_rejected = reject
     set_rejected.__doc__ = 'set_rejected() is an alias for reject()'
 
@@ -602,9 +605,12 @@ class TransactionLog(models.Model):
     def save(self):
         if self.id is not None:
             raise InvalidTransactionLog(
-                _('Altering transaction log entries is not allowed'))
+                'Altering transaction log entries is not allowed')
         if self.transaction.id is None:
             self.transaction.save()
+        if self.transaction.log_set.filter(type=self.type).count():
+            raise InvalidTransactionLog(
+                'Only one instance of each log type is allowed.')
         super(TransactionLog, self).save()
 
     class Meta:
@@ -641,19 +647,19 @@ class TransactionEntry(models.Model):
     def save(self):
         if self.transaction.is_registered():
             raise InvalidTransactionEntry(
-                _('Can not add entries to registered transactions'))
+                'Can not add entries to registered transactions')
 
         if self.debit < 0 or self.credit < 0:
             raise InvalidTransactionEntry(
-                _('Credit and debit must be positive or zero'))
+                'Credit and debit must be positive or zero')
 
         if self.debit > 0 and self.credit > 0:
             raise InvalidTransactionEntry(
-                _('Only credit or debit may be set'))
+                'Only credit or debit may be set')
 
         if self.debit == 0 and self.credit == 0:
             raise InvalidTransactionEntry(
-                _('Create or debit must be positive'))
+                'Create or debit must be positive')
 
         super(TransactionEntry, self).save()
 

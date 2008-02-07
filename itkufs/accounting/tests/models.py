@@ -1,6 +1,7 @@
 from datetime import datetime
-from django.db import IntegrityError
 import unittest
+
+from django.db import IntegrityError
 
 from itkufs.accounting.models import *
 
@@ -23,7 +24,7 @@ class GroupTestCase(unittest.TestCase):
             account.save()
 
         # FIXME
-        #Transaction.objects.all().delete()
+        Transaction.objects.all().delete()
 
         self.transactions = {
             'Reg': Transaction(group=self.group),
@@ -284,12 +285,14 @@ class TransactionTestCase(unittest.TestCase):
     def testEmptyTransaction(self):
         """Checks that empty transactions are accepted"""
 
-        Transaction().save()
+        transaction = Transaction(group=self.group)
+        transaction.save()
+        transaction.delete()
 
     def testEqualDebitAndCreditAmount(self):
         """Checks that transaction only accept sum(debit)==sum(credit)"""
 
-        transaction = Transaction()
+        transaction = Transaction(group=self.group)
         transaction.save()
 
         transaction.entry_set.add(TransactionEntry(
@@ -299,20 +302,22 @@ class TransactionTestCase(unittest.TestCase):
         self.assertRaises(InvalidTransaction,
             transaction.set_registered, user=self.user)
 
-    def testAccountOnlyOnceInTransaction(self):
-        """Checks that debit accounts are only present once per transaction"""
+        transaction.delete()
 
-        transaction = Transaction()
+    def testAccountOnlyOnceInTransaction(self):
+        """Checks that multiple credit accounts are allowed in a transaction"""
+
+        transaction = Transaction(group=self.group)
         transaction.save()
 
         transaction.entry_set.add(TransactionEntry(
-            account=self.accounts[1], debit=200))
+            account=self.accounts[0], debit=200))
         transaction.entry_set.add(TransactionEntry(
-            account=self.accounts[0], credit=100))
+            account=self.accounts[1], credit=100))
+        transaction.entry_set.add(TransactionEntry(
+            account=self.accounts[2], credit=100))
 
-        self.assertRaises(IntegrityError, transaction.entry_set.add,
-            TransactionEntry(account=self.accounts[1], credit=100))
-
+        transaction.delete()
 
     def testRegisteredLogEntry(self):
         """Checks that a registered log entry is created"""
@@ -398,6 +403,7 @@ class TransactionTestCase(unittest.TestCase):
 
     def testRejectReceivedTransaction(self):
         """Tests that rejecting received transaction fails"""
+
         transaction = self.transaction
         transaction.set_payed(user=self.user)
         transaction.set_received(user=self.user)
@@ -407,6 +413,7 @@ class TransactionTestCase(unittest.TestCase):
 
     def testReceiveNotPayedTransaction(self):
         """Checks that receiving a transaction that is not payed fails"""
+
         transaction = self.transaction
 
         self.assertRaises(InvalidTransaction, transaction.set_received,
@@ -440,10 +447,9 @@ class LogTestCase(unittest.TestCase):
                                   user=self.user)
             log2 = TransactionLog(type=key, transaction=self.transaction,
                                   user=self.user)
-
             if key != 'Reg':
                 log1.save()
-            self.assertRaises(IntegrityError, log2.save)
+            self.assertRaises(InvalidTransactionLog, log2.save)
 
     def testLogEntryModify(self):
         """Checks that modifying log entry raises error"""
