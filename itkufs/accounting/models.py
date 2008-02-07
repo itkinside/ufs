@@ -458,7 +458,7 @@ class Transaction(models.Model):
         self.last_modified = datetime.now()
         super(Transaction, self).save()
 
-    def set_registered(self, user=None, message=''):
+    def set_registered(self, user, message=''):
         self.save()
 
         if self.id is None:
@@ -466,8 +466,7 @@ class Transaction(models.Model):
 
         if not self.is_registered():
             log = TransactionLog(type=self.REGISTERED_STATE, transaction=self)
-            if user:
-                log.user = user
+            log.user = user
             if message is not None and message.strip() != '':
                 log.message = message
             log.save()
@@ -478,11 +477,10 @@ class Transaction(models.Model):
             raise InvalidTransaction(
                 _('Could not set transaction as registered'))
 
-    def set_payed(self, user=None, message=''):
+    def set_payed(self, user, message=''):
         if not self.is_rejected() and self.is_registered():
             log = TransactionLog(type=self.PAYED_STATE, transaction=self)
-            if user:
-                log.user = user
+            log.user = user
             if message.strip() != '':
                 log.message = message
             log.save()
@@ -492,11 +490,10 @@ class Transaction(models.Model):
         else:
             raise InvalidTransaction(_('Could not set transaction as payed'))
 
-    def set_received(self, user=None, message=''):
+    def set_received(self, user, message=''):
         if not self.is_rejected() and self.is_registered() and self.is_payed():
             log = TransactionLog(type=self.RECEIVED_STATE, transaction=self)
-            if user:
-                log.user = user
+            log.user = user
             if message.strip() != '':
                 log.message = message
             log.save()
@@ -506,13 +503,12 @@ class Transaction(models.Model):
         else:
             raise InvalidTransaction(_('Could not set transaction as received'))
 
-    def reject(self, user=None, message=''):
+    def reject(self, user, message=''):
         if (self.is_registered()
             and not self.is_payed()
             and not self.is_received()):
             log = TransactionLog(type=self.REJECTED_STATE, transaction=self)
-            if user:
-                log.user = user
+            log.user = user
             if message.strip() != '':
                 log.message = message
             log.save()
