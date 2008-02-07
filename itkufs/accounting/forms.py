@@ -56,7 +56,7 @@ class DepositWithdrawForm(forms.Form):
         widget=forms.widgets.Textarea(attrs={'rows': 2}))
 
 class TransferForm(DepositWithdrawForm):
-    to_account = forms.ChoiceField(label=_('To'), required=True)
+    credit_account = forms.ChoiceField(label=_('To'), required=True)
 
     def __init__(self, *args, **kwargs):
         account = kwargs.pop('account')
@@ -64,5 +64,5 @@ class TransferForm(DepositWithdrawForm):
         super(DepositWithdrawForm, self).__init__(*args, **kwargs)
 
         if account:
-            self.fields['to_account'].choices = [(account.id, account.name)
+            self.fields['credit_account'].choices = [(account.id, account.name)
                 for account in account.group.user_account_set]
