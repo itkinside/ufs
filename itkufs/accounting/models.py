@@ -605,6 +605,7 @@ class TransactionLog(models.Model):
         super(TransactionLog, self).save()
 
     class Meta:
+        ordering = ('timestamp',)
         unique_together = (('transaction', 'type'),)
         verbose_name = _('transaction log entry')
         verbose_name_plural = _('transaction log entries')
