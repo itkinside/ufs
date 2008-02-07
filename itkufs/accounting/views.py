@@ -304,7 +304,7 @@ def approve_transactions(request, group, page='1', is_admin=False):
                 elif change_to == 'Rec':
                     t.set_received(user=request.user)
                 elif change_to == 'Rej':
-                    to_be_rejected.append(t)
+                    to_be_rejected.append((t))
             else:
                 forms.append(form)
 
@@ -339,29 +339,30 @@ def approve_transactions(request, group, page='1', is_admin=False):
 def reject_transactions(request, group, is_admin=False):
     """Reject transactions from members and other groups"""
 
-    # XXX: HACK!!! needs more work ;)
-    # request.POST.getlist('a')
-
     if request.method != 'POST':
-        raise Exception()
+        # request.user.message_set.create('') # FIXME Write user message
+        return HttpResponseRedirect(reverse('group-summary', args=(group.slug,)))
 
-    if request.POST['reason'].strip() == '':
-        raise Exception()
+    form = RejectTransactionForm(request.POST)
+    to_be_rejected = request.POST.getlist('transactions')
 
-    transaction = []
-    for key in request.POST.keys():
-        parts = key.split('_')
-        if parts[0] == 'transaction' and parts[1].isdecimal():
-            transaction.append(int(parts[1]))
+    to_be_rejected = Transaction.objects.filter(id__in=to_be_rejected, group=group)
 
-    for id in transaction:
-        t = Transaction.objects.get(id=id)
+    if not form.is_valid():
+        return render_to_response('accounting/reject_transactions.html',
+                           {
+                                'is_admin': is_admin,
+                                'group': group,
+                                'transactions': to_be_rejected,
+                                'form': form,
+                           },
+                           context_instance=RequestContext(request))
 
-        # FIXME check the we are allowed to reject this transaction
+    for transaction in to_be_rejected:
+        transactions.set_rejected(user=request.user, message=request.POST['reason'])
 
-        t.set_rejected(user=request.user, message=request.POST['reason'])
-
-    raise Exception('done')
+    # FIXME insert user message
+    return HttpResponseRedirect(reverse('approve-transactions', args=(group.slug,)))
 
 @login_required
 @limit_to_admin

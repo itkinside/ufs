@@ -23,6 +23,7 @@ class AccountForm(CustomModelForm):
         account.save()
         return account
 
+
 class GroupForm(CustomModelForm):
     delete_logo = forms.BooleanField()
 
@@ -40,20 +41,33 @@ class GroupForm(CustomModelForm):
         group.save()
         return group
 
+
 class TransactionForm(CustomModelForm):
     class Meta:
         model = Transaction
         fields = ('settlement',)
+
+
+class ChangeTransactionForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        choices = kwargs.pop('choices', (('',''),))
+        super(forms.Form, self).__init__(*args, **kwargs)
+        self.fields['state'].widget = forms.Select(choices=choices)
+
+    state = forms.CharField(max_length=3, label='', required=False)
+
 
 class EntryForm(CustomModelForm):
     class Meta:
         model = TransactionEntry
         fields = ('debit', 'credit')
 
+
 class DepositWithdrawForm(forms.Form):
     amount = forms.DecimalField(label=_('Amount'), required=True, min_value=0)
     details = forms.CharField(label=_('Details'), required=False,
         widget=forms.widgets.Textarea(attrs={'rows': 2}))
+
 
 class TransferForm(DepositWithdrawForm):
     credit_account = forms.ChoiceField(label=_('To'), required=True)
@@ -66,3 +80,7 @@ class TransferForm(DepositWithdrawForm):
         if account:
             self.fields['credit_account'].choices = [(account.id, account.name)
                 for account in account.group.user_account_set]
+
+class RejectTransactionForm(forms.Form):
+    reason = forms.CharField(label=_('Reason'),
+        widget=forms.widgets.Textarea(attrs={'rows': 2}), required=True)

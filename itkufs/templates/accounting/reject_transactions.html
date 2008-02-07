@@ -9,7 +9,7 @@
     <label>Transactions:</label>
     <ul id="rejectionlist">
     {% for t in transactions %}
-        <li>{{ t }} <input type="hidden" name="transaction_{{ t.id }}" value="{{ t.id }}" /></li>
+        <li>{{ t }} <input type="hidden" name="transactions" value="{{ t.id }}" /></li>
     {% endfor %}
     </ul>
    {{ form.as_p }}
