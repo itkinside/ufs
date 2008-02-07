@@ -280,6 +280,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
 @limit_to_admin
 def approve_transactions(request, group, page='1', is_admin=False):
     """Approve transactions from members and other groups"""
+    # FIXME disapearing accounts upon POST
 
     # Get related transactions
     transactions = group.not_received_transaction_set
