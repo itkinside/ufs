@@ -614,12 +614,16 @@ class TransactionLog(models.Model):
         verbose_name_plural = _('transaction log entries')
 
     def __unicode__(self):
-        return _(u'%(type)s at %(timestamp)s by %(user)s: %(message)s') % {
+        d = {
             'type': self.get_type_display(),
-            'timestamp': self.timestamp.strftime('%Y-%m-%d %H:%M'),
             'user': self.user,
             'message': self.message,
         }
+        if self.timestamp is None:
+            d['timestamp'] = '(not saved)'
+        else:
+            d['timestamp'] = self.timestamp.strftime('%Y-%m-%d %H:%M')
+        return _(u'%(type)s at %(timestamp)s by %(user)s: %(message)s') % d
 
 databrowse.site.register(TransactionLog)
 
