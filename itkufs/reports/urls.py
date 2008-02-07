@@ -4,6 +4,12 @@ from django.views.generic import create_update
 from itkufs.reports.views import *
 
 urlpatterns = patterns('',
+
+    url(r'^(?P<group>[0-9a-z_-]+)/list/add-new/$',
+        edit_list, {'type': 'new'}, name='new-list-new'),
+    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<list>[0-9a-z_-]+)/edit-new/$',
+        edit_list, {'type': 'edit'}, name='edit-list-new'),
+
     # Lists
     url(r'^(?P<group>[0-9a-z_-]+)/list/add/$',
         alter_list, {'type': 'new'}, name='new-list'),

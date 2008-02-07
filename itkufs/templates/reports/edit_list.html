@@ -7,9 +7,14 @@
 
 <label>Columns:</label>
 <table class="tablelist">
-    <tr><th>Name</th> <th>Width</th> <th>Order</th></tr>
+    <tr>
+        <th>Name</th>
+        <th>Width</th>
+    </tr>
 {% for columnform in columnforms %}
-    <tr class="{% cycle evenrow,oddrow %}">{{ columnform.as_table_row }}</tr>
+    <tr class="{% cycle evenrow,oddrow %}">
+        {{ columnform.as_table_row }}
+    </tr>
 {% endfor %}
 </table>
 

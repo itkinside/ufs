@@ -13,6 +13,7 @@ from django.newforms import form_for_instance, form_for_model
 from itkufs.common.decorators import limit_to_group, limit_to_owner, limit_to_admin
 from itkufs.accounting.models import Group, Account
 from itkufs.reports.models import *
+from itkufs.reports.forms import *
 
 @login_required
 @limit_to_group
@@ -37,47 +38,28 @@ def show_list(request, group, list, is_admin=False):
 
 @login_required
 @limit_to_admin
-def new_list(request, group, is_admin=False):
-    """Create new list"""
-
-    columnforms = []
-
-    ListForm = form_for_model(List, fields=('name', 'slug', 'account_width', 'balance_width'))
-    ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width'))
-
-    listform = ListForm()
-    for i in range(0,5):
-        columnforms.append( ColumnForm(prefix='new%s'%i) )
-
-    return render_to_response('reports/edit_list.html',
-                              {
-                                  'is_admin': is_admin,
-                                  'listform': listform,
-                                  'columnforms': columnforms,
-
-                              },
-                              context_instance=RequestContext(request))
-
-@login_required
-@limit_to_admin
-def edit_list(request, group, slug, is_admin=False):
+def edit_list(request, group, list=None, is_admin=False, type='new'):
     """Edit list"""
+    if type == 'new':
+        columnforms = []
 
-    try:
-        list = group.list_set.get(slug=slug)
-    except List.DoesNotExist:
-        raise Http404
+        listform = ListForm()
+        for i in range(0,5):
+            columnforms.append( ColumnForm(data, prefix='new%s'%i) )
 
-    ListForm = form_for_instance(list, fields=('name', 'slug', 'account_width', 'balance_width'))
-    listform = ListForm()
+    elif type == 'edit':
+        if list is None:
+            raise Http404
 
-    columnforms = []
-    for c in list.column_set.all():
-        ColumnForm = form_for_instance(c, form=ColumnBaseForm, fields=('name', 'width'))
-        columnforms.append( ColumnForm(prefix=c.id) )
-    for i in range(0,3):
-        ColumnForm = form_for_model(ListColumn, form=ColumnBaseForm, fields=('name', 'width'))
-        columnforms.append( ColumnForm(prefix='new%s'%i) )
+        listform = ListForm(instance=list)
+
+        columnforms = []
+        for c in list.column_set.all():
+            columnforms.append( ColumnForm(instance=c) )
+        for i in range(0,3):
+            columnforms.append( ColumnForm(prefix='new%s'%i) )
+    else:
+        raise Exception('Unknown type for edit_list')
 
     return render_to_response('reports/edit_list.html',
                               {
