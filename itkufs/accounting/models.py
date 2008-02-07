@@ -496,7 +496,10 @@ class Transaction(models.Model):
             raise InvalidTransaction(_('Could not set transaction as payed'))
 
     def set_received(self, user, message=''):
-        if not self.is_rejected() and self.is_registered() and self.is_payed():
+        if not self.is_rejected() and self.is_registered():
+            if not self.is_payed():
+                self.set_payed(user, message=_('Auto: Is set to recieved, thus also payed.'))
+
             log = TransactionLog(type=self.RECEIVED_STATE, transaction=self)
             log.user = user
             if message.strip() != '':
