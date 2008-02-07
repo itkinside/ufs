@@ -143,6 +143,7 @@ class Group(models.Model):
 
 databrowse.site.register(Group)
 
+
 class AccountManager(models.Manager):
     def get_query_set(self):
         return super(AccountManager,self).get_query_set().extra(
@@ -162,6 +163,7 @@ class AccountManager(models.Manager):
                 """
             }
         )
+
 
 class Account(models.Model):
     ASSET_ACCOUNT = 'As'        # Eiendeler/aktiva
@@ -336,13 +338,16 @@ class InvalidTransaction(Exception):
     def __unicode__(self):
         return u'Invalid transaction: %s' % self.value
 
+
 class InvalidTransactionEntry(InvalidTransaction):
     def __unicode__(self):
         return u'Invalid transaction entry: %s' % self.value
 
+
 class InvalidTransactionLog(InvalidTransaction):
     def __unicode__(self):
         return u'Invalid transaction log: %s' % self.value
+
 
 class Settlement(models.Model):
     group = models.ForeignKey(Group, verbose_name=_('group'))
@@ -366,6 +371,7 @@ class Settlement(models.Model):
 
 databrowse.site.register(Settlement)
 
+
 class TransactionManager(models.Manager):
     def get_query_set(self):
         return super(TransactionManager,self).get_query_set().extra(
@@ -378,6 +384,7 @@ class TransactionManager(models.Manager):
                 """
             }
         )
+
 
 class Transaction(models.Model):
     UNDEFINED_STATE = ''
@@ -459,8 +466,6 @@ class Transaction(models.Model):
         super(Transaction, self).save()
 
     def set_registered(self, user, message=''):
-        self.save()
-
         if self.id is None:
             self.save()
 
@@ -536,19 +541,19 @@ class Transaction(models.Model):
 
     def get_registered(self):
         if self.is_registered():
-            return self.log_set.filter(type=self.REGISTERED_STATE)[0];
+            return self.log_set.filter(type=self.REGISTERED_STATE)[0]
 
     def get_payed(self):
         if self.is_payed():
-            return self.log_set.filter(type=self.PAYED_STATE)[0];
+            return self.log_set.filter(type=self.PAYED_STATE)[0]
 
     def get_received(self):
         if self.is_received():
-            return self.log_set.filter(type=self.RECEIVED_STATE)[0];
+            return self.log_set.filter(type=self.RECEIVED_STATE)[0]
 
     def get_rejected(self):
         if self.is_rejected():
-            return self.log_set.filter(type=self.REJECTED_STATE)[0];
+            return self.log_set.filter(type=self.REJECTED_STATE)[0]
 
     registered = property(get_registered, None, None)
     received = property(get_received, None, None)
@@ -578,6 +583,7 @@ class Transaction(models.Model):
         return possible_state
 
 databrowse.site.register(Transaction)
+
 
 class TransactionLog(models.Model):
     transaction = models.ForeignKey(Transaction,
@@ -612,6 +618,7 @@ class TransactionLog(models.Model):
         }
 
 databrowse.site.register(TransactionLog)
+
 
 class TransactionEntry(models.Model):
     transaction = models.ForeignKey(Transaction,
@@ -655,4 +662,3 @@ class TransactionEntry(models.Model):
         }
 
 databrowse.site.register(TransactionEntry)
-
