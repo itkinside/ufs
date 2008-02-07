@@ -3,7 +3,8 @@ from django.newforms.forms import BoundField
 from django.utils.safestring import mark_safe
 
 class CustomModelForm(ModelForm):
-    """Returns this form rendered as HTML <tr>s -- excluding the <table></table>."""
+    """Returns this form rendered as HTML <td>s -- excluding the
+       <table></table> and <tr></tr>."""
     def as_table_row(self):
         output = []
         for name, field in self.fields.items():

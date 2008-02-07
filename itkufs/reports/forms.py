@@ -1,5 +1,6 @@
 from django import newforms as forms
 from django.template.defaultfilters import slugify
+from django.newforms.util import ValidationError
 
 from itkufs.reports.models import *
 from itkufs.common.forms import CustomModelForm
@@ -27,6 +28,14 @@ class ColumnForm(CustomModelForm):
     class Meta:
         model = ListColumn
         fields = ('name', 'width')
+
+    def clean(self):
+        test = self.cleaned_data
+        if 'width' not in self.cleaned_data and 'name' not in self.cleaned_data:
+            del self._errors['width']
+            del self._errors['name']
+
+        return self.cleaned_data
 
     def save(self, list=None, **kwargs):
         original_commit = kwargs['commit']

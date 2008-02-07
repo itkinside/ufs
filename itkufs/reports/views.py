@@ -40,7 +40,6 @@ def show_list(request, group, list, is_admin=False):
 @limit_to_admin
 def edit_list(request, group, list=None, is_admin=False, type='new'):
     """Edit list"""
-
     if request.method == 'POST':
         data = request.POST
     else:
