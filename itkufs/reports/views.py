@@ -66,6 +66,20 @@ def edit_list(request, group, list=None, is_admin=False, type='new'):
     else:
         raise Exception('Unknown type for edit_list')
 
+    if data and listform.is_valid():
+        forms_ok = True
+        for column in columnforms:
+            if not column.is_valid():
+                forms_ok = False
+                break
+        if forms_ok:
+            list = listform.save(group=group)
+
+            for column in columnforms:
+                column.save(list=list)
+
+            raise Exception()
+
     return render_to_response('reports/edit_list.html',
                               {
                                   'is_admin': is_admin,

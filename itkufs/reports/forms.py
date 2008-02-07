@@ -11,7 +11,7 @@ class ListForm(CustomModelForm):
         exclude = ('slug', 'group')
 
     def save(self, group=None, **kwargs):
-        original_commit = kwargs['commit']
+        original_commit = kwargs.pop('commit', True)
         kwargs['commit'] = False
         list = super(ListForm, self).save(**kwargs)
 
@@ -25,6 +25,7 @@ class ListForm(CustomModelForm):
         return list
 
 class ColumnForm(CustomModelForm):
+    # FIXME Needs more debuging with respect to clean, se view edit_list
     class Meta:
         model = ListColumn
         fields = ('name', 'width')
@@ -34,16 +35,17 @@ class ColumnForm(CustomModelForm):
         if 'width' not in self.cleaned_data and 'name' not in self.cleaned_data:
             del self._errors['width']
             del self._errors['name']
+            self._errors['__all__'] = 'Empty form'
 
         return self.cleaned_data
 
     def save(self, list=None, **kwargs):
-        original_commit = kwargs['commit']
+        original_commit = kwargs.pop('commit', True)
         kwargs['commit'] = False
         column = super(ColumnForm, self).save(**kwargs)
 
         if list:
-           column.group = group
+           column.list = list
 
         if original_commit:
             column.save()
