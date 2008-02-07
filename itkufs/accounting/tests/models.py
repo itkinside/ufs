@@ -23,9 +23,6 @@ class GroupTestCase(unittest.TestCase):
         for account in self.accounts:
             account.save()
 
-        # FIXME
-        Transaction.objects.all().delete()
-
         self.transactions = {
             'Reg': Transaction(group=self.group),
             'Pay': Transaction(group=self.group),
@@ -123,6 +120,7 @@ class GroupTestCase(unittest.TestCase):
         set = self.group.not_rejected_transaction_set
         self.assertEqual(set.count(), 3)
 
+
 class AccountTestCase(unittest.TestCase):
     # FIXME: Test all account properties
 
@@ -141,9 +139,6 @@ class AccountTestCase(unittest.TestCase):
         for account in self.accounts:
             account.save()
         self.account = self.accounts[0]
-
-        # FIXME
-        #Transaction.objects.all().delete()
 
         self.transactions = {
             'Reg': Transaction(group=self.group),
@@ -242,15 +237,12 @@ class AccountTestCase(unittest.TestCase):
         set = self.account.not_rejected_transaction_set
         self.assertEqual(set.count(), 3)
 
+
 class TransactionTestCase(unittest.TestCase):
     def setUp(self):
-        # FIXME
-        #User.objects.all().delete()
         self.user = User(username='alice')
         self.user.save()
 
-        # FIXME
-        #Group.objects.all().delete()
         self.group = Group(name='Group 1', slug='group1')
         self.group.save()
 
@@ -419,10 +411,6 @@ class TransactionTestCase(unittest.TestCase):
         self.assertRaises(InvalidTransaction, transaction.set_received,
             user=self.user)
 
-    def testOnlyOneGroupOnEachSideOfTransaction(self):
-        """FIXME: Write docstring"""
-        self.fail('Test not implemented')
-
 class LogTestCase(unittest.TestCase):
     def setUp(self):
         self.user = User(username='alice')
@@ -463,6 +451,7 @@ class LogTestCase(unittest.TestCase):
             if key != 'Reg':
                 log1.save()
                 self.assertRaises(InvalidTransactionLog, log1.save)
+
 
 class EntryTestCase(unittest.TestCase):
     def setUp(self):
@@ -514,9 +503,12 @@ class EntryTestCase(unittest.TestCase):
         self.entry.credit = 0
         self.assertRaises(InvalidTransactionEntry, self.entry.save)
 
+
 class SettlementTestCase(unittest.TestCase):
     # FIXME: Test all settlement properties
 
     def setUp(self):
         pass
 
+    def breakDown(self):
+        pass
