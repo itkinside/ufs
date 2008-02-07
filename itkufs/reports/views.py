@@ -40,6 +40,12 @@ def show_list(request, group, list, is_admin=False):
 @limit_to_admin
 def edit_list(request, group, list=None, is_admin=False, type='new'):
     """Edit list"""
+
+    if request.method == 'POST':
+        data = request.POST
+    else:
+        data = None
+
     if type == 'new':
         columnforms = []
 
@@ -51,13 +57,13 @@ def edit_list(request, group, list=None, is_admin=False, type='new'):
         if list is None:
             raise Http404
 
-        listform = ListForm(instance=list)
+        listform = ListForm(data, instance=list)
 
         columnforms = []
         for c in list.column_set.all():
-            columnforms.append( ColumnForm(instance=c) )
+            columnforms.append( ColumnForm(data, instance=c, prefix=c.id) )
         for i in range(0,3):
-            columnforms.append( ColumnForm(prefix='new%s'%i) )
+            columnforms.append( ColumnForm(data, prefix='new%s'%i) )
     else:
         raise Exception('Unknown type for edit_list')
 
