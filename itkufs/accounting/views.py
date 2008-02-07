@@ -195,18 +195,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
 
     if transfer_type == 'transfer':
         title = _('Transfer from account')
-        form = TransferForm(data, group=group)
-    elif transfer_type == 'register' and is_admin:
-        title = 'This string is not used'
-        form = TransactionForm(data,
-            debit_options={
-                'user_accounts': True,
-                'group_accounts': True,
-            },
-            credit_options={
-                'user_accounts': True,
-                'group_accounts': True,
-            })
+        form = TransferForm(data, account=account)
     elif transfer_type == 'deposit':
         title = _('Deposit to account')
         form = DepositWithdrawForm(data)
@@ -266,34 +255,6 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
                 transaction.set_payed(user=request.user)
                 transaction.set_received(user=request.user)
 
-        elif transfer_type == 'register' and is_admin:
-            # General transaction by group admin
-
-            credit_account = Account.objects.get(
-                id=form.cleaned_data['credit_account'])
-            debit_account = Account.objects.get(
-                id=form.cleaned_data['debit_account'])
-
-            transaction.entry_set.add(
-                TransactionEntry(account=debit_account, debit=amount))
-            transaction.entry_set.add(
-                TransactionEntry(account=credit_account, credit=amount))
-
-            if 'registered' in form.data:
-                transaction.set_registered(user=request.user, message=details)
-
-            # FIXME sanity check please
-            if 'payed' in form.data:
-            # and debit_account.group.admins.filter(id=request.user.id).count
-            # elns
-                transaction.set_payed(user=request.user)
-
-            # FIXME sanity check please
-            if 'received' in form.data:
-                transaction.set_received(user=request.user)
-
-            return HttpResponseRedirect(reverse('group-summary',
-                args=[group.slug]))
         else:
             return HttpResponseForbidden(
                 _('This page may only be viewed by group admins.'))
