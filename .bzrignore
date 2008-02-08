@@ -4,3 +4,4 @@ itkufs/locale/no/LC_MESSAGES/*.mo
 itkufs/locale/en/LC_MESSAGES/*.mo
 media/logos/*
 itkufs/settings_local.py
+itkufs/settings/local.py
