@@ -280,15 +280,10 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
 @limit_to_admin
 def approve_transactions(request, group, page='1', is_admin=False):
     """Approve transactions from members and other groups"""
-    # FIXME disapearing accounts upon POST
-
-    # Get related transactions
-    transactions = group.not_received_transaction_set
-
-    forms = []
+    transactions = []
     to_be_rejected = []
 
-    for t in transactions:
+    for t in group.not_received_transaction_set:
         choices = t.get_valid_logtype_choices()
 
         if request.method == 'POST':
@@ -306,13 +301,17 @@ def approve_transactions(request, group, page='1', is_admin=False):
                     t.set_received(user=request.user)
                 elif change_to == 'Rej':
                     to_be_rejected.append((t))
+
+                if change_to != 'Rej' and change_to != 'Rec':
+                    transactions.append((t, ChangeTransactionForm(prefix="transaction%d" %
+                        t.id, choices=t.get_valid_logtype_choices())))
             else:
-                forms.append(form)
+                transactions.append((t,form))
 
         else:
-            form = ChangeTransactionForm(prefix="transaction%d" % t.id,
-                choices=choices)
-            forms.append(form)
+            form = ChangeTransactionForm(choices=choices,
+                prefix="transaction%d" % t.id)
+            transactions.append((t,form))
 
     if to_be_rejected:
         form = RejectTransactionForm()
@@ -324,8 +323,6 @@ def approve_transactions(request, group, page='1', is_admin=False):
                                 'form': form,
                            },
                            context_instance=RequestContext(request))
-
-    transactions = zip(transactions, forms)
 
     return render_to_response('accounting/approve_transactions.html',
                        {
