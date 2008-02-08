@@ -48,7 +48,7 @@ def edit_list(request, group, list=None, is_admin=False, type='new'):
     if type == 'new':
         columnforms = []
 
-        listform = ListForm()
+        listform = ListForm(data)
         for i in range(0,5):
             columnforms.append( ColumnForm(data, prefix='new%s'%i) )
 
