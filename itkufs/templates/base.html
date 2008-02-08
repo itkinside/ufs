@@ -27,17 +27,7 @@
 <div id="menu">
 {% block menu %}
 <ul id="menulist">
-    <li><a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">{% trans "My account" %}</a>
-    {% ifnotequal request.user.account_set.count 0 %}
-    {% ifnotequal request.user.account_set.count 1 %}
-    <ul>
-        {% for account in request.user.account_set.all %}
-        <li><a href="{% url account-summary account.group.slug,account.slug %}">{{ account.group.name }}</a></li>
-        {% endfor %}
-    </ul>
-    {% endifnotequal %}
-    {% endifnotequal %}
-    </li>
+    <li><a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">{% trans "My account" %}</a></li>
 {% if not request.session.my_account.group.admin_only or is_admin %}
     <li{% if request.session.my_account.group.admin_only %} class="admin"{% endif %}>
         <a href="{% url group-summary request.session.my_account.group.slug %}">
@@ -86,10 +76,28 @@
 <span>&bull;</span>
 {% trans "User:" %} {{ user.username }}
 
+{% ifnotequal request.user.account_set.count 0 %}
+{% ifnotequal request.user.account_set.count 1 %}
+<span>&bull;</span>
+<form action="{% url account-switch request.session.my_account.group.slug %}" method="post">
+<div style="display: inline;">
+{% trans "Group:" %}
+<select name="group">
+    {% for account in request.user.account_set.all %}
+    <option value="{{ account.group.slug }}"{% ifequal account.group.slug request.session.my_account.group.slug %} selected="selected"{% endifequal %}>
+            {{ account.group }}</option>
+    {% endfor %}
+</select>
+<button type="submit">{% trans "Go" %}</button>
+</div>
+</form>
+{% endifnotequal %}
+{% endifnotequal %}
+
 {% if group.email %}
 <span>&bull;</span>
 {% trans "Contact:" %}
-<a href="mailto:{{group.email}}">{{group.email}}</a>
+<a href="mailto:{{ group.email }}">{{ group.email }}</a>
 {% endif %}
 
 <span>&bull;</span>

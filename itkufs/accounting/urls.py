@@ -22,6 +22,10 @@ urlpatterns = patterns('',
 
     ### Account
 
+    # Switch to another account
+    url(r'^(?P<group>[0-9a-z_-]+)/account/switch/$',
+        account_switch, name='account-switch'),
+
     # Summary
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/$',
         account_summary, name='account-summary'),

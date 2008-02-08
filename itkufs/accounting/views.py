@@ -9,10 +9,11 @@ from django.core.xheaders import populate_xheaders
 from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
 from django.newforms import form_for_instance, form_for_model
-from django.shortcuts import render_to_response
+from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _, ungettext
 from django.views.generic.list_detail import object_list, object_detail
+from django.db import transaction as db_transaction
 
 from itkufs.common.decorators import limit_to_group, limit_to_owner, limit_to_admin
 from itkufs.accounting.models import *
@@ -29,6 +30,18 @@ def group_summary(request, group, is_admin=False):
         extra_context={'is_admin': is_admin})
     populate_xheaders(request, response, Group, group.id)
     return response
+
+@login_required
+def account_switch(request, group, is_admin=False):
+    """Switch to account summary for the selected account"""
+
+    if request.method != 'POST':
+        raise Http404
+
+    group_slug = request.POST['group']
+    account = get_object_or_404(Account, owner=request.user, group__slug=group_slug)
+    url = reverse('account-summary', args=(account.group.slug, account.slug))
+    return HttpResponseRedirect(url)
 
 @login_required
 @limit_to_owner
