@@ -77,7 +77,7 @@ img {
 	border-bottom: 3px solid #d3d7cf;
 }
 
-/* Drop-down menu */
+/* Top menu */
 #menu {
 	background: #eeeeec; /* To fill width of menu with color */
 	margin: 0 -1em;
@@ -99,11 +99,6 @@ img {
 	padding: 0.3em 0.5em;
 	text-decoration: none;
 }
-#menu li li a {
-	background: #eeeeec;
-	color: black;
-}
-
 #menu a:hover {
 	background: #d3d7cf;
 	color: black;
@@ -119,16 +114,6 @@ img {
 	position: relative;
 	width: 8em;
 }
-#menu li ul {
-	display: none;
-	position: absolute;
-}
-#menu li:hover ul,
-#menu li.over ul /* The over class is an IE-hack */
-{
-	display: block;
-}
-
 #menu #help {
 	float: right;
 	text-align: right;
