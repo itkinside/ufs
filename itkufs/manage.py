@@ -1,4 +1,11 @@
-#!/usr/bin/python
+#! /usr/bin/env python
+
+import os.path
+import sys
+
+project_base = os.path.abspath(os.path.dirname(os.environ['_']) + '/../')
+sys.path.insert(0, project_base)
+
 from django.core.management import execute_manager
 try:
     import settings # Assumed to be in the same directory.

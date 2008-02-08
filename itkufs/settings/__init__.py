@@ -1,5 +1,9 @@
 # Django settings for itkufs project.
 
+# DATABASE_* and SECRET_KEY are included from a file which
+# is not committed to VCS
+from itkufs.settings.local import *
+
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 TEMPLATE_STRING_IF_INVALID = ''
@@ -9,13 +13,6 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
-DATABASE_ENGINE = ''           # 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
-DATABASE_NAME = ''             # Or path to database file if using sqlite3.
-DATABASE_USER = ''             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 # Local time zone for this installation. All choices can be found here:
 # http://www.postgresql.org/docs/current/static/datetime-keywords.html#DATETIME-TIMEZONE-SET-TABLE
@@ -45,9 +42,6 @@ MEDIA_URL = '/media/'
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/admin/'
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'r%5-zgi)*&2gu49)y*sd!90ktse_7%-qjeneen2ufk3&4ub5ff'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
