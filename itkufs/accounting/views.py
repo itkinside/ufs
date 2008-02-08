@@ -377,19 +377,55 @@ def reject_transactions(request, group, is_admin=False):
 
 @login_required
 @limit_to_admin
+@db_transaction.commit_manually
 def create_transaction(request, group, is_admin=False):
     """Admin view for creating transactions"""
 
-    # FIXME Handle post
-    form = TransactionForm()
-    user_forms = [(account, EntryForm(prefix=account.id, auto_id=False)) for account in group.user_account_set]
-    group_forms = [(account, EntryForm(prefix=account.id, auto_id=False)) for account in group.group_account_set]
+    if request.method == 'POST':
+        post = request.POST
+    else:
+        post = None
+
+    settlement = SettlementForm(post, prefix='settlement')
+    user_forms = [(account, EntryForm(post, prefix=account.id))
+        for account in group.user_account_set]
+    group_forms = [(account, EntryForm(post, prefix=account.id))
+        for account in group.group_account_set]
+
+    if post:
+        valid = True
+
+        # FIXME support settlment 
+        transaction = Transaction(group=group)
+        transaction.save()
+
+        for account, form in user_forms:
+            if not form.is_valid():
+                valid = False
+            else:
+                if form.cleaned_data['credit'] > 0:
+                    transaction.entry_set.add(TransactionEntry(account=account, credit=form.cleaned_data['credit'], debit=0))
+                elif form.cleaned_data['debit']:
+                    transaction.entry_set.add(TransactionEntry(account=account, debit=form.cleaned_data['debit'], credit=0))
+        for account, form in group_forms:
+            if not form.is_valid():
+                valid = False
+            else:
+                if form.cleaned_data['credit'] > 0:
+                    transaction.entry_set.add(TransactionEntry(account=account, credit=form.cleaned_data['credit'], debit=0))
+                elif form.cleaned_data['debit']:
+                    transaction.entry_set.add(TransactionEntry(account=account, debit=form.cleaned_data['debit'], credit=0))
+
+        if valid:
+            db_transaction.commit()
+        else:
+            db_transaction.rollback()
 
     return render_to_response('accounting/transaction_form.html',
                               {
                                 'is_admin': is_admin,
                                 'group': group,
-                                'form': form,
+                                'form': settlement,
                                 'group_forms': group_forms,
                                 'user_forms': user_forms,
                               },

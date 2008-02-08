@@ -4,7 +4,7 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 
 from itkufs.accounting.models import *
-from itkufs.common.forms import CustomModelForm
+from itkufs.common.forms import CustomModelForm, CustomForm
 
 class AccountForm(CustomModelForm):
     class Meta:
@@ -44,7 +44,7 @@ class GroupForm(CustomModelForm):
         return group
 
 
-class TransactionForm(CustomModelForm):
+class SettlementForm(CustomModelForm):
     class Meta:
         model = Transaction
         fields = ('settlement',)
@@ -59,10 +59,9 @@ class ChangeTransactionForm(forms.Form):
     state = forms.CharField(max_length=3, label='', required=False)
 
 
-class EntryForm(CustomModelForm):
-    class Meta:
-        model = TransactionEntry
-        fields = ('debit', 'credit')
+class EntryForm(CustomForm):
+    debit = forms.DecimalField(min_value=0, required=False)
+    credit = forms.DecimalField(min_value=0, required=False)
 
 
 class DepositWithdrawForm(forms.Form):
