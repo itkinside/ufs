@@ -8,39 +8,30 @@
 <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>µFS - {% block title %}Foo Bar{% endblock %}</title>
-        <link rel="stylesheet" type="text/css" href="{% url media "style/reset-min.css" %}" />
-        <link rel="stylesheet" type="text/css" href="{% url media "style/fonts-min.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% url media "style/reset-fonts-grids.css" %}" />
         <link rel="stylesheet" type="text/css" href="{% url media "style/base.css" %}" />
         <link rel="shortcut icon" type="image/png" href="{% url media "images/favicon.png" %}" />
         <script type="text/javascript" src="{% url jsi18n %}"></script>
         <script type="text/javascript" src="{% url media "js/ufs.js" %}"></script>
         {% block extrahead %}{% endblock %}
-
 </head>
+
 <body>
 
-<div id="container">
+<div id="doc3" class="yui-t1">
+    <div id="hd">
 
-<h1 id="head" style="background: url({% url media "images/logo.png" %}) top right no-repeat;">
-{% trans "&micro;FS Microfinance System" %}</h1>
+<h1 style="background: url({% url media "images/logo.png" %}) top left no-repeat;">
+{% trans "&micro;FS Microfinance System" %}
+</h1>
 
-<div id="menu">
-{% block menu %}
-<ul id="menulist">
-    <li><a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">{% trans "My account" %}</a></li>
-{% if not request.session.my_account.group.admin_only or is_admin %}
-    <li{% if request.session.my_account.group.admin_only %} class="admin"{% endif %}>
-        <a href="{% url group-summary request.session.my_account.group.slug %}">
-        {% trans "My group" %}{% if is_admin and group.not_payed_transaction_set.count %}*{% endif %}</a>
-    </li>
-    {% endif %}
-    <li id="help"><a href="{% url help request.session.my_account.group.slug %}">{% trans "Help" %}</a></li>
-</ul>
-{% endblock %}
-</div>
+    </div>
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                <div class="yui-g">
 
-<div id="content">
-<h1>{% block header %}Foo Bar{% endblock %}</h1>
+<h2>{% block header %}Foo Bar{% endblock %}</h2>
 
 {% if messages %}
 <ul id="messages">
@@ -50,17 +41,7 @@
 </ul>
 {% endif %}
 
-{% block outertabs %}
-<div id="tabs">
-    <ul>
-    {% block tabs %}
-        <li>Foo</li>
-        <li>Bar</li>
-    {% endblock %}
-    </ul>
-</div>
-{% endblock %}
-
+<div id="content">
 {% block content %}
 <h2>Header 2</h2>
 {% lorem 2 p %}
@@ -69,7 +50,48 @@
 {% endblock %}
 </div>
 
-<div id="footer">
+                </div>
+            </div>
+        </div>
+        <div class="yui-b">
+
+<div id="menu">
+{% block menu %}
+
+<ul class="menulist" id="mainmenu">
+    <li>
+        <a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">
+        {% trans "My account" %}</a>
+    </li>
+
+{% if not request.session.my_account.group.admin_only or is_admin %}
+    <li{% if request.session.my_account.group.admin_only %} class="admin"{% endif %}>
+        <a href="{% url group-summary request.session.my_account.group.slug %}">
+        {% trans "My group" %}{% if is_admin and group.not_payed_transaction_set.count %}*{% endif %}</a>
+    </li>
+{% endif %}
+
+    <li id="help">
+        <a href="{% url help request.session.my_account.group.slug %}">
+        {% trans "Help" %}</a>
+    </li>
+</ul>
+
+<p>Submenu (old tabs)</p>
+
+<ul class="menulist" id="submenu">
+{% block tabs %}
+    <li>Foo</li>
+    <li>Bar</li>
+{% endblock %}
+</ul>
+{% endblock %}
+</div>
+
+        </div>
+    </div>
+    <div id="ft">
+
 {% block footer %}
 µFS v1.0-&alpha;{{ BZRREV }}
 
@@ -115,8 +137,8 @@
 </form>
 
 {% endblock %}
-</div>
 
+    </div>
 </div>
 
 {% if debug %}

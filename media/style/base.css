@@ -1,61 +1,55 @@
+/* Basic block elements */
 body {
-	background: #888A85;
-	color: black;
-	margin: 0;
+	background: white;
+	color: #444;
+	padding: 1em;
 }
-
-/* Headers */
-h1#head {
-	height: 40px; /* Height of background logo */
+h1, h2, h3 {
+	font-family: Georgia, serif;
 }
-
 h1 {
-	/* background: ...; */ /* Defined in template, as logo url is needed */
-	font-size: 200%;
-	margin: 0.2em 0;
+	/* background: ...; */ /* Defined in template, as logo URL is needed */
+	font-size: 2.5em;
+	min-height: 40px;
+	padding-left: 50px; /* To make place for background */
 }
 h2 {
-	font-size: 138.5%;
-	margin: 0.5em 0;
+	font-size: 24px;
+	margin: 0.2em 0;
 }
 h3 {
-	font-size: 123.1%;
-	font-weight: bold;
-	margin: 0.5em 0 0.3em 0;
+	font-size: 20px;
+	margin: 0.2em 0;
 }
-
-/* Block elements */
 p {
-	margin: 0.7em 0;
-}
-table {
-	margin: 0.7em 0;
-}
-caption {
-	font-weight: bold;
+	margin: 0.5em 0;
 }
 ul {
-	list-style-type: disc;
-	padding-left: 1em;
-	margin: 0.3em 0 1em;
+	margin: 0.5em 0;
 }
-ul ul {
-	list-style-type: square;
+ul li {
+	margin-left: 1.5em;
+	list-style: square outside;
 }
-ul ul ul {
-	list-style-type: circle;
+ul ul li {
+	list-style: disc;
 }
-
+ul ul ul li {
+	list-style: circle;
+}
 dt {
 	font-weight: bold;
 }
 dd {
-	margin-left: 0.5em;
+	margin-left: 1em;
 }
 
-/* Inline elements */
+/* Basic inline elements */
 a {
 	background: transparent;
+	color: #204a87;
+}
+a:hover {
 	color: black;
 }
 em {
@@ -65,140 +59,95 @@ img {
 	vertical-align: middle;
 }
 
-/* Page container */
-#container {
-	background: white;
-	margin: 0 auto;
-	min-width: 740px;
-	max-width: 60em;
-	padding: 1em;
-	border-left: 3px solid #d3d7cf;
-	border-right: 3px solid #d3d7cf;
-	border-bottom: 3px solid #d3d7cf;
+/* Page header */
+#hd {
+	border-bottom: 1px solid #ccc;
+	padding: 0.5em;
 }
 
-/* Top menu */
-#menu {
-	background: #eeeeec; /* To fill width of menu with color */
-	margin: 0 -1em;
-	padding: 0 1em;
-	height: 1.85em; /* Text height + menu top/bottom padding */
-	border-bottom: 1px solid #d3d7cf;
-	border-top: 1px solid #d3d7cf;
+/* Page footer */
+#ft {
+	border-top: 1px solid #ccc;
+	padding-top: 0.5em;
 }
-#menu a {
-	background: transparent;
-	color: black;
-	font-size: 116%;
-
-	/* Make links fill li */
-	display: block;
-	line-height: 1em;
-	width: 100%;
-
-	padding: 0.3em 0.5em;
-	text-decoration: none;
-}
-#menu a:hover {
-	background: #d3d7cf;
-	color: black;
-}
-#menu ul {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-#menu li {
-	float: left;
-	margin-right: 2em;
-	position: relative;
-	width: 8em;
-}
-#menu #help {
-	float: right;
-	text-align: right;
-}
-
-/* Tab menu */
-#tabs ul {
-	border-bottom: 1px solid #d3d7cf;
-	margin: 0;
-	padding: 0.5em 0 0.3em 0.5em;
-}
-#tabs ul li {
-	display: inline;
-	list-style: none;
-	margin: 0;
-	padding: 0 0.5em 0 0;
-}
-#tabs ul li a {
-	background: #eeeeec;
-	border: 1px solid #d3d7cf;
-	margin: 0;
-	padding: 0.3em 1em;
-	text-decoration: none;
-}
-#tabs ul li a:hover {
-	background: #d3d7cf;
-	color: black;
-}
-
-/* Main content block */
-#content {
-	/* Get clear of the floating menu */
-	clear: left;
-	margin: 0.5em 0;
-}
-
-/* Footer block */
-#footer {
-	border-top: 1px solid #d3d7cf;
-	clear: both;
-	font-size: 85%;
-	padding-top: 1em;
-}
-#footer span {
+#ft span {
 	font-weight: bold;
 	padding: 0 0.5em;
 }
-#footer form {
+#ft form {
 	display: inline;
 }
-#footer select {
+#ft select {
 	width: auto;
 }
-#footer button {
+#ft button {
 	margin-left: 0;
 }
 
-#messages {
-	margin-top: 1em;
-	margin-left: 1em;
+/* Menu area */
+#bd > .yui-b {
+	padding: 0.5em;
+}
+#menu {
+}
+.menulist {
+	margin-bottom: 0.5em;
 }
 
-/* Tables */
-.tablelist th, .tabledetails th {
-	background: #d3d7cf;
-	color: black;
-	border: 1px solid #babdb6;
+/* Content area */
+#yui-main > .yui-b {
+	border-left: 1px solid #ccc;
+	padding: 1em;
+	min-height: 20em;
+}
+#content {
+}
+
+/* Debug area */
+#debug {
+	margin: 1em 0;
+	text-align: left;
+}
+
+/* Page layouts */
+div.coltwo {
+	float: left;
+	padding-right: 1em;
+	width: 48%;
+}
+div.colthree {
+	float: left;
+	padding-right: 1em;
+	width: 32%;
+}
+
+/* Table layouts */
+caption {
+	font-weight: bold;
+	margin: 0.5em 0;
+}
+table {
+	margin: 0.5em 0;
+}
+table th {
+	background: #f0f0f0;
+	border: 1px solid #ccc;
 	padding: 0.3em;
 	font-weight: bolder;
 }
-.tablelist td, .tabledetails td {
-	border: 1px solid #babdb6;
+table td {
+	border: 1px solid #ccc;
 	padding: 0.3em;
 	vertical-align: top;
 }
-tr.evenrow {
+table tr.evenrow {
 	background: white;
-	color: black;
 }
-tr.oddrow {
+table tr.oddrow {
 	background: #eeeeec;
-	color: black;
 }
 
-/* Alignment */
+/* Content layout */
 .align_left {
 	text-align: left;
 }
@@ -208,17 +157,12 @@ tr.oddrow {
 .align_right {
 	text-align: right;
 }
-
-/* Float */
 .float_left {
 	float: left;
 }
-
 .float_right {
 	float: right;
 }
-
-/* Colorization */
 .pending, .comment, .comment a, .none {
 	background: transparent;
 	color: #888a85;
@@ -237,163 +181,115 @@ tr.oddrow {
 .disabled td {
 	text-decoration: line-through;
 }
-.admin a, .admin a:hover {
+.admin a {
+	background: transparent;
 	color: #900 !important;
 }
-
-/* Columns */
-div.coltwo {
-	width: 48%;
-	padding-right: 1em;
-	float: left;
-}
-div.colthree {
-	width: 32%;
-	padding-right: 1em;
-	float: left;
-}
-
-/* Error list */
-ul.errorlist {
+.admin a:hover {
 	background: transparent;
-	color: #c00;
-	padding: 0;
-	margin-left: 9em;
-	margin-bottom: -0.6em;
-	list-style-type: none;
+	color: #500 !important;
 }
 
 /* Forms */
 label {
-	display: block;
-	width: 8em;
-	font-weight: bold;
-	float: left;
-	clear: both;
-	text-align: right;
-	margin-right: 1em;
+        display: block;
+        width: 8em;
+        font-weight: bold;
+        float: left;
+        clear: both;
+        text-align: right;
+        margin-right: 1em;
 }
 input, select, textarea {
-	width: 15em;
+        width: 15em;
 }
 input, select, textarea, button {
-	border: 1px solid #2e3436;
-	font-size: 100%;
+        border: 1px solid #2e3436;
+        font-size: 100%;
 }
 input:focus, select:focus, textarea:focus {
-	background: #ffd;
+        background: #ffd;
 }
 input:hover, select:hover, textarea:hover, button:hover {
-	border: 1px solid #555753;
+        border: 1px solid #555753;
 }
-
 button {
-	background: #d3d7cf;
-	color: black;
-	margin-left: 9em;
+        background: #d3d7cf;
+        color: black;
+        margin-left: 9em;
 }
 
+/* Form hacks -- let the mayhem begin */
+/* FIXME: adamcik, please cleanup!!1 -jodal, 2008-03-10 */
 #rejectionlist {
-	margin-left: 9em;
+        margin-left: 9em;
 }
-
 .plainform button {
-	margin-left: 0.2em;
+        margin-left: 0.2em;
 }
-
 #accounting_approve_transactions button {
-	margin-left: 0 !important;
-	margin-right: 0.5em;
+        margin-left: 0 !important;
+        margin-right: 0.5em;
 }
 input#id_payed, #accounting_approve_transactions table input,
 input#id_registered, input#id_received, form #delete_logo,
 input#id_placeholder, input#id_active, input#id_ignore_block_limit,
 input#id_double, input#id_ignore_blocked {
-	/* checkboxes */
-	width: auto;
-	border: 0;
+	/* Fix all checkboxes */
+        width: auto;
+        border: 0;
 }
 #transactions table select {
-	width: 6em;
+        width: 6em;
 }
 #editlist table input {
-	width: auto;
+        width: auto;
 }
-
 form p {
 	clear: left;
 }
-
 #createtransaction input {
-	width: 4em;
-	text-align: right;
+        width: 4em;
+        text-align: right;
 }
 #createtransaction .debit_sum,
 #createtransaction .credit_sum {
-	text-align: right;
+        text-align: right;
 }
 #createtransaction .sum {
-	font-weight: bold;
+        font-weight: bold;
 }
 #createtransaction #debit_sum, #createtransaction #credit_sum {
-	text-align: right;
+        text-align: right;
 }
-
 /* Account/group summary */
 #accountinfo, #groupinfo, #actions, #lists, #transaction_actions, #statements {
-	float: left;
-	margin-right: 3em;
+        float: left;
+        margin-right: 3em;
 }
 #transactions, #accounts, #accounts .comment, #transactions table {
-	clear: both;
+        clear: both;
 }
-
 /* New list page */
 #listcolumns input {
-	background: transparent;
-	width: auto;
+        background: transparent;
+        width: auto;
 }
 
-/* Query debug */
-div#debug {
-	background: transparent;
-	color: white;
-	margin: 1em;
-}
-div#debug table {
-	background: transparent;
-	color: black;
-	border: 2px solid #d3d7cf;
-}
-
-div#debug table#query_table, div#debug table#query_table thead {
-	background: white;
-	color: black;
-}
-div#debug table#query_table th {
-	font-weight: bolder;
-	padding: 0.5em;
-	text-align: left;
-}
-div#debug table#query_table td {
-	padding: 0.5em;
-	text-align: left;
-	vertical-align: top;
-}
-
+/* Print style */
 @media print {
-	#head, #menu, #debug {
-		display: none;
-	}
-	#container {
-		border: 0;
-	}
-	#tabs ul li a {
-		display: none;
-	}
-	#tabs ul li a.active {
-		display: inline;
-		border: 0;
-		font-size: 150%;
-	}
+        #apphead, #menu, #debug {
+                display: none;
+        }
+        #container {
+                border: 0;
+        }
+        #tabs ul li a {
+                display: none;
+        }
+        #tabs ul li a.active {
+                display: inline;
+                border: 0;
+                font-size: 150%;
+        }
 }
