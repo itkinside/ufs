@@ -277,6 +277,7 @@ form p {
 }
 
 /* Print style */
+/* FIXME: Not updated after introduction of YUI Grids */
 @media print {
         #apphead, #menu, #debug {
                 display: none;
