@@ -1,6 +1,6 @@
 # Django settings for itkufs project.
 
-# DATABASE_* and SECRET_KEY are included from a file which
+# PROJECT_BASE, DATABASE_* and SECRET_KEY are included from a file which
 # is not committed to VCS
 from itkufs.settings.local import *
 
@@ -32,7 +32,7 @@ AUTHENTICATION_BACKENDS = (
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/home/cassarossa/itk/felles/itkufs/media/'
+MEDIA_ROOT = PROJECT_BASE + 'media/'
 
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"
@@ -64,7 +64,7 @@ ROOT_URLCONF = 'itkufs.urls'
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates".
     # Always use forward slashes, even on Windows.
-    '/home/cassarossa/itk/felles/itkufs/itkufs/templates/',
+    PROJECT_BASE + 'itkufs/templates/',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -106,4 +106,4 @@ LANGUAGES = (
 )
 
 # Development version numbering
-BZR_BRANCH_DIR = '/home/cassarossa/itk/felles/itkufs/'
+BZR_BRANCH_DIR = PROJECT_BASE
