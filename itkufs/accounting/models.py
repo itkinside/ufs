@@ -499,7 +499,8 @@ class Transaction(models.Model):
     def set_received(self, user, message=''):
         if not self.is_rejected() and self.is_registered():
             if not self.is_payed():
-                self.set_payed(user, message=_('Auto: Is set to recieved, thus also payed.'))
+                self.set_payed(user,
+                    message=ugettext('Auto: Is set to recieved, thus also payed.'))
 
             log = TransactionLog(type=self.RECEIVED_STATE, transaction=self)
             log.user = user
