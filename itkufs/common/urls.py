@@ -9,6 +9,6 @@ urlpatterns = patterns('',
         login_user, name='login'),
 
     # Help
-    url(r'^(?P<group>[0-9a-z_-]+)/help/$',
-        static_page, {'template': 'accounting/help.html'}, name='help'),
+    url(r'help/$',
+        static_page, {'template': 'common/help.html'}, name='help'),
 )

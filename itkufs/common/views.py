@@ -33,10 +33,9 @@ def login_user(request):
                               context_instance=RequestContext(request))
 
 @login_required
-def static_page(request, group, template, is_admin=False):
+def static_page(request, template, is_admin=False):
     return render_to_response(template,
                               {
-                                  'group': group,
                                   'is_admin': is_admin,
                               },
                               context_instance=RequestContext(request))
