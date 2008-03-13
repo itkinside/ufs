@@ -15,13 +15,16 @@ h1 {
 }
 h2 {
 	font-size: 24px;
-	margin: 0.2em 0;
+	margin: 0.3em 0;
 }
 h3 {
 	font-size: 20px;
 	margin: 0.2em 0;
 }
 p {
+	margin: 0.5em 0;
+}
+form {
 	margin: 0.5em 0;
 }
 ul {
@@ -65,10 +68,17 @@ img {
 	padding: 0.5em;
 }
 
+/* Page breadcrumbs */
+#bc {
+	border-bottom: 1px solid #ccc;
+	padding: 0.5em;
+}
+
 /* Page footer */
 #ft {
 	border-top: 1px solid #ccc;
-	padding-top: 0.5em;
+	border-bottom: 1px solid #ccc;
+	padding: 0.5em;
 }
 #ft span {
 	font-weight: bold;
@@ -90,7 +100,11 @@ img {
 }
 #menu {
 }
-.menulist {
+#submenu p {
+	font-size: larger;
+	border-bottom: 1px solid #ccc;
+}
+ul.menulist {
 	margin-bottom: 0.5em;
 }
 
