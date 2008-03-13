@@ -39,7 +39,8 @@ def account_switch(request, group, is_admin=False):
         raise Http404
 
     group_slug = request.POST['group']
-    account = get_object_or_404(Account, owner=request.user, group__slug=group_slug)
+    account = get_object_or_404(Account, owner=request.user,
+        group__slug=group_slug)
     url = reverse('account-summary', args=(account.group.slug, account.slug))
     return HttpResponseRedirect(url)
 
@@ -69,7 +70,7 @@ def account_summary(request, group, account, is_admin=False):
     response = object_detail(request, Account.objects.all(), account.id,
         template_name='accounting/account_summary.html',
         template_object_name='account',
-        extra_context={'is_admin': is_admin})
+        extra_context={'is_admin': is_admin, 'group': group})
     populate_xheaders(request, response, Account, account.id)
     return response
 
@@ -92,7 +93,8 @@ def edit_group(request, group, is_admin=False):
                 group.logo = ''
                 group.save()
 
-            request.user.message_set.create(message=_('Group successfully updated'))
+            request.user.message_set.create(
+                message=_('Group successfully updated'))
 
             return HttpResponseRedirect(reverse('group-summary',
                 args=(group.slug,)))
@@ -136,12 +138,11 @@ def edit_account(request, group, account=None, type='new', is_admin=False):
 
     extra = {
         'is_admin': is_admin,
+        'group': group,
         'form': form,
     }
 
-    if type == 'new':
-        extra['group'] = group
-    else:
+    if type == 'edit':
         extra['account'] = account
 
     return render_to_response('accounting/account_form.html', extra,
