@@ -100,12 +100,19 @@ img {
 }
 #menu {
 }
-#submenu p {
-	font-size: larger;
+#menu h2 {
+	display: none;
+}
+#menu h3 {
+	font-size: large;
 	border-bottom: 1px solid #ccc;
+	margin-top: 1em;
 }
 ul.menulist {
 	margin-bottom: 0.5em;
+}
+#helptips p {
+	color: #888a85;
 }
 
 /* Content area */
