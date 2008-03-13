@@ -80,12 +80,12 @@ def edit_list(request, group, list=None, is_admin=False, type='new'):
 
             raise Exception()
 
-    return render_to_response('reports/edit_list.html',
+    return render_to_response('reports/list_edit.html',
                               {
                                   'is_admin': is_admin,
+                                  'group': group,
                                   'listform': listform,
                                   'columnforms': columnforms,
-
                               },
                               context_instance=RequestContext(request))
 
@@ -117,7 +117,7 @@ def alter_list(request, group, slug=None, type='new', is_admin=False):
         'group': group,
     }
 
-    redirect = reverse('group-summary',args=(group.slug,))
+    redirect = group.get_absolute_url()
 
     if type == 'new':
         return create_object(request, model=List, extra_context=context,
