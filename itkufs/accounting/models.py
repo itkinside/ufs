@@ -4,6 +4,7 @@ from django.db import models, transaction
 from django.db.models import Q
 from django.contrib import databrowse
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _, ugettext
 
@@ -44,6 +45,11 @@ class Group(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('group-summary', kwargs={
+            'group': self.slug,
+        })
 
     def save(self):
         super(Group, self).save()
@@ -216,6 +222,12 @@ class Account(models.Model):
 
     def __unicode__(self):
         return "%s: %s" % (self.group, self.name)
+
+    def get_absolute_url(self):
+        return reverse('account-summary', kwargs={
+            'group': self.group.slug,
+            'account': self.slug,
+        })
 
     def balance(self):
         if self.balance_sql:
@@ -431,6 +443,12 @@ class Transaction(models.Model):
             return ', '.join(entries)
         else:
             return u'Empty transaction'
+
+    def get_absolute_url(self):
+        return reverse('transaction-details', kwargs={
+            'group': self.group.slug,
+            'transaction': self.id,
+        })
 
     def debug(self):
         status = self.log_set.all()
