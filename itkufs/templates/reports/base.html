@@ -1,8 +1,26 @@
 {% extends "base.html" %}
 
-{% block tabs %}
-    <li><a href="{% url group-summary group.slug %}">Back to group</a></li>
+
+{% block title %}{{ group.name }} - {{ block.super }}{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; Reports
+    &raquo; <a href="{{ group.get_absolute_url }}">{{ group.name }}</a>
 {% endblock %}
 
-{% block title %}{{ request.session.my_account.group.name }}{% endblock %}
-{% block header %}{{ request.session.my_account.group.name }}{% endblock %}
+
+{% block header %}&laquo;{{ group.name }}&raquo;{% endblock %}
+
+
+{% block submenu %}
+
+<h3>Reports</h3>
+
+<ul class="menulist">
+    <li><a href="{{ group.get_absolute_url }}">Back to group</a></li>
+    <li>FIXME: We could do more with this list.</li>
+</ul>
+
+{% endblock %}

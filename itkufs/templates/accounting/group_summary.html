@@ -1,7 +1,17 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 
+{% block helptips %}
+
+<h3>Help</h3>
+
+<p>{% trans "In all group views <em>balance</em> is seen from the perspective of the group. If the group owes people money, it is a liability, and their user account balance is negative. If people owes the group money, it is an asset, and their user account balance is positive." %}</p>
+
+{% endblock %}
+
+
 {% block content %}
+
 <div id="groupinfo">
 <h3>{% trans "Group info" %}</h3>
 <table class="tabledetails">
@@ -84,8 +94,6 @@
     </tr>
 {% endfor %}
 </table>
-
-<p class="comment">{% trans "Balance is seen from the perspective of the bar. If the bar owes people money, it is a liability, and their user account balance is negative. If people owes the bar money, it is an asset, and their user account balance is positive." %}</p>
 
 </div>
 <div class="coltwo">

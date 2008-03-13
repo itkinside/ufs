@@ -1,7 +1,11 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 
+
 {% block content %}
+
+<h1>FIXME: Is this template used?</h1>
+
 <form action="." method="post" id="createtransaction">
     {{ form.as_p }}
     <label>{% trans "Account:" %}</label>
@@ -43,4 +47,5 @@
         <button type="submit">{% trans "Save transaction" %}</button>
     </p>
 </form>
+
 {% endblock %}

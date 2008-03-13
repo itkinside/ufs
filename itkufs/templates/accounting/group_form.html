@@ -1,11 +1,31 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 
+
+{% block title %}
+    {% trans "Edit group" %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; <a href="{% url edit-group group.slug %}">
+    {% trans "Edit group" %}</a>
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+    &ndash; {% trans "Edit group" %}
+{% endblock %}
+
+
 {% block content %}
+
 <form action="." method="post" enctype="multipart/form-data">
     {{ form.as_p }}
-    <p>
-        <button type="submit">{% trans "Save changes to group" %}</button>
-    </p>
+    <p><button type="submit">{% trans "Save group" %}</button></p>
 </form>
+
 {% endblock %}

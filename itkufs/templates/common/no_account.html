@@ -1,13 +1,29 @@
-{% extends "accounting/base.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 
+
 {% block menu %}{% endblock %}
-{% block title %}{% trans "You need an account" %}{% endblock %}
+
+
+{% block title %}
+    {% trans "No account" %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; {% trans "No account" %}
+{% endblock %}
+
+
 {% block header %}{% trans "You need an account" %}{% endblock %}
-{% block outertabs %}{% endblock %}
+
 
 {% block content %}
 
-<p>{% trans "You already have a &micro;FS user, but it is not connected to any accounts. Please ask your group administrator to create an account for you and connect the account with your user." %}</p>
+<p>{% trans "You already have a &micro;FS <em>user</em>, but it is not
+connected to any <em>accounts</em>. Please ask your group administrator to
+create an account for you and connect the account with your user." %}</p>
 
 {% endblock %}

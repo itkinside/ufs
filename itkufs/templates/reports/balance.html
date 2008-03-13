@@ -1,8 +1,28 @@
 {% extends "reports/base.html" %}
 {% load i18n %}
 
+
+{% block title %}
+    {% trans "Balance statement" %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; <a href="{% url balance group.slug %}">
+        {% trans "Balance statement" %}</a>
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+    &ndash; {% trans "Balance statement" %}
+    &ndash; {{ today }}
+{% endblock %}
+
+
 {% block content %}
-<h2>{% blocktrans with group.name as group_name %}Balance statement for {{ group_name }} at {{ today }}{% endblocktrans %}</h2>
 
 <div class="coltwo">
 <table class="tablelist">
@@ -12,13 +32,13 @@
 {% for name, balance in accounts.as %}
     <tr>
         <td>&nbsp;&nbsp;{{ name }}</td>
-        <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
+        <td class="align_right">{{ balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
         <td><em>{% trans "Total assets" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.as_sum|stringformat:"0.2f" }}</em>
+            <em>{{ accounts.as_sum|floatformat:2 }}</em>
         </td>
     </tr>
 </table>
@@ -36,13 +56,13 @@
 {% for name, balance in accounts.li %}
     <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}</td>
-        <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
+        <td class="align_right">{{ balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
         <td><em>&nbsp;&nbsp;{% trans "Total liabilities" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.li_sum|stringformat:"0.2f" }}</em>
+            <em>{{ accounts.li_sum|floatformat:2 }}</em>
         </td>
     </tr>
 
@@ -52,20 +72,20 @@
 {% for name, balance in accounts.eq %}
     <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}</td>
-        <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
+        <td class="align_right">{{ balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
         <td><em>&nbsp;&nbsp;{% trans "Total equities (Net worth)" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.eq_sum|stringformat:"0.2f" }}</em>
+            <em>{{ accounts.eq_sum|floatformat:2 }}</em>
         </td>
     </tr>
 
     <tr>
         <td><em>{% trans "Total liabilities and equities" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.li_eq_sum|stringformat:"0.2f" }}</em>
+            <em>{{ accounts.li_eq_sum|floatformat:2 }}</em>
         </td>
     </tr>
 </table>

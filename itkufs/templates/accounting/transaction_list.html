@@ -1,6 +1,32 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 
+
+{% block title %}
+    {% trans "Transactions" %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% if account %}
+        &raquo; <a href="{% url transaction-list-account group.slug,account.slug %}">Transactions</a>
+    {% else %}
+        &raquo; <a href="{% url transaction-list-group group.slug %}">Transactions</a>
+    {% endif %}
+    {% if is_paginated %}
+        &raquo; {% trans "Page" %} {{ page }} {% trans "of" %} {{ pages }}
+    {% endif %}
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+    &ndash; {% trans "Transactions" %}
+{% endblock %}
+
+
 {% block content %}
 
 {% if not transaction_list %}
@@ -57,7 +83,7 @@
         </td>
         {% if forloop.first %}
         <td rowspan="{{ rowspan }}" class="details">
-            <a href="{% url transaction-details e.account.group.slug,t.id %}">Details</a>
+            <a href="{{ t.get_absolute_url }}">Details</a>
         </td>
         {% endif %}
     </tr>

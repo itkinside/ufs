@@ -1,6 +1,7 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 
+
 {% block content %}
 
 <div id="accountinfo">
@@ -35,27 +36,28 @@
 <table class="tabledetails">
     <tr>
         <th>{% trans "Name" %}</th>
-        {% if not account.group.admin_only or is_admin %}
-        <td><a href="{% url group-summary account.group.slug %}">{{ account.group.name }}</a></td>
+        {% if not group.admin_only or is_admin %}
+            <td><a href="{% url group-summary group.slug %}">
+                {{ group.name }}</a></td>
         {% else %}
-        <td>{{ account.group.name }}</td>
+        <td>{{ group.name }}</td>
         {% endif %}
     </tr>
 
     <tr>
         <th>{% trans "Warning limit" %}</th>
-        {% if account.group.warn_limit %}
-        <td>{{ account.group.warn_limit|floatformat:2 }}</td>
+        {% if group.warn_limit %}
+            <td>{{ group.warn_limit|floatformat:2 }}</td>
         {% else %}
-        <td>{{ account.group.warn_limit }}</td>
+            <td>{{ group.warn_limit }}</td>
         {% endif %}
     </tr>
     <tr>
         <th>{% trans "Blocking limit" %}</th>
-        {% if account.group.block_limit %}
-        <td>{{ account.group.block_limit|floatformat:2 }}</td>
+        {% if group.block_limit %}
+            <td>{{ group.block_limit|floatformat:2 }}</td>
         {% else %}
-        <td>{{ account.group.block_limit }}</td>
+            <td>{{ group.block_limit }}</td>
         {% endif %}
     </tr>
 </table>
@@ -65,20 +67,20 @@
 <div id="actions">
 <h3>{% trans "Actions" %}</h3>
 <ul>
-    <li><a href="{% url account-deposit account.group.slug,account.slug %}">{% trans "Deposit" %}</a></li>
-    <li><a href="{% url account-withdraw account.group.slug,account.slug %}">{% trans "Withdraw" %}</a></li>
-    <li><a href="{% url account-transfer account.group.slug,account.slug %}">{% trans "Transfer" %}</a></li>
+    <li><a href="{% url account-deposit group.slug,account.slug %}">{% trans "Deposit" %}</a></li>
+    <li><a href="{% url account-withdraw group.slug,account.slug %}">{% trans "Withdraw" %}</a></li>
+    <li><a href="{% url account-transfer group.slug,account.slug %}">{% trans "Transfer" %}</a></li>
 </ul>
 </div>
 
 <div id="lists">
 <h3>{% trans "Lists" %}</h3>
-{% if not account.group.list_set.count %}
+{% if not group.list_set.count %}
 <p>{% trans "No lists configured." %}</p>
 {% else %}
 <ul>
-    {% for list in account.group.list_set.all %}
-    <li><a href="{% url view-list account.group.slug,list.slug %}">{{ list.name }}</a></li>
+    {% for list in group.list_set.all %}
+    <li><a href="{% url view-list group.slug,list.slug %}">{{ list.name }}</a></li>
     {% endfor %}
 </ul>
 {% endif %}

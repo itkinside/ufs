@@ -7,7 +7,7 @@
 
 <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>µFS - {% block title %}Foo Bar{% endblock %}</title>
+        <title>{% block title %}µFS{% endblock %}</title>
         <link rel="stylesheet" type="text/css" href="{% url media "style/reset-fonts-grids.css" %}" />
         <link rel="stylesheet" type="text/css" href="{% url media "style/base.css" %}" />
         <link rel="shortcut icon" type="image/png" href="{% url media "images/favicon.png" %}" />
@@ -25,6 +25,9 @@
 {% trans "&micro;FS Microfinance System" %}
 </h1>
 
+    </div>
+    <div id="bc">
+        {% block breadcrumbs %}µFS{% endblock %}
     </div>
     <div id="bd">
         <div id="yui-main">
@@ -56,6 +59,9 @@
         <div class="yui-b">
 
 <div id="menu">
+
+<h2>Menu</h2>
+
 {% block menu %}
 
 <ul class="menulist" id="mainmenu">
@@ -77,14 +83,14 @@
     </li>
 </ul>
 
-<p>Submenu (old tabs)</p>
+<div id="submenu">
+{% block submenu %}{% endblock %}
+</div>
 
-<ul class="menulist" id="submenu">
-{% block tabs %}
-    <li>Foo</li>
-    <li>Bar</li>
-{% endblock %}
-</ul>
+<div id="helptips">
+{% block helptips %}{% endblock %}
+</div>
+
 {% endblock %}
 </div>
 

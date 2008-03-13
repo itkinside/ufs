@@ -1,15 +1,44 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 
-{% block content %}
 
-<h2>Create or edit account</h2>
+{% block title %}
+    {% if account %}
+        {% trans "Edit account" %}
+    {% else %}
+        {% trans "New account" %}
+    {% endif %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% if account %}
+        &raquo; <a href="{% url edit-account group.slug,account.slug %}">
+        {% trans "Edit account" %}</a>
+    {% else %}
+        &raquo; <a href="{% url new-account group.slug %}">
+        {% trans "New account" %}</a>
+    {% endif %}
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+    {% if account %}
+        &ndash; {% trans "Edit account" %}
+    {% else %}
+        &ndash; {% trans "New account" %}
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
 
 <form action="." method="post">
     {{ form.as_p }}
-    <p>
-        <button type="submit">{% trans "Save changes to account" %}</button>
-    </p>
+    <p><button type="submit">{% trans "Save account" %}</button></p>
 </form>
 
 {% endblock %}

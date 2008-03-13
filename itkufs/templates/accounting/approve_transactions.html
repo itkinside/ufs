@@ -1,9 +1,30 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 
-{% block content %}
-<h2>{% trans "Approve transactions" %}</h2>
 
+{% block title %}
+    {% trans "Approve transactions" %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; <a href="{% url approve-transactions group.slug %}">
+        Approve transactions</a>
+    {% if is_paginated %}
+        &raquo; {% trans "Page" %} {{ page }} {% trans "of" %} {{ pages }}
+    {% endif %}
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+    &ndash; {% trans "Approve transactions" %}
+{% endblock %}
+
+
+{% block content %}
 {% if not transaction_list %}
 <p>{% trans "No pending transactions found." %}</p>
 {% else %}
@@ -28,7 +49,7 @@
             <th>{% trans "Change to" %}</th>
 
     </tr>
-    {% for t,f in transaction_list %}
+    {% for t, f in transaction_list %}
     <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}
         {% if t.is_rejected %}rejected{% else %}
         {% if not t.is_received %}pending{% endif %}{% endif %}">
@@ -54,12 +75,7 @@
         </td>
         {% for e in t.entry_set.all %}
         <td class="account">
-            {% if is_admin %}
-            <a href="{% url group-summary e.account.group.slug %}">{{e.account.group.name}}</a>:
-            <a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{e.account.name}}</a>
-            {% else %}
-                {{ e.account.group.name }}: {{e.account.name}}
-            {% endif %}
+            <a href="{% url account-summary e.account.group.slug,e.account.slug %}">{{ e.account.name }}</a>
         </td>
         <td class="align_right debit">
             {% if e.debit %}

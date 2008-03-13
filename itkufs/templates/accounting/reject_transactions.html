@@ -1,9 +1,30 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 
-{% block content %}
 
-<h2>{% trans "Reject transaction" %}</h2>
+{% block title %}
+    {% trans "Reject transactions" %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; <a href="{% url reject-transactions group.slug %}">
+            Reject transactions</a>
+    {% if is_paginated %}
+        &raquo; {% trans "Page" %} {{ page }} {% trans "of" %} {{ pages }}
+    {% endif %}
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+    &ndash; {% trans "Reject transactions" %}
+{% endblock %}
+
+
+{% block content %}
 
 <form method="post" action="{% url reject-transactions group.slug %}">
     <label>Transactions:</label>
@@ -13,7 +34,7 @@
     {% endfor %}
     </ul>
    {{ form.as_p }}
-   <button type="submit">{% trans "Reject" %}</button>
+   <p><button type="submit">{% trans "Reject" %}</button></p>
 </form>
 
 {% endblock %}

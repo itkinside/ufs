@@ -1,8 +1,27 @@
 {% extends "reports/base.html" %}
 {% load i18n %}
 
+{% block title %}
+    {% trans "Income statement" %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; <a href="{% url income group.slug %}">
+        {% trans "Income statement" %}</a>
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+    &ndash; {% trans "Income statement" %}
+    &ndash; {% trans "up to" %} {{ today }}
+{% endblock %}
+
+
 {% block content %}
-<h2>{% blocktrans with group.name as group_name %}Income statement for {{ group_name }} until {{ today }}{% endblocktrans %}</h2>
 
 <p>FIXME: Delimit income statement to time interval.</p>
 
@@ -13,13 +32,13 @@
 {% for name, balance in accounts.in %}
     <tr>
         <td>&nbsp;&nbsp;{{ name }}</td>
-        <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
+        <td class="align_right">{{ balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
         <td><em>{% trans "Total revenues and gains" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.in_sum|stringformat:"0.2f" }}</em>
+            <em>{{ accounts.in_sum|floatformat:2 }}</em>
         </td>
     </tr>
 
@@ -29,19 +48,19 @@
 {% for name, balance in accounts.ex %}
     <tr>
         <td>&nbsp;&nbsp;{{ name }}</td>
-        <td class="align_right">{{ balance|stringformat:"0.2f" }}</td>
+        <td class="align_right">{{ balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
         <td><em>{% trans "Total expenses and losses" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.ex_sum|stringformat:"0.2f" }}</em>
+            <em>{{ accounts.ex_sum|floatformat:2 }}</em>
         </td>
     </tr>
 
     <tr>
         <th>{% trans "Net income" %}</th>
-        <th class="align_right">{{ accounts.in_ex_diff|stringformat:"0.2f" }}</th>
+        <th class="align_right">{{ accounts.in_ex_diff|floatformat:2 }}</th>
     </tr>
 </table>
 

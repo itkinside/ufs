@@ -1,11 +1,22 @@
-{% extends "accounting/base.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 
-{% block outertabs %}{% endblock %}
+
+{% block title %}
+    Help
+    - {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; <a href="{% url help group.slug %}">Help</a>
+{% endblock %}
+
+
+{% block header %}{% trans "Help" %}{% endblock %}
+
 
 {% block content %}
-
-<h2>{% trans "Help" %}</h2>
 
 <ul>
     <li><a href="#transaction-status">{% trans "What do the transaction status terms mean?" %}</a></li>

@@ -1,24 +1,36 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 
+
+{% block title %}{{ title }} - {{ block.super }}{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }} &raquo;
+    {% ifnotequal type "register" %}
+        {{ title }}
+    {% else %}
+        {% trans "Register transaction" %}
+    {% endifnotequal %}
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }} &ndash;
+    {% ifnotequal type "register" %}
+        {{ title }}
+    {% else %}
+        {% trans "Register transaction" %}
+    {% endifnotequal %}
+{% endblock %}
+
+
 {% block content %}
 
-<h2>
-{% ifnotequal type "register" %}
-    {% blocktrans with account.name as account_name %}
-    {{ title }} &ldquo;{{ account_name }}&rdquo;
-    {% endblocktrans %}
-{% else %}
-    {% trans "Register transaction" %}
-{% endifnotequal %}
-</h2>
-
 <form method="post" action=".">
-{{ form.as_p }}
-<p>
-  <input type="hidden" name="type" value="{{type}}" />
-  <button>{{ type|capfirst}}</button>
-</p>
+    <input type="hidden" name="type" value="{{type}}" />
+    {{ form.as_p }}
+    <p><button>{{ type|capfirst}}</button></p>
 </form>
 
 {% endblock %}

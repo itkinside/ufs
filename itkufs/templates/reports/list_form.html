@@ -1,9 +1,26 @@
 {% extends "reports/base.html" %}
 {% load i18n %}
 
-{% block content %}
 
-<h2>Create or edit list</h2>
+{% block title %}
+    {% trans "New/edit list" %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; {% trans "New/edit list" %} (FIXME: Cleanup alter/edit)
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+    &ndash; {% trans "New/edit list" %}
+{% endblock %}
+
+
+{% block content %}
 
 <form action="." method="post" id="new_list">
 
@@ -101,8 +118,9 @@
     </tr>
     {% endfor %}
 </table>
-<p>
-    <button type="submit">{% if object.id %}Update list{% else %}Create list{% endif %}</button>
-</p>
+
+<p><button type="submit">Save list</button></p>
+
 </form>
+
 {% endblock %}

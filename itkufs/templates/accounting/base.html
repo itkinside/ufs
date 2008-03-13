@@ -1,28 +1,75 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block tabs %}
+
+{% block title %}
     {% if account %}
-        <li><a href="{% url account-summary account.group.slug,account.slug %}">Summary</a></li>
-        <li><a href="{% url transaction-list-account account.group.slug,account.slug %}">Transactions</a></li>
-        {% if is_admin %}
-            <li class="admin"><a href="{% url edit-account account.group.slug,account.slug %}">Edit account</a></li>
+        {{ account.name }} -
+    {% endif %}
+    {{ group.name }} - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }} &raquo; {% trans "Accounting" %} &raquo;
+    {% if account %}
+        {% if not group.admin_only or is_admin %}
+            <a href="{{ group.get_absolute_url }}">{{ group.name }}</a>
+        {% else %}
+            {{ group.name }}
         {% endif %}
+        &raquo; <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
     {% else %}
-        <li><a href="{% url group-summary group.slug %}">Summary</a></li>
-        <li><a href="{% url transaction-list-group group.slug %}">Transactions</a></li>
-        {% if is_admin %}
-            <li class="admin"><a href="{% url edit-group group.slug%}">Edit group</a></li>
-            <li class="admin"><a href="{% url new-account group.slug %}">Add account</a></li>
-            <li class="admin"><a href="{% url new-list group.slug %}">Add list</a></li>
+        {% if not group.admin_only or is_admin %}
+            <a href="{{ group.get_absolute_url }}">{{ group.name }}</a>
+        {% else %}
+            {{ group.name }}
         {% endif %}
     {% endif %}
 {% endblock %}
 
-{% block title %}{{ request.session.my_account.group.name }}{% endblock %}
+
 {% block header %}
     {% if account %}
-        Account {{ account.name }} in {{ account.group.name }}
+        &laquo;{{ account.name }}&raquo;
     {% else %}
-        {% firstof group.name request.session.my_account.group.name %}
+        &laquo;{{ group.name }}&raquo;
+    {% endif %}
+{% endblock %}
+
+
+{% block submenu %}
+    {% if not group.admin_only or is_admin %}
+        <h3>&laquo;{{ group.name }}&raquo;</h3>
+
+        <ul class="menulist">
+            <li><a href="{{ group.get_absolute_url }}">Summary</a></li>
+            <li><a href="{% url transaction-list-group group.slug %}">
+                Transactions</a></li>
+
+            {% if is_admin %}
+                <li class="admin"><a href="{% url edit-group group.slug%}">
+                    Edit group</a></li>
+                <li class="admin"><a href="{% url new-account group.slug %}">
+                    New account</a></li>
+                <li class="admin"><a href="{% url new-list group.slug %}">
+                    New list</a></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+
+    {% if account %}
+        <h3>&laquo;{{ account.name }}&raquo;</h3>
+
+        <ul class="menulist">
+            <li><a href="{{ account.get_absolute_url }}">Summary</a></li>
+            <li><a href="{% url transaction-list-account group.slug,account.slug %}">
+                Transactions</a></li>
+
+            {% if is_admin %}
+                <li class="admin"><a href="{% url edit-account group.slug,account.slug %}">
+                    Edit account</a></li>
+            {% endif %}
+        </ul>
     {% endif %}
 {% endblock %}

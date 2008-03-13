@@ -1,9 +1,14 @@
-{% extends "accounting/base.html" %}
+{% extends "accounting/transaction_list.html" %}
 {% load i18n %}
 
-{% block content %}
 
-<h2>{% trans "Transaction" %}</h2>
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; {% trans "Transaction" %} {{ transaction.id }}</a>
+{% endblock %}
+
+
+{% block content %}
 
 <table class="tabledetails">
 {% if is_admin %}
