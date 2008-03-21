@@ -1,8 +1,9 @@
 body {
-	padding: 2px;
+	padding: 1em;
 }
 h1 {
 	font-size: 200%;
+	font-family: serif;
 	float: left;
 }
 
@@ -19,15 +20,11 @@ table {
 	clear: both;
 }
 
-thead {
-	display: table-header-group
-}
-tfoot {
-	display: table-footer-group;
+thead, tfoot {
+	display: table-header-group;
 }
 
 thead th {
-	padding: 2px 5px;
 	font-weight: bolder;
 	text-align: center;
 }
@@ -48,14 +45,13 @@ tbody td.double {
 	border-bottom-style: dashed;
 }
 
-tfoot td {
-	border: 0;
-	text-align: left;
-}
-
 td {
 	text-align: center;
 	height: 1.6em;
+}
+tfoot td {
+	border: 0;
+	text-align: left;
 }
 td.balance {
 	text-align: right;
@@ -71,16 +67,11 @@ td.balance {
 	height: 3.5em;
 	overflow: hidden;
 }
-#reminder {
-	font-weight: bold;
-	text-align: center;
-}
 #top {
-	background: #eeeeec;
-	border-bottom: 1px dashed gray;
-	margin: -2px; /* counter padding on body */
-	margin-bottom: 0.3em;
-	padding: 0.3em;
+	border-bottom: 1px solid #cccccc;
+	border-top: 1px solid #cccccc;
+	padding: 0.5em;
+	text-align: left;
 }
 #admin {
 	float: right;
@@ -88,12 +79,9 @@ td.balance {
 #admin a {
 	text-decoration: underline;
 }
-#print {
-	float: left;
-}
 
 tfoot img {
-	vertical-align: text-bottom;
+	vertical-align: bottom;
 	width: 3em;
 	height: 1em;
 }
@@ -129,5 +117,8 @@ tfoot img {
 @media print {
 	.noprint, #debug {
 		display: none;
+	}
+	body {
+		padding: 0;
 	}
 }

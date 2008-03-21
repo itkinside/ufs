@@ -23,8 +23,6 @@
 {% with list.total_column_count as colspan %}
 
 <div id="top" class="noprint">
-<p id="print">{% trans "Push CTRL+P to print"%}</p>
-
 {% if is_admin %}
 <p id="admin">
       <b>Admin:</b>
@@ -42,7 +40,7 @@
     <thead>
         <tr>
             <th colspan="{{ colspan }}">
-                    <h1>{{ group.name }}: {{ list.name }}</h1>
+                    <h1>{{ group.name }} &raquo; {{ list.name }}</h1>
                     {% if group.logo %}
                     <p id="logo"><img src="{% url media group.logo %}" alt="logo" /></p>
                     {% endif %}
