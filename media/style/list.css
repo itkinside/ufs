@@ -57,6 +57,9 @@ td.balance {
 	text-align: right;
 	padding-right: 0.5em !important;
 }
+th.name {
+	white-space: nowrap;
+}
 
 #secondary {
 	float: left;
@@ -71,6 +74,7 @@ td.balance {
 	border-bottom: 1px solid #cccccc;
 	border-top: 1px solid #cccccc;
 	padding: 0.5em;
+	margin-bottom: 0.5em;
 	text-align: left;
 }
 #admin {
