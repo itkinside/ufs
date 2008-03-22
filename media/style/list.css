@@ -4,6 +4,7 @@ body {
 h1 {
 	font-size: 200%;
 	font-family: serif;
+	font-weight: bold;
 	float: left;
 }
 
@@ -13,6 +14,14 @@ a {
 }
 a:hover {
 	text-decoration: underline;
+}
+.admin a {
+	background: transparent;
+	color: #900 !important;
+}
+.admin a:hover {
+	background: transparent;
+	color: #500 !important;
 }
 
 table {
@@ -77,11 +86,12 @@ th.name {
 	margin-bottom: 0.5em;
 	text-align: left;
 }
-#admin {
+#menu {
 	float: right;
 }
-#admin a {
-	text-decoration: underline;
+#menu li {
+	display: inline;
+	padding-left: 0.5em;
 }
 
 tfoot img {

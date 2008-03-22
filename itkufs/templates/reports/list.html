@@ -23,13 +23,23 @@
 {% with list.total_column_count as colspan %}
 
 <div id="top" class="noprint">
-{% if is_admin %}
-<p id="admin">
-      <b>Admin:</b>
-      <a href="{% url edit-list group.slug,list.slug %}">Edit</a>,
-      <a href="{% url delete-list group.slug,list.slug %}">Delete</a>
-</p>
+<ul id="menu">
+    <li>
+        <a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">
+        {% trans "My account" %}</a>
+    </li>
+
+{% if not request.session.my_account.group.admin_only or is_admin %}
+    <li{% if request.session.my_account.group.admin_only %} class="admin"{% endif %}>
+        <a href="{% url group-summary request.session.my_account.group.slug %}">
+        {% trans "My group" %}{% if is_admin and group.not_payed_transaction_set.count %}*{% endif %}</a>
+    </li>
 {% endif %}
+{% if is_admin %}
+    <li class="admin"><a href="{% url edit-list group.slug,list.slug %}">Edit</a></li>
+    <li class="admin"><a href="{% url delete-list group.slug,list.slug %}">Delete</a></li>
+{% endif %}
+</ul>
 
 <p id="reminder">
     {% trans "Please remember to print with backgrounds and landscape orientation if prefered." %}
