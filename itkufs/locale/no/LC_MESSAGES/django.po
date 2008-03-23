@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-24 00:33+0100\n"
+"POT-Creation-Date: 2008-03-24 00:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -410,7 +410,8 @@ msgstr "Min konto"
 msgid "My group"
 msgstr "Min gruppe"
 
-#: templates/base.html:82 templates/common/help.html:16
+#: templates/base.html:82 templates/accounting/group_summary.html:6
+#: templates/common/help.html:16
 msgid "Help"
 msgstr "Hjelp"
 
@@ -455,8 +456,8 @@ msgid "Account info"
 msgstr "Kontoinformasjon"
 
 #: templates/accounting/account_summary.html:11
-#: templates/accounting/group_summary.html:83
-#: templates/accounting/group_summary.html:105 templates/reports/list.html:59
+#: templates/accounting/group_summary.html:86
+#: templates/accounting/group_summary.html:108 templates/reports/list.html:59
 msgid "Balance"
 msgstr "Balanse"
 
@@ -465,8 +466,8 @@ msgid "Owner"
 msgstr "Eier"
 
 #: templates/accounting/account_summary.html:22
-#: templates/accounting/group_summary.html:82
-#: templates/accounting/group_summary.html:104
+#: templates/accounting/group_summary.html:85
+#: templates/accounting/group_summary.html:107
 msgid "Type"
 msgstr "Type"
 
@@ -479,7 +480,7 @@ msgid "Yes,No"
 msgstr "Ja,Nei"
 
 #: templates/accounting/account_summary.html:35
-#: templates/accounting/group_summary.html:16
+#: templates/accounting/group_summary.html:19
 msgid "Group info"
 msgstr "Gruppeinformasjon"
 
@@ -488,12 +489,12 @@ msgid "Name"
 msgstr "Navn"
 
 #: templates/accounting/account_summary.html:48
-#: templates/accounting/group_summary.html:19
+#: templates/accounting/group_summary.html:22
 msgid "Warning limit"
 msgstr "Advarselsgrense"
 
 #: templates/accounting/account_summary.html:56
-#: templates/accounting/group_summary.html:27
+#: templates/accounting/group_summary.html:30
 msgid "Blocking limit"
 msgstr "Blokkeringsgrense"
 
@@ -514,7 +515,7 @@ msgid "Transfer"
 msgstr "Overføring"
 
 #: templates/accounting/account_summary.html:77
-#: templates/accounting/group_summary.html:55
+#: templates/accounting/group_summary.html:58
 msgid "Lists"
 msgstr "Lister"
 
@@ -524,7 +525,7 @@ msgstr "Ingen lister er konfigurert."
 
 #: templates/accounting/approve_transactions.html:6
 #: templates/accounting/approve_transactions.html:23
-#: templates/accounting/group_summary.html:41
+#: templates/accounting/group_summary.html:44
 msgid "Approve transactions"
 msgstr "Godkjenn transaksjoner"
 
@@ -556,8 +557,8 @@ msgid "Status"
 msgstr "Status"
 
 #: templates/accounting/approve_transactions.html:45
-#: templates/accounting/group_summary.html:81
-#: templates/accounting/group_summary.html:103
+#: templates/accounting/group_summary.html:84
+#: templates/accounting/group_summary.html:106
 #: templates/accounting/transaction_details.html:34
 #: templates/accounting/transaction_list.html:43
 msgid "Account"
@@ -592,7 +593,7 @@ msgid "Summary"
 msgstr "Oversikt"
 
 #: templates/accounting/base.html:49 templates/accounting/base.html.py:69
-#: templates/accounting/group_summary.html:39
+#: templates/accounting/group_summary.html:42
 #: templates/accounting/transaction_list.html:6
 #: templates/accounting/transaction_list.html:26
 msgid "Transactions"
@@ -614,48 +615,50 @@ msgstr "Lagre gruppe"
 
 #: templates/accounting/group_summary.html:8
 msgid ""
-"In all group views <em>balance</em> is seen from the perspective of the "
-"group. If the group owes people money, it is a liability, and their user "
-"account balance is negative. If people owes the group money, it is an asset, "
-"and their user account balance is positive."
+"In all group views <em>balance</em> is seen from the\n"
+"perspective of the group. If the group owes people money, it is a "
+"liability,\n"
+"and their user account balance is negative. If people owes the group money, "
+"it\n"
+"is an asset, and their user account balance is positive.\""
 msgstr ""
 "På alle gruppesider er <em>balansen</em> sett fra perspektivet til gruppen. "
 "Hvis gruppen skylder folk penger, så er det gjeld, og deres "
 "brukerkontobalanse er negativ. Hvis folk skylder gruppen penger, så er det "
 "en eiendel, og brukerkontobalansen er positiv."
 
-#: templates/accounting/group_summary.html:47
+#: templates/accounting/group_summary.html:50
 msgid "Statements"
 msgstr "Rapporter"
 
-#: templates/accounting/group_summary.html:49 templates/reports/balance.html:6
+#: templates/accounting/group_summary.html:52 templates/reports/balance.html:6
 #: templates/reports/balance.html.py:14 templates/reports/balance.html:20
 msgid "Balance statement"
 msgstr "Balanseregnskap"
 
-#: templates/accounting/group_summary.html:50 templates/reports/income.html:5
+#: templates/accounting/group_summary.html:53 templates/reports/income.html:5
 #: templates/reports/income.html.py:13 templates/reports/income.html:19
 msgid "Income statement"
 msgstr "Inntektsregnskap"
 
-#: templates/accounting/group_summary.html:62
+#: templates/accounting/group_summary.html:65
 msgid "No lists"
 msgstr "Ingen lister"
 
-#: templates/accounting/group_summary.html:71
-#: templates/accounting/group_summary.html:75
+#: templates/accounting/group_summary.html:74
+#: templates/accounting/group_summary.html:78
 msgid "Accounts"
 msgstr "Kontoer"
 
-#: templates/accounting/group_summary.html:72
+#: templates/accounting/group_summary.html:75
 msgid "No accounts found."
 msgstr "Ingen kontoer funnet."
 
-#: templates/accounting/group_summary.html:79
+#: templates/accounting/group_summary.html:82
 msgid "User accounts"
 msgstr "Medlemskontoer"
 
-#: templates/accounting/group_summary.html:101
+#: templates/accounting/group_summary.html:104
 msgid "Group accounts"
 msgstr "Gruppekontoer"
 
