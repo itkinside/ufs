@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-24 00:41+0100\n"
+"POT-Creation-Date: 2008-03-24 00:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -798,6 +798,14 @@ msgstr ""
 
 #: templates/reports/balance.html:86
 msgid "Total liabilities and equities"
+msgstr ""
+
+#: templates/reports/base.html:10 templates/reports/base.html.py:20
+msgid "Reports"
+msgstr ""
+
+#: templates/reports/base.html:24
+msgid "Back to group"
 msgstr ""
 
 #: templates/reports/income.html:20
