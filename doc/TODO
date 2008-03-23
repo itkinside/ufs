@@ -27,10 +27,7 @@ Forms:
 Templates:
 - Transaction list and approve transaction view et al. should resemble each
   other more.
-- Generalize tabs somehow. Do not repeat code in all templates. Mark active tab
-  dynamically.
 - Update Norwegian translation.
-- Add missing {% trans %} tags on tabs, etc.
 
 New features:
 - Admin rejection of user claims, using TransactionMessage, only missing
@@ -100,6 +97,7 @@ DONE
   or credit
 - Updated transaction lists and detail views.
 - Use new convenience functions for transaction_sets in Group model.
+- Add missing {% trans %} tags on tabs, etc.
 
 WONTFIX
 -------
@@ -109,3 +107,5 @@ WONTFIX
 - Serial number to lists (somewhat in doubt...)
 - Add group.sales_account or something. Must know what account to register
   sales and expenses on.
+- Generalize tabs somehow. Do not repeat code in all templates. Mark active tab
+  dynamically.
