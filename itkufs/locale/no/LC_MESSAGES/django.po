@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-24 00:03+0100\n"
+"POT-Creation-Date: 2008-03-24 00:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -436,13 +436,13 @@ msgstr "Språk:"
 
 #: templates/accounting/account_form.html:7
 #: templates/accounting/account_form.html:19
-#: templates/accounting/account_form.html:30
+#: templates/accounting/account_form.html:30 templates/accounting/base.html:73
 msgid "Edit account"
 msgstr "Endre konto"
 
 #: templates/accounting/account_form.html:9
 #: templates/accounting/account_form.html:22
-#: templates/accounting/account_form.html:32
+#: templates/accounting/account_form.html:32 templates/accounting/base.html:55
 msgid "New account"
 msgstr "Ny konto"
 
@@ -587,11 +587,26 @@ msgstr "Oppdater"
 msgid "Accounting"
 msgstr "Kontoførsel"
 
-#: templates/accounting/group_form.html:6
+#: templates/accounting/base.html:47 templates/accounting/base.html.py:67
+msgid "Summary"
+msgstr "Oversikt"
+
+#: templates/accounting/base.html:49 templates/accounting/base.html.py:69
+#: templates/accounting/group_summary.html:39
+#: templates/accounting/transaction_list.html:6
+#: templates/accounting/transaction_list.html:26
+msgid "Transactions"
+msgstr "Transaksjoner"
+
+#: templates/accounting/base.html:53 templates/accounting/group_form.html:6
 #: templates/accounting/group_form.html:14
 #: templates/accounting/group_form.html:20
 msgid "Edit group"
 msgstr "Endre gruppe"
+
+#: templates/accounting/base.html:57
+msgid "New list"
+msgstr "Ny liste"
 
 #: templates/accounting/group_form.html:28
 msgid "Save group"
@@ -608,12 +623,6 @@ msgstr ""
 "Hvis gruppen skylder folk penger, så er det gjeld, og deres "
 "brukerkontobalanse er negativ. Hvis folk skylder gruppen penger, så er det "
 "en eiendel, og brukerkontobalansen er positiv."
-
-#: templates/accounting/group_summary.html:39
-#: templates/accounting/transaction_list.html:6
-#: templates/accounting/transaction_list.html:26
-msgid "Transactions"
-msgstr "Transaksjoner"
 
 #: templates/accounting/group_summary.html:47
 msgid "Statements"
