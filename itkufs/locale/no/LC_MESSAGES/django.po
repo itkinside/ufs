@@ -499,7 +499,7 @@ msgstr "Blokkeringsgrense"
 
 #: templates/accounting/account_summary.html:68
 msgid "Actions"
-msgstr "Handlinger"
+msgstr "Oppgaver"
 
 #: templates/accounting/account_summary.html:70
 msgid "Deposit"
