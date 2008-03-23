@@ -28,38 +28,30 @@
 <dl>
     <dt>{% trans "Registered" %}</dt>
     <dd>
-        {% blocktrans %}
-        The transaction has been registered as a valid transaction with correct
-        debit and credit entries, in this state no accounts have been affected.
-    {% endblocktrans %}
+        {% blocktrans %}The transaction has been registered as a valid
+        transaction with correct debit and credit entries, in this state no
+        accounts have been affected.{% endblocktrans %}
     </dd>
 
     <dt>{% trans "Payed" %}</dt>
     <dd>
-        {% blocktrans %}
-        The debit side of the transaction has been comfirmed and should now
-        have been done in the real world.
-    {% endblocktrans %}
+        {% blocktrans %}The debit side of the transaction has been confirmed
+        and should now have been done in the real world.{% endblocktrans %}
     </dd>
 
     <dt>{% trans "Received" %}</dt>
     <dd>
-        {% blocktrans %}
-        The credit side of the transaction has registered that the money has been
-        received in the real world.
-    {% endblocktrans %}
+        {% blocktrans %}The credit side of the transaction has registered that
+        the money has been received in the real world.{% endblocktrans %}
     </dd>
 </dl>
 
 <h3 id="tech-contact">{% trans "Who do I contact about technical errors in &micro;FS?" %}</h3>
 
-<p>
-{% blocktrans %}
-Please contact the &micro;FS developers at <a href="mailto:itk-ufs@samfundet.no">
-itk-ufs@samfundet.no</a> if you experience any technical errors. Please include
-a description of what you did, what you expected and what actually happened,
-including any error messages you may have gotten.
-{% endblocktrans %}
-</p>
+<p>{% blocktrans %}Please contact the &micro;FS developers at <a
+href="mailto:itk-ufs@samfundet.no"> itk-ufs@samfundet.no</a> if you experience
+any technical errors. Please include a description of what you did, what you
+expected and what actually happened, including any error messages you may have
+gotten.{% endblocktrans %}</p>
 
 {% endblock %}

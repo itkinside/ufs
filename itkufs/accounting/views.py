@@ -218,7 +218,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
         form = DepositWithdrawForm(data)
     else:
         return HttpResponseForbidden(
-            _('This page may only be viewed by group admins.'))
+            _('Forbidden if not group admin.'))
 
     if request.method == 'POST' and form.is_valid():
         amount = form.cleaned_data['amount']
@@ -271,7 +271,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
 
         else:
             return HttpResponseForbidden(
-                _('This page may only be viewed by group admins.'))
+                _('Forbidden if not group admin.'))
 
         request.user.message_set.create(
             message='Added transaction: %s' % transaction)

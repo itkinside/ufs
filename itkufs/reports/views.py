@@ -108,7 +108,7 @@ def alter_list(request, group, slug=None, type='new', is_admin=False):
     if request.method == 'POST':
         if u'group' in request.POST:
             if group.id != int(request.POST['group']):
-                return HttpResponseForbidden(_('This page may only be viewed by group admins in the current group.'))
+                return HttpResponseForbidden(_('Forbidden if not group admin.'))
         else:
             raise Exception()
 
