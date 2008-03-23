@@ -19,6 +19,11 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
 <h3>{% trans "Group info" %}</h3>
 <table class="tabledetails">
     <tr>
+        <th>{% trans "Name" %}</th>
+        <td>{{ group.name }}</td>
+    </tr>
+
+    <tr>
         <th>{% trans "Warning limit" %}</th>
         {% if group.warn_limit %}
         <td>{{ group.warn_limit|stringformat:"0.2f" }}</td>
@@ -26,6 +31,7 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
         <td>{{ group.warn_limit|default_if_none:_("None") }}</td>
         {% endif %}
     </tr>
+
     <tr>
         <th>{% trans "Blocking limit" %}</th>
         {% if group.block_limit %}

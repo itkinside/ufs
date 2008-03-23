@@ -8,8 +8,8 @@
 <h3>{% trans "Account info" %}</h3>
 <table class="tabledetails">
     <tr>
-        <th>{% trans "Balance" %}</th>
-        <td>{{ account.user_balance|floatformat:2 }}</td>
+        <th>{% trans "Name" %}</th>
+        <td>{{ account.name }}</td>
     </tr>
 
     <tr>
@@ -22,6 +22,11 @@
         <th>{% trans "Type" %}</th>
         <td>{{ account.get_type_display }}</td>
     {% endif %}
+    </tr>
+
+    <tr>
+        <th>{% trans "Balance" %}</th>
+        <td>{{ account.user_balance|floatformat:2 }}</td>
     </tr>
 
     <tr>
