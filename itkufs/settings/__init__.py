@@ -53,9 +53,9 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
     'itkufs.common.middleware.UfsMiddleware',
 )
 
@@ -103,6 +103,9 @@ ugettext = lambda s: s
 LANGUAGES = (
     ('en', ugettext('English')),
     ('no', ugettext('Norwegian')),
+)
+LOCALE_PATHS = (
+    PROJECT_BASE + 'itkufs/locale/',
 )
 
 # Development version numbering
