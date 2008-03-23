@@ -23,7 +23,7 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
         {% if group.warn_limit %}
         <td>{{ group.warn_limit|stringformat:"0.2f" }}</td>
         {% else %}
-        <td>{{ group.warn_limit }}</td>
+        <td>{{ group.warn_limit|default_if_none:_("None") }}</td>
         {% endif %}
     </tr>
     <tr>
@@ -31,7 +31,7 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
         {% if group.block_limit %}
         <td>{{ group.block_limit|stringformat:"0.2f" }}</td>
         {% else %}
-        <td>{{ group.block_limit }}</td>
+        <td>{{ group.block_limit|default_if_none:_("None") }}</td>
         {% endif %}
     </tr>
 </table>

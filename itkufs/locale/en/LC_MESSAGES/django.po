@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-24 00:44+0100\n"
+"POT-Creation-Date: 2008-03-24 00:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -485,6 +485,13 @@ msgstr ""
 #: templates/accounting/account_summary.html:48
 #: templates/accounting/group_summary.html:22
 msgid "Warning limit"
+msgstr ""
+
+#: templates/accounting/account_summary.html:52
+#: templates/accounting/account_summary.html:60
+#: templates/accounting/group_summary.html:26
+#: templates/accounting/group_summary.html:34
+msgid "None"
 msgstr ""
 
 #: templates/accounting/account_summary.html:56

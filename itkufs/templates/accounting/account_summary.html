@@ -49,7 +49,7 @@
         {% if group.warn_limit %}
             <td>{{ group.warn_limit|floatformat:2 }}</td>
         {% else %}
-            <td>{{ group.warn_limit }}</td>
+            <td>{{ group.warn_limit|default_if_none:_("None") }}</td>
         {% endif %}
     </tr>
     <tr>
@@ -57,7 +57,7 @@
         {% if group.block_limit %}
             <td>{{ group.block_limit|floatformat:2 }}</td>
         {% else %}
-            <td>{{ group.block_limit }}</td>
+            <td>{{ group.block_limit|default_if_none:_("None") }}</td>
         {% endif %}
     </tr>
 </table>
