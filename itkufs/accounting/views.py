@@ -46,10 +46,11 @@ def account_switch(request, group, is_admin=False):
 
 @login_required
 @limit_to_owner
-def account_summary(request, group, account, is_admin=False):
+def account_summary(request, group, account,
+    is_admin=False, is_owner=False):
     """Show account summary"""
 
-    if request.user == account.owner:
+    if is_owner:
         # Check if active
         if not account.active and not is_admin:
             return HttpResponseForbidden(_('This account has been disabled.'))
@@ -70,7 +71,11 @@ def account_summary(request, group, account, is_admin=False):
     response = object_detail(request, Account.objects.all(), account.id,
         template_name='accounting/account_summary.html',
         template_object_name='account',
-        extra_context={'is_admin': is_admin, 'group': group})
+        extra_context={
+            'is_admin': is_admin,
+            'is_owner': is_owner,
+            'group': group,
+        })
     populate_xheaders(request, response, Account, account.id)
     return response
 
@@ -111,7 +116,8 @@ def edit_group(request, group, is_admin=False):
 
 @login_required
 @limit_to_admin
-def edit_account(request, group, account=None, type='new', is_admin=False):
+def edit_account(request, group, account=None, type='new',
+    is_admin=False, is_owner=False):
     """Create account or edit account properties"""
 
     if request.method == 'POST':
@@ -144,13 +150,15 @@ def edit_account(request, group, account=None, type='new', is_admin=False):
 
     if type == 'edit':
         extra['account'] = account
+        extra['is_owner'] = is_owner
 
     return render_to_response('accounting/account_form.html', extra,
                               context_instance=RequestContext(request))
 
 @login_required
 @limit_to_owner
-def transaction_list(request, group, account=None, page='1', is_admin=False):
+def transaction_list(request, group, account=None, page='1',
+    is_admin=False, is_owner=False):
     """Lists a group or an account's transactions"""
 
     # Get transactions
@@ -167,6 +175,7 @@ def transaction_list(request, group, account=None, page='1', is_admin=False):
                        template_name='accounting/transaction_list.html',
                        extra_context={
                             'is_admin': is_admin,
+                            'is_owner': is_owner,
                             'group': group,
                             'account': account,
                        },
@@ -199,7 +208,8 @@ def transaction_details(request, group, transaction, is_admin=False):
 
 @login_required
 @limit_to_owner
-def transfer(request, group, account=None, transfer_type=None, is_admin=False):
+def transfer(request, group, account=None, transfer_type=None,
+    is_admin=False, is_owner=False):
     """Deposit, withdraw or transfer money"""
 
     if request.method == 'POST':
@@ -282,6 +292,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
     return render_to_response('accounting/transfer.html',
                               {
                                   'is_admin': is_admin,
+                                  'is_owner': is_owner,
                                   'account': account,
                                   'type': transfer_type,
                                   'title': title,
