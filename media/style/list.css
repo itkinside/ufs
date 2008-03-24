@@ -1,5 +1,6 @@
 body {
 	padding: 1em;
+	margin: 1px;
 }
 h1 {
 	font-size: 200%;
@@ -26,7 +27,6 @@ a:hover {
 
 table {
 	width: 100%;
-	clear: both;
 }
 
 thead, tfoot {
