@@ -1,6 +1,7 @@
 TODO µFS v1
 ===========
 
+
 MUST HAVE
 ---------
 
@@ -37,16 +38,18 @@ New features:
 - Admin rejection of user claims, using TransactionMessage, only missing
   emails, but perhaps messages is enough?
 
+
 SHOULD HAVE
 -----------
 
-- User registration of expenses. Includes adding {sales,expense}_account to
-  Group.
 - Create correction transactions in a non-manual manner.
 
 New features:
 - Settlement
 - Creating invoices for other groups, either for email or printing.
+- User registration of expenses. Includes adding {sales,expense}_account to
+  Group. This is listed in the roadmap as a v2 feature.
+
 
 DONE
 ----
@@ -57,6 +60,7 @@ DONE
   inactive. As of 2008-03-24, the account summary does not allow showing
   disabled accounts if group.admin_only=True and inactive accounts have a
   strike-through in the account list in the group summary.
+
 
 WONTFIX
 -------
