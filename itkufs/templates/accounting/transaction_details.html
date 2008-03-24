@@ -11,12 +11,10 @@
 {% block content %}
 
 <table class="tabledetails">
-{% if is_admin %}
     <tr>
         <th>Transaction ID</th>
         <td>{{ transaction.id }}</th>
     </tr>
-{% endif %}
     <tr>
         <th>Status</th>
         <td>{{ transaction.get_status_display }}</th>
