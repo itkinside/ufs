@@ -40,7 +40,8 @@ New features:
 SHOULD HAVE
 -----------
 
-- User registration of expenses.
+- User registration of expenses. Includes adding {sales,expense}_account to
+  Group.
 - Create correction transactions in a non-manual manner.
 
 New features:
@@ -50,50 +51,7 @@ New features:
 DONE
 ----
 
-- JS code for toggeling checkbox'es in approve view
-- Dynamic lists
-- Admin mesage with feedback to approval
-- enforce sum(width) < 100, implimented by relative 100%
-- Move group info to account summary
-- Refactor menu
-- Income statement (see http://www.accountingcoach.com/)
-- i18n: Add _() et al around all strings
-- Add contact field to account group for first-line support
-- Custom image for list
-- List: IntegerField->PositiveSmallInt
-- Enforce checking of admin rights, all we do today is hide menu...
-- i18n: Translate itkufs/locale/no/LC_MESSAGES/django.po
-- Split transation_list template into user/admin/menu
-- Group
-  * Rename AccountGroup to Group
-  * Methods for registered_transaction_set, payed_transaction_set,
-    received_transaction_set, not_payed_transaction_set,
-    not_recieved_transaction_set in the Group model
-- Transaction: strip down
-- TransactionLog(transaction, type, timestamp, user, message) instead of
-  transaction details and to know who did what to a transaction. Type is
-  registered, payed, received and rejected.
-- TransactionEntry(transaction, account, debit, credit) instead of debit/credit
-  account and amount on Transaction
-- Rename "list item" to "list column" or "list field"?
-- Change NewTransaction to Transaction
-- Modify Transaction so that we don't automagicly set it as registered, also
-  ensure that entries can only be added to unregistered transactions, thus
-  ensuring data integrity
-- TransactionLog needs to enforce that user is set.
-- Admin should be able to edit lists (adamcik)
-- Account management, optionally connect with users
-- Refactor of lists, statements, invoice etc to report app
-- Lists: Who to include on the list?
-- is_* for Transaction need to check against status not log
-- http://www.b-list.org/weblog/2007/nov/02/handle-choices-right-way/
-- Placeholder flag for group
-- Convenience functions in Account model to match *transaction_set in group
-- Update code with the new Transaction model
-- Do not allow saving Transaction with accounts from different groups in debit
-  or credit
-- Updated transaction lists and detail views.
-- Use new convenience functions for transaction_sets in Group model.
+(emptied 2008-03-24)
 - Add missing {% trans %} tags on tabs, etc.
 - Respect active flag for accounts, or at least indicate that account is
   inactive. As of 2008-03-24, the account summary does not allow showing
@@ -103,10 +61,6 @@ DONE
 WONTFIX
 -------
 
-- Custom base.html for each accountgroups lists?
-- Account list in admin menu
-- Serial number to lists (somewhat in doubt...)
-- Add group.sales_account or something. Must know what account to register
-  sales and expenses on.
+(emptied 2008-03-24)
 - Generalize tabs somehow. Do not repeat code in all templates. Mark active tab
   dynamically.
