@@ -53,7 +53,7 @@ a {
 	color: #204a87;
 }
 a:hover {
-	color: black;
+	color: #444;
 }
 em {
 	font-style: italic;
@@ -113,7 +113,7 @@ ul.menulist {
 	margin-bottom: 0.5em;
 }
 #helptips p {
-	color: #888a85;
+	color: #666;
 }
 
 /* Content area */
@@ -205,11 +205,11 @@ table tr.oddrow {
 }
 .admin a {
 	background: transparent;
-	color: #900 !important;
+	color: #b00 !important;
 }
 .admin a:hover {
 	background: transparent;
-	color: #500 !important;
+	color: #444 !important;
 }
 
 /* Forms */
@@ -226,14 +226,14 @@ input, select, textarea {
         width: 15em;
 }
 input, select, textarea, button {
-        border: 1px solid #2e3436;
+        border: 1px solid #ccc;
         font-size: 100%;
 }
 input:focus, select:focus, textarea:focus {
         background: #ffd;
 }
 input:hover, select:hover, textarea:hover, button:hover {
-        border: 1px solid #555753;
+        border: 1px solid #444;
 }
 button {
         background: #d3d7cf;
