@@ -73,11 +73,11 @@
 
             {% if is_owner %}
                 <li><a href="{% url account-deposit group.slug,account.slug %}">
-                    {% trans "Deposit" %}</a></li>
+                    {% trans "New deposit" %}</a></li>
                 <li><a href="{% url account-withdraw group.slug,account.slug %}">
-                    {% trans "Withdraw" %}</a></li>
+                    {% trans "New withdraw" %}</a></li>
                 <li><a href="{% url account-transfer group.slug,account.slug %}">
-                    {% trans "Transfer" %}</a></li>
+                    {% trans "New transfer" %}</a></li>
             {% endif %}
 
             {% if is_admin %}

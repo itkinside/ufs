@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-24 01:28+0100\n"
+"POT-Creation-Date: 2008-03-24 01:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -517,18 +517,18 @@ msgstr "Oppgaver"
 
 #: templates/accounting/account_summary.html:77
 #: templates/accounting/base.html:76
-msgid "Deposit"
-msgstr "Innskudd"
+msgid "New deposit"
+msgstr "Nytt innskudd"
 
 #: templates/accounting/account_summary.html:79
 #: templates/accounting/base.html:78
-msgid "Withdraw"
-msgstr "Uttak"
+msgid "New withdraw"
+msgstr "Nytt uttak"
 
 #: templates/accounting/account_summary.html:81
 #: templates/accounting/base.html:80
-msgid "Transfer"
-msgstr "Overføring"
+msgid "New transfer"
+msgstr "Ny overføring"
 
 #: templates/accounting/account_summary.html:94
 #: templates/accounting/group_summary.html:72
