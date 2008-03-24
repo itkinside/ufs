@@ -467,27 +467,31 @@ class Transaction(models.Model):
     def save(self):
         debit_sum = 0
         credit_sum = 0
-        debit_groups = []
-        credit_groups = []
+        debit_accounts = []
+        credit_accounts = []
 
         for entry in self.entry_set.all():
             if entry.debit > 0:
                 debit_sum += float(entry.debit)
-                debit_groups.append(entry.account.group)
-            if entry.credit > 0:
+                debit_accounts.append(entry.account)
+            elif entry.credit > 0:
                 credit_sum += float(entry.credit)
-                credit_groups.append(entry.account.group)
+                credit_accounts.append(entry.account)
+
+        for account in debit_accounts + credit_accounts:
+            if account.group != self.group:
+                raise InvalidTransaction('Group of transaction entry account '
+                    + 'does not match group of transaction.')
+
+        account_intersection = set(debit_accounts).intersection(
+            set(credit_accounts))
+        if len(account_intersection):
+            raise InvalidTransaction('The following accounts is both a debit '
+                    + 'and a credit account for this transaction: %s'
+                    % list(account_intersection))
 
         if debit_sum != credit_sum:
             raise InvalidTransaction('Credit and debit do not match.')
-
-        if len(debit_groups) > 1:
-            raise InvalidTransaction(
-                'Accounts from different groups on debit side.')
-
-        if len(credit_groups) > 1:
-            raise InvalidTransaction(
-                'Accounts from different groups on credt side.')
 
         self.last_modified = datetime.now()
         super(Transaction, self).save()
@@ -527,7 +531,8 @@ class Transaction(models.Model):
         if not self.is_rejected() and self.is_registered():
             if not self.is_payed():
                 self.set_payed(user,
-                    message=ugettext('Auto: Is set to recieved, thus also payed.'))
+                    message=ugettext(
+                        'Auto: Is set to recieved, thus also payed.'))
 
             log = TransactionLog(type=self.RECEIVED_STATE, transaction=self)
             log.user = user
@@ -538,8 +543,7 @@ class Transaction(models.Model):
             self.last_modified = datetime.now()
             self.save()
         else:
-            raise InvalidTransaction(
-                'Could not set transaction as received')
+            raise InvalidTransaction('Could not set transaction as received')
 
     def reject(self, user, message=''):
         if (self.is_registered()
