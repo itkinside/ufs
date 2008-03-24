@@ -25,9 +25,9 @@
 <div id="top" class="noprint">
 {% if is_admin %}
 <p id="admin">
-      <b>Admin:</b>
-      <a href="{% url edit-list group.slug,list.slug %}">Edit</a>,
-      <a href="{% url delete-list group.slug,list.slug %}">Delete</a>
+    <b>{% trans "Admin" %}:</b>
+    <a href="{% url edit-list group.slug,list.slug %}">{% trans "Edit" %}</a>,
+    <a href="{% url delete-list group.slug,list.slug %}">{% trans "Delete" %}</a>
 </p>
 {% endif %}
 
