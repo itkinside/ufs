@@ -285,7 +285,7 @@ form p {
         text-align: right;
 }
 /* Account/group summary */
-#accountinfo, #groupinfo, #actions, #lists, #transaction_actions, #statements {
+#accountinfo, #groupinfo, #actions, #lists, #statements {
         float: left;
         margin-right: 3em;
 }
