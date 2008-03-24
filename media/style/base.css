@@ -256,7 +256,8 @@ button {
 input#id_payed, #accounting_approve_transactions table input,
 input#id_registered, input#id_received, form #delete_logo,
 input#id_placeholder, input#id_active, input#id_ignore_block_limit,
-input#id_double, input#id_ignore_blocked {
+input#id_double, input#id_ignore_blocked, input#id_admin_only,
+input#id_delete_logo {
 	/* Fix all checkboxes */
         width: auto;
         border: 0;
