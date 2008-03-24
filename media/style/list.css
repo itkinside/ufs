@@ -93,6 +93,16 @@ th.name {
 	display: inline;
 	padding-left: 0.5em;
 }
+#debug {
+	text-align: left;
+	border-bottom: 1px solid #cccccc;
+	border-top: 1px solid #cccccc;
+	padding: 0.5em;
+	margin-top: 0.5em;
+}
+#debug td {
+	text-align: left;
+}
 
 tfoot img {
 	vertical-align: bottom;
