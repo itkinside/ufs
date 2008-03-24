@@ -156,16 +156,24 @@ class AccountManager(models.Manager):
             select={
             'balance_sql':
                 """
-                SELECT sum(debit)-sum(credit) FROM accounting_transactionentry
+                SELECT sum(debit) - sum(credit)
+                FROM accounting_transactionentry
+                    JOIN accounting_transaction
+                        ON (accounting_transactionentry.transaction_id
+                            = accounting_transaction.id)
                 WHERE account_id = accounting_account.id
-                """,
+                    AND accounting_transaction.status = '%s'
+                """ % Transaction.RECEIVED_STATE,
             'is_user_account_sql':
                 """
-                (accounting_account.owner_id IS NOT NULL AND accounting_account.type = '%s')
+                (accounting_account.owner_id IS NOT NULL
+                    AND accounting_account.type = '%s')
                 """ % Account.LIABILITY_ACCOUNT,
             'group_block_limit_sql':
                 """
-                SELECT accounting_group.block_limit FROM accounting_group WHERE accounting_group.id = accounting_account.group_id
+                SELECT accounting_group.block_limit
+                FROM accounting_group
+                WHERE accounting_group.id = accounting_account.group_id
                 """
             }
         )
@@ -390,9 +398,10 @@ class TransactionManager(models.Manager):
             select={
             'entry_count_sql':
                 """
-                SELECT COUNT(*) FROM accounting_transactionentry WHERE
-                accounting_transactionentry.transaction_id =
-                accounting_transaction.id
+                SELECT COUNT(*)
+                FROM accounting_transactionentry
+                WHERE accounting_transactionentry.transaction_id =
+                    accounting_transaction.id
                 """
             }
         )
