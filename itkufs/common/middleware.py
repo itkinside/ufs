@@ -25,6 +25,9 @@ class UfsMiddleware:
                             slug=view_kwargs['account'])
                 except Account.DoesNotExist:
                     raise Http404
+                # Add account owner flag
+                if view_kwargs['account'].owner == request.user:
+                    view_kwargs['is_owner'] = True
 
             if 'list' in view_kwargs:
                 # Replace list slug with list object

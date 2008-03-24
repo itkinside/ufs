@@ -1,4 +1,7 @@
-itkufs/locale/no/LC_MESSAGES/*.mo
+itkufs/compile-messages.py
+itkufs/itkufs.sqlite
 itkufs/locale/en/LC_MESSAGES/*.mo
-media/logos/*
+itkufs/locale/no/LC_MESSAGES/*.mo
+itkufs/make-messages.py
 itkufs/settings/local.py
+media/logos/*

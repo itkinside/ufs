@@ -8,8 +8,8 @@
 <h3>{% trans "Account info" %}</h3>
 <table class="tabledetails">
     <tr>
-        <th>{% trans "Balance" %}</th>
-        <td>{{ account.user_balance|floatformat:2 }}</td>
+        <th>{% trans "Name" %}</th>
+        <td>{{ account.name }}</td>
     </tr>
 
     <tr>
@@ -22,6 +22,11 @@
         <th>{% trans "Type" %}</th>
         <td>{{ account.get_type_display }}</td>
     {% endif %}
+    </tr>
+
+    <tr>
+        <th>{% trans "Balance" %}</th>
+        <td>{{ account.user_balance|floatformat:2 }}</td>
     </tr>
 
     <tr>
@@ -49,7 +54,7 @@
         {% if group.warn_limit %}
             <td>{{ group.warn_limit|floatformat:2 }}</td>
         {% else %}
-            <td>{{ group.warn_limit }}</td>
+            <td>{{ group.warn_limit|default_if_none:_("None") }}</td>
         {% endif %}
     </tr>
     <tr>
@@ -57,22 +62,34 @@
         {% if group.block_limit %}
             <td>{{ group.block_limit|floatformat:2 }}</td>
         {% else %}
-            <td>{{ group.block_limit }}</td>
+            <td>{{ group.block_limit|default_if_none:_("None") }}</td>
         {% endif %}
     </tr>
 </table>
 </div>
 
-{% ifequal user account.owner %}
+{% if is_owner or is_admin %}
 <div id="actions">
 <h3>{% trans "Actions" %}</h3>
 <ul>
-    <li><a href="{% url account-deposit group.slug,account.slug %}">{% trans "Deposit" %}</a></li>
-    <li><a href="{% url account-withdraw group.slug,account.slug %}">{% trans "Withdraw" %}</a></li>
-    <li><a href="{% url account-transfer group.slug,account.slug %}">{% trans "Transfer" %}</a></li>
+    {% if is_owner %}
+    <li><a href="{% url account-deposit group.slug,account.slug %}">
+        {% trans "New deposit" %}</a></li>
+    <li><a href="{% url account-withdraw group.slug,account.slug %}">
+        {% trans "New withdraw" %}</a></li>
+    <li><a href="{% url account-transfer group.slug,account.slug %}">
+        {% trans "New transfer" %}</a></li>
+    {% endif %}
+
+    {% if is_admin %}
+    <li class="admin"><a href="{% url edit-account group.slug,account.slug %}">
+        {% trans "Edit account" %}</a></li>
+    {% endif %}
 </ul>
 </div>
+{% endif %}
 
+{% if is_owner and not group.admin_only %}
 <div id="lists">
 <h3>{% trans "Lists" %}</h3>
 {% if not group.list_set.count %}
@@ -80,11 +97,12 @@
 {% else %}
 <ul>
     {% for list in group.list_set.all %}
-    <li><a href="{% url view-list group.slug,list.slug %}">{{ list.name }}</a></li>
+    <li><a href="{% url view-list group.slug,list.slug %}">
+        {{ list.name }}</a></li>
     {% endfor %}
 </ul>
 {% endif %}
 </div>
-{% endifequal %}
+{% endif %}
 
 {% endblock %}

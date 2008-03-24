@@ -36,13 +36,15 @@
     </li>
 {% endif %}
 {% if is_admin %}
-    <li class="admin"><a href="{% url edit-list group.slug,list.slug %}">Edit</a></li>
-    <li class="admin"><a href="{% url delete-list group.slug,list.slug %}">Delete</a></li>
+    <li class="admin"><a href="{% url edit-list group.slug,list.slug %}">
+        {% trans "Edit" %}</a></li>
+    <li class="admin"><a href="{% url delete-list group.slug,list.slug %}">
+        {% trans "Delete" %}</a></li>
 {% endif %}
 </ul>
 
 <p id="reminder">
-    {% trans "Please remember to print with backgrounds and landscape orientation if prefered." %}
+    {% trans "Remember to print with backgrounds and landscape orientation." %}
 </p>
 </div>
 

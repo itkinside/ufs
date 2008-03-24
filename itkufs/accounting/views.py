@@ -46,10 +46,11 @@ def account_switch(request, group, is_admin=False):
 
 @login_required
 @limit_to_owner
-def account_summary(request, group, account, is_admin=False):
+def account_summary(request, group, account,
+    is_admin=False, is_owner=False):
     """Show account summary"""
 
-    if request.user == account.owner:
+    if is_owner:
         # Check if active
         if not account.active and not is_admin:
             return HttpResponseForbidden(_('This account has been disabled.'))
@@ -70,7 +71,11 @@ def account_summary(request, group, account, is_admin=False):
     response = object_detail(request, Account.objects.all(), account.id,
         template_name='accounting/account_summary.html',
         template_object_name='account',
-        extra_context={'is_admin': is_admin, 'group': group})
+        extra_context={
+            'is_admin': is_admin,
+            'is_owner': is_owner,
+            'group': group,
+        })
     populate_xheaders(request, response, Account, account.id)
     return response
 
@@ -111,7 +116,8 @@ def edit_group(request, group, is_admin=False):
 
 @login_required
 @limit_to_admin
-def edit_account(request, group, account=None, type='new', is_admin=False):
+def edit_account(request, group, account=None, type='new',
+    is_admin=False, is_owner=False):
     """Create account or edit account properties"""
 
     if request.method == 'POST':
@@ -144,13 +150,15 @@ def edit_account(request, group, account=None, type='new', is_admin=False):
 
     if type == 'edit':
         extra['account'] = account
+        extra['is_owner'] = is_owner
 
     return render_to_response('accounting/account_form.html', extra,
                               context_instance=RequestContext(request))
 
 @login_required
 @limit_to_owner
-def transaction_list(request, group, account=None, page='1', is_admin=False):
+def transaction_list(request, group, account=None, page='1',
+    is_admin=False, is_owner=False):
     """Lists a group or an account's transactions"""
 
     # Get transactions
@@ -167,6 +175,7 @@ def transaction_list(request, group, account=None, page='1', is_admin=False):
                        template_name='accounting/transaction_list.html',
                        extra_context={
                             'is_admin': is_admin,
+                            'is_owner': is_owner,
                             'group': group,
                             'account': account,
                        },
@@ -199,8 +208,16 @@ def transaction_details(request, group, transaction, is_admin=False):
 
 @login_required
 @limit_to_owner
-def transfer(request, group, account=None, transfer_type=None, is_admin=False):
+@db_transaction.commit_on_success
+def transfer(request, group, account=None, transfer_type=None,
+    is_admin=False, is_owner=False):
     """Deposit, withdraw or transfer money"""
+
+    # FIXME: When adding a transfer from one self to one self, which should not
+    # be allowed, an IntegrityError ("columns transaction_id, account_id are
+    # not unique") is raised. Even if commit_on_success is used, an empty
+    # transaction without entries are saved to the database. In other words, we
+    # need more error checking here, or try out commit_manually instead.
 
     if request.method == 'POST':
         data = request.POST
@@ -218,7 +235,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
         form = DepositWithdrawForm(data)
     else:
         return HttpResponseForbidden(
-            _('This page may only be viewed by group admins.'))
+            _('Forbidden if not group admin.'))
 
     if request.method == 'POST' and form.is_valid():
         amount = form.cleaned_data['amount']
@@ -271,7 +288,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
 
         else:
             return HttpResponseForbidden(
-                _('This page may only be viewed by group admins.'))
+                _('Forbidden if not group admin.'))
 
         request.user.message_set.create(
             message='Added transaction: %s' % transaction)
@@ -282,6 +299,7 @@ def transfer(request, group, account=None, transfer_type=None, is_admin=False):
     return render_to_response('accounting/transfer.html',
                               {
                                   'is_admin': is_admin,
+                                  'is_owner': is_owner,
                                   'account': account,
                                   'type': transfer_type,
                                   'title': title,
@@ -317,8 +335,9 @@ def approve_transactions(request, group, page='1', is_admin=False):
                     to_be_rejected.append((t))
 
                 if change_to != 'Rej' and change_to != 'Rec':
-                    transactions.append((t, ChangeTransactionForm(prefix="transaction%d" %
-                        t.id, choices=t.get_valid_logtype_choices())))
+                    transactions.append((t,
+                        ChangeTransactionForm(prefix='transaction%d' % t.id,
+                            choices=t.get_valid_logtype_choices())))
             else:
                 transactions.append((t,form))
 
@@ -346,6 +365,7 @@ def approve_transactions(request, group, page='1', is_admin=False):
                             'transaction_list': transactions,
                        },
                        context_instance=RequestContext(request))
+
 @login_required
 @limit_to_admin
 def reject_transactions(request, group, is_admin=False):
@@ -353,12 +373,13 @@ def reject_transactions(request, group, is_admin=False):
 
     if request.method != 'POST':
         # request.user.message_set.create('') # FIXME Write user message
-        return HttpResponseRedirect(reverse('group-summary', args=(group.slug,)))
+        return HttpResponseRedirect(
+            reverse('group-summary', args=(group.slug,)))
 
     form = RejectTransactionForm(request.POST)
     to_be_rejected = request.POST.getlist('transactions')
-
-    to_be_rejected = Transaction.objects.filter(id__in=to_be_rejected, group=group)
+    to_be_rejected = Transaction.objects.filter(id__in=to_be_rejected,
+        group=group)
 
     if not form.is_valid():
         return render_to_response('accounting/reject_transactions.html',
@@ -371,10 +392,12 @@ def reject_transactions(request, group, is_admin=False):
                            context_instance=RequestContext(request))
 
     for transaction in to_be_rejected:
-        transactions.set_rejected(user=request.user, message=request.POST['reason'])
+        transactions.set_rejected(user=request.user,
+            message=request.POST['reason'])
 
     # FIXME insert user message
-    return HttpResponseRedirect(reverse('approve-transactions', args=(group.slug,)))
+    return HttpResponseRedirect(
+        reverse('approve-transactions', args=(group.slug,)))
 
 @login_required
 @limit_to_admin
@@ -396,7 +419,7 @@ def create_transaction(request, group, is_admin=False):
     if post:
         valid = True
 
-        # FIXME support settlment 
+        # FIXME: support settlement
         transaction = Transaction(group=group)
         transaction.save()
 
@@ -405,17 +428,25 @@ def create_transaction(request, group, is_admin=False):
                 valid = False
             else:
                 if form.cleaned_data['credit'] > 0:
-                    transaction.entry_set.add(TransactionEntry(account=account, credit=form.cleaned_data['credit'], debit=0))
+                    transaction.entry_set.add(
+                        TransactionEntry(account=account,
+                            credit=form.cleaned_data['credit'], debit=0))
                 elif form.cleaned_data['debit']:
-                    transaction.entry_set.add(TransactionEntry(account=account, debit=form.cleaned_data['debit'], credit=0))
+                    transaction.entry_set.add(
+                        TransactionEntry(account=account,
+                            debit=form.cleaned_data['debit'], credit=0))
         for account, form in group_forms:
             if not form.is_valid():
                 valid = False
             else:
                 if form.cleaned_data['credit'] > 0:
-                    transaction.entry_set.add(TransactionEntry(account=account, credit=form.cleaned_data['credit'], debit=0))
+                    transaction.entry_set.add(
+                        TransactionEntry(account=account,
+                            credit=form.cleaned_data['credit'], debit=0))
                 elif form.cleaned_data['debit']:
-                    transaction.entry_set.add(TransactionEntry(account=account, debit=form.cleaned_data['debit'], credit=0))
+                    transaction.entry_set.add(
+                        TransactionEntry(account=account,
+                            debit=form.cleaned_data['debit'], credit=0))
 
         if valid:
             db_transaction.commit()

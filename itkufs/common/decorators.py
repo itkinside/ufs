@@ -35,11 +35,7 @@ def limit_to_owner(function):
             return function(request, *args, **kwargs)
 
         # Check if non-admin are members of the group
-        # Warning: If used on views where account=None is possible, this
-        # assertion will fail for non-admins trying forbidden URLs
-        assert('account' in kwargs and isinstance(kwargs['account'], Account))
-        is_owner = kwargs['account'].owner == request.user
-        if is_owner:
+        if 'is_owner' in kwargs and kwargs['is_owner']:
             return function(request, *args, **kwargs)
 
         # All other
