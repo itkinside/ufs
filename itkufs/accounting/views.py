@@ -335,8 +335,9 @@ def approve_transactions(request, group, page='1', is_admin=False):
                     to_be_rejected.append((t))
 
                 if change_to != 'Rej' and change_to != 'Rec':
-                    transactions.append((t, ChangeTransactionForm(prefix="transaction%d" %
-                        t.id, choices=t.get_valid_logtype_choices())))
+                    transactions.append((t,
+                        ChangeTransactionForm(prefix='transaction%d' % t.id,
+                            choices=t.get_valid_logtype_choices())))
             else:
                 transactions.append((t,form))
 
@@ -364,6 +365,7 @@ def approve_transactions(request, group, page='1', is_admin=False):
                             'transaction_list': transactions,
                        },
                        context_instance=RequestContext(request))
+
 @login_required
 @limit_to_admin
 def reject_transactions(request, group, is_admin=False):
@@ -371,12 +373,13 @@ def reject_transactions(request, group, is_admin=False):
 
     if request.method != 'POST':
         # request.user.message_set.create('') # FIXME Write user message
-        return HttpResponseRedirect(reverse('group-summary', args=(group.slug,)))
+        return HttpResponseRedirect(
+            reverse('group-summary', args=(group.slug,)))
 
     form = RejectTransactionForm(request.POST)
     to_be_rejected = request.POST.getlist('transactions')
-
-    to_be_rejected = Transaction.objects.filter(id__in=to_be_rejected, group=group)
+    to_be_rejected = Transaction.objects.filter(id__in=to_be_rejected,
+        group=group)
 
     if not form.is_valid():
         return render_to_response('accounting/reject_transactions.html',
@@ -389,10 +392,12 @@ def reject_transactions(request, group, is_admin=False):
                            context_instance=RequestContext(request))
 
     for transaction in to_be_rejected:
-        transactions.set_rejected(user=request.user, message=request.POST['reason'])
+        transactions.set_rejected(user=request.user,
+            message=request.POST['reason'])
 
     # FIXME insert user message
-    return HttpResponseRedirect(reverse('approve-transactions', args=(group.slug,)))
+    return HttpResponseRedirect(
+        reverse('approve-transactions', args=(group.slug,)))
 
 @login_required
 @limit_to_admin
