@@ -89,7 +89,7 @@
 </div>
 {% endif %}
 
-{% if is_owner %}
+{% if is_owner and not group.admin_only %}
 <div id="lists">
 <h3>{% trans "Lists" %}</h3>
 {% if not group.list_set.count %}
