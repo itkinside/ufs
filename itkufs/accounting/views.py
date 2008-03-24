@@ -208,9 +208,16 @@ def transaction_details(request, group, transaction, is_admin=False):
 
 @login_required
 @limit_to_owner
+@db_transaction.commit_on_success
 def transfer(request, group, account=None, transfer_type=None,
     is_admin=False, is_owner=False):
     """Deposit, withdraw or transfer money"""
+
+    # FIXME: When adding a transfer from one self to one self, which should not
+    # be allowed, an IntegrityError ("columns transaction_id, account_id are
+    # not unique") is raised. Even if commit_on_success is used, an empty
+    # transaction without entries are saved to the database. In other words, we
+    # need more error checking here, or try out commit_manually instead.
 
     if request.method == 'POST':
         data = request.POST
