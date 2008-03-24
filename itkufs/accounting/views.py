@@ -414,7 +414,7 @@ def create_transaction(request, group, is_admin=False):
     if post:
         valid = True
 
-        # FIXME support settlment 
+        # FIXME: support settlement
         transaction = Transaction(group=group)
         transaction.save()
 
@@ -423,17 +423,25 @@ def create_transaction(request, group, is_admin=False):
                 valid = False
             else:
                 if form.cleaned_data['credit'] > 0:
-                    transaction.entry_set.add(TransactionEntry(account=account, credit=form.cleaned_data['credit'], debit=0))
+                    transaction.entry_set.add(
+                        TransactionEntry(account=account,
+                            credit=form.cleaned_data['credit'], debit=0))
                 elif form.cleaned_data['debit']:
-                    transaction.entry_set.add(TransactionEntry(account=account, debit=form.cleaned_data['debit'], credit=0))
+                    transaction.entry_set.add(
+                        TransactionEntry(account=account,
+                            debit=form.cleaned_data['debit'], credit=0))
         for account, form in group_forms:
             if not form.is_valid():
                 valid = False
             else:
                 if form.cleaned_data['credit'] > 0:
-                    transaction.entry_set.add(TransactionEntry(account=account, credit=form.cleaned_data['credit'], debit=0))
+                    transaction.entry_set.add(
+                        TransactionEntry(account=account,
+                            credit=form.cleaned_data['credit'], debit=0))
                 elif form.cleaned_data['debit']:
-                    transaction.entry_set.add(TransactionEntry(account=account, debit=form.cleaned_data['debit'], credit=0))
+                    transaction.entry_set.add(
+                        TransactionEntry(account=account,
+                            debit=form.cleaned_data['debit'], credit=0))
 
         if valid:
             db_transaction.commit()
