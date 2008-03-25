@@ -180,17 +180,19 @@ class AccountManager(models.Manager):
 
 
 class Account(models.Model):
-    ASSET_ACCOUNT = 'As'        # Eiendeler/aktiva
-    LIABILITY_ACCOUNT = 'Li'    # Gjeld/passiva
-    EQUITY_ACCOUNT = 'Eq'       # Egenkapital
-    INCOME_ACCOUNT = 'In'       # Inntekt
-    EXPENSE_ACCOUNT = 'Ex'      # Utgift
+    ASSET_ACCOUNT = 'As'          # Eiendeler/aktiva
+    LIABILITY_ACCOUNT = 'Li'      # Gjeld/passiva
+    EQUITY_ACCOUNT = 'Eq'         # Egenkapital
+    INCOME_ACCOUNT = 'In'         # Inntekt
+    EXPENSE_ACCOUNT = 'Ex'        # Utgift
+    INCOME_EXPENSE_ACCOUNT = 'IE' # Inntekt/Utgift
     ACCOUNT_TYPE = (
         (ASSET_ACCOUNT, _('Asset')),
         (LIABILITY_ACCOUNT, _('Liability')),
         (EQUITY_ACCOUNT, _('Equity')),
         (INCOME_ACCOUNT, _('Income')),
         (EXPENSE_ACCOUNT, _('Expense')),
+        (INCOME_EXPENSE_ACCOUNT, _('Income / Expense')),
     )
 
     objects = AccountManager()
