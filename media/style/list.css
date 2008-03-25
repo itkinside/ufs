@@ -95,7 +95,6 @@ th.name {
 }
 #debug {
 	text-align: left;
-	border-bottom: 1px solid #cccccc;
 	border-top: 1px solid #cccccc;
 	padding: 0.5em;
 	margin-top: 0.5em;
@@ -108,6 +107,7 @@ tfoot img {
 	vertical-align: bottom;
 	width: 3em;
 	height: 1em;
+	margin-left: 0.4em;
 }
 
 .evenrow {
@@ -125,7 +125,7 @@ tfoot img {
 
 .blacklisted img {
 	vertical-align: middle;
-	height: 1.2em;
+	height: 1.6em;
 	width: 100%;
 	margin: 0;
 }

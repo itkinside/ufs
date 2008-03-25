@@ -16,7 +16,7 @@
 
 <body>
 
-<p class="hidden">{% trans "<b>Invalid</b> list, do not use!" %}</p>
+<p class="hidden">{% trans "<b>Invalid</b> list, do not use!" %} {% trans "Remember to use a web-browser that supports CSS2, ie" %} <a href="http://www.getfirefox.com/">Firefox</a>.</p>
 
 {% with list.column_set.all as columns %}
 {% with list.total_width as width %}
