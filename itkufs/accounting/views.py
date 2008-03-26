@@ -436,7 +436,7 @@ def create_transaction(request, group, is_admin=False):
                         if credit > 0:
                             entry = TransactionEntry(credit=credit, debit=0)
                         elif debit > 0:
-                            entry = TransactionEntry(debit=debit, credit=0)
+                            entry = TransactionEntry(credit=0, debit=debit)
 
                         entry.account = account
                         entry.transaction = transaction
@@ -445,6 +445,8 @@ def create_transaction(request, group, is_admin=False):
         except CreateTransactionException:
             db_transaction.rollback()
         else:
+            transaction.set_registered(user=request.user)
+
             request.user.message_set.create(
                 message= _('Your transaction has been added'))
             db_transaction.commit()
