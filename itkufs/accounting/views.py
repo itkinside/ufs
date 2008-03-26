@@ -413,11 +413,14 @@ def create_transaction(request, group, is_admin=False):
     group_forms = [(account, EntryForm(post, prefix=account.id))
         for account in group.group_account_set]
 
-    if post:
+    if post and settlement.is_valid():
         valid = True
 
-        # FIXME: support settlement
-        transaction = Transaction(group=group)
+        try:
+            settlement = Settlement.objects.get(id=settlement.cleaned_data['settlement'])
+        except Settlement.DoesNotExist:
+            settlement = None
+        transaction = Transaction(group=group, settlement=settlement)
         transaction.save()
 
         for account, form in user_forms:
