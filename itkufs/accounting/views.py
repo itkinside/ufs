@@ -437,14 +437,11 @@ def create_transaction(request, group, is_admin=False):
                         credit = form.cleaned_data['credit']
                         debit = form.cleaned_data['debit']
 
-                        if credit > 0:
-                            entry = TransactionEntry(credit=credit, debit=0)
-                        elif debit > 0:
-                            entry = TransactionEntry(credit=0, debit=debit)
-
-                        entry.account = account
-                        entry.transaction = transaction
-                        entry.save()
+                        if credit > 0 or debit > 0:
+                            entry = TransactionEntry(credit=credit, debit=debit)
+                            entry.account = account
+                            entry.transaction = transaction
+                            entry.save()
 
             transaction.set_registered(user=request.user)
 
