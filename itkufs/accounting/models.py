@@ -52,7 +52,10 @@ class Group(models.Model):
         })
 
     def save(self):
+        if not len(self.slug):
+            raise ValueError('Slug cannot be empty.')
         super(Group, self).save()
+
         # Create default accounts
         if not self.account_set.count():
             bank = Account(name=ugettext('Bank'), slug='bank',
@@ -198,7 +201,7 @@ class Account(models.Model):
     objects = AccountManager()
 
     name = models.CharField(_('name'), max_length=100)
-    slug = models.SlugField(_('slug'), prepopulate_from=['name'],
+    slug = models.SlugField(_('slug'), prepopulate_from=['name'], unique=True,
         help_text=_('A shortname used in URLs etc.'))
     group = models.ForeignKey(Group, verbose_name=_('group'))
     type = models.CharField(_('type'), max_length=2, choices=ACCOUNT_TYPE,
@@ -238,6 +241,11 @@ class Account(models.Model):
             'group': self.group.slug,
             'account': self.slug,
         })
+
+    def save(self):
+        if not len(self.slug):
+            raise ValueError('Slug cannot be empty.')
+        super(Account, self).save()
 
     def balance(self):
         if self.balance_sql:
