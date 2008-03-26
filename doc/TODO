@@ -35,8 +35,10 @@ Templates:
 - Update Norwegian translation. Last done 2008-03-23.
 
 New features:
-- Admin rejection of user claims, using TransactionMessage, only missing
-  emails, but perhaps messages is enough?
+- 'New claim' as an action for regular users to claim expenses from each other
+  or from the group. Will need a Group.expense_account field.
+- Admin rejection of user claims (and deposits and withdrawals), using
+  TransactionMessage, only missing emails, but perhaps messages is enough?
 
 
 SHOULD HAVE
