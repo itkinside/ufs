@@ -1,7 +1,7 @@
 {% load i18n %}
 
-{% if is_paginated %}
     <p>
+{% if is_paginated %}
     {% if has_previous %}
         {% if account %}
             <a href="{% url transaction-list-account-page account.group.slug,account.slug,previous %}">
@@ -39,6 +39,6 @@
         {% endif %}
     {% endif %}
     &mdash;
+{% endif %}
     {% blocktrans %}{{ hits }} hits{% endblocktrans %}
     </p>
-{% endif %}

@@ -35,7 +35,9 @@
 
 {% else %}
 
-{% include "accounting/transaction_list_menu.html" %}
+{% if is_paginated %}
+    {% include "accounting/transaction_list_menu.html" %}
+{% endif %}
 
 <table class="tablelist">
     <tr>
