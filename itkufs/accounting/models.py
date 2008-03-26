@@ -505,7 +505,7 @@ class Transaction(models.Model):
                     % list(account_intersection))
 
         if debit_sum != credit_sum:
-            raise InvalidTransaction('Credit and debit do not match.')
+            raise InvalidTransaction('Credit and debit do not match, credit: %d, debit: %d.' % (credit_sum, debit_sum))
 
         self.last_modified = datetime.now()
         super(Transaction, self).save()
