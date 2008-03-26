@@ -5,6 +5,14 @@
 {% block content %}
 
 <form action="." method="post" id="createtransaction">
+    {% if errors %}
+        <ul class="error">
+            {% for e in errors %}
+                <li>{{ e }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     {{ form.as_p }}
     <label>{% trans "Account:" %}</label>
     <div class="colthree">

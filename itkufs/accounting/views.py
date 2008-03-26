@@ -415,6 +415,8 @@ def create_transaction(request, group, is_admin=False):
     group_forms = [(account, EntryForm(post, prefix=account.id))
         for account in group.group_account_set]
 
+    errors = []
+
     if post and settlement_form.is_valid():
         try:
             settlement = Settlement.objects.get(
@@ -449,9 +451,10 @@ def create_transaction(request, group, is_admin=False):
             request.user.message_set.create(
                 message= _('Your transaction has been added'))
 
-        except InvalidTransaction:
+        except InvalidTransaction, e:
             #db_transaction.rollback()
             transaction.delete()
+            errors.append(e)
         else:
             #db_transaction.commit()
 
@@ -465,5 +468,6 @@ def create_transaction(request, group, is_admin=False):
                                 'form': settlement_form,
                                 'group_forms': group_forms,
                                 'user_forms': user_forms,
+                                'errors': errors,
                               },
                               context_instance=RequestContext(request))
