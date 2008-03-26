@@ -378,10 +378,6 @@ class InvalidTransactionLog(InvalidTransaction):
     def __unicode__(self):
         return u'Invalid transaction log: %s' % self.value
 
-class CreateTransactionException(Exception):
-    def __unicode__(self):
-        return u'Could not create transaction: %s' % self.value
-
 
 class Settlement(models.Model):
     group = models.ForeignKey(Group, verbose_name=_('group'))

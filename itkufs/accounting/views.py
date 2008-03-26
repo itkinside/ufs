@@ -398,7 +398,9 @@ def reject_transactions(request, group, is_admin=False):
 
 @login_required
 @limit_to_admin
-@db_transaction.commit_manually
+# FIXME!! @db_transaction.commit_manually
+# Bugs when doing user.get_and_delete_messages "Transaction managed block ended
+# with pending COMMIT/ROLLBACK"
 def create_transaction(request, group, is_admin=False):
     """Admin view for creating transactions"""
 
@@ -428,7 +430,7 @@ def create_transaction(request, group, is_admin=False):
             for forms in [group_forms, user_forms]:
                 for account, form in forms:
                     if not form.is_valid():
-                        raise CreateTransactionException()
+                        raise InvalidTransaction()
                     else:
                         credit = form.cleaned_data['credit']
                         debit = form.cleaned_data['debit']
@@ -442,14 +444,16 @@ def create_transaction(request, group, is_admin=False):
                         entry.transaction = transaction
                         entry.save()
 
-        except CreateTransactionException:
-            db_transaction.rollback()
-        else:
             transaction.set_registered(user=request.user)
 
             request.user.message_set.create(
                 message= _('Your transaction has been added'))
-            db_transaction.commit()
+
+        except InvalidTransaction:
+            #db_transaction.rollback()
+            transaction.delete()
+        else:
+            #db_transaction.commit()
 
             url = reverse('group-summary', args=(group.slug,))
             return HttpResponseRedirect(url)
