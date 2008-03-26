@@ -414,44 +414,43 @@ def create_transaction(request, group, is_admin=False):
         for account in group.group_account_set]
 
     if post and settlement.is_valid():
-        valid = True
-
         try:
-            settlement = Settlement.objects.get(id=settlement.cleaned_data['settlement'])
+            settlement = Settlement.objects.get(
+                id=settlement.cleaned_data['settlement'])
         except Settlement.DoesNotExist:
             settlement = None
+
         transaction = Transaction(group=group, settlement=settlement)
         transaction.save()
 
-        for account, form in user_forms:
-            if not form.is_valid():
-                valid = False
-            else:
-                if form.cleaned_data['credit'] > 0:
-                    transaction.entry_set.add(
-                        TransactionEntry(account=account,
-                            credit=form.cleaned_data['credit'], debit=0))
-                elif form.cleaned_data['debit']:
-                    transaction.entry_set.add(
-                        TransactionEntry(account=account,
-                            debit=form.cleaned_data['debit'], credit=0))
-        for account, form in group_forms:
-            if not form.is_valid():
-                valid = False
-            else:
-                if form.cleaned_data['credit'] > 0:
-                    transaction.entry_set.add(
-                        TransactionEntry(account=account,
-                            credit=form.cleaned_data['credit'], debit=0))
-                elif form.cleaned_data['debit']:
-                    transaction.entry_set.add(
-                        TransactionEntry(account=account,
-                            debit=form.cleaned_data['debit'], credit=0))
 
-        if valid:
-            db_transaction.commit()
-        else:
+        try:
+            for forms in [group_forms, user_forms]:
+                for account, form in forms:
+                    if not form.is_valid():
+                        raise CreateTransactionException()
+                    else:
+                        credit = form.cleaned_data['credit']
+                        debit = form.cleaned_data['debit']
+
+                        if credit > 0:
+                            entry = TransactionEntry(credit=credit, debit=0)
+                        elif debit > 0:
+                            entry = TransactionEntry(debit=debit, credit=0)
+
+                        entry.account = account
+                        entry.transaction = transaction
+                        entry.save()
+
+        except CreateTransactionException:
             db_transaction.rollback()
+        else:
+            request.user.message_set.create(
+                message= _('Your transaction has been added'))
+            db_transaction.commit()
+
+            url = reverse('group-summary', args=(group.slug,))
+            return HttpResponseRedirect(url)
 
     return render_to_response('accounting/transaction_form.html',
                               {
