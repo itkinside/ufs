@@ -2,47 +2,41 @@ var UFS = {
   init: function() {
     Menu.init();
     Checkbox.init();
-//    Transaction.init();
+    Transaction.init();
     Select.init('id_admins');
     Select.init('id_accounts');
   }
 };
 
-/*
 var Transaction = {
   // Add a sumrow to tables in form#createtransaction
   init: function() {
     var form = document.getElementById('createtransaction');
     if (form == null) return;
 
-    var tables = form.getElementsByTagName('table');
+    var tbody = form.getElementsByTagName('tbody')[0];
 
-    for (var i=0; i<tables.length; i++) {
-      var tbody = tables[i].getElementsByTagName('tbody')[0];
+    var row = document.createElement('tr');
+    var td1 = document.createElement('td');
+    var td2 = document.createElement('td');
+    var td3 = document.createElement('td');
 
-      var row = document.createElement('tr');
-      var td1 = document.createElement('td');
-      var td2 = document.createElement('td');
-      var td3 = document.createElement('td');
+    row.className = 'sum';
+    td2.id = 'debit_sum';
+    td3.id = 'credit_sum';
 
-      row.className = 'sum';
-      td2.id = 'debit_sum'+i;
-      td2.className = 'debit_sum';
-      td3.id = 'credit_sum'+i;
-      td3.className = 'credit_sum';
+    td1.appendChild(document.createTextNode('Sum'));
+    td2.appendChild(document.createTextNode(0));
+    td3.appendChild(document.createTextNode(0));
+    row.appendChild(td1); row.appendChild(td2); row.appendChild(td3);
 
-      td1.appendChild(document.createTextNode('Sum'));
-      td2.appendChild(document.createTextNode(0));
-      td3.appendChild(document.createTextNode(0));
-      row.appendChild(td1); row.appendChild(td2); row.appendChild(td3);
+    tbody.appendChild(row);
 
-      tbody.appendChild(row);
-      addEvent(tbody, 'keyup', Transaction.update);
+    addEvent(tbody, 'keyup', Transaction.update);
 
-      var inputs = tbody.getElementsByTagName('input');
-      for (var j=0; j<inputs.length; j++) {
-        addEvent(inputs[j], 'change', Transaction.update);
-      }
+    var inputs = tbody.getElementsByTagName('input');
+    for (var j=0; j<inputs.length; j++) {
+      addEvent(inputs[j], 'change', Transaction.update);
     }
     Transaction.update();
   },
@@ -50,35 +44,41 @@ var Transaction = {
     var form = document.getElementById('createtransaction');
     if (form == null) return;
 
-    var tables = form.getElementsByTagName('table');
+    var inputs = form.getElementsByTagName('tbody')[0].getElementsByTagName('input');
 
-    for (var i=0; i<tables.length; i++) {
-      var inputs = tables[i].getElementsByTagName('input');
+    var debit = 0;
+    var credit = 0;
+    for (var j=0; j<inputs.length; j++) {
+    	var input = inputs[j];
+      var value = input.value;
 
-      var debit = 0;
-      var credit = 0;
-      for (var j=0; j<inputs.length; j++) {
-      	var input = inputs[j];
-	var value = input.value;
-
-	if (isNaN(value)) {
-          input.className = "error";
-	} else {
-          if (input.id.match(/debit/))
-	    debit += Number(input.value);
-	  else if (input.id.match(/credit/))
-	    credit += Number(input.value);
-          input.className = "";
-	}
+      if (isNaN(value)) {
+        input.className = "error";
+      } else {
+        if (input.id.match(/debit/))
+          debit += Number(input.value);
+        else if (input.id.match(/credit/))
+          credit += Number(input.value);
+        input.className = "";
       }
+    }
 
-      document.getElementById('debit_sum'+i).innerHTML = debit;
-      document.getElementById('credit_sum'+i).innerHTML = credit;
+    var debit_sum  = document.getElementById('debit_sum');
+    var credit_sum = document.getElementById('credit_sum');
+
+    debit_sum.innerHTML = debit;
+    credit_sum.innerHTML = credit;
+
+    if (debit != credit) {
+      debit_sum.className  = 'error';
+      credit_sum.className = 'error';
+    } else {
+      debit_sum.className  = 'ok';
+      credit_sum.className = 'ok';
     }
 
   }
 };
-*/
 
 var Checkbox = {
   // Functions to add all, none and invert buttons to modify checkboxes in

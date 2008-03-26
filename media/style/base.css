@@ -197,7 +197,7 @@ table tr.oddrow {
 }
 .error, .blocked {
 	background: transparent;
-	color: #c00;
+	color: #A40000;
 }
 .error input {
 	border: 1px solid #c00;
@@ -207,11 +207,14 @@ table tr.oddrow {
 }
 .admin a {
 	background: transparent;
-	color: #b00 !important;
+	color: #CE5C00 !important;
 }
 .admin a:hover {
 	background: transparent;
-	color: #444 !important;
+	color: #F57900 !important;
+}
+.ok {
+	color: #4E9A06;
 }
 
 /* Forms */
