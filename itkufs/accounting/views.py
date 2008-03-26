@@ -409,16 +409,16 @@ def create_transaction(request, group, is_admin=False):
     else:
         post = None
 
-    settlement = SettlementForm(post, prefix='settlement')
+    settlement_form = SettlementForm(post, prefix='settlement')
     user_forms = [(account, EntryForm(post, prefix=account.id))
         for account in group.user_account_set]
     group_forms = [(account, EntryForm(post, prefix=account.id))
         for account in group.group_account_set]
 
-    if post and settlement.is_valid():
+    if post and settlement_form.is_valid():
         try:
             settlement = Settlement.objects.get(
-                id=settlement.cleaned_data['settlement'])
+                id=settlement_form.cleaned_data['settlement'])
         except Settlement.DoesNotExist:
             settlement = None
 
@@ -462,7 +462,7 @@ def create_transaction(request, group, is_admin=False):
                               {
                                 'is_admin': is_admin,
                                 'group': group,
-                                'form': settlement,
+                                'form': settlement_form,
                                 'group_forms': group_forms,
                                 'user_forms': user_forms,
                               },
