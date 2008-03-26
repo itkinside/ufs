@@ -404,12 +404,11 @@ class TransactionTestCase(unittest.TestCase):
             'Reason for rejecting')
 
     def testReceiveNotPayedTransaction(self):
-        """Checks that receiving a transaction that is not payed fails"""
+        """Checks that receiving a transaction that is not payed does not fail"""
 
         transaction = self.transaction
 
-        self.assertRaises(InvalidTransaction, transaction.set_received,
-            user=self.user)
+        transaction.set_received(user=self.user)
 
 class LogTestCase(unittest.TestCase):
     def setUp(self):
