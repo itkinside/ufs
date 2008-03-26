@@ -162,10 +162,7 @@ def transaction_list(request, group, account=None, page='1',
     """Lists a group or an account's transactions"""
 
     # Get transactions
-    if account is not None:
-        transactions = account.transaction_set
-    else:
-        transactions = group.transaction_set
+    transactions = (account or group).transaction_set_with_rejected
 
     # Pass on to generic view
     response = object_list(request, transactions,
