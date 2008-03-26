@@ -79,8 +79,13 @@ class TransferForm(DepositWithdrawForm):
         super(DepositWithdrawForm, self).__init__(*args, **kwargs)
 
         if account:
-            self.fields['credit_account'].choices = [(account.id, account.name)
-                for account in account.group.user_account_set]
+            choices = []
+
+            for a in account.group.user_account_set:
+                if a != account:
+                    choices.append((a.id, a.name))
+
+            self.fields['credit_account'].choices = choices
 
 class RejectTransactionForm(forms.Form):
     reason = forms.CharField(label=_('Reason'),
