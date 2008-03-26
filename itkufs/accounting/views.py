@@ -392,7 +392,7 @@ def reject_transactions(request, group, is_admin=False):
                            context_instance=RequestContext(request))
 
     for transaction in to_be_rejected:
-        transactions.set_rejected(user=request.user,
+        transaction.set_rejected(user=request.user,
             message=request.POST['reason'])
 
     # FIXME insert user message
