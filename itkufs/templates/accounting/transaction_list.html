@@ -49,19 +49,19 @@
     </tr>
     {% for t in transaction_list %}
     {% with t.entry_count_sql as rowspan %}
-    <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}
-        {% if t.is_rejected %}
-            rejected
-        {% else %}
-            {% if not t.is_received %}
-                pending
-            {% else %}
-                received
-            {% endif %}
-        {% endif %}">
+    <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}">
         {% for e in t.entry_set.select_related %}
             {% if forloop.first %}
-                <td rowspan="{{ rowspan }}" class="status">
+                <td rowspan="{{ rowspan }}" class="status
+                    {% if t.is_rejected %}
+                        rejected
+                    {% else %}
+                        {% if not t.is_received %}
+                            pending
+                        {% else %}
+                            received
+                        {% endif %}
+                    {% endif %}">
                     {% blocktrans with t.get_status_display as status and t.last_modified|date:"Y-m-d H:i" as last_modified %}
                         <b>{{ status }}</b> at {{ last_modified }}
                     {% endblocktrans %}
