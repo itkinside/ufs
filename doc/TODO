@@ -37,6 +37,7 @@ New features:
   or from the group. Will need a Group.expense_account field.
 - Admin rejection of user claims (and deposits and withdrawals), using
   TransactionMessage, only missing emails, but perhaps messages is enough?
+- Do something reasonable with settlements or simply remove them.
 
 
 SHOULD HAVE
