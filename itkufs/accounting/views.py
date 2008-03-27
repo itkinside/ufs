@@ -156,10 +156,14 @@ def edit_account(request, group, account=None, type='new',
                               context_instance=RequestContext(request))
 
 @login_required
-@limit_to_owner
+@limit_to_group
 def transaction_list(request, group, account=None, page='1',
     is_admin=False, is_owner=False):
     """Lists a group or an account's transactions"""
+
+    if account and not is_owner and not is_admin:
+        # FIXME incorperate into decorator?
+        return HttpResponseForbidden(_('Forbidden if not account owner or group admin.'))
 
     # Get transactions
     transactions = (account or group).transaction_set_with_rejected
