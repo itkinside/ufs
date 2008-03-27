@@ -380,13 +380,13 @@ def reject_transactions(request, group, is_admin=False):
 
     if not form.is_valid():
         return render_to_response('accounting/reject_transactions.html',
-                           {
-                                'is_admin': is_admin,
-                                'group': group,
-                                'transactions': to_be_rejected,
-                                'form': form,
-                           },
-                           context_instance=RequestContext(request))
+            {
+                 'is_admin': is_admin,
+                 'group': group,
+                 'transactions': to_be_rejected,
+                 'form': form,
+            },
+            context_instance=RequestContext(request))
 
     for transaction in to_be_rejected:
         transaction.set_rejected(user=request.user,
@@ -395,6 +395,33 @@ def reject_transactions(request, group, is_admin=False):
     # FIXME insert user message
     return HttpResponseRedirect(
         reverse('approve-transactions', args=(group.slug,)))
+
+@login_required
+@limit_to_admin
+def create_settlement(request, group, is_admin=False):
+    """Admin view for creating new settlements"""
+
+    if request.method == 'POST':
+        form = SettlementForm(request.POST)
+
+        if form.is_valid():
+            settlement = form.save(commit=False)
+
+            settlement.group = group
+            settlement.save()
+
+            return HttpResponseRedirect(
+                reverse('group-summary', args=(group.slug,)))
+    else:
+        form = SettlementForm()
+
+    return render_to_response('accounting/settlement_form.html',
+        {
+            'form': form,
+            'group': group,
+        },
+        context_instance=RequestContext(request))
+
 
 @login_required
 @limit_to_admin
@@ -409,7 +436,7 @@ def create_transaction(request, group, is_admin=False):
     else:
         post = None
 
-    settlement_form = SettlementForm(post, prefix='settlement')
+    settlement_form = TransactionSettlementForm(post, prefix='settlement')
     user_forms = [(account, EntryForm(post, prefix=account.id))
         for account in group.user_account_set.filter(active=True)]
     group_forms = [(account, EntryForm(post, prefix=account.id))

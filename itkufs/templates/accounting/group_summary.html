@@ -43,8 +43,10 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
 <div id="actions">
 <h3>{% trans "Actions" %}</h3>
     <ul class="admin">
-        <li><a href="{% url multiple-transactions group.slug %}">
+        <li><a href="{% url create-transaction group.slug %}">
             {% trans "Create transaction" %}</a></li>
+        <li><a href="{% url create-settlement group.slug %}">
+            {% trans "Create settlment" %}</a></li>
         <li><a href="{% url approve-transactions group.slug %}">
             {% trans "Approve transactions" %}
             {% if group.not_payed_transaction_set.count %}*{% endif %}</a></li>

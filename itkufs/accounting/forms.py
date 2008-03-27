@@ -44,11 +44,15 @@ class GroupForm(CustomModelForm):
         return group
 
 
-class SettlementForm(CustomModelForm):
+class TransactionSettlementForm(CustomModelForm):
     class Meta:
         model = Transaction
         fields = ('settlement',)
 
+class SettlementForm(CustomModelForm):
+    class Meta:
+        model = Settlement
+        exclude = ['group']
 
 class ChangeTransactionForm(forms.Form):
     def __init__(self, *args, **kwargs):

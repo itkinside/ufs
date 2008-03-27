@@ -389,6 +389,7 @@ class Settlement(models.Model):
         ordering = ['date']
         verbose_name = _('settlement')
         verbose_name_plural = _('settlements')
+        unique_together = (('date', 'comment', 'group'),)
 
     class Admin:
         pass

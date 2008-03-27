@@ -17,8 +17,10 @@ urlpatterns = patterns('',
         approve_transactions, name='approve-transactions'),
     url(r'^(?P<group>[0-9a-z_-]+)/reject_transaction/$',
         reject_transactions, name='reject-transactions'),
-    url(r'^(?P<group>[0-9a-z_-]+)/group-transaction/$',
-        create_transaction, name='multiple-transactions'),
+    url(r'^(?P<group>[0-9a-z_-]+)/create-transaction/$',
+        create_transaction, name='create-transaction'),
+    url(r'^(?P<group>[0-9a-z_-]+)/create-settlement/$',
+        create_settlement, name='create-settlement'),
     # FIXME: No transfer view with type 'register'?
 
     ### Account
