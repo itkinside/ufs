@@ -68,3 +68,79 @@ var Transaction = {
   }
 };
 Element.observe(window, 'load', Transaction.init);
+
+var Multiselect = {
+  init: function() {
+    $$('select[multiple=multiple]').each( // Use css selector to get right nodes.
+      function(selected) {
+        // Create sibling select
+        var available = new Element('select', {
+	  'multiple': 'multiple',
+	});
+
+	// FIXME nucking the old parent may not be generic enough
+	var old_parent = selected.parentNode;
+	var new_parent = new Element('p');
+
+	new_parent.insert(old_parent.select('label')[0]);
+	var div = new Element('div', {'style': 'float:left'}); // FIXME add class instead of style perhaps?
+	div.insert(new Element('span', {'style': 'vertical-align: top'}).update('Selected'));
+	div.insert(selected);
+
+	new_parent.insert(div);
+
+	div = new Element('div', {'style': 'float: left; margin-left: 0.5em'});
+	div.insert(new Element('span', {'style': 'vertical-align: top'}).update('Available'));
+	div.insert(available);
+
+	new_parent.insert(div);
+
+        // Set the style of the selects.
+	selected.setStyle({'height': '10em', 'display': 'block'});
+	available.setStyle({'height': '10em', 'display': 'block'});
+
+	old_parent.replace(new_parent);
+
+	// Move non-selected items to available
+	selected.select('option').each(
+	  function(option) {
+            if (!option.selected) {
+	      available.insert(option);
+	    }
+	    option.selected = '';
+	  }
+	)
+
+	// Add event handler for selected
+	selected.observe('click',
+	  function(e) {
+	    if (e.element().nodeName == 'OPTION') {
+	      available.insert(e.element());
+	      e.element().selected = '';
+	    }
+	  }
+	);
+	// Add event handler for available
+	available.observe('click',
+	  function(e) {
+	    if (e.element().nodeName == 'OPTION') {
+	      selected.insert(e.element());
+	      e.element().selected = '';
+	    }
+	  }
+	);
+      }
+    );
+    // Add global submit handler.
+    document.observe('submit',
+      function() {
+        $$('select[multiple=multiple] option').each(
+          function(option) {
+    	    option.selected = 'selected';
+          }
+        )
+      }
+    );
+  }
+}
+Element.observe(window, 'load', Multiselect.init);
