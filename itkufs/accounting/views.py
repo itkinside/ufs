@@ -438,7 +438,7 @@ def create_transaction(request, group, is_admin=False):
                         debit = form.cleaned_data['debit']
 
                         if credit > 0 or debit > 0:
-                            entry = TransactionEntry(credit=credit, debit=debit)
+                            entry = TransactionEntry(credit=credit or 0, debit=debit or 0)
                             entry.account = account
                             entry.transaction = transaction
                             entry.save()
