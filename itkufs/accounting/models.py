@@ -709,6 +709,7 @@ class TransactionEntry(models.Model):
         unique_together = (('transaction', 'account'),)
         verbose_name = _('transaction entry')
         verbose_name_plural = _('transaction entries')
+        ordering = ['credit', 'debit']
 
     def __unicode__(self):
         return _(u'%(account)s: debit %(debit)s, credit %(credit)s') % {
