@@ -187,6 +187,9 @@ table tr.oddrow {
 .float_right {
 	float: right;
 }
+.clear {
+	clear: both;
+}
 .pending, .comment, .comment a, .none {
 	background: transparent;
 	color: #888a85;

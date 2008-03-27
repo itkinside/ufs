@@ -27,7 +27,7 @@ def group_summary(request, group, is_admin=False):
     response = object_detail(request, Group.objects.all(), group.id,
         template_name='accounting/group_summary.html',
         template_object_name='group',
-        extra_context={'is_admin': is_admin})
+        extra_context={'is_admin': is_admin, 'all': 'all' in request.GET})
     populate_xheaders(request, response, Group, group.id)
     return response
 
@@ -411,9 +411,9 @@ def create_transaction(request, group, is_admin=False):
 
     settlement_form = SettlementForm(post, prefix='settlement')
     user_forms = [(account, EntryForm(post, prefix=account.id))
-        for account in group.user_account_set]
+        for account in group.user_account_set.filter(active=True)]
     group_forms = [(account, EntryForm(post, prefix=account.id))
-        for account in group.group_account_set]
+        for account in group.group_account_set.filter(active=True)]
 
     errors = []
 

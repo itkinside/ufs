@@ -120,6 +120,8 @@ class GroupTestCase(unittest.TestCase):
         set = self.group.not_rejected_transaction_set
         self.assertEqual(set.count(), 3)
 
+    #FIXME add user_account testcase and group account testcase!
+
 
 class AccountTestCase(unittest.TestCase):
     # FIXME: Test all account properties
