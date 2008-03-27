@@ -201,7 +201,7 @@ class Account(models.Model):
     objects = AccountManager()
 
     name = models.CharField(_('name'), max_length=100)
-    slug = models.SlugField(_('slug'), prepopulate_from=['name'], unique=True,
+    slug = models.SlugField(_('slug'), prepopulate_from=['name'],
         help_text=_('A shortname used in URLs etc.'))
     group = models.ForeignKey(Group, verbose_name=_('group'))
     type = models.CharField(_('type'), max_length=2, choices=ACCOUNT_TYPE,
