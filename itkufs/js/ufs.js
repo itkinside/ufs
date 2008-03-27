@@ -11,70 +11,58 @@ var UFS = {
 var Transaction = {
   // Add a sumrow to tables in form#createtransaction
   init: function() {
-    var form = document.getElementById('createtransaction');
-    if (form == null) return;
+    var tbody = $$('#createtransaction tbody')[0];
+    if (tbody == null) return;
 
-    var tbody = form.getElementsByTagName('tbody')[0];
+    var row = new Element('tr', { 'class': 'sum'})
+    row.insert(new Element('td').update('Sum'));
+    row.insert(new Element('td', { 'id': 'debit_sum'}));
+    row.insert(new Element('td', { 'id': 'credit_sum'}));
+    tbody.insert(row);
 
-    var row = document.createElement('tr');
-    var td1 = document.createElement('td');
-    var td2 = document.createElement('td');
-    var td3 = document.createElement('td');
+    tbody.observe('keyup', Transaction.update);
 
-    row.className = 'sum';
-    td2.id = 'debit_sum';
-    td3.id = 'credit_sum';
-
-    td1.appendChild(document.createTextNode('Sum'));
-    td2.appendChild(document.createTextNode(0));
-    td3.appendChild(document.createTextNode(0));
-    row.appendChild(td1); row.appendChild(td2); row.appendChild(td3);
-
-    tbody.appendChild(row);
-
-    addEvent(tbody, 'keyup', Transaction.update);
-
-    var inputs = tbody.getElementsByTagName('input');
-    for (var j=0; j<inputs.length; j++) {
-      addEvent(inputs[j], 'change', Transaction.update);
-    }
+    tbody.select('input').each(
+      function(input) {
+        input.observe('change', Transaction.update);
+        input.observe('click', Transaction.update);
+      }
+    )
     Transaction.update();
   },
   update: function() {
-    var form = document.getElementById('createtransaction');
-    if (form == null) return;
-
-    var inputs = form.getElementsByTagName('tbody')[0].getElementsByTagName('input');
+    var inputs = $$('#createtransaction tbody input');
 
     var debit = 0;
     var credit = 0;
-    for (var j=0; j<inputs.length; j++) {
-    	var input = inputs[j];
-      var value = input.value;
+    var error = false;
 
-      if (isNaN(value)) {
-        input.className = "error";
-      } else {
-        if (input.id.match(/debit/))
-          debit += Number(input.value);
-        else if (input.id.match(/credit/))
-          credit += Number(input.value);
-        input.className = "";
+    inputs.each(
+      function(input) {
+        var value = input.value;
+
+        if (isNaN(value) || value < 0) {
+          input.parentNode.addClassName("error");
+	  error = true;
+        } else {
+          if (input.id.match(/debit/))
+            debit += Number(input.value);
+          else if (input.id.match(/credit/))
+            credit += Number(input.value);
+          input.parentNode.removeClassName('error');
+        }
       }
-    }
+    )
 
-    var debit_sum  = document.getElementById('debit_sum');
-    var credit_sum = document.getElementById('credit_sum');
+    $('debit_sum').update(debit);
+    $('credit_sum').update(credit);
 
-    debit_sum.innerHTML = debit;
-    credit_sum.innerHTML = credit;
-
-    if (debit != credit) {
-      debit_sum.className  = 'error';
-      credit_sum.className = 'error';
+    if (debit != credit || error) {
+      $('debit_sum').className  = 'error';
+      $('credit_sum').className = 'error';
     } else {
-      debit_sum.className  = 'ok';
-      credit_sum.className = 'ok';
+      $('debit_sum').className  = 'ok';
+      $('credit_sum').className = 'ok';
     }
 
   }
@@ -340,4 +328,4 @@ function addEvent(obj, evType, fn) {
     }
 }
 
-window.onload = UFS.init;
+Element.observe(window, 'load', UFS.init);

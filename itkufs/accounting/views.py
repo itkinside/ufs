@@ -432,7 +432,7 @@ def create_transaction(request, group, is_admin=False):
             for forms in [group_forms, user_forms]:
                 for account, form in forms:
                     if not form.is_valid():
-                        raise InvalidTransaction()
+                        raise InvalidTransaction('Form was not valid')
                     else:
                         credit = form.cleaned_data['credit']
                         debit = form.cleaned_data['debit']
