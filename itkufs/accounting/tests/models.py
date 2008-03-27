@@ -239,6 +239,7 @@ class AccountTestCase(unittest.TestCase):
         set = self.account.not_rejected_transaction_set
         self.assertEqual(set.count(), 3)
 
+    # FIXME test that one account per user per group is enforced
 
 class TransactionTestCase(unittest.TestCase):
     def setUp(self):

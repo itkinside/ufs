@@ -214,7 +214,7 @@ class Account(models.Model):
 
     class Meta:
         ordering = ['group', 'type', 'name']
-        unique_together = (('slug', 'group'),)
+        unique_together = (('slug', 'group'), ('owner', 'group'))
         verbose_name = _('account')
         verbose_name_plural = _('accounts')
 
