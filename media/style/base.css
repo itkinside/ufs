@@ -209,12 +209,10 @@ table tr.oddrow {
 	text-decoration: line-through;
 }
 .admin a {
-	background: transparent;
-	color: #CE5C00 !important;
+	color: #F57900 !important;
 }
 .admin a:hover {
-	background: transparent;
-	color: #F57900 !important;
+	color: #CE5C00 !important;
 }
 .ok, .received b {
 	color: #4E9A06;
