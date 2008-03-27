@@ -39,6 +39,10 @@ New features:
   TransactionMessage, only missing emails, but perhaps messages is enough?
 - Do something reasonable with settlements or simply remove them.
 
+Other:
+- Should we be able to cancel payments that are set to payed by user deposit
+  but never payed?
+
 
 SHOULD HAVE
 -----------
