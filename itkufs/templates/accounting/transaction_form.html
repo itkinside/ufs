@@ -22,9 +22,8 @@
             </tr>
         </thead>
         <tbody>
-        {% cycle evenrow,oddrow as rowcolors %}
         {% for a,f in group_forms %}
-            <tr class="{% cycle rowcolors %}">
+            <tr class="{% cycle evenrow,oddrow as rowcolors %}">
                 <td>{{ a.name }}</td>
                 {{ f.as_table_row }}
             </tr>
