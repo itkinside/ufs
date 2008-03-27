@@ -164,11 +164,11 @@ table td {
 	padding: 0.3em;
 	vertical-align: top;
 }
-table tr.evenrow {
+table tr.evenrow, table tr.oddrow .status, table tr.oddrow .details {
 	background: white;
 }
 table tr.oddrow {
-	background: #eeeeec;
+	background: #EEEEEC;
 }
 
 /* Content layout */
@@ -198,7 +198,7 @@ table tr.oddrow {
 	background: transparent;
 	color: #ce5c00;
 }
-.error, .blocked, .Rej {
+.error, .blocked, .rejected b {
 	background: transparent;
 	color: #A40000;
 }
@@ -216,7 +216,7 @@ table tr.oddrow {
 	background: transparent;
 	color: #F57900 !important;
 }
-.ok, .Rec {
+.ok, .received b {
 	color: #4E9A06;
 }
 

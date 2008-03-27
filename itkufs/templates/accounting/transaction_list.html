@@ -50,48 +50,44 @@
     {% for t in transaction_list %}
     {% with t.entry_count_sql as rowspan %}
     <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}
-        {% if t.is_rejected %}rejected{% else %}
-        {% if not t.is_received %}pending{% endif %}{% endif %}">
-        {% for e in t.entry_set.select_related %}
-        {% if forloop.first %}
-        <td rowspan="{{ rowspan }}">
-                {% blocktrans with t.get_status_display as status and t.last_modified|date:"Y-m-d H:i" as last_modified and t.status as class %}
-                    <span class="{{ class }}">{{ status }}</span> at {{ last_modified }}
-                {% endblocktrans %}
-        </td>
-        {% endif %}
-        <td class="account">
-            {% if is_admin %}
-                {% ifnotequal e.account.group group %}
-                <a href="{% url group-summary e.account.group.slug %}">{{ e.account.group.name }}</a>:
-                {% endifnotequal %}
-                <a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{ e.account.name }}</a>
+        {% if t.is_rejected %}
+            rejected
+        {% else %}
+            {% if not t.is_received %}
+                pending
             {% else %}
-                {% ifnotequal e.account.group group %}
-                {{ e.account.group.name }}:
-                {% endifnotequal %}
-                {{ e.account.name }}
+                received
             {% endif %}
-        </td>
-        <td class="align_right debit">
-            {% if e.debit %}
-            {{ e.debit|stringformat:"0.2f" }}
+        {% endif %}">
+        {% for e in t.entry_set.select_related %}
+            {% if forloop.first %}
+                <td rowspan="{{ rowspan }}" class="status">
+                    {% blocktrans with t.get_status_display as status and t.last_modified|date:"Y-m-d H:i" as last_modified %}
+                        <b>{{ status }}</b> at {{ last_modified }}
+                    {% endblocktrans %}
+                </td>
+            {% else %}
+                <tr class="{% cycle trclass %}">
             {% endif %}
-        </td>
-        <td class="align_right credit">
-            {% if e.credit %}
-            {{ e.credit|stringformat:"0.2f" }}
+            <td class="account">
+                {% if is_admin %}
+                    <a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{ e.account.name }}</a>
+                {% else %}
+                    {{ e.account.name }}
+                {% endif %}
+            </td>
+            <td class="align_right debit">
+                {{ e.debit|default:""|stringformat:"0.2f" }}
+            </td>
+            <td class="align_right credit">
+                {{ e.credit|default:""|stringformat:"0.2f" }}
+            </td>
+            {% if forloop.first %}
+                <td rowspan="{{ rowspan }}" class="details">
+                    <a href="{{ t.get_absolute_url }}">Details</a>
+                </td>
             {% endif %}
-        </td>
-        {% if forloop.first %}
-        <td rowspan="{{ rowspan }}" class="details">
-            <a href="{{ t.get_absolute_url }}">Details</a>
-        </td>
-        {% endif %}
-    </tr>
-    <tr class="{{ trclass }}
-        {% if t.is_rejected %}rejected{% else %}
-        {% if not t.is_received %}pending{% endif %}{% endif %}">
+            </tr>
         {% endfor %}
     </tr>
     {% endwith %}
