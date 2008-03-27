@@ -205,7 +205,7 @@ table tr.oddrow {
 .error input {
 	border: 1px solid #c00;
 }
-.disabled td {
+.disabled td, .disabled {
 	text-decoration: line-through;
 }
 .admin a {
