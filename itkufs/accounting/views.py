@@ -93,7 +93,7 @@ def edit_group(request, group, is_admin=False):
             if old_logo and old_logo != group.get_logo_filename():
                 os.remove(old_logo)
 
-            elif 'delete_logo' in form.cleaned_data:
+            elif 'delete_logo' in form.cleaned_data and old_logo:
                 os.remove(group.get_logo_filename())
                 group.logo = ''
                 group.save()
