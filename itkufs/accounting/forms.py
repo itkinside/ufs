@@ -39,15 +39,15 @@ class GroupForm(CustomModelForm):
         exclude = ('slug',)
 
     def save(self, **kwargs):
+        original_commit = kwargs.pop('commit', True)
         kwargs['commit'] = False
         group = super(GroupForm, self).save(**kwargs)
 
         if not group.slug:
             group.slug = slugify(group.name)
 
-        group.save()
-        return group
-
+        kwargs['commit'] = original_commit
+        return super(GroupForm, self).save(**kwargs)
 
 class TransactionSettlementForm(CustomModelForm):
     class Meta:

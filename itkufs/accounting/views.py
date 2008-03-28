@@ -90,6 +90,7 @@ def edit_group(request, group, is_admin=False):
         form = GroupForm(data=request.POST, files=request.FILES, instance=group)
         if form.is_valid():
             form.save()
+
             if old_logo and old_logo != group.get_logo_filename():
                 os.remove(old_logo)
 
