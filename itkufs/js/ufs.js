@@ -14,10 +14,10 @@ var Transaction = {
     var tbody = $$('#createtransaction tbody')[0];
     if (tbody == null) return;
 
-    var row = new Element('tr', { 'class': 'sum'})
+    var row = new Element('tr', { 'style': 'font-weight: bold'})
     row.insert(new Element('td').update('Sum'));
-    row.insert(new Element('td', { 'id': 'debit_sum'}));
-    row.insert(new Element('td', { 'id': 'credit_sum'}));
+    row.insert(new Element('td', { 'id': 'debit_sum', 'style': 'text-align: right'}));
+    row.insert(new Element('td', { 'id': 'credit_sum', 'style': 'text-align: right'}));
     tbody.insert(row);
 
     tbody.observe('keyup', Transaction.update);

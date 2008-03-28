@@ -176,6 +176,8 @@ table tr.oddrow {
 .clear {
 	clear: both;
 }
+
+/* colors */
 .pending, .comment, .comment a, .none {
 	background: transparent;
 	color: #888a85;
@@ -186,10 +188,10 @@ table tr.oddrow {
 }
 .error, .blocked, .rejected b, .errorlist {
 	background: transparent;
-	color: #A40000;
+	color: #A40000 !important;
 }
 .error input {
-	border: 1px solid #c00;
+	border: 1px solid #c00 !important;
 }
 .disabled td, .disabled {
 	text-decoration: line-through;
@@ -235,16 +237,6 @@ table tr.oddrow {
 	display: block;
 }
 
-#createtransaction .debit_sum,
-#createtransaction .credit_sum {
-        text-align: right;
-}
-#createtransaction .sum {
-        font-weight: bold;
-}
-#createtransaction #debit_sum, #createtransaction #credit_sum {
-        text-align: right;
-}
 /* Account/group summary */
 #accountinfo, #groupinfo, #actions, #lists, #statements {
         float: left;
