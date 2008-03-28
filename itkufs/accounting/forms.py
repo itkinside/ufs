@@ -29,6 +29,11 @@ class AccountForm(CustomModelForm):
 class GroupForm(CustomModelForm):
     delete_logo = forms.BooleanField()
 
+    def __init__(self, *args, **kwargs):
+        super(GroupForm, self).__init__(*args, **kwargs)
+        if 'instance' not in kwargs or kwargs['instance'].logo == '':
+            del self.fields['delete_logo']
+
     class Meta:
         model = Group
         exclude = ('slug',)

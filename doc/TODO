@@ -55,6 +55,11 @@ New features:
 - User registration of expenses. Includes adding {sales,expense}_account to
   Group. This is listed in the roadmap as a v2 feature.
 
+MIGHT HAVE
+----------
+- Figure out a smart way of creating papers/pdf's to use in BSF. A standerdised
+  setup would probably be beneficial.
+
 
 DONE
 ----
