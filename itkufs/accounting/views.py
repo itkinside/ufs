@@ -215,12 +215,6 @@ def transfer(request, group, account=None, transfer_type=None,
     is_admin=False, is_owner=False):
     """Deposit, withdraw or transfer money"""
 
-    # FIXME: When adding a transfer from one self to one self, which should not
-    # be allowed, an IntegrityError ("columns transaction_id, account_id are
-    # not unique") is raised. Even if commit_on_success is used, an empty
-    # transaction without entries are saved to the database. In other words, we
-    # need more error checking here, or try out commit_manually instead.
-
     if request.method == 'POST':
         data = request.POST
     else:
@@ -374,7 +368,6 @@ def reject_transactions(request, group, is_admin=False):
     """Reject transactions from members and other groups"""
 
     if request.method != 'POST':
-        # request.user.message_set.create('') # FIXME Write user message
         return HttpResponseRedirect(
             reverse('group-summary', args=(group.slug,)))
 
@@ -397,7 +390,6 @@ def reject_transactions(request, group, is_admin=False):
         transaction.set_rejected(user=request.user,
             message=request.POST['reason'])
 
-    # FIXME insert user message
     return HttpResponseRedirect(
         reverse('approve-transactions', args=(group.slug,)))
 
