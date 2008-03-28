@@ -610,11 +610,6 @@ class Transaction(models.Model):
     payed = property(get_payed, None, None)
 
     def get_valid_logtype_choices(self, user=None):
-        # FIXME remove choices that set status for other group...
-
-        debit_group = self.entry_set.filter(debit__gt=0)[0]
-        credit_group = self.entry_set.filter(credit__gt=0)[0]
-
         possible_state = dict(self.TRANSACTION_STATE)
 
         if self.is_rejected() or self.is_received():
