@@ -306,20 +306,15 @@ form p {
 }
 
 /* Print style */
-/* FIXME: Not updated after introduction of YUI Grids */
 @media print {
-        #apphead, #menu, #debug {
+        #menu, #debug, #ft, #hd, #bc {
                 display: none;
         }
-        #container {
-                border: 0;
+        .yui-b  {
+                margin: 0 !important;
+								border: 0 !important;
         }
-        #tabs ul li a {
-                display: none;
-        }
-        #tabs ul li a.active {
-                display: inline;
-                border: 0;
-                font-size: 150%;
+        body {
+                padding: 0;
         }
 }
