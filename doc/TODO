@@ -20,13 +20,6 @@ Views:
   views which has to do with transactions. Check possible django bug :(
 
 Forms:
-- More sanity checking, prevent admin from performing transactions that he does
-  not have enough privileges to invoke (should be done in form and/or model)
-  (Is this still a problem with our new model??)
-  * get_valid_choices() must check session user before returning
-  * Use get_valid_choices() in "Register transaction"
-- (adamcik) Finish rewrite of approve/change transaction state form. Needs
-  testing.
 
 Templates:
 - Transaction list and approve transaction view et al. should resemble each
@@ -78,6 +71,17 @@ DONE
   data yet.
 - (adamcik) Use newforms for lists.
 - (adamcik) Cleanup reports.views, i.e. finish rewrite of new/edit list.
+- (adamcik) Finish rewrite of approve/change transaction state form. Needs
+  testing.
+
+NOT AN ISSUE
+------------
+
+- More sanity checking, prevent admin from performing transactions that he does
+  not have enough privileges to invoke (should be done in form and/or model)
+  (Is this still a problem with our new model??)
+  * get_valid_choices() must check session user before returning
+  * Use get_valid_choices() in "Register transaction"
 
 WONTFIX
 -------
