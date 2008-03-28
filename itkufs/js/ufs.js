@@ -78,12 +78,11 @@ var Multiselect = {
 	  'multiple': 'multiple',
 	});
 
-	// FIXME nucking the old parent may not be generic enough
 	var old_parent = selected.parentNode;
 	var new_parent = new Element('p');
 
 	new_parent.insert(old_parent.select('label')[0]);
-	var div = new Element('div', {'style': 'float:left'}); // FIXME add class instead of style perhaps?
+	var div = new Element('div', {'style': 'float:left'});
 	div.insert(new Element('span', {'style': 'vertical-align: top'}).update('Selected'));
 	div.insert(selected);
 
