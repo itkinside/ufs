@@ -1,0 +1,35 @@
+{% extends "reports/base.html" %}
+{% load i18n %}
+
+
+{% block title %}
+    {% trans "Delete list" %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; <a href="{% url delete-list group,object.slug %}">
+        {% trans "Edit list" %}</a>
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+    &ndash; {% trans "Delete list" %}
+{% endblock %}
+
+
+{% block content %}
+
+<form method="post" action="">
+
+<p>
+<label>{% trans "Are you sure you want to delete" %} &laquo;{{ list.name }}&raquo;</label>
+
+<button type="submit">{% trans "Delete" %}</button>
+</p>
+</form>
+
+{% endblock %}

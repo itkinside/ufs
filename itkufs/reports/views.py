@@ -93,6 +93,24 @@ def edit_list(request, group, list=None, is_admin=False, type='new'):
                               context_instance=RequestContext(request))
 
 @login_required
+@limit_to_admin
+def delete_list(request, group, list, is_admin=False):
+    if request.method == 'POST':
+        # FIXME maybe a bit naive here?
+        list.delete()
+        request.user.message_set.create(message=_('List deleted'))
+        return HttpResponseRedirect(reverse('group-summary', args=(group.slug,)))
+
+    return render_to_response('reports/list_delete.html',
+                              {
+                                  'is_admin': is_admin,
+                                  'group': group,
+                                  'list': list,
+                              },
+                              context_instance=RequestContext(request))
+
+
+@login_required
 @limit_to_group
 def balance(request, group, is_admin=False):
     """Show balance sheet for the group"""
