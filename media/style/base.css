@@ -130,18 +130,6 @@ ul.menulist {
 	text-align: left;
 }
 
-/* Page layouts */
-div.coltwo {
-	float: left;
-	padding-right: 1em;
-	width: 48%;
-}
-div.colthree {
-	float: left;
-	padding-right: 1em;
-	width: 32%;
-}
-
 /* Table layouts */
 caption {
 	font-weight: bold;
@@ -180,6 +168,7 @@ table tr.oddrow {
 }
 .float_left {
 	float: left;
+	margin-right: 1em;
 }
 .float_right {
 	float: right;
