@@ -12,6 +12,8 @@ Model:
   reject his withdrawal request. An admin may reject everything not already
   recieved or rejected.
 - Unit tests of account balance and lots of properties. See FIXMEs.
+- Should user/group_account_set only contain active accounts, check that this
+  has been done right.
 
 Views:
 - Use decorators to control commit/rollback of transactions. At least in all
@@ -30,6 +32,9 @@ Templates:
 - Transaction list and approve transaction view et al. should resemble each
   other more.
 - Update Norwegian translation. Last done 2008-03-23.
+- If admin only is set we should probably hide the parts of a large
+  multitransaction that is not linked to user, hiding numbers or entire
+  useraccounts
 
 New features:
 - 'New claim' as an action for regular users to claim expenses from each other
