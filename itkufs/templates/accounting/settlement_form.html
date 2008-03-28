@@ -1,0 +1,30 @@
+{% extends "accounting/base.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Create settlement" %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; <a href="{% url create-settlement group.slug %}">
+    {% trans "Create settlement" %}</a>
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+    &ndash; {% trans "Create settlement" %}
+{% endblock %}
+
+
+{% block content %}
+
+<form action="." method="post" enctype="multipart/form-data">
+    {{ form.as_p }}
+    <p><button type="submit">{% trans "Create settlement" %}</button></p>
+</form>
+
+{% endblock %}
