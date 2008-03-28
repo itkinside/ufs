@@ -442,15 +442,9 @@ def create_transaction(request, group, is_admin=False):
     errors = []
 
     if post and settlement_form.is_valid():
-        try:
-            settlement = Settlement.objects.get(
-                id=settlement_form.cleaned_data['settlement'])
-        except Settlement.DoesNotExist:
-            settlement = None
-
-        transaction = Transaction(group=group, settlement=settlement)
+        transaction = Transaction(group=group,
+                settlement=settlement_form.cleaned_data['settlement'])
         transaction.save()
-
 
         try:
             for forms in [group_forms, user_forms]:
