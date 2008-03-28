@@ -36,7 +36,7 @@ class List(models.Model):
     ignore_blocked = models.BooleanField(help_text=_("Should this list exclude blocked accounts?"))
 
     class Meta:
-        #unique_together = (('slug', 'account_group'),)
+        unique_together = (('slug', 'group'),)
         verbose_name = _('list')
         verbose_name_plural = _('lists')
 

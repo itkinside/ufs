@@ -25,19 +25,12 @@ class ListForm(CustomModelForm):
         return list
 
 class ColumnForm(CustomModelForm):
-    # FIXME Needs more debuging with respect to clean, se view edit_list
+    name = forms.CharField(max_length=100, required=False)
+    width = forms.IntegerField(min_value=0, required=False)
+
     class Meta:
         model = ListColumn
         fields = ('name', 'width')
-
-    def clean(self):
-        test = self.cleaned_data
-        if 'width' not in self.cleaned_data and 'name' not in self.cleaned_data:
-            del self._errors['width']
-            del self._errors['name']
-            self._errors['__all__'] = 'Empty form'
-
-        return self.cleaned_data
 
     def save(self, list=None, **kwargs):
         original_commit = kwargs.pop('commit', True)

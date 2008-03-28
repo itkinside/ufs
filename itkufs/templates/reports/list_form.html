@@ -3,123 +3,45 @@
 
 
 {% block title %}
-    {% trans "New/edit list" %}
+    {% trans "Edit list" %}
     - {{ block.super }}
 {% endblock %}
 
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo; {% trans "New/edit list" %} (FIXME: Cleanup alter/edit)
+    &raquo; <a href="{% url edit-list group,object.slug %}">
+        {% trans "Edit list" %}</a>
 {% endblock %}
 
 
 {% block header %}
     {{ block.super }}
-    &ndash; {% trans "New/edit list" %}
+    &ndash; {% trans "Edit list" %}
 {% endblock %}
 
 
 {% block content %}
 
-<form action="." method="post" id="new_list">
+<form method="post" action="" id="editlist">
+{{ listform.as_p }}
 
-<input type="hidden" name="group" value="{{ group.id }}" />
-
-{% if form.name.errors %}
-<ul class="errorlist">
-   {% for error in form.name.errors %}
-    <li>{{ error }}</li>
-   {% endfor%}
-</ul>
-{% endif %}
-<p>
-    <label>Name:</label> {{ form.name }}
-</p>
-
-{% if form.slug.errors %}
-<ul class="errorlist">
-   {% for error in form.slug.errors %}
-    <li>{{ error }}</li>
-   {% endfor%}
-</ul>
-{% endif %}
-
-<p>
-    <label>Slug:</label> {{ form.slug }}
-</p>
-
-{% if form.account_width.errors %}
-<ul class="errorlist">
-   {% for error in form.account_width.errors %}
-    <li>{{ error }}</li>
-   {% endfor%}
-</ul>
-{% endif %}
-<p>
-    <label>Account Width:</label> {{ form.account_width }}
-</p>
-
-{% if form.balance_width.errors %}
-<ul class="errorlist">
-   {% for error in form.balance_width.errors %}
-    <li>{{ error }}</li>
-   {% endfor%}
-</ul>
-{% endif %}
-<p>
-    <label>Balance Width:</label> {{ form.balance_width }}
-</p>
-
-{% if form.double.errors %}
-<ul class="errorlist">
-   {% for error in form.double.errors %}
-    <li>{{ error }}</li>
-   {% endfor%}
-</ul>
-{% endif %}
-<p>
-    <label>Double:</label> {{ form.double }}
-</p>
-
-{% if form.ignore_blocked.errors %}
-<ul class="errorlist">
-   {% for error in form.ignore_blocked.errors %}
-    <li>{{ error }}</li>
-   {% endfor%}
-</ul>
-{% endif %}
-<p>
-    <label>Ignore blocked:</label> {{ form.ignore_blocked }}
-</p>
-
-{% if form.accounts.errors %}
-<ul class="errorlist">
-   {% for error in form.accounts.errors %}
-    <li>{{ error }}</li>
-   {% endfor%}
-</ul>
-{% endif %}
-<p>
-    <label>Accounts:</label> {{ form.accounts }}
-    *FIXME*: This needs newforms for us to be able to limit the accounts
-</p>
-
-<p><label>Columns:</label></p>
-<table id="listcolumns" class="tablelist">
+<label>Columns:</label>
+<table class="tablelist">
     <tr>
-        <th>Name</th> <th>Width</th>
+        <th>Name</th>
+        <th>Width</th>
     </tr>
-    {% for column in form.listcolumn %}
+{% for columnform in columnforms %}
     <tr class="{% cycle evenrow,oddrow %}">
-        {{ column.id }}
-        <td{% if column.name.errors %} class="error"{% endif %}>{{ column.name }}</td>
-        <td{% if column.width.errors %} class="error"{% endif %}>{{ column.width }}</td>
+        {{ columnform.as_table_row }}
     </tr>
-    {% endfor %}
+{% endfor %}
 </table>
 
-<p><button type="submit">Save list</button></p>
+<input type="hidden" name="count" value="{{ columnforms|length }}" />
+
+<button type="submit">Create list</button>
 
 </form>
 

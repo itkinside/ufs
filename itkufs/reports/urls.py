@@ -5,19 +5,10 @@ from itkufs.reports.views import *
 
 urlpatterns = patterns('',
     # Lists
-    url(r'^(?P<group>[0-9a-z_-]+)/list/add-new/$',
-        edit_list, {'type': 'new'}, name='new-list-new'),
-    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<list>[0-9a-z_-]+)/edit-new/$',
-        edit_list, {'type': 'edit'}, name='edit-list-new'),
-
-    # FIXME: Still in development? edit_list or alter_list?
-
-    url(r'^(?P<group>[0-9a-z_-]+)/list/add/$',
-        alter_list, {'type': 'new'}, name='new-list'),
-    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/edit/$',
-        alter_list, {'type': 'edit'}, name='edit-list'),
-    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<slug>[0-9a-z_-]+)/delete/$',
-        alter_list, {'type': 'delete'}, name='delete-list'),
+    url(r'^(?P<group>[0-9a-z_-]+)/create-list/$',
+        edit_list, {'type': 'new'}, name='create-list'),
+    url(r'^(?P<group>[0-9a-z_-]+)/edit-list/(?P<list>[0-9a-z_-]+)/$',
+        edit_list, {'type': 'edit'}, name='edit-list'),
 
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<list>[0-9a-z_-]+)/$',
         show_list, name='view-list'),

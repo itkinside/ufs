@@ -25,7 +25,6 @@ Forms:
   * get_valid_choices() must check session user before returning
   * Use get_valid_choices() in "Register transaction"
 - (adamcik) Finish rewrite of approve/change transaction state form.
-- (adamcik) Use newforms for lists.
 
 Templates:
 - Transaction list and approve transaction view et al. should resemble each
@@ -72,7 +71,7 @@ DONE
   strike-through in the account list in the group summary.
 - (adamcik) Finish group-transaction view, it doesn't know what to do with POST
   data yet.
-
+- (adamcik) Use newforms for lists.
 
 WONTFIX
 -------

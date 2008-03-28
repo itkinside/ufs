@@ -47,10 +47,9 @@ def edit_list(request, group, list=None, is_admin=False, type='new'):
 
     if type == 'new':
         columnforms = []
-
-        listform = ListForm(data)
-        for i in range(0,5):
-            columnforms.append( ColumnForm(data, prefix='new%s'%i) )
+        listform = ListForm(data=data)
+        for i in range(0,4): # Lock number of coloumns for new list
+            columnforms.append( ColumnForm(data=data, prefix='new%s'%i))
 
     elif type == 'edit':
         if list is None:
@@ -61,6 +60,7 @@ def edit_list(request, group, list=None, is_admin=False, type='new'):
         columnforms = []
         for c in list.column_set.all():
             columnforms.append( ColumnForm(data, instance=c, prefix=c.id) )
+
         for i in range(0,3):
             columnforms.append( ColumnForm(data, prefix='new%s'%i) )
     else:
@@ -76,11 +76,14 @@ def edit_list(request, group, list=None, is_admin=False, type='new'):
             list = listform.save(group=group)
 
             for column in columnforms:
-                column.save(list=list)
+                if column.cleaned_data['name'] and column.cleaned_data['width']:
+                    column.save(list=list)
+                elif column.instance.id:
+                    column.instance.delete()
 
-            raise Exception()
+            return HttpResponseRedirect(reverse('view-list', args=(group.slug, list.slug)))
 
-    return render_to_response('reports/list_edit.html',
+    return render_to_response('reports/list_form.html',
                               {
                                   'is_admin': is_admin,
                                   'group': group,
@@ -88,51 +91,6 @@ def edit_list(request, group, list=None, is_admin=False, type='new'):
                                   'columnforms': columnforms,
                               },
                               context_instance=RequestContext(request))
-
-
-@login_required
-@limit_to_admin
-def alter_list(request, group, slug=None, type='new', is_admin=False):
-    """FIXME"""
-    # FIXME: Rename to edit_list
-    # FIXME: Err, we already got a view named edit_list? adamcik?
-
-    # TODO: Maybe this function could be made more generic so that it can limit
-    # access to generic views for any object?
-    if slug is not None:
-        try:
-            id = group.list_set.get(slug=slug).id
-        except Group.DoesNotExist:
-            raise Http404
-
-    if request.method == 'POST':
-        if u'group' in request.POST:
-            if group.id != int(request.POST['group']):
-                return HttpResponseForbidden(_('Forbidden if not group admin.'))
-        else:
-            raise Exception()
-
-    context={
-        'is_admin': is_admin,
-        'group': group,
-    }
-
-    redirect = group.get_absolute_url()
-
-    if type == 'new':
-        return create_object(request, model=List, extra_context=context,
-            post_save_redirect=redirect)
-
-    elif type == 'edit':
-        return update_object(request, model=List, extra_context=context, object_id=id,
-            post_save_redirect=redirect)
-
-    elif type == 'delete':
-        if request.method == 'POST' and request.POST['submit'] != 'yes':
-            return HttpResponseRedirect(redirect)
-
-        return delete_object(request, model=List, extra_context=context, object_id=id,
-            post_delete_redirect=redirect)
 
 @login_required
 @limit_to_group
