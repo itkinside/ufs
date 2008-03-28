@@ -10,6 +10,12 @@ class ListForm(CustomModelForm):
         model = List
         exclude = ('slug', 'group')
 
+    def __init__(self, *args, **kwargs):
+        group = kwargs.pop('group')
+        super(ListForm, self).__init__(*args, **kwargs)
+
+        self.fields['accounts'].widget.choices = [(a.id, a) for a in group.user_account_set]
+
     def save(self, group=None, **kwargs):
         original_commit = kwargs.pop('commit', True)
         kwargs['commit'] = False

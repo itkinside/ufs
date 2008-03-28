@@ -47,7 +47,7 @@ def edit_list(request, group, list=None, is_admin=False, type='new'):
 
     if type == 'new':
         columnforms = []
-        listform = ListForm(data=data)
+        listform = ListForm(data=data, group=group)
         for i in range(0,4): # Lock number of coloumns for new list
             columnforms.append( ColumnForm(data=data, prefix='new%s'%i))
 
@@ -55,7 +55,7 @@ def edit_list(request, group, list=None, is_admin=False, type='new'):
         if list is None:
             raise Http404
 
-        listform = ListForm(data, instance=list)
+        listform = ListForm(data, instance=list, group=group)
 
         columnforms = []
         for c in list.column_set.all():
