@@ -568,6 +568,14 @@ class Transaction(models.Model):
             self.status = self.REJECTED_STATE
             self.last_modified = datetime.now()
             self.save()
+
+            users = {}
+            for entry in self.entry_set.all():
+                if entry.account.is_user_account():
+                    users[entry.account.owner] = entry.account.owner
+
+            for user in users.values():
+                user.message_set.create(message=_('A transaction containing your account has been rejected'))
         else:
             raise InvalidTransaction(
                 'Could not set transaction as rejected')
