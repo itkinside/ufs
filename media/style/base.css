@@ -24,9 +24,6 @@ h3 {
 p {
 	margin: 0.5em 0;
 }
-form {
-	margin: 0.5em 0;
-}
 ul {
 	margin: 0.5em 0;
 }
@@ -219,68 +216,36 @@ table tr.oddrow {
 }
 
 /* Forms */
-label {
-        display: block;
-        width: 8em;
-        font-weight: bold;
-        float: left;
-        clear: both;
-        text-align: right;
-        margin-right: 1em;
+#yui-main form {
+	padding-left: 1em;
 }
-input, select, textarea {
-        width: 15em;
+#yui-main label {
+	font-weight: bold;
+	display: block;
+	clear: both;
+	margin-left: -1em;
 }
-input, select, textarea, button {
-        border: 1px solid #ccc;
-        font-size: 100%;
+#yui-main select, #yui-main textarea {
+	width: 15em;
 }
-input:focus, select:focus, textarea:focus {
-        background: #ffd;
+#yui-main input, #yui-main select, #yui-main textarea, #yui-main button {
+	border: 1px solid #ccc;
+	font-size: 100%;
 }
-input:hover, select:hover, textarea:hover, button:hover {
-        border: 1px solid #444;
+#yui-main input:focus, #yui-main textarea:focus {
+	background: #ffd;
 }
-button {
-        background: #d3d7cf;
-        color: black;
-        margin-left: 9em;
+#yui-main input:hover, #yui-main select:hover, #yui-main textarea:hover, #yui-main button:hover {
+	border: 1px solid #444;
+}
+#yui-main button {
+	background: #d3d7cf;
+	color: black;
+	margin-left: -1em;
+	clear: both;
+	display: block;
 }
 
-/* Form hacks -- let the mayhem begin */
-/* FIXME: adamcik, please cleanup!!1 -jodal, 2008-03-10 */
-#rejectionlist {
-        margin-left: 9em;
-}
-.plainform button {
-        margin-left: 0.2em;
-}
-#accounting_approve_transactions button {
-        margin-left: 0 !important;
-        margin-right: 0.5em;
-}
-input#id_payed, #accounting_approve_transactions table input,
-input#id_registered, input#id_received, form #delete_logo,
-input#id_placeholder, input#id_active, input#id_ignore_block_limit,
-input#id_double, input#id_ignore_blocked, input#id_admin_only,
-input#id_delete_logo {
-	/* Fix all checkboxes */
-        width: auto;
-        border: 0;
-}
-#transactions table select {
-        width: 6em;
-}
-#editlist table input {
-        width: auto;
-}
-form p {
-	clear: left;
-}
-#createtransaction input {
-        width: 4em;
-        text-align: right;
-}
 #createtransaction .debit_sum,
 #createtransaction .credit_sum {
         text-align: right;

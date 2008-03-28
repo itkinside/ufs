@@ -95,8 +95,8 @@ var Multiselect = {
 	new_parent.insert(div);
 
         // Set the style of the selects.
-	selected.setStyle({'height': '10em', 'display': 'block'});
-	available.setStyle({'height': '10em', 'display': 'block'});
+	selected.setStyle({'height': '10em', 'display': 'block', 'marginBottom': '0.5em'});
+	available.setStyle({'height': '10em', 'display': 'block', 'marginBottom': '0.5em'});
 
 	old_parent.replace(new_parent);
 
