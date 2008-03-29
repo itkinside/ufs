@@ -183,7 +183,7 @@ table tr.oddrow {
 .error input {
 	border: 1px solid #c00 !important;
 }
-.disabled td, .disabled {
+.inactive td, .inactive {
 	text-decoration: line-through;
 }
 .admin a {

@@ -93,7 +93,7 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
     </tr>
 {% for account in group.user_account_set %}
     {% if all or account.active %}
-    <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} disabled{% endif %}">
+    <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
         {% if is_admin %}
         <td><a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a></td>
         {% else %}
@@ -117,7 +117,7 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
     </tr>
 {% for account in group.group_account_set %}
     {% if all or account.active %}
-    <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} disabled{% endif %}">
+    <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
         {% if is_admin %}
         <td><a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a></td>
         {% else %}
@@ -133,9 +133,9 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
 
 <p class="clear">
 {% if all %}
-    <a href=".">{% trans "Only show active accounts" %}</a>.
+    <a href=".">{% trans "Hide inactive accounts" %}</a>
 {% else %}
-    <a href="?all">{% trans "Show all accounts" %}</a>.
+    <a href="?all">{% trans "Show inactive accounts" %}</a>
 {% endif %}
 </p>
 

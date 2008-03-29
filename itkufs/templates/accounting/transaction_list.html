@@ -69,7 +69,7 @@
             {% else %}
                 <tr class="{% cycle trclass %}">
             {% endif %}
-            <td class="account{% if not e.account.active %} disabled{% endif %}">
+            <td class="account{% if not e.account.active %} inactive{% endif %}">
                 {% if is_admin %}
                     <a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{ e.account.name }}</a>
                 {% else %}

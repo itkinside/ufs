@@ -53,7 +53,7 @@ def account_summary(request, group, account,
     if is_owner:
         # Check if active
         if not account.active and not is_admin:
-            return HttpResponseForbidden(_('This account has been disabled.'))
+            return HttpResponseForbidden(_('This account is inactive.'))
 
         # Set active account in session
         request.session['my_account'] = account
