@@ -72,19 +72,7 @@
 <div id="actions">
 <h3>{% trans "Actions" %}</h3>
 <ul>
-    {% if is_owner %}
-    <li><a href="{% url account-deposit group.slug,account.slug %}">
-        {% trans "New deposit" %}</a></li>
-    <li><a href="{% url account-withdraw group.slug,account.slug %}">
-        {% trans "New withdraw" %}</a></li>
-    <li><a href="{% url account-transfer group.slug,account.slug %}">
-        {% trans "New transfer" %}</a></li>
-    {% endif %}
-
-    {% if is_admin %}
-    <li class="admin"><a href="{% url edit-account group.slug,account.slug %}">
-        {% trans "Edit account" %}</a></li>
-    {% endif %}
+    {% include "accounting/account_action.html" %}
 </ul>
 </div>
 {% endif %}

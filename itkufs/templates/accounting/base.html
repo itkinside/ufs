@@ -47,8 +47,7 @@
                 {% trans "Summary" %}</a></li>
             <li><a href="{% url transaction-list-group group.slug %}">
                 {% trans "Transactions" %}</a></li>
-
-            {% include "accounting/group_action_admin.html" %}
+            {% include "accounting/group_action.html" %}
         </ul>
     {% endif %}
 
@@ -60,20 +59,7 @@
                 {% trans "Summary" %}</a></li>
             <li><a href="{% url transaction-list-account group.slug,account.slug %}">
                 {% trans "Transactions" %}</a></li>
-
-            {% if is_owner %}
-                <li><a href="{% url account-deposit group.slug,account.slug %}">
-                    {% trans "New deposit" %}</a></li>
-                <li><a href="{% url account-withdraw group.slug,account.slug %}">
-                    {% trans "New withdraw" %}</a></li>
-                <li><a href="{% url account-transfer group.slug,account.slug %}">
-                    {% trans "New transfer" %}</a></li>
-            {% endif %}
-
-            {% if is_admin %}
-                <li class="admin"><a href="{% url edit-account group.slug,account.slug %}">
-                    {% trans "Edit account" %}</a></li>
-            {% endif %}
+            {% include "accounting/account_action.html" %}
         </ul>
     {% endif %}
 {% endblock %}

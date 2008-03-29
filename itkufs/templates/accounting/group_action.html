@@ -2,8 +2,7 @@
 
 {% if is_admin %}
 <li class="admin"><a href="{% url approve-transactions group.slug %}">
-     {% trans "Approve transactions" %}
-     {% if group.not_payed_transaction_set.count %}*{% endif %}</a></li>
+     {% trans "Approve transactions" %}{% if group.not_payed_transaction_set.count %}*{% endif %}</a></li>
 <li class="admin"><a href="{% url create-transaction group.slug %}">
      {% trans "Create transaction" %}</a></li>
 <li class="admin"><a href="{% url create-settlement group.slug %}">
