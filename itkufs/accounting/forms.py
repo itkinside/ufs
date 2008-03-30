@@ -50,6 +50,9 @@ class GroupForm(CustomModelForm):
         return super(GroupForm, self).save(**kwargs)
 
 class TransactionSettlementForm(CustomModelForm):
+    details = forms.CharField(label=_('Details'), required=False,
+        widget=forms.widgets.Textarea(attrs={'rows': 2}))
+
     class Meta:
         model = Transaction
         fields = ('settlement',)

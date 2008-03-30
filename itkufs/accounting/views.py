@@ -461,7 +461,7 @@ def create_transaction(request, group, is_admin=False):
                             entry.transaction = transaction
                             entry.save()
 
-            transaction.set_registered(user=request.user)
+            transaction.set_registered(user=request.user, message=settlement_form.cleaned_data['details'])
 
             request.user.message_set.create(
                 message= _('Your transaction has been added'))

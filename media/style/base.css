@@ -206,8 +206,12 @@ table tr.oddrow {
 	clear: both;
 	margin-left: -1em;
 }
-#yui-main select, #yui-main textarea {
+#yui-main select {
 	width: 15em;
+}
+#yui-main textarea {
+	width: 20em;
+	height: 10em;
 }
 #yui-main input, #yui-main select, #yui-main textarea, #yui-main button {
 	border: 1px solid #ccc;
