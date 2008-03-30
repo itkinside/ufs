@@ -313,10 +313,11 @@ def approve_transactions(request, group, page='1', is_admin=False):
 
     for t in group.not_received_transaction_set:
         choices = t.get_valid_logtype_choices()
+        choices.insert(0, ('',''))
 
         if request.method == 'POST':
             form = ChangeTransactionForm(request.POST,
-                prefix="transaction%d" % t.id, choices=choices)
+                prefix="transaction%d" % t.id, choices=choices, label=False)
 
             if form.is_valid():
                 change_to = form.cleaned_data['state']
@@ -331,15 +332,17 @@ def approve_transactions(request, group, page='1', is_admin=False):
                     to_be_rejected.append((t))
 
                 if change_to != 'Rej' and change_to != 'Rec':
+                    tmp = t.get_valid_logtype_choices()
+                    tmp.insert(0,('',''))
                     transactions.append((t,
                         ChangeTransactionForm(prefix='transaction%d' % t.id,
-                            choices=t.get_valid_logtype_choices())))
+                            choices=tmp, label=False)))
             else:
                 transactions.append((t,form))
 
         else:
             form = ChangeTransactionForm(choices=choices,
-                prefix="transaction%d" % t.id)
+                prefix="transaction%d" % t.id, label=False)
             transactions.append((t,form))
 
     if to_be_rejected:
@@ -434,6 +437,7 @@ def create_transaction(request, group, is_admin=False):
         post = None
 
     settlement_form = TransactionSettlementForm(post, prefix='settlement')
+    status_form = ChangeTransactionForm(post, choices=Transaction().get_valid_logtype_choices())
     user_forms = [(account, EntryForm(post, prefix=account.id))
         for account in group.user_account_set.filter(active=True)]
     group_forms = [(account, EntryForm(post, prefix=account.id))
@@ -461,7 +465,17 @@ def create_transaction(request, group, is_admin=False):
                             entry.transaction = transaction
                             entry.save()
 
-            transaction.set_registered(user=request.user, message=settlement_form.cleaned_data['details'])
+
+            if status_form.is_valid():
+                state = status_form.cleaned_data['state']
+                details = settlement_form.cleaned_data['details']
+
+                if state == Transaction.REGISTERED_STATE:
+                    transaction.set_registered(user=request.user, message=details)
+                elif state == Transaction.PAYED_STATE:
+                    transaction.set_payed(user=request.user, message=details)
+                elif state == Transaction.RECEIVED_STATE:
+                    transaction.set_received(user=request.user, message=details)
 
             request.user.message_set.create(
                 message= _('Your transaction has been added'))
@@ -480,7 +494,8 @@ def create_transaction(request, group, is_admin=False):
                               {
                                 'is_admin': is_admin,
                                 'group': group,
-                                'form': settlement_form,
+                                'settlement_form': settlement_form,
+                                'status_form': status_form,
                                 'group_forms': group_forms,
                                 'user_forms': user_forms,
                                 'errors': errors,
