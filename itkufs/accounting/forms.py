@@ -65,10 +65,14 @@ class SettlementForm(CustomModelForm):
 class ChangeTransactionForm(forms.Form):
     def __init__(self, *args, **kwargs):
         choices = kwargs.pop('choices', (('',''),))
+        label = kwargs.pop('label', True)
         super(forms.Form, self).__init__(*args, **kwargs)
+
+        if not label:
+            self.fields['state'].label = ''
         self.fields['state'].widget = forms.Select(choices=choices)
 
-    state = forms.CharField(max_length=3, label='', required=False)
+    state = forms.CharField(max_length=3, required=False)
 
 
 class EntryForm(CustomForm):
