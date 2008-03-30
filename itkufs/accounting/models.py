@@ -507,12 +507,12 @@ class Transaction(models.Model):
         self.last_modified = datetime.now()
         super(Transaction, self).save()
 
-    def set_registered(self, user, message=''):
+    def set_registered(self, user, message='', auto=False):
         if self.id is None:
             self.save()
 
         if not self.is_registered():
-            log = TransactionLog(type=self.REGISTERED_STATE, transaction=self)
+            log = TransactionLog(type=self.REGISTERED_STATE, transaction=self, auto=auto)
             log.user = user
             if message is not None and message.strip() != '':
                 log.message = message
@@ -524,9 +524,9 @@ class Transaction(models.Model):
             raise InvalidTransaction(
                 'Could not set transaction as registered')
 
-    def set_payed(self, user, message=''):
+    def set_payed(self, user, message='', auto=False):
         if not self.is_rejected() and self.is_registered():
-            log = TransactionLog(type=self.PAYED_STATE, transaction=self)
+            log = TransactionLog(type=self.PAYED_STATE, transaction=self, auto=auto)
             log.user = user
             if message.strip() != '':
                 log.message = message
@@ -538,14 +538,12 @@ class Transaction(models.Model):
             raise InvalidTransaction(
                 'Could not set transaction as payed')
 
-    def set_received(self, user, message=''):
+    def set_received(self, user, message='', auto=False):
         if not self.is_rejected() and self.is_registered():
             if not self.is_payed():
-                self.set_payed(user,
-                    message=ugettext(
-                        'Auto: Is set to recieved, thus also payed.'))
+                self.set_payed(user, auto=True)
 
-            log = TransactionLog(type=self.RECEIVED_STATE, transaction=self)
+            log = TransactionLog(type=self.RECEIVED_STATE, transaction=self, auto=auto)
             log.user = user
             if message.strip() != '':
                 log.message = message
@@ -556,11 +554,11 @@ class Transaction(models.Model):
         else:
             raise InvalidTransaction('Could not set transaction as received')
 
-    def reject(self, user, message=''):
+    def reject(self, user, message='', auto=False):
         if (self.is_registered()
             and not self.is_payed()
             and not self.is_received()):
-            log = TransactionLog(type=self.REJECTED_STATE, transaction=self)
+            log = TransactionLog(type=self.REJECTED_STATE, transaction=self, auto=auto)
             log.user = user
             if message.strip() != '':
                 log.message = message
@@ -647,6 +645,7 @@ class TransactionLog(models.Model):
     timestamp =  models.DateTimeField(_('timestamp'), auto_now_add=True)
     user = models.ForeignKey(User, verbose_name=_('user'))
     message = models.CharField(_('message'), max_length=200, blank=True)
+    auto = models.BooleanField(default=False)
 
     def save(self):
         if self.id is not None:
