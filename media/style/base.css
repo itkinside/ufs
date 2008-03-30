@@ -210,8 +210,8 @@ table tr.oddrow {
 	width: 15em;
 }
 #yui-main textarea {
-	width: 20em;
-	height: 10em;
+	width: 35em;
+	height: 6em;
 }
 #yui-main input, #yui-main select, #yui-main textarea, #yui-main button {
 	border: 1px solid #ccc;
