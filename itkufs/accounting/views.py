@@ -428,7 +428,7 @@ def create_settlement(request, group, is_admin=False):
 # FIXME!! @db_transaction.commit_manually
 # Bugs when doing user.get_and_delete_messages "Transaction managed block ended
 # with pending COMMIT/ROLLBACK"
-def create_transaction(request, group, is_admin=False):
+def create_transaction(request, group, is_admin=False, transaction=None):
     """Admin view for creating transactions"""
 
     if request.method == 'POST':
@@ -436,19 +436,37 @@ def create_transaction(request, group, is_admin=False):
     else:
         post = None
 
-    settlement_form = TransactionSettlementForm(post, prefix='settlement')
-    status_form = ChangeTransactionForm(post, choices=Transaction().get_valid_logtype_choices())
-    user_forms = [(account, EntryForm(post, prefix=account.id))
-        for account in group.user_account_set.filter(active=True)]
-    group_forms = [(account, EntryForm(post, prefix=account.id))
-        for account in group.group_account_set.filter(active=True)]
+    if transaction:
+        try:
+            transaction = group.transaction_set.get(id=transaction)
+        except Transaction.DoesNotExist:
+            pass
+    else:
+        transaction = Transaction(group=group)
+
+    # FIXME use is_editable and only return forms that apply
+
+    settlement_form = TransactionSettlementForm(post, prefix='settlement', instance=transaction)
+    status_form = ChangeTransactionForm(post, choices=transaction.get_valid_logtype_choices())
+
+    user_forms = []
+    group_forms = []
+
+    entries = transaction.entry_set.select_related(depth=1)
+
+    for account in group.user_account_set.filter(active=True):
+        user_forms.append((account, EntryForm(post, prefix=account.id)))
+
+    for account in group.group_account_set.filter(active=True):
+        group_forms.append((account, EntryForm(post, prefix=account.id)))
 
     errors = []
 
     if post and settlement_form.is_valid():
-        transaction = Transaction(group=group,
-                settlement=settlement_form.cleaned_data['settlement'])
-        transaction.save()
+        if transaction.id is None:
+            transaction.save()
+
+        transaction.settlement = settlement_form.cleaned_data['settlement']
 
         try:
             for forms in [group_forms, user_forms]:
@@ -469,6 +487,8 @@ def create_transaction(request, group, is_admin=False):
             if status_form.is_valid():
                 state = status_form.cleaned_data['state']
                 details = settlement_form.cleaned_data['details']
+
+                transaction.save()
 
                 if state == Transaction.REGISTERED_STATE:
                     transaction.set_registered(user=request.user, message=details)

@@ -580,6 +580,7 @@ class Transaction(models.Model):
     set_rejected = reject
     set_rejected.__doc__ = 'set_rejected() is an alias for reject()'
 
+
     def is_registered(self):
         return self.status in (self.REGISTERED_STATE,
                                self.PAYED_STATE,
@@ -593,6 +594,9 @@ class Transaction(models.Model):
 
     def is_rejected(self):
         return self.status == self.REJECTED_STATE
+
+    def is_editable(self):
+        return self.status == self.REGISTERED_STATE
 
     def get_registered(self):
         if self.is_registered():
@@ -625,9 +629,7 @@ class Transaction(models.Model):
             del possible_state[self.PAYED_STATE]
             del possible_state[self.REJECTED_STATE]
 
-        if self.is_registered():
-            del possible_state[self.REGISTERED_STATE]
-        else:
+        if not self.is_registered():
             del possible_state[self.REJECTED_STATE]
 
         # A bit ugly but we want to ensure that register is "default", ie first

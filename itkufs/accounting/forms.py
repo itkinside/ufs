@@ -69,10 +69,10 @@ class ChangeTransactionForm(forms.Form):
         super(forms.Form, self).__init__(*args, **kwargs)
 
         if not label:
-            self.fields['state'].label = ''
-        self.fields['state'].widget = forms.Select(choices=choices)
+            self.fields['change_to'].label = ''
+        self.fields['change_to'].widget = forms.Select(choices=choices)
 
-    state = forms.CharField(max_length=3, required=False)
+    change_to = forms.CharField(max_length=3, required=False)
 
 
 class EntryForm(CustomForm):

@@ -25,6 +25,10 @@
     </tr>
 </table>
 
+{% if is_admin and transaction.is_editable %}
+FIXME (placement): <a href="{% url edit-transaction group.slug,transaction.id %}">Edit</a>
+{% endif %}
+
 <h3>{% trans "Entries" %}</h3>
 
 <table class="tablelist">
