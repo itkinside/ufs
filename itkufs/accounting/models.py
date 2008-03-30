@@ -615,21 +615,34 @@ class Transaction(models.Model):
     rejected = property(get_rejected, None, None)
     payed = property(get_payed, None, None)
 
-    def get_valid_logtype_choices(self, user=None):
+    def get_valid_logtype_choices(self):
         possible_state = dict(self.TRANSACTION_STATE)
 
         if self.is_rejected() or self.is_received():
             return [('','')]
 
-        if self.is_registered():
-            del possible_state[self.REGISTERED_STATE]
-
         if self.is_payed():
             del possible_state[self.PAYED_STATE]
             del possible_state[self.REJECTED_STATE]
 
+        if self.is_registered():
+            del possible_state[self.REGISTERED_STATE]
+        else:
+            del possible_state[self.REJECTED_STATE]
+
+        # A bit ugly but we want to ensure that register is "default", ie first
+        # in the list
+        if self.REGISTERED_STATE in possible_state:
+            can_be_registered = possible_state[self.REGISTERED_STATE]
+            del possible_state[self.REGISTERED_STATE]
+        else:
+            can_be_registered = False
+
         possible_state = possible_state.items()
-        possible_state.insert(0, ('',''))
+
+        if can_be_registered:
+            possible_state.insert(0, (self.REGISTERED_STATE, can_be_registered))
+
         return possible_state
 
 databrowse.site.register(Transaction)
