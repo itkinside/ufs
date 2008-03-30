@@ -188,14 +188,12 @@ class Account(models.Model):
     EQUITY_ACCOUNT = 'Eq'         # Egenkapital
     INCOME_ACCOUNT = 'In'         # Inntekt
     EXPENSE_ACCOUNT = 'Ex'        # Utgift
-    EXTERNAL_ACCOUNT = 'EA'       # Ektsern, ie. leverandør/kunde
     ACCOUNT_TYPE = (
         (ASSET_ACCOUNT, _('Asset')),
         (LIABILITY_ACCOUNT, _('Liability')),
         (EQUITY_ACCOUNT, _('Equity')),
         (INCOME_ACCOUNT, _('Income')),
         (EXPENSE_ACCOUNT, _('Expense')),
-        (EXPENSE_ACCOUNT, _('Supplier/customer')),
     )
 
     objects = AccountManager()
