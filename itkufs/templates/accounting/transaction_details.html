@@ -72,7 +72,6 @@
         <th>{% trans "Status" %}</th>
         <th>{% trans "When" %}</th>
         <th>{% trans "Who" %}</th>
-        <th>{% trans "Auto" %}</th>
         <th>{% trans "Message" %}</th>
     </tr>
 
@@ -80,8 +79,7 @@
     <tr class="{% cycle 'evenrow' 'oddrow' %}">
         <td>{{ l.get_type_display }}</td>
         <td>{{ l.timestamp|date:"Y-m-d H:i" }}</td>
-        <td><a href="mailto:{{ l.user.email }}">{{ l.user }}</a></td>
-        <td>{% if l.auto %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
+        <td><a href="mailto:{{ l.user.email }}">{{ l.user }}</a>{% if l.auto %} ({% trans "auto" %}){% endif %}</td>
         <td>{{ l.message }}</td>
     </tr>
     {% endfor %}
