@@ -72,7 +72,11 @@
 <div id="actions">
 <h3>{% trans "Actions" %}</h3>
 <ul>
-    {% include "accounting/account_action.html" %}
+{% include "accounting/account_action.html" %}
+{% if is_admin %}
+    <li class="admin"><a href="{% url edit-account group.slug,account.slug %}">
+        {% trans "Edit account" %}</a></li>
+{% endif %}
 </ul>
 </div>
 {% endif %}
@@ -80,14 +84,19 @@
 {% if is_owner and not group.admin_only %}
 <div id="lists">
 <h3>{% trans "Lists" %}</h3>
-{% if not group.list_set.count %}
-<p>{% trans "No lists configured." %}</p>
-{% else %}
 <ul>
+{% if group.list_set.count %}
     {% for list in group.list_set.all %}
     <li><a href="{% url view-list group.slug,list.slug %}">
         {{ list.name }}</a></li>
     {% endfor %}
+{% else %}
+    {% if is_admin %}
+        <li class="admin"><a href="{% url new-list group.slug %}">
+            {% trans "No lists found" %}</a></li>
+    {% else %}
+        <li>{% trans "No lists found" %}</li>
+    {% endif %}
 </ul>
 {% endif %}
 </div>

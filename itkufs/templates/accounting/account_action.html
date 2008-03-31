@@ -8,8 +8,3 @@
     <li><a href="{% url account-transfer group.slug,account.slug %}">
         {% trans "New transfer" %}</a></li>
 {% endif %}
-
-{% if is_admin %}
-    <li class="admin"><a href="{% url edit-account group.slug,account.slug %}">
-        {% trans "Edit account" %}</a></li>
-{% endif %}
