@@ -3,21 +3,34 @@
 
 
 {% block title %}
-    {% trans "Edit list" %}
+    {% ifequal type 'edit' %}
+        {% trans "Edit list" %}
+    {% else %}
+        {% trans "New list" %}
+    {% endifequal %}
     - {{ block.super }}
 {% endblock %}
 
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo; <a href="{% url edit-list group,object.slug %}">
-        {% trans "Edit list" %}</a>
+    {% ifequal type 'edit' %}
+        &raquo; <a href="{% url edit-list group.slug,listform.instance.slug %}">
+            {% trans "Edit list" %}</a>
+    {% else %}
+        &raquo; <a href="{% url create-list group.slug %}">
+            {% trans "New list" %}</a>
+    {% endifequal %}
 {% endblock %}
 
 
 {% block header %}
     {{ block.super }}
-    &ndash; {% trans "Edit list" %}
+    {% ifequal type 'edit' %}
+        &ndash; {% trans "Edit list" %}
+    {% else %}
+        &ndash; {% trans "New list" %}
+    {% endifequal %}
 {% endblock %}
 
 
