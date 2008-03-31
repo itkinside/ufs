@@ -320,7 +320,7 @@ def approve_transactions(request, group, page='1', is_admin=False):
                 prefix="transaction%d" % t.id, choices=choices, label=False)
 
             if form.is_valid():
-                change_to = form.cleaned_data['state']
+                change_to = form.cleaned_data['change_to']
 
                 if change_to == 'Reg':
                     t.set_registered(user=request.user)
