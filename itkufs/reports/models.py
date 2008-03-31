@@ -26,14 +26,16 @@ class List(models.Model):
     name = models.CharField(_('name'), max_length=200)
     slug = models.SlugField(_('slug'), prepopulate_from=['name'])
     account_width = models.PositiveSmallIntegerField(_('account width'),
-        help_text=_('Relative size of cell (everything will be converted to precent)'))
+        help_text=_('Relative width of cell'))
     balance_width = models.PositiveSmallIntegerField(_('balance width'),
-        help_text=_('Zero value indicates that balance should be left out.'))
+        help_text=_('Relative width of cell, 0 to hide'))
     group = models.ForeignKey(Group,
         verbose_name=_('group'), related_name='list_set')
     accounts = models.ManyToManyField(Account, blank="true")
-    double = models.BooleanField(help_text=_("Indicates that two rows should be used per account"))
-    ignore_blocked = models.BooleanField(help_text=_("Should this list exclude blocked accounts?"))
+    double = models.BooleanField(
+        help_text=_('Use two rows per account'))
+    ignore_blocked = models.BooleanField(
+        help_text=_('Exclude blocked accounts'))
 
     class Meta:
         unique_together = (('slug', 'group'),)
@@ -41,16 +43,18 @@ class List(models.Model):
         verbose_name_plural = _('lists')
 
     class Admin:
-        list_filter = ['group']
-        list_display = ['group', 'name']
-        list_display_links = ['name']
-        ordering = ['group', 'name']
+        list_filter = ('group',)
+        list_display = ('group', 'name')
+        list_display_links = ('name',)
+        ordering = ('group', 'name')
 
     def __unicode__(self):
         return u'%s: %s' % (self.group, self.name)
 
     def total_width(self):
-        return int(self.account_width + self.balance_width + self.listcolumn_width)
+        return int(self.account_width
+            + self.balance_width
+            + self.listcolumn_width)
 
     def total_column_count(self):
         count = self.listcolumn_count + 1
