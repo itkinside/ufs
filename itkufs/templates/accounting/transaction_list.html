@@ -58,14 +58,14 @@
                     {% if t.is_rejected %}
                         rejected
                     {% else %}
-                        {% if not t.is_received %}
+                        {% if t.is_pending %}
                             pending
                         {% else %}
-                            received
+                            committed
                         {% endif %}
                     {% endif %}">
-                    {% blocktrans with t.get_status_display as status and t.last_modified|date:"Y-m-d H:i" as last_modified %}
-                        <b>{{ status }}</b> at {{ last_modified }}
+                    {% blocktrans with t.get_state_display as state and t.last_modified|date:"Y-m-d H:i" as last_modified %}
+                        <b>{{ state }}</b> at {{ last_modified }}
                     {% endblocktrans %}
                 </td>
             {% else %}

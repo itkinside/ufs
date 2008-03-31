@@ -192,7 +192,7 @@ table tr.oddrow {
 .admin a:hover {
 	color: #ce5c00 !important;
 }
-.ok, .received b {
+.ok, .committed b {
 	color: #4e9a06;
 }
 
