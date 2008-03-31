@@ -452,13 +452,13 @@ class Transaction(models.Model):
             entries = []
             for entry in self.entry_set.all():
                 if entry.debit:
-                    entries.append('%s debit %.2f' %
+                    entries.append(u'%s debit %.2f' %
                         (entry.account, entry.debit))
                 else:
-                    entries.append('%s credit %.2f' %
+                    entries.append(u'%s credit %.2f' %
                         (entry.account, entry.credit))
 
-            return ', '.join(entries)
+            return u', '.join(entries)
         else:
             return u'Empty transaction'
 
