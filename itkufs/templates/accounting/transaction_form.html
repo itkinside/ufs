@@ -42,6 +42,7 @@
             <tr>
                 <th>{% trans "Account" %}</th>
                 <th>{% trans "Type" %}</th>
+                <th>{% trans "Balance" %}</th>
                 <th>{% trans "Debit" %}</th>
                 <th>{% trans "Credit" %}</th>
             </tr>
@@ -51,6 +52,7 @@
             <tr class="{% cycle evenrow,oddrow as rowcolors %}">
                 <td>{{ a.name }}</td>
                 <td>{{ a.get_type_display }}</td>
+                <td class="align_right">{{ a.balance }}</td>
                 {{ f.as_table_row }}
             </tr>
         {% endfor %}
@@ -58,6 +60,7 @@
             <tr class="{% cycle rowcolors %}">
                 <td>{{ a.name }}</td>
                 <td>{{ a.get_type_display }}</td>
+                <td class="align_right">{{ a.balance }}</td>
                 {{ f.as_table_row }}
             </tr>
         {% endfor %}

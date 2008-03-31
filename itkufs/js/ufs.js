@@ -17,6 +17,7 @@ var Transaction = {
     var row = new Element('tr', { 'style': 'font-weight: bold'})
     row.insert(new Element('td').update('Sum'));
     row.insert(new Element('td'));
+    row.insert(new Element('td'));
     row.insert(new Element('td', { 'id': 'debit_sum', 'style': 'text-align: right'}));
     row.insert(new Element('td', { 'id': 'credit_sum', 'style': 'text-align: right'}));
     tbody.insert(row);
