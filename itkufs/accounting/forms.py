@@ -76,8 +76,8 @@ class ChangeTransactionForm(forms.Form):
 
 
 class EntryForm(CustomForm):
-    debit = forms.DecimalField(min_value=0, required=False)
-    credit = forms.DecimalField(min_value=0, required=False)
+    debit = forms.DecimalField(min_value=0, required=False, widget=forms.TextInput(attrs={'size': 4, 'class': 'debit'}))
+    credit = forms.DecimalField(min_value=0, required=False, widget=forms.TextInput(attrs={'size': 4, 'class': 'credit'}))
 
 
 class DepositWithdrawForm(forms.Form):
