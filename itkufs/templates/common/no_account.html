@@ -2,7 +2,8 @@
 {% load i18n %}
 
 
-{% block menu %}{% endblock %}
+{% block menu %}
+{% endblock %}
 
 
 {% block title %}
@@ -22,8 +23,10 @@
 
 {% block content %}
 
-<p>{% trans "You already have a &micro;FS <em>user</em>, but it is not
+<p>{% blocktrans %}
+You already have a &micro;FS <em>user</em>, but it is not
 connected to any <em>accounts</em>. Please ask your group administrator to
-create an account for you and connect the account with your user." %}</p>
+create an account for you and connect the account with your user."
+{% endblocktrans %}</p>
 
 {% endblock %}

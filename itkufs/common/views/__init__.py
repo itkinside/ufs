@@ -28,12 +28,20 @@ def login_user(request):
     except IndexError:
         pass
 
+    try:
+        group = Group.objects.filter(admins__in=[request.user])[0]
+        url = reverse('group-summary',
+                      kwargs={'group': group.slug})
+        return HttpResponseRedirect(url)
+    except IndexError:
+        pass
+
     # Tell the user he has a user, but not an account
     return render_to_response('common/no_account.html',
                               context_instance=RequestContext(request))
 
 @login_required
-def account_switch(request, is_admin=False):
+def group_switch(request, is_admin=False):
     """Switch to account summary for the selected account"""
 
     if request.method != 'POST':

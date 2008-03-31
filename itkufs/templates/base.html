@@ -108,7 +108,7 @@
 {% ifnotequal request.user.account_set.count 0 %}
 {% ifnotequal request.user.account_set.count 1 %}
 <span>&bull;</span>
-<form action="{% url account-switch request.session.my_account.group.slug %}" method="post">
+<form action="{% url switch-group %}" method="post">
 <div style="display: inline;">
 {% trans "Group:" %}
 <select name="group">
