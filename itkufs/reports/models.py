@@ -1,8 +1,8 @@
 from django.db import models
-from django.contrib import databrowse
 from django.utils.translation import ugettext_lazy as _
 
 from itkufs.accounting.models import Group, Account
+
 
 class ListManager(models.Manager):
     def get_query_set(self):
@@ -20,6 +20,8 @@ class ListManager(models.Manager):
                 """
             }
         )
+
+
 class List(models.Model):
     objects = ListManager()
 
@@ -61,7 +63,7 @@ class List(models.Model):
         if self.balance_width:
             count += 1
         return int(count)
-databrowse.site.register(List)
+
 
 class ListColumn(models.Model):
     name = models.CharField(_('name'), max_length=200, core=True)
@@ -78,4 +80,3 @@ class ListColumn(models.Model):
 
     def __unicode__(self):
         return u'%s: %s, %s' % (self.list.group, self.list, self.name)
-databrowse.site.register(ListColumn)
