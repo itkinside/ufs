@@ -2,22 +2,6 @@ from django.conf.urls.defaults import *
 from itkufs.accounting.views import *
 
 urlpatterns = patterns('',
-    ### Groups
-    url(r'^(?P<group>[0-9a-z_-]+)/$',
-        group_summary, name='group-summary'),
-    url(r'^(?P<group>[0-9a-z_-]+)/edit/$',
-        edit_group, name='edit-group'),
-
-    ### Accounts
-    url(r'^(?P<group>[0-9a-z_-]+)/account/switch/$',
-        account_switch, name='account-switch'),
-    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/$',
-        account_summary, name='account-summary'),
-    url(r'^(?P<group>[0-9a-z_-]+)/new-account/$',
-        edit_account, {'type': 'new'}, name='new-account'),
-    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/edit/$',
-        edit_account, {'type': 'edit'}, name='edit-account'),
-
     ### Settlements
     url(r'^(?P<group>[0-9a-z_-]+)/settlement/(?P<settlement>\d+)/$',
         settlement_details, name='settlement-summary'),
