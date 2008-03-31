@@ -41,7 +41,7 @@ def login_user(request):
                               context_instance=RequestContext(request))
 
 @login_required
-def group_switch(request, is_admin=False):
+def switch_group(request, is_admin=False):
     """Switch to account summary for the selected account"""
 
     if request.method != 'POST':
