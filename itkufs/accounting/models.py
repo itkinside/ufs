@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 from django.conf import settings
 from django.db import models, transaction
@@ -364,7 +364,7 @@ class RoleAccount(models.Model):
     )
 
     group = models.ForeignKey(Group, verbose_name=_('group'))
-    role = models.CharField(_('role'), max_length=2, choices=ACCOUNT_ROLE)
+    role = models.CharField(_('role'), max_length=4, choices=ACCOUNT_ROLE)
     account = models.ForeignKey(Account, verbose_name=_('account'))
 
     class Meta:
@@ -466,6 +466,8 @@ class Transaction(models.Model):
         related_name='real_transaction_set')
     settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
         null=True, blank=True)
+    date = models.DateField(_('date'),
+        help_text=_('May be used for date of the transaction if not today.'))
     last_modified = models.DateTimeField(_('Last modified'), auto_now_add=True)
     status = models.CharField(_('status'), max_length=3,
         choices=TRANSACTION_STATE, blank=True)
@@ -527,9 +529,12 @@ class Transaction(models.Model):
                     % list(account_intersection))
 
         if debit_sum != credit_sum:
-            raise InvalidTransaction('Credit and debit do not match, credit: %d, debit: %d.' % (credit_sum, debit_sum))
+            raise InvalidTransaction('Credit and debit do not match, '
+                + 'credit: %d, debit: %d.' % (credit_sum, debit_sum))
 
-        self.last_modified = datetime.now()
+        if self.date is None:
+            self.date = datetime.date.today()
+        self.last_modified = datetime.datetime.now()
         super(Transaction, self).save()
 
     def set_registered(self, user, message='', auto=False):
@@ -544,7 +549,7 @@ class Transaction(models.Model):
                 log.message = message
             log.save()
             self.status = self.REGISTERED_STATE
-            self.last_modified = datetime.now()
+            self.last_modified = datetime.datetime.now()
             self.save()
         else:
             raise InvalidTransaction(
@@ -558,7 +563,7 @@ class Transaction(models.Model):
                 log.message = message
             log.save()
             self.status = self.PAYED_STATE
-            self.last_modified = datetime.now()
+            self.last_modified = datetime.datetime.now()
             self.save()
         else:
             raise InvalidTransaction(
@@ -575,7 +580,7 @@ class Transaction(models.Model):
                 log.message = message
             log.save()
             self.status = self.RECEIVED_STATE
-            self.last_modified = datetime.now()
+            self.last_modified = datetime.datetime.now()
             self.save()
         else:
             raise InvalidTransaction('Could not set transaction as received')
@@ -590,7 +595,7 @@ class Transaction(models.Model):
                 log.message = message
             log.save()
             self.status = self.REJECTED_STATE
-            self.last_modified = datetime.now()
+            self.last_modified = datetime.datetime.now()
             self.save()
 
             users = {}
@@ -599,7 +604,9 @@ class Transaction(models.Model):
                     users[entry.account.owner] = entry.account.owner
 
             for user in users.values():
-                user.message_set.create(message=_('A transaction containing your account has been rejected'))
+                user.message_set.create(
+                    message=_('A transaction containing your account '
+                        + 'has been rejected'))
         else:
             raise InvalidTransaction(
                 'Could not set transaction as rejected')
