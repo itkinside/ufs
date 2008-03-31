@@ -55,20 +55,16 @@
         {% if not t.is_received %}pending{% endif %}{% endif %}">
         <td rowspan="{{ t.entry_set.all.count }}" class="status">
             <dl>
-                {% if t.is_registered %}
-                <dt>Registered:</dt>
-                <dd>{{ t.registered.timestamp|date:"Y-m-d H:i" }}</dd>
+                {% if t.is_pending %}
+                <dt>{% trans "Pending" %}:</dt>
+                <dd>{{ t.pending.timestamp|date:"Y-m-d H:i" }}</dd>
                 {% endif %}
-                {% if t.is_payed %}
-                <dt>Payed:</dt>
-                <dd>{{ t.payed.timestamp|date:"Y-m-d H:i" }}</dd>
-                {% endif %}
-                {% if t.is_received %}
-                <dt>Recieved:</dt>
-                <dd>{{ t.received.timestamp|date:"Y-m-d H:i" }}</dd>
+                {% if t.is_committed %}
+                <dt>{% trans "Committed" %}:</dt>
+                <dd>{{ t.committed.timestamp|date:"Y-m-d H:i" }}</dd>
                 {% endif %}
                 {% if t.is_rejected %}
-                <dt>Rejected:</dt>
+                <dt>{% trans "Rejected" %}:</dt>
                 <dd>{{ t.rejected.timestamp|date:"Y-m-d H:i" }}</dd>
                 {% endif %}
             </dl>
@@ -90,8 +86,8 @@
         {% if forloop.first %}
         <td rowspan="{{ t.entry_set.all.count }}" class="details">
             <dl>
-                <dt>{{ t.registered.user|default:"Unknown" }}: </dt>
-                <dd class="registered">{{ t.registered.message|default:"(None)" }}</dd>
+                <dt>{{ t.pending.user|default:"Unknown" }}: </dt>
+                <dd class="registered">{{ t.pending.message|default:"(None)" }}</dd>
                 {% if t.rejected %}
                 <dt>{{ t.rejected.user|default:"Unknown" }}: </dt>
                 <dd class="rejected">{{ t.rejected.message|default:"(None)" }}</dd>

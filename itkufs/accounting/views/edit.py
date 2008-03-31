@@ -95,8 +95,7 @@ def transfer(request, group, account=None, transfer_type=None,
             transaction.entry_set.add(
                 TransactionEntry(account=bank_account, debit=amount))
 
-            transaction.set_registered(user=request.user, message=details)
-            transaction.set_payed(user=request.user)
+            transaction.set_pending(user=request.user, message=details)
 
         elif transfer_type == 'withdraw':
             # Withdraw from user account
@@ -106,7 +105,7 @@ def transfer(request, group, account=None, transfer_type=None,
             transaction.entry_set.add(
                 TransactionEntry(account=bank_account, credit=amount))
 
-            transaction.set_registered(user=request.user, message=details)
+            transaction.set_pending(user=request.user, message=details)
 
         elif transfer_type == 'transfer':
             # Transfer from user account to other user account
@@ -119,11 +118,10 @@ def transfer(request, group, account=None, transfer_type=None,
             transaction.entry_set.add(
                 TransactionEntry(account=credit_account, credit=amount))
 
-            transaction.set_registered(user=request.user, message=details)
+            transaction.set_pending(user=request.user, message=details)
 
             if amount <= account.user_balance():
-                transaction.set_payed(user=request.user)
-                transaction.set_received(user=request.user)
+                transaction.set_commited(user=request.user)
 
         else:
             return HttpResponseForbidden(_('Forbidden if not group admin.'))
@@ -154,9 +152,8 @@ def approve_transactions(request, group, page='1', is_admin=False):
     transactions = []
     to_be_rejected = []
 
-    for t in group.not_received_transaction_set:
+    for t in group.pending_transaction_set:
         choices = t.get_valid_logtype_choices()
-        choices.insert(0, ('',''))
 
         if request.method == 'POST':
             form = ChangeTransactionForm(request.POST,
@@ -165,21 +162,15 @@ def approve_transactions(request, group, page='1', is_admin=False):
             if form.is_valid():
                 change_to = form.cleaned_data['change_to']
 
-                if change_to == 'Reg':
-                    t.set_registered(user=request.user)
-                elif change_to == 'Pay':
-                    t.set_payed(user=request.user)
-                elif change_to == 'Rec':
-                    t.set_received(user=request.user)
-                elif change_to == 'Rej':
+                if change_to == t.COMMITTED_STATE:
+                    t.set_committed(user=request.user)
+                elif change_to == t.REJECTED_STATE:
                     to_be_rejected.append((t))
 
-                if change_to != 'Rej' and change_to != 'Rec':
-                    tmp = t.get_valid_logtype_choices()
-                    tmp.insert(0,('',''))
+                if change_to != t.REJECTED_STATE and change_to != t.COMMITTED_STATE:
                     transactions.append((t,
                         ChangeTransactionForm(prefix='transaction%d' % t.id,
-                            choices=tmp, label=False)))
+                            choices=t.get_valid_logtype_choices(), label=False)))
             else:
                 transactions.append((t,form))
 
