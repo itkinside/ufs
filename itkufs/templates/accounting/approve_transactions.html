@@ -26,7 +26,7 @@
 
 {% block content %}
 {% if not transaction_list %}
-<p>{% trans "No pending transactions found." %} <b>FIXME</b>: message 'You have pending transactions in "ITK Inside".' make no sense</p>
+<p>{% trans "No pending transactions found." %}</p>
 {% else %}
 
 <form action="{% url approve-transactions group.slug %}" method="post" id="accounting_approve_transactions">

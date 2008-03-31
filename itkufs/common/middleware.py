@@ -41,10 +41,5 @@ class UfsMiddleware:
             # Add group admin flag
             if view_kwargs['group'].admins.filter(id=request.user.id).count():
                 view_kwargs['is_admin'] = True
-                # Check for pending transactions TODO add quick link
-                if view_kwargs['group'].pending_transaction_set.count():
-                    request.user.message_set.create(
-                        message=_('You have pending transactions in "%s".') \
-                        % view_kwargs['group'].name)
             else:
                 view_kwargs['is_admin'] = False
