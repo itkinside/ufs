@@ -2,6 +2,8 @@
 
 {% if is_paginated %}
     <p>
+    {% blocktrans %}{{ hits }} hits{% endblocktrans %}
+    &ndash;
     {% if has_previous %}
         {% if account %}
             <a href="{% url transaction-list-account-page account.group.slug,account.slug,previous %}">
@@ -10,7 +12,7 @@
             <a href="{% url transaction-list-group-page group.slug,previous %}">
             &lt;&lt; {% trans "Previous" %}</a>
         {% endif %}
-        &mdash;
+        &bull;
     {% endif %}
     {% for i in page_range %}
         {% ifequal i page %}
@@ -29,7 +31,7 @@
         {% endif %}
     {% endfor %}
     {% if has_next %}
-        &mdash;
+        &bull;
         {% if account %}
             <a href="{% url transaction-list-account-page account.group.slug,account.slug,next %}">
             {% trans "Next" %} &gt;&gt;</a>
@@ -38,7 +40,5 @@
             {% trans "Next" %} &gt;&gt;</a>
         {% endif %}
     {% endif %}
-    &mdash;
-    {% blocktrans %}{{ hits }} hits{% endblocktrans %}
     </p>
 {% endif %}
