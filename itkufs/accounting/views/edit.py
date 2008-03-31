@@ -305,7 +305,7 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
             details = settlement_form.cleaned_data['details']
 
             transaction.save()
-            transaction.set_added(user=request.user, message=details)
+            transaction.set_pending(user=request.user, message=details)
 
             request.user.message_set.create(
                 message= _('Your transaction has been added'))
