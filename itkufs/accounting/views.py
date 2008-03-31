@@ -486,16 +486,20 @@ def create_transaction(request, group, is_admin=False, transaction=None):
 
 
             if status_form.is_valid():
-                state = status_form.cleaned_data['state']
+                change_to = status_form.cleaned_data['change_to']
                 details = settlement_form.cleaned_data['details']
 
                 transaction.save()
 
-                if state == Transaction.REGISTERED_STATE:
-                    transaction.set_registered(user=request.user, message=details)
-                elif state == Transaction.PAYED_STATE:
+                if change_to == Transaction.REGISTERED_STATE:
+                    transaction.set_registered(user=request.user,
+                        message=details)
+                elif change_to == Transaction.PAYED_STATE:
+                    # FIXME: Should we set_registered with auto=True here?
                     transaction.set_payed(user=request.user, message=details)
-                elif state == Transaction.RECEIVED_STATE:
+                elif change_to == Transaction.RECEIVED_STATE:
+                    # FIXME: Should we set_registered with auto=True here?
+                    # FIXME: Should we set_payed with auto=True here?
                     transaction.set_received(user=request.user, message=details)
 
             request.user.message_set.create(
