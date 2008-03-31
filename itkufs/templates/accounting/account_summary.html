@@ -16,7 +16,12 @@
     {% if account.owner %}
         <th>{% trans "Owner" %}</th>
         <td>
-            <a href="mailto:{{ account.owner.email }}">{{ account.owner.username }}</a>
+            {% if account.owner.email %}
+                <a href="mailto:{{ account.owner.email }}">
+                    {{ account.owner.username }}</a>
+            {% else %}
+                {{ account.owner.username }}
+            {% endif %}
         </td>
     {% else %}
         <th>{% trans "Type" %}</th>
