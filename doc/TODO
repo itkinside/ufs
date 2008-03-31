@@ -1,91 +1,114 @@
-TODO µFS v1
-===========
+µFS TODO
+========
 
-MUST HAVE
----------
+Continuously
+~~~~~~~~~~~~
+- Update Norwegian translation. Last done 2008-03-23
+- Write/update documentation
+- Write/update unit tests
+- Test use cases
+- egrep -ir 'todo|fixme|xxx' itkufs/
 
-Model:
-- Implement the new transaction semantics with regard to no connections between
-  group et al. See docs. Must problably mainly be controlled by testing a lot
-  more.
-- set_reject, etc, need to be enforce who is allowed to alter state. A user may
-  reject his withdrawal request. An admin may reject everything not already
-  recieved or rejected.
-- Unit tests of account balance and lots of properties. See FIXMEs.
-- Should user/group_account_set only contain active accounts, check that this
-  has been done right.
-
-Views:
-- Use decorators to control commit/rollback of transactions. At least in all
-  views which has to do with transactions. Check possible django bug :(
-
-Forms:
-
-Templates:
-- Transaction list and approve transaction view et al. should resemble each
-  other more.
-- Update Norwegian translation. Last done 2008-03-23.
-- If admin only is set we should probably hide the parts of a large
-  multitransaction that is not linked to user, hiding numbers or entire
-  useraccounts
-
-New features:
-- 'New claim' as an action for regular users to claim expenses from each other
-  or from the group. Will need a Group.expense_account field.
-- Admin rejection of user claims (and deposits and withdrawals), using
-  TransactionMessage, only missing emails, but perhaps messages is enough?
-- Do something reasonable with settlements or simply remove them.
-
-Other:
-- Should we be able to cancel payments that are set to payed by user deposit
-  but never payed?
-
-
-SHOULD HAVE
------------
-
-- Create correction transactions in a non-manual manner.
-
-New features:
-- Settlement
-- Creating invoices for other groups, either for email or printing.
-- User registration of expenses. Includes adding {sales,expense}_account to
-  Group. This is listed in the roadmap as a v2 feature.
-
-MIGHT HAVE
+ACCOUNTING
 ----------
-- Figure out a smart way of creating papers/pdf's to use in BSF. A standerdised
-  setup would probably be beneficial.
+
+This release
+~~~~~~~~~~~~
+- Use cases:
+	- Check status of bar economy
+	- Register sales to own users
+	- Register sales to other groups
+	- Print new lists
+	- Settlement
+		- Create new
+		- Register recievables
+		- Register payments
+- (adamcik) Complete edit-transaction
+- (adamcik) change_to requires fix
+- (jodal) group,is_admin,account,is_owner context processor
+- set_rejected() must enforce who is allowed to alter state. A user may reject
+  his withdrawal or deposit if state=pending. An admin may reject everything if
+  state=pending.
+- User rejection of ones own pending withdrawals and deposits.
+- Should user/group_account_set only contain active accounts or all?
+- Use decorators to control commit/rollback of transactions. At least in all
+  views which has to do with transactions. Check possible Django bug :(
+- Transaction list and approve transaction view should resemble each other.
+- If admin_only is set we should hide the parts of a large multitransaction
+  that is not linked to user, hiding at least numbers or entire users.
+- Add the flag Settlement.closed.
+- Implement edit-settlement, settlement-list and settlement-details.
+- Assign AccountRoles.
+
+Later release
+~~~~~~~~~~~~~
+- Date based transaction lists. Filter on account and settlement.
+- Mail users when:
+	- Balance is below warning limit
+	- Balance is below block limit
+	- Participant in transaction which is rejected
+- Create pre-populated correction transactions.
+- 'New claim' as an action for regular users to claim expenses from each other
+  or from the group.
 
 
-DONE
-----
-
-(emptied 2008-03-24)
-- Add missing {% trans %} tags on tabs, etc.
-- Respect active flag for accounts, or at least indicate that account is
-  inactive. As of 2008-03-24, the account summary does not allow showing
-  disabled accounts if group.admin_only=True and inactive accounts have a
-  strike-through in the account list in the group summary.
-- (adamcik) Finish group-transaction view, it doesn't know what to do with POST
-  data yet.
-- (adamcik) Use newforms for lists.
-- (adamcik) Cleanup reports.views, i.e. finish rewrite of new/edit list.
-- (adamcik) Finish rewrite of approve/change transaction state form. Needs
-  testing.
-
-NOT AN ISSUE
-------------
-
-- More sanity checking, prevent admin from performing transactions that he does
-  not have enough privileges to invoke (should be done in form and/or model)
-  (Is this still a problem with our new model??)
-  * get_valid_choices() must check session user before returning
-  * Use get_valid_choices() in "Register transaction"
-
-WONTFIX
+REPORTS
 -------
 
-(emptied 2008-03-24)
-- Generalize tabs somehow. Do not repeat code in all templates. Mark active tab
-  dynamically.
+This release
+~~~~~~~~~~~~
+- More interesting submenu.
+- Modify Account.balance() to return the balance at a given date, then modify
+  the balance and income statements so that one can specify for which date you
+  want the report to be valid.
+- Review code
+- Write unit tests
+- Write documentation
+
+Later release
+~~~~~~~~~~~~~
+- Pie chart of balance statement
+- Bar chart of income statement
+- Line chart of developments through time
+
+Even later release
+~~~~~~~~~~~~~~~~~~
+- Private (for the user himself) high score of where the user spends the most
+  money
+
+
+INVOICING
+---------
+
+Later release
+~~~~~~~~~~~~~
+- Creating invoices for other groups, either for email or printing.
+- A standardized setup would probably be beneficial.
+- Start out with just name of spender, amount and sum.
+
+Even later release
+~~~~~~~~~~~~~~~~~~
+- Cache names in the DB and use JavaScript to fetch them on the fly.
+- Use user names from other groups, if they use µFS.
+
+
+INVENTORY
+---------
+
+Later release
+~~~~~~~~~~~~~
+- A catalog of articles with quantity and price
+- Support the purchase workflow:
+	1. User/admin registers purchase of new/more articles
+	2. Admin approves purchase
+	3. Admin decides prices for new articles and updates for old
+	4. User/admin prints price list
+- Support the catalog update workflow:
+	1. User/admin/slave counts the quantity of all articles
+	2. Admin updates the catalog with the new quantities
+
+Even later release
+~~~~~~~~~~~~~~~~~~
+- µFS helps the admin decide reasonable prices, given estimates on loss
+- µFS helps the admin improve the loss estimates based on inventory counts and
+  sales reports
