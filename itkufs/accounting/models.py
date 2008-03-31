@@ -3,16 +3,10 @@ import datetime
 from django.conf import settings
 from django.db import models, transaction
 from django.db.models import Q
-from django.contrib import databrowse
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _, ugettext
-
-databrowse.site.register(User)
-
-# TODO: Replace custom save methods with validator_lists when Django supports
-# this good enough
 
 class Group(models.Model):
     name = models.CharField(_('name'), max_length=100)
@@ -85,68 +79,40 @@ class Group(models.Model):
         """Returns all transactions connected to group, including rejected"""
         return self.real_transaction_set.exclude(
             state=Transaction.UNDEFINED_STATE).distinct()
-    transaction_set_with_rejected = property(get_transaction_set_with_rejected,
-                                             None, None)
+    transaction_set_with_rejected = property(
+        get_transaction_set_with_rejected, None, None)
 
     def get_transaction_set(self):
-        """Returns all transactions connected to group, that have not been
-        rejected"""
+        """Returns all transactions connected to group, excluding rejected"""
         return self.transaction_set_with_rejected.exclude(
             state=Transaction.REJECTED_STATE)
     transaction_set = property(get_transaction_set, None, None)
 
-    def get_registered_transaction_set(self):
-        """Returns all transactions connected to group, that are registered and
-        not rejected"""
-        return self.transaction_set.exclude(state=Transaction.UNDEFINED_STATE)
-    registered_transaction_set = property(get_registered_transaction_set,
-                                          None, None)
+    def get_added_transaction_set(self):
+        """Returns all added transactions connected to group, excluding
+        committed and rejected"""
+        return self.transaction_set.filter(state=Transaction.ADDED_STATE)
+    added_transaction_set = property(
+        get_added_transaction_set, None, None)
 
-    def get_payed_transaction_set(self):
-        """Returns all payed transactions connected to group, that are not
+    def get_committed_transaction_set(self):
+        """Returns all committed transactions connected to group, excluding
         rejected"""
-        return self.transaction_set.filter(
-            Q(state=Transaction.PAYED_STATE) |
-            Q(state=Transaction.RECEIVED_STATE))
-    payed_transaction_set = property(get_payed_transaction_set, None, None)
-
-    def get_not_payed_transaction_set(self):
-        """Returns all unpayed transactions connected to group, that are not
-        rejected"""
-        return self.transaction_set.filter(
-            Q(state=Transaction.UNDEFINED_STATE) |
-            Q(state=Transaction.REGISTERED_STATE))
-    not_payed_transaction_set = property(get_not_payed_transaction_set,
-                                         None, None)
-
-    def get_received_transaction_set(self):
-        """Returns all received transactions connected to group"""
-        return self.transaction_set.filter(
-            state=Transaction.RECEIVED_STATE)
-    received_transaction_set = property(get_received_transaction_set,
-                                        None, None)
-
-    def get_not_received_transaction_set(self):
-        """Returns all transactions that have not been received connected to
-        group"""
-        return self.transaction_set.exclude(
-            state=Transaction.RECEIVED_STATE)
-    not_received_transaction_set = property(get_not_received_transaction_set,
-                                            None, None)
+        return self.transaction_set.filter(state=Transaction.COMMITTED_STATE)
+    committed_transaction_set = property(
+        get_committed_transaction_set, None, None)
 
     def get_rejected_transaction_set(self):
         """Returns all rejected transactions connected to group"""
         return self.transaction_set_with_rejected.filter(
             state=Transaction.REJECTED_STATE)
-    rejected_transaction_set = property(get_rejected_transaction_set,
-                                        None, None)
+    rejected_transaction_set = property(
+        get_rejected_transaction_set, None, None)
 
     get_not_rejected_transaction_set = get_transaction_set
-    get_not_rejected_transaction_set.__doc__ = """Returns all transactions that
-    have not been rejected connected to group. Same as get_transaction_set()."""
+    get_not_rejected_transaction_set.__doc__ = """Returns all non-rejected
+    transactions connected to group. Same as get_transaction_set()."""
     not_rejected_transaction_set = property(get_transaction_set, None, None)
-
-databrowse.site.register(Group)
 
 
 class AccountManager(models.Manager):
@@ -162,7 +128,7 @@ class AccountManager(models.Manager):
                             = accounting_transaction.id)
                 WHERE account_id = accounting_account.id
                     AND accounting_transaction.state = '%s'
-                """ % Transaction.RECEIVED_STATE,
+                """ % Transaction.COMMITTED_STATE,
             'is_user_account_sql':
                 """
                 (accounting_account.owner_id IS NOT NULL
@@ -287,70 +253,42 @@ class Account(models.Model):
         """Returns all transactions connected to account, including rejected"""
         return Transaction.objects.filter(
             entry_set__account=self).exclude(
-            state=Transaction.UNDEFINED_STATE).distinct()
-    transaction_set_with_rejected = property(get_transaction_set_with_rejected,
-                                             None, None)
+                state=Transaction.UNDEFINED_STATE).distinct()
+    transaction_set_with_rejected = property(
+        get_transaction_set_with_rejected, None, None)
 
     def get_transaction_set(self):
-        """Returns all transactions connected to account, that have not been
-        rejected"""
+        """Returns all transactions connected to account, excluding rejected"""
         return self.transaction_set_with_rejected.exclude(
             state=Transaction.REJECTED_STATE)
     transaction_set = property(get_transaction_set, None, None)
 
-    def get_registered_transaction_set(self):
-        """Returns all transactions connected to account, that are registered
-        and not rejected"""
-        return self.transaction_set.exclude(state=Transaction.UNDEFINED_STATE)
-    registered_transaction_set = property(get_registered_transaction_set,
-                                          None, None)
+    def get_added_transaction_set(self):
+        """Returns all added transactions connected to account, excluding
+        committed and rejected"""
+        return self.transaction_set.filter(state=Transaction.ADDED_STATE)
+    added_transaction_set = property(
+        get_added_transaction_set, None, None)
 
-    def get_payed_transaction_set(self):
-        """Returns all payed transactions connected to account, that are not
+    def get_committed_transaction_set(self):
+        """Returns all committed transactions connected to account, excluding
         rejected"""
-        return self.transaction_set.filter(
-            Q(state=Transaction.PAYED_STATE) |
-            Q(state=Transaction.RECEIVED_STATE))
-    payed_transaction_set = property(get_payed_transaction_set, None, None)
-
-    def get_not_payed_transaction_set(self):
-        """Returns all unpayed transactions connected to account, that are not
-        rejected"""
-        return self.transaction_set.filter(
-            Q(state=Transaction.UNDEFINED_STATE) |
-            Q(state=Transaction.REGISTERED_STATE))
-    not_payed_transaction_set = property(get_not_payed_transaction_set,
-                                         None, None)
-
-    def get_received_transaction_set(self):
-        """Returns all received transactions connected to account"""
-        return self.transaction_set.filter(
-            state=Transaction.RECEIVED_STATE)
-    received_transaction_set = property(get_received_transaction_set,
-                                        None, None)
-
-    def get_not_received_transaction_set(self):
-        """Returns all transactions that have not been received connected to
-        account"""
-        return self.transaction_set.exclude(
-            state=Transaction.RECEIVED_STATE)
-    not_received_transaction_set = property(get_not_received_transaction_set,
-                                            None, None)
+        return self.transaction_set.filter(state=Transaction.COMMITTED_STATE)
+    committed_transaction_set = property(
+        get_committed_transaction_set, None, None)
 
     def get_rejected_transaction_set(self):
         """Returns all rejected transactions connected to account"""
         return self.transaction_set_with_rejected.filter(
             state=Transaction.REJECTED_STATE)
-    rejected_transaction_set = property(get_rejected_transaction_set,
-                                        None, None)
+    rejected_transaction_set = property(
+        get_rejected_transaction_set, None, None)
 
     get_not_rejected_transaction_set = get_transaction_set
     get_not_rejected_transaction_set.__doc__ = """Returns all transactions that
     have not been rejected connected to account. Same as
     get_transaction_set()."""
     not_rejected_transaction_set = property(get_transaction_set, None, None)
-
-databrowse.site.register(Account)
 
 
 class RoleAccount(models.Model):
@@ -387,7 +325,6 @@ class RoleAccount(models.Model):
             'group': self.group,
         }
 
-databrowse.site.register(RoleAccount)
 
 ### Transaction models
 
@@ -429,8 +366,6 @@ class Settlement(models.Model):
         else:
             return smart_unicode(self.date)
 
-databrowse.site.register(Settlement)
-
 
 class TransactionManager(models.Manager):
     def get_query_set(self):
@@ -449,14 +384,12 @@ class TransactionManager(models.Manager):
 
 class Transaction(models.Model):
     UNDEFINED_STATE = ''
-    REGISTERED_STATE = 'Reg'
-    PAYED_STATE = 'Pay'
-    RECEIVED_STATE = 'Rec'
+    ADDED_STATE = 'Add'
+    COMMITTED_STATE = 'Com'
     REJECTED_STATE = 'Rej'
     TRANSACTION_STATE = (
-        (REGISTERED_STATE, _('Registered')),
-        (PAYED_STATE, _('Payed')),
-        (RECEIVED_STATE, _('Received')),
+        (ADDED_STATE, _('Added')),
+        (COMMITTED_STATE, _('Committed')),
         (REJECTED_STATE, _('Rejected')),
     )
 
@@ -537,63 +470,44 @@ class Transaction(models.Model):
         self.last_modified = datetime.datetime.now()
         super(Transaction, self).save()
 
-    def set_registered(self, user, message='', auto=False):
+    def set_added(self, user, message=''):
         if self.id is None:
             self.save()
 
-        if not self.is_registered():
-            log = TransactionLog(type=self.REGISTERED_STATE,
-                transaction=self, auto=auto)
+        if not self.is_added():
+            log = TransactionLog(type=self.ADDED_STATE, transaction=self)
             log.user = user
             if message is not None and message.strip() != '':
                 log.message = message
             log.save()
-            self.state = self.REGISTERED_STATE
+            self.state = self.ADDED_STATE
             self.last_modified = datetime.datetime.now()
             self.save()
         else:
-            raise InvalidTransaction(
-                'Could not set transaction as registered')
+            raise InvalidTransaction('Could not set transaction as added')
 
-    def set_payed(self, user, message='', auto=False):
-        if not self.is_rejected() and self.is_registered():
-            log = TransactionLog(type=self.PAYED_STATE, transaction=self, auto=auto)
+    def set_committed(self, user, message=''):
+        if not self.is_rejected() and self.is_added():
+            log = TransactionLog(type=self.COMMITTED_STATE, transaction=self)
             log.user = user
             if message.strip() != '':
                 log.message = message
             log.save()
-            self.state = self.PAYED_STATE
+
+            self.state = self.COMMITTED_STATE
             self.last_modified = datetime.datetime.now()
             self.save()
         else:
-            raise InvalidTransaction(
-                'Could not set transaction as payed')
+            raise InvalidTransaction('Could not set transaction as committed')
 
-    def set_received(self, user, message='', auto=False):
-        if not self.is_rejected() and self.is_registered():
-            if not self.is_payed():
-                self.set_payed(user, auto=True)
-
-            log = TransactionLog(type=self.RECEIVED_STATE, transaction=self, auto=auto)
+    def set_rejected(self, user, message=''):
+        if self.is_added() and not self.is_committed():
+            log = TransactionLog(type=self.REJECTED_STATE, transaction=self)
             log.user = user
             if message.strip() != '':
                 log.message = message
             log.save()
-            self.state = self.RECEIVED_STATE
-            self.last_modified = datetime.datetime.now()
-            self.save()
-        else:
-            raise InvalidTransaction('Could not set transaction as received')
 
-    def reject(self, user, message='', auto=False):
-        if (self.is_registered()
-            and not self.is_payed()
-            and not self.is_received()):
-            log = TransactionLog(type=self.REJECTED_STATE, transaction=self, auto=auto)
-            log.user = user
-            if message.strip() != '':
-                log.message = message
-            log.save()
             self.state = self.REJECTED_STATE
             self.last_modified = datetime.datetime.now()
             self.save()
@@ -605,82 +519,49 @@ class Transaction(models.Model):
 
             for user in users.values():
                 user.message_set.create(
-                    message=_('A transaction containing your account '
-                        + 'has been rejected'))
+                    message=_('Transaction %(id)d regarding your account '
+                        + 'has been rejected.') % {'id': self.id})
         else:
             raise InvalidTransaction(
                 'Could not set transaction as rejected')
-    set_rejected = reject
-    set_rejected.__doc__ = 'set_rejected() is an alias for reject()'
 
 
-    def is_registered(self):
-        return self.state in (self.REGISTERED_STATE,
-                               self.PAYED_STATE,
-                               self.RECEIVED_STATE)
+    def is_added(self):
+        return self.state == self.ADDED_STATE
 
-    def is_payed(self):
-        return self.state in (self.PAYED_STATE, self.RECEIVED_STATE)
-
-    def is_received(self):
-        return self.state == self.RECEIVED_STATE
+    def is_committed(self):
+        return self.state == self.COMMITTED_STATE
 
     def is_rejected(self):
         return self.state == self.REJECTED_STATE
 
     def is_editable(self):
-        return self.state == self.REGISTERED_STATE
+        return self.state == self.ADDED_STATE
 
-    def get_registered(self):
-        if self.is_registered():
-            return self.log_set.filter(type=self.REGISTERED_STATE)[0]
+    def get_added(self):
+        if self.is_added() or self.is_committed() or self.is_rejected():
+            return self.log_set.filter(type=self.ADDED_STATE)[0]
+    added = property(get_added, None, None)
 
-    def get_payed(self):
-        if self.is_payed():
-            return self.log_set.filter(type=self.PAYED_STATE)[0]
-
-    def get_received(self):
-        if self.is_received():
-            return self.log_set.filter(type=self.RECEIVED_STATE)[0]
+    def get_committed(self):
+        if self.is_committed():
+            return self.log_set.filter(type=self.COMMITTED_STATE)[0]
+    committed = property(get_committed, None, None)
 
     def get_rejected(self):
         if self.is_rejected():
             return self.log_set.filter(type=self.REJECTED_STATE)[0]
-
-    registered = property(get_registered, None, None)
-    received = property(get_received, None, None)
     rejected = property(get_rejected, None, None)
-    payed = property(get_payed, None, None)
 
     def get_valid_logtype_choices(self):
-        possible_state = dict(self.TRANSACTION_STATE)
-
-        if self.is_rejected() or self.is_received():
+        if self.is_committed() or self.is_rejected():
             return [('','')]
-
-        if self.is_payed():
-            del possible_state[self.PAYED_STATE]
-            del possible_state[self.REJECTED_STATE]
-
-        if not self.is_registered():
-            del possible_state[self.REJECTED_STATE]
-
-        # A bit ugly but we want to ensure that register is "default", ie first
-        # in the list
-        if self.REGISTERED_STATE in possible_state:
-            can_be_registered = possible_state[self.REGISTERED_STATE]
-            del possible_state[self.REGISTERED_STATE]
         else:
-            can_be_registered = False
-
-        possible_state = possible_state.items()
-
-        if can_be_registered:
-            possible_state.insert(0, (self.REGISTERED_STATE, can_be_registered))
-
-        return possible_state
-
-databrowse.site.register(Transaction)
+            states = dict(self.TRANSACTION_STATE)
+            del states[self.ADDED_STATE]
+            states = states.items()
+            states.insert(0, ('',''))
+            return states
 
 
 class TransactionLog(models.Model):
@@ -724,8 +605,6 @@ class TransactionLog(models.Model):
             d['timestamp'] = self.timestamp.strftime(settings.DATETIME_FORMAT)
         return _(u'%(type)s at %(timestamp)s by %(user)s: %(message)s') % d
 
-databrowse.site.register(TransactionLog)
-
 
 class TransactionEntry(models.Model):
     transaction = models.ForeignKey(Transaction,
@@ -738,9 +617,9 @@ class TransactionEntry(models.Model):
         max_digits=10, decimal_places=2, default=0)
 
     def save(self):
-        if self.transaction.is_registered():
+        if self.transaction.is_added():
             raise InvalidTransactionEntry(
-                'Can not add entries to registered transactions')
+                'Can not add entries to existing transactions')
 
         if self.debit < 0 or self.credit < 0:
             raise InvalidTransactionEntry(
@@ -768,5 +647,3 @@ class TransactionEntry(models.Model):
             'debit': self.debit,
             'credit': self.credit,
         }
-
-databrowse.site.register(TransactionEntry)
