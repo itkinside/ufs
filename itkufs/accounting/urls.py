@@ -15,7 +15,7 @@ databrowse.site.register(TransactionEntry)
 urlpatterns = patterns('',
     ### Settlements
     url(r'^(?P<group>[0-9a-z_-]+)/settlement/(?P<settlement>\d+)/$',
-        settlement_details, name='settlement-summary'),
+        settlement_details, name='settlement-details'),
     url(r'^(?P<group>[0-9a-z_-]+)/new-settlement/$',
         new_edit_settlement, {'type': 'new'}, name='new-settlement'),
     url(r'^(?P<group>[0-9a-z_-]+)/settlement/(?P<settlement>\d+)/edit/$',
