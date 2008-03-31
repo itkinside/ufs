@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.conf import settings
 from django.db import models, transaction
 from django.db.models import Q
 from django.contrib import databrowse
@@ -16,27 +17,22 @@ databrowse.site.register(User)
 class Group(models.Model):
     name = models.CharField(_('name'), max_length=100)
     slug = models.SlugField(_('slug'), prepopulate_from=['name'], unique=True,
-        help_text=_('A shortname used in URLs etc.'))
+        help_text=_('A shortname used in URLs.'))
     admin_only = models.BooleanField(default=True,
-        help_text=_('Only allow admins to view group details.'))
-    warn_limit = models.IntegerField(_('warn limit'), null=True, blank=True,
-        help_text=_('Limit for warning user, leave blank for no limit.'))
-    block_limit = models.IntegerField(_('block limit'), null=True, blank=True,
-        help_text=_('Limit for blacklisting user, leave blank for no limit.'))
+        help_text=_('Only allow admins to view group details and reports.'))
     admins = models.ManyToManyField(User, verbose_name=_('admins'),
         null=True, blank=True, filter_interface=models.HORIZONTAL)
-    bank_account = models.ForeignKey('Account', verbose_name=_('bank account'),
-        null=True, blank=True, related_name='bank_account_for', editable=False)
-    cash_account = models.ForeignKey('Account', verbose_name=_('cash account'),
-        null=True, blank=True, related_name='cash_account_for', editable=False)
-    # TODO: Probably needs to add sales_account etc. Can wait for inventory.
-
-    logo = models.ImageField(upload_to='logos', null=True, blank=True)
-    email = models.EmailField(null=True, blank=True,
+    warn_limit = models.IntegerField(_('warn limit'), null=True, blank=True,
+        help_text=_('Warn user of low balance at this limit, '
+            + 'leave blank for no limit.'))
+    block_limit = models.IntegerField(_('block limit'), null=True, blank=True,
+        help_text=_('Limit for blacklisting user, leave blank for no limit.'))
+    logo = models.ImageField(upload_to='logos', blank=True)
+    email = models.EmailField(blank=True,
         help_text=_('Contact address for group.'))
 
     class Meta:
-        ordering = ['name']
+        ordering = ('name',)
         verbose_name = _('group')
         verbose_name_plural = _('groups')
 
@@ -211,7 +207,7 @@ class Account(models.Model):
         default=False)
 
     class Meta:
-        ordering = ['group', 'type', 'name']
+        ordering = ('group', 'type', 'name')
         unique_together = (('slug', 'group'), ('owner', 'group'))
         verbose_name = _('account')
         verbose_name_plural = _('accounts')
@@ -224,15 +220,15 @@ class Account(models.Model):
                 'classes': 'collapse',
                 'fields' : ('type', 'active', 'ignore_block_limit')}),
         )
-        list_display = ['group', 'name', 'type', 'owner', 'balance',
-            'active', 'ignore_block_limit']
-        list_display_links = ['name']
-        list_filter = ['active', 'type', 'group']
+        list_display = ('group', 'name', 'type', 'owner', 'balance',
+            'active', 'ignore_block_limit')
+        list_display_links = ('name')
+        list_filter = ('active', 'type', 'group')
         list_per_page = 20
-        search_fields = ['name']
+        search_fields = ('name',)
 
     def __unicode__(self):
-        return "%s: %s" % (self.group, self.name)
+        return u'%s: %s' % (self.group, self.name)
 
     def get_absolute_url(self):
         return reverse('account-summary', kwargs={
@@ -357,6 +353,42 @@ class Account(models.Model):
 databrowse.site.register(Account)
 
 
+class RoleAccount(models.Model):
+    BANK_ACCOUNT = 'Bank'
+    CASH_ACCOUNT = 'Cash'
+    SALE_ACCOUNT = 'Sale'
+    ACCOUNT_ROLE = (
+        (BANK_ACCOUNT, _('Bank account')),
+        (CASH_ACCOUNT, _('Cash account')),
+        (SALE_ACCOUNT, _('Sale account')),
+    )
+
+    group = models.ForeignKey(Group, verbose_name=_('group'))
+    role = models.CharField(_('role'), max_length=2, choices=ACCOUNT_ROLE)
+    account = models.ForeignKey(Account, verbose_name=_('account'))
+
+    class Meta:
+        ordering = ('group', 'role')
+        unique_together = (('group', 'role'),)
+        verbose_name = _('role account')
+        verbose_name_plural = _('role accounts')
+
+    class Admin:
+        list_display = ('group', 'type', 'account')
+        list_display_links = ('group', 'type', 'account')
+        list_filter = ('group', 'type')
+        list_per_page = 20
+        search_fields = ('account',)
+
+    def __unicode__(self):
+        return _(u'%(account)s is %(role)s for %(group)s') % {
+            'account': self.account.name,
+            'role': self.get_role_display().lower(),
+            'group': self.group,
+        }
+
+databrowse.site.register(RoleAccount)
+
 ### Transaction models
 
 class InvalidTransaction(Exception):
@@ -380,11 +412,10 @@ class InvalidTransactionLog(InvalidTransaction):
 class Settlement(models.Model):
     group = models.ForeignKey(Group, verbose_name=_('group'))
     date = models.DateField(_('date'))
-    comment = models.CharField(_('comment'), max_length=200,
-        blank=True, null=True)
+    comment = models.CharField(_('comment'), max_length=200, blank=True)
 
     class Meta:
-        ordering = ['date']
+        ordering = ('date',)
         verbose_name = _('settlement')
         verbose_name_plural = _('settlements')
         unique_together = (('date', 'comment', 'group'),)
@@ -394,7 +425,7 @@ class Settlement(models.Model):
 
     def __unicode__(self):
         if self.comment is not None:
-            return smart_unicode("%s: %s" % (self.date, self.comment))
+            return u'%s: %s' % (self.date, self.comment)
         else:
             return smart_unicode(self.date)
 
@@ -442,7 +473,7 @@ class Transaction(models.Model):
     class Meta:
         verbose_name = _('transaction')
         verbose_name_plural = _('transactions')
-        ordering = ['-last_modified']
+        ordering = ('-last_modified',)
 
     class Admin:
         pass
@@ -467,10 +498,6 @@ class Transaction(models.Model):
             'group': self.group.slug,
             'transaction': self.id,
         })
-
-    def debug(self):
-        status = self.log_set.all()
-        return '%s %s' % (self.__unicode__(), status)
 
     @transaction.commit_on_success
     def save(self):
@@ -510,7 +537,8 @@ class Transaction(models.Model):
             self.save()
 
         if not self.is_registered():
-            log = TransactionLog(type=self.REGISTERED_STATE, transaction=self, auto=auto)
+            log = TransactionLog(type=self.REGISTERED_STATE,
+                transaction=self, auto=auto)
             log.user = user
             if message is not None and message.strip() != '':
                 log.message = message
@@ -684,9 +712,9 @@ class TransactionLog(models.Model):
             'message': self.message,
         }
         if self.timestamp is None:
-            d['timestamp'] = '(not saved)'
+            d['timestamp'] = u'(not saved)'
         else:
-            d['timestamp'] = self.timestamp.strftime('%Y-%m-%d %H:%M')
+            d['timestamp'] = self.timestamp.strftime(settings.DATETIME_FORMAT)
         return _(u'%(type)s at %(timestamp)s by %(user)s: %(message)s') % d
 
 databrowse.site.register(TransactionLog)
@@ -725,7 +753,7 @@ class TransactionEntry(models.Model):
         unique_together = (('transaction', 'account'),)
         verbose_name = _('transaction entry')
         verbose_name_plural = _('transaction entries')
-        ordering = ['credit', 'debit']
+        ordering = ('credit', 'debit')
 
     def __unicode__(self):
         return _(u'%(account)s: debit %(debit)s, credit %(credit)s') % {
