@@ -22,7 +22,7 @@ from itkufs.accounting.forms import *
 
 @login_required
 @limit_to_admin
-def new_edit_settlement(request, group, is_admin=False):
+def new_edit_settlement(request, group, type='new', is_admin=False):
     """Create new and edit existing settlements"""
 
     # TODO: Implement support for editing settlements
