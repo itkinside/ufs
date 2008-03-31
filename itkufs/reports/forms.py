@@ -32,7 +32,7 @@ class ListForm(CustomModelForm):
 
 class ColumnForm(CustomModelForm):
     name = forms.CharField(max_length=100, required=False)
-    width = forms.IntegerField(min_value=0, required=False)
+    width = forms.IntegerField(min_value=0, required=False, widget=forms.TextInput(attrs={'size': 4, 'class': 'number'}))
 
     class Meta:
         model = ListColumn

@@ -153,7 +153,7 @@ table tr.oddrow {
 .align_center {
 	text-align: center;
 }
-.align_right, .debit, .credit {
+.align_right, .number {
 	text-align: right;
 }
 .float_left {
