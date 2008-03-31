@@ -49,6 +49,7 @@ class GroupForm(CustomModelForm):
         kwargs['commit'] = original_commit
         return super(GroupForm, self).save(**kwargs)
 
+
 class TransactionSettlementForm(CustomModelForm):
     details = forms.CharField(label=_('Details'), required=False,
         widget=forms.widgets.Textarea(attrs={'rows': 2}))
@@ -57,10 +58,12 @@ class TransactionSettlementForm(CustomModelForm):
         model = Transaction
         fields = ('settlement',)
 
+
 class SettlementForm(CustomModelForm):
     class Meta:
         model = Settlement
         exclude = ['group']
+
 
 class ChangeTransactionForm(forms.Form):
     def __init__(self, *args, **kwargs):
