@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block title %}
-    {% trans "Create settlement" %}
+    {% trans "New settlement" %}
     - {{ block.super }}
 {% endblock %}
 
@@ -10,13 +10,13 @@
 {% block breadcrumbs %}
     {{ block.super }}
     &raquo; <a href="{% url create-settlement group.slug %}">
-    {% trans "Create settlement" %}</a>
+    {% trans "New settlement" %}</a>
 {% endblock %}
 
 
 {% block header %}
     {{ block.super }}
-    &ndash; {% trans "Create settlement" %}
+    &ndash; {% trans "New settlement" %}
 {% endblock %}
 
 
@@ -24,7 +24,7 @@
 
 <form action="." method="post" enctype="multipart/form-data">
     {{ form.as_p }}
-    <p><button type="submit">{% trans "Create settlement" %}</button></p>
+    <p><button type="submit">{% trans "Save settlement" %}</button></p>
 </form>
 
 {% endblock %}

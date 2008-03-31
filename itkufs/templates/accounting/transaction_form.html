@@ -2,6 +2,26 @@
 {% load i18n %}
 
 
+{% block title %}
+    {% trans "New transaction" %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; <a href="{% url create-transaction group.slug %}">
+        {% trans "New transaction" %}</a>
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+    &ndash; {% trans "New transaction" %}
+{% endblock %}
+
+
+
 {% block content %}
 
 <form action="." method="post" id="createtransaction">
@@ -20,7 +40,9 @@
     <table class="tablelist">
         <thead>
             <tr>
-                <th>Account</th><th>Debit</th><th>Credit</th>
+                <th>{% trans "Account" %}</th>
+                <th>{% trans "Debit" %}</th>
+                <th>{% trans "Credit" %}</th>
             </tr>
         </thead>
         <tbody>

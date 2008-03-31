@@ -11,9 +11,11 @@
 {% block breadcrumbs %}
     {{ block.super }}
     {% if account %}
-        &raquo; <a href="{% url transaction-list-account group.slug,account.slug %}">Transactions</a>
+        &raquo; <a href="{% url transaction-list-account group.slug,account.slug %}">
+            {% trans "Transactions" %}</a>
     {% else %}
-        &raquo; <a href="{% url transaction-list-group group.slug %}">Transactions</a>
+        &raquo; <a href="{% url transaction-list-group group.slug %}">
+            {% trans "Transactions" %}</a>
     {% endif %}
     {% if is_paginated %}
         &raquo; {% trans "Page" %} {{ page }} {% trans "of" %} {{ pages }}
