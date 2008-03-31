@@ -19,31 +19,31 @@
 {% block content %}
 
 <ul>
-    <li><a href="#transaction-status">{% trans "What do the transaction status terms mean?" %}</a></li>
+    <li><a href="#transaction-state">{% trans "What do the transaction state terms mean?" %}</a></li>
     <li><a href="#tech-contact">{% trans "Who do I contact about technical errors in &micro;FS?" %}</a></li>
 </ul>
 
-<h3 id="transaction-status">{% trans "What do the transaction status terms mean?" %}</h3>
+<h3 id="transaction-state">{% trans "What do the transaction state terms mean?" %}</h3>
 
 <dl>
-    <dt>{% trans "Registered" %}</dt>
+    <dt>{% trans "Pending" %}</dt>
     <dd>
         {% blocktrans %}The transaction has been registered as a valid
         transaction with correct debit and credit entries, in this state no
         accounts have been affected.{% endblocktrans %}
     </dd>
 
-    <dt>{% trans "Payed" %}</dt>
+    <dt>{% trans "Committed" %}</dt>
     <dd>
-        {% blocktrans %}The debit side of the transaction has been confirmed
-        and should now have been done in the real world.{% endblocktrans %}
+        {% blocktrans %}The transaction is complete and the balance of the
+        accounts has been updated{% endblocktrans %}
+    </dd>
+    <dt>{% trans "Rejected" %}</dt>
+    <dd>
+        {% blocktrans %}The transaction has been rejected by the admin, please
+        see the transaction details for a reason.{% endblocktrans %}
     </dd>
 
-    <dt>{% trans "Received" %}</dt>
-    <dd>
-        {% blocktrans %}The credit side of the transaction has registered that
-        the money has been received in the real world.{% endblocktrans %}
-    </dd>
 </dl>
 
 <h3 id="tech-contact">{% trans "Who do I contact about technical errors in &micro;FS?" %}</h3>
