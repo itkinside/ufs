@@ -54,4 +54,3 @@ def static_page(request, template, is_admin=False):
                                   'is_admin': is_admin,
                               },
                               context_instance=RequestContext(request))
-
