@@ -84,7 +84,7 @@ class Group(models.Model):
     def get_transaction_set_with_rejected(self):
         """Returns all transactions connected to group, including rejected"""
         return self.real_transaction_set.exclude(
-            status=Transaction.UNDEFINED_STATE).distinct()
+            state=Transaction.UNDEFINED_STATE).distinct()
     transaction_set_with_rejected = property(get_transaction_set_with_rejected,
                                              None, None)
 
@@ -92,13 +92,13 @@ class Group(models.Model):
         """Returns all transactions connected to group, that have not been
         rejected"""
         return self.transaction_set_with_rejected.exclude(
-            status=Transaction.REJECTED_STATE)
+            state=Transaction.REJECTED_STATE)
     transaction_set = property(get_transaction_set, None, None)
 
     def get_registered_transaction_set(self):
         """Returns all transactions connected to group, that are registered and
         not rejected"""
-        return self.transaction_set.exclude(status=Transaction.UNDEFINED_STATE)
+        return self.transaction_set.exclude(state=Transaction.UNDEFINED_STATE)
     registered_transaction_set = property(get_registered_transaction_set,
                                           None, None)
 
@@ -106,23 +106,23 @@ class Group(models.Model):
         """Returns all payed transactions connected to group, that are not
         rejected"""
         return self.transaction_set.filter(
-            Q(status=Transaction.PAYED_STATE) |
-            Q(status=Transaction.RECEIVED_STATE))
+            Q(state=Transaction.PAYED_STATE) |
+            Q(state=Transaction.RECEIVED_STATE))
     payed_transaction_set = property(get_payed_transaction_set, None, None)
 
     def get_not_payed_transaction_set(self):
         """Returns all unpayed transactions connected to group, that are not
         rejected"""
         return self.transaction_set.filter(
-            Q(status=Transaction.UNDEFINED_STATE) |
-            Q(status=Transaction.REGISTERED_STATE))
+            Q(state=Transaction.UNDEFINED_STATE) |
+            Q(state=Transaction.REGISTERED_STATE))
     not_payed_transaction_set = property(get_not_payed_transaction_set,
                                          None, None)
 
     def get_received_transaction_set(self):
         """Returns all received transactions connected to group"""
         return self.transaction_set.filter(
-            status=Transaction.RECEIVED_STATE)
+            state=Transaction.RECEIVED_STATE)
     received_transaction_set = property(get_received_transaction_set,
                                         None, None)
 
@@ -130,14 +130,14 @@ class Group(models.Model):
         """Returns all transactions that have not been received connected to
         group"""
         return self.transaction_set.exclude(
-            status=Transaction.RECEIVED_STATE)
+            state=Transaction.RECEIVED_STATE)
     not_received_transaction_set = property(get_not_received_transaction_set,
                                             None, None)
 
     def get_rejected_transaction_set(self):
         """Returns all rejected transactions connected to group"""
         return self.transaction_set_with_rejected.filter(
-            status=Transaction.REJECTED_STATE)
+            state=Transaction.REJECTED_STATE)
     rejected_transaction_set = property(get_rejected_transaction_set,
                                         None, None)
 
@@ -161,7 +161,7 @@ class AccountManager(models.Manager):
                         ON (accounting_transactionentry.transaction_id
                             = accounting_transaction.id)
                 WHERE account_id = accounting_account.id
-                    AND accounting_transaction.status = '%s'
+                    AND accounting_transaction.state = '%s'
                 """ % Transaction.RECEIVED_STATE,
             'is_user_account_sql':
                 """
@@ -222,7 +222,7 @@ class Account(models.Model):
         )
         list_display = ('group', 'name', 'type', 'owner', 'balance',
             'active', 'ignore_block_limit')
-        list_display_links = ('name')
+        list_display_links = ('name',)
         list_filter = ('active', 'type', 'group')
         list_per_page = 20
         search_fields = ('name',)
@@ -287,7 +287,7 @@ class Account(models.Model):
         """Returns all transactions connected to account, including rejected"""
         return Transaction.objects.filter(
             entry_set__account=self).exclude(
-            status=Transaction.UNDEFINED_STATE).distinct()
+            state=Transaction.UNDEFINED_STATE).distinct()
     transaction_set_with_rejected = property(get_transaction_set_with_rejected,
                                              None, None)
 
@@ -295,13 +295,13 @@ class Account(models.Model):
         """Returns all transactions connected to account, that have not been
         rejected"""
         return self.transaction_set_with_rejected.exclude(
-            status=Transaction.REJECTED_STATE)
+            state=Transaction.REJECTED_STATE)
     transaction_set = property(get_transaction_set, None, None)
 
     def get_registered_transaction_set(self):
         """Returns all transactions connected to account, that are registered
         and not rejected"""
-        return self.transaction_set.exclude(status=Transaction.UNDEFINED_STATE)
+        return self.transaction_set.exclude(state=Transaction.UNDEFINED_STATE)
     registered_transaction_set = property(get_registered_transaction_set,
                                           None, None)
 
@@ -309,23 +309,23 @@ class Account(models.Model):
         """Returns all payed transactions connected to account, that are not
         rejected"""
         return self.transaction_set.filter(
-            Q(status=Transaction.PAYED_STATE) |
-            Q(status=Transaction.RECEIVED_STATE))
+            Q(state=Transaction.PAYED_STATE) |
+            Q(state=Transaction.RECEIVED_STATE))
     payed_transaction_set = property(get_payed_transaction_set, None, None)
 
     def get_not_payed_transaction_set(self):
         """Returns all unpayed transactions connected to account, that are not
         rejected"""
         return self.transaction_set.filter(
-            Q(status=Transaction.UNDEFINED_STATE) |
-            Q(status=Transaction.REGISTERED_STATE))
+            Q(state=Transaction.UNDEFINED_STATE) |
+            Q(state=Transaction.REGISTERED_STATE))
     not_payed_transaction_set = property(get_not_payed_transaction_set,
                                          None, None)
 
     def get_received_transaction_set(self):
         """Returns all received transactions connected to account"""
         return self.transaction_set.filter(
-            status=Transaction.RECEIVED_STATE)
+            state=Transaction.RECEIVED_STATE)
     received_transaction_set = property(get_received_transaction_set,
                                         None, None)
 
@@ -333,14 +333,14 @@ class Account(models.Model):
         """Returns all transactions that have not been received connected to
         account"""
         return self.transaction_set.exclude(
-            status=Transaction.RECEIVED_STATE)
+            state=Transaction.RECEIVED_STATE)
     not_received_transaction_set = property(get_not_received_transaction_set,
                                             None, None)
 
     def get_rejected_transaction_set(self):
         """Returns all rejected transactions connected to account"""
         return self.transaction_set_with_rejected.filter(
-            status=Transaction.REJECTED_STATE)
+            state=Transaction.REJECTED_STATE)
     rejected_transaction_set = property(get_rejected_transaction_set,
                                         None, None)
 
@@ -374,9 +374,9 @@ class RoleAccount(models.Model):
         verbose_name_plural = _('role accounts')
 
     class Admin:
-        list_display = ('group', 'type', 'account')
-        list_display_links = ('group', 'type', 'account')
-        list_filter = ('group', 'type')
+        list_display = ('group', 'role', 'account')
+        list_display_links = ('group', 'role', 'account')
+        list_filter = ('group', 'role')
         list_per_page = 20
         search_fields = ('account',)
 
@@ -469,7 +469,7 @@ class Transaction(models.Model):
     date = models.DateField(_('date'),
         help_text=_('May be used for date of the transaction if not today.'))
     last_modified = models.DateTimeField(_('Last modified'), auto_now_add=True)
-    status = models.CharField(_('status'), max_length=3,
+    state = models.CharField(_('state'), max_length=3,
         choices=TRANSACTION_STATE, blank=True)
 
     class Meta:
@@ -548,7 +548,7 @@ class Transaction(models.Model):
             if message is not None and message.strip() != '':
                 log.message = message
             log.save()
-            self.status = self.REGISTERED_STATE
+            self.state = self.REGISTERED_STATE
             self.last_modified = datetime.datetime.now()
             self.save()
         else:
@@ -562,7 +562,7 @@ class Transaction(models.Model):
             if message.strip() != '':
                 log.message = message
             log.save()
-            self.status = self.PAYED_STATE
+            self.state = self.PAYED_STATE
             self.last_modified = datetime.datetime.now()
             self.save()
         else:
@@ -579,7 +579,7 @@ class Transaction(models.Model):
             if message.strip() != '':
                 log.message = message
             log.save()
-            self.status = self.RECEIVED_STATE
+            self.state = self.RECEIVED_STATE
             self.last_modified = datetime.datetime.now()
             self.save()
         else:
@@ -594,7 +594,7 @@ class Transaction(models.Model):
             if message.strip() != '':
                 log.message = message
             log.save()
-            self.status = self.REJECTED_STATE
+            self.state = self.REJECTED_STATE
             self.last_modified = datetime.datetime.now()
             self.save()
 
@@ -615,21 +615,21 @@ class Transaction(models.Model):
 
 
     def is_registered(self):
-        return self.status in (self.REGISTERED_STATE,
+        return self.state in (self.REGISTERED_STATE,
                                self.PAYED_STATE,
                                self.RECEIVED_STATE)
 
     def is_payed(self):
-        return self.status in (self.PAYED_STATE, self.RECEIVED_STATE)
+        return self.state in (self.PAYED_STATE, self.RECEIVED_STATE)
 
     def is_received(self):
-        return self.status == self.RECEIVED_STATE
+        return self.state == self.RECEIVED_STATE
 
     def is_rejected(self):
-        return self.status == self.REJECTED_STATE
+        return self.state == self.REJECTED_STATE
 
     def is_editable(self):
-        return self.status == self.REGISTERED_STATE
+        return self.state == self.REGISTERED_STATE
 
     def get_registered(self):
         if self.is_registered():
