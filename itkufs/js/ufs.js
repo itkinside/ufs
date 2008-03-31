@@ -11,15 +11,15 @@
 var Transaction = {
   // Add a sumrow to tables in form#createtransaction
   init: function() {
-    var tbody = $$('#createtransaction tbody')[0];
+    var tbody = $$('#newtransaction tbody')[0];
     if (tbody == null) return;
 
     var row = new Element('tr', { 'style': 'font-weight: bold'})
     row.insert(new Element('td').update('Sum'));
     row.insert(new Element('td'));
     row.insert(new Element('td'));
-    row.insert(new Element('td', { 'id': 'debit_sum', 'style': 'text-align: right'}));
-    row.insert(new Element('td', { 'id': 'credit_sum', 'style': 'text-align: right'}));
+    row.insert(new Element('td', { 'id': 'debit_sum', 'class': 'debit'}));
+    row.insert(new Element('td', { 'id': 'credit_sum', 'class': 'credit'}));
     tbody.insert(row);
 
     tbody.observe('keyup', Transaction.update);
@@ -33,7 +33,7 @@ var Transaction = {
     Transaction.update();
   },
   update: function() {
-    var inputs = $$('#createtransaction tbody input');
+    var inputs = $$('#newtransaction tbody input');
 
     var debit = 0;
     var credit = 0;
@@ -60,11 +60,15 @@ var Transaction = {
     $('credit_sum').update(credit);
 
     if (debit != credit || error) {
-      $('debit_sum').className  = 'error';
-      $('credit_sum').className = 'error';
+      $('debit_sum').removeClassName('ok');
+      $('credit_sum').removeClassName('ok');
+      $('debit_sum').addClassName('error');
+      $('credit_sum').addClassName('error');
     } else {
-      $('debit_sum').className  = 'ok';
-      $('credit_sum').className = 'ok';
+      $('debit_sum').removeClassName('error');
+      $('credit_sum').removeClassName('error');
+      $('debit_sum').addClassName('ok');
+      $('credit_sum').addClassName('ok');
     }
 
   }
