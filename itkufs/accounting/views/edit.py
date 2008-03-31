@@ -120,8 +120,8 @@ def transfer(request, group, account=None, transfer_type=None,
 
             transaction.set_pending(user=request.user, message=details)
 
-            if amount <= account.user_balance():
-                transaction.set_commited(user=request.user)
+            if amount <= account.user_balance() - (group.block_limit or 0):
+                transaction.set_committed(user=request.user)
 
         else:
             return HttpResponseForbidden(_('Forbidden if not group admin.'))
