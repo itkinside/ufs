@@ -3,6 +3,8 @@ from django.conf import settings
 from django.contrib import databrowse
 from django.contrib.auth.decorators import user_passes_test
 
+databrowse.site.register(User)
+
 urlpatterns = patterns('',
     (r'^admin/', include('django.contrib.admin.urls')),
 
