@@ -266,8 +266,6 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
 
     settlement_form = TransactionSettlementForm(post, prefix='settlement',
         instance=transaction)
-    status_form = ChangeTransactionForm(post,
-        choices=transaction.get_valid_logtype_choices())
 
     user_forms = []
     group_forms = []
@@ -304,23 +302,10 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
                             entry.transaction = transaction
                             entry.save()
 
+            details = settlement_form.cleaned_data['details']
 
-            if status_form.is_valid():
-                change_to = status_form.cleaned_data['change_to']
-                details = settlement_form.cleaned_data['details']
-
-                transaction.save()
-
-                if change_to == Transaction.REGISTERED_STATE:
-                    transaction.set_registered(user=request.user,
-                        message=details)
-                elif change_to == Transaction.PAYED_STATE:
-                    # FIXME: Should we set_registered with auto=True here?
-                    transaction.set_payed(user=request.user, message=details)
-                elif change_to == Transaction.RECEIVED_STATE:
-                    # FIXME: Should we set_registered with auto=True here?
-                    # FIXME: Should we set_payed with auto=True here?
-                    transaction.set_received(user=request.user, message=details)
+            transaction.save()
+            transaction.set_added(user=request.user, message=details)
 
             request.user.message_set.create(
                 message= _('Your transaction has been added'))
@@ -339,7 +324,6 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
             'is_admin': is_admin,
             'group': group,
             'settlement_form': settlement_form,
-            'status_form': status_form,
             'group_forms': group_forms,
             'user_forms': user_forms,
             'errors': errors,
