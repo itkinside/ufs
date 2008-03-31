@@ -49,7 +49,7 @@ def new_edit_list(request, group, list=None, is_admin=False, type='new'):
     if type == 'new':
         columnforms = []
         listform = ListForm(data=data, group=group)
-        for i in range(0,4): # Lock number of coloumns for new list
+        for i in range(0,10): # Lock number of coloumns for new list
             columnforms.append( ColumnForm(data=data, prefix='new%s'%i))
 
     elif type == 'edit':
