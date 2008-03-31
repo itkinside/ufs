@@ -41,7 +41,7 @@
 
 <table class="tablelist">
     <tr>
-            <th>{% trans "Status" %}</th>
+            <th>{% trans "State" %}</th>
             <th>{% trans "Account" %}</th>
             <th>{% trans "Debit" %}</th>
             <th>{% trans "Credit" %}</th>
@@ -53,7 +53,7 @@
     <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}
         {% if t.is_rejected %}rejected{% else %}
         {% if not t.is_received %}pending{% endif %}{% endif %}">
-        <td rowspan="{{ t.entry_set.all.count }}" class="status">
+        <td rowspan="{{ t.entry_set.all.count }}" class="state">
             <dl>
                 {% if t.is_pending %}
                 <dt>{% trans "Pending" %}:</dt>

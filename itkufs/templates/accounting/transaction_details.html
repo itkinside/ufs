@@ -16,8 +16,19 @@
         <td>{{ transaction.id }}</th>
     </tr>
     <tr>
-        <th>Status</th>
-        <td>{{ transaction.get_status_display }}</th>
+        <th>Settlement</th>
+        <td>
+            {% if transaction.settlement %}
+                <a href="{% url settlement-details group.slug %}">
+                    {{ transaction.settlement }}</a>
+            {% else %}
+                {% trans "None" %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>State</th>
+        <td>{{ transaction.get_state_display }}</th>
     </tr>
     <tr>
         <th>Last modified</th>
@@ -73,7 +84,7 @@ FIXME (placement): <a href="{% url edit-transaction group.slug,transaction.id %}
 
 <table class="tablelist">
     <tr>
-        <th>{% trans "Status" %}</th>
+        <th>{% trans "State" %}</th>
         <th>{% trans "When" %}</th>
         <th>{% trans "Who" %}</th>
         <th>{% trans "Message" %}</th>
