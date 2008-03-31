@@ -81,6 +81,8 @@ def transfer(request, group, account=None, transfer_type=None,
         if details == '':
             details = None
 
+        bank_account = group.roleaccount_set.get(role=RoleAccount.BANK_ACCOUNT)
+
         transaction = Transaction(group=group)
         # FIXME: save() shouldn't be need if we figure out a reasonable hack
         transaction.save()
@@ -91,7 +93,7 @@ def transfer(request, group, account=None, transfer_type=None,
             transaction.entry_set.add(
                 TransactionEntry(account=account, credit=amount))
             transaction.entry_set.add(
-                TransactionEntry(account=group.bank_account, debit=amount))
+                TransactionEntry(account=bank_account, debit=amount))
 
             transaction.set_registered(user=request.user, message=details)
             transaction.set_payed(user=request.user)
@@ -102,7 +104,7 @@ def transfer(request, group, account=None, transfer_type=None,
             transaction.entry_set.add(
                 TransactionEntry(account=account, debit=amount))
             transaction.entry_set.add(
-                TransactionEntry(account=group.bank_account, credit=amount))
+                TransactionEntry(account=bank_account, credit=amount))
 
             transaction.set_registered(user=request.user, message=details)
 
