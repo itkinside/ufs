@@ -290,7 +290,8 @@ class RoleAccount(models.Model):
 
     class Meta:
         ordering = ('group', 'role')
-        unique_together = (('group', 'role'),)
+        # FIXME: waiting for http://code.djangoproject.com/ticket/6523
+        #unique_together = (('group', 'role'),)
         verbose_name = _('role account')
         verbose_name_plural = _('role accounts')
 
