@@ -417,8 +417,9 @@ def create_settlement(request, group, is_admin=False):
 
     return render_to_response('accounting/settlement_form.html',
         {
-            'form': form,
+            'is_admin': is_admin,
             'group': group,
+            'form': form,
         },
         context_instance=RequestContext(request))
 
