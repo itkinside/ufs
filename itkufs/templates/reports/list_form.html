@@ -14,6 +14,8 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
+    &raquo;  <a href="{% url view-list group.slug,listform.instance.slug %}">
+        {{ listform.instance.name }}</a>
     {% ifequal type 'edit' %}
         &raquo; <a href="{% url edit-list group.slug,listform.instance.slug %}">
             {% trans "Edit list" %}</a>
@@ -33,11 +35,21 @@
     {% endifequal %}
 {% endblock %}
 
+{% block helptips %}
+
+<h3>{% trans  "Help" %}</h3>
+
+<p>{% blocktrans %} Selecting <em>accounts</em> for the list allows you to
+limit which users will be put on this list. An empty accounts list implies all
+active users in this group. {% endblocktrans %} </p>
+
+{% endblock %}
 
 {% block content %}
 
 <form method="post" action="" id="neweditlist">
 {{ listform.as_p }}
+
 
 <label>{% trans "Columns" %}:</label>
 <table class="tablelist">
