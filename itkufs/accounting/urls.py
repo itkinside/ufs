@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
-from itkufs.accounting.views import *
+from itkufs.accounting.views.edit import *
+from itkufs.accounting.views.display import *
 
 urlpatterns = patterns('',
     ### Settlements
