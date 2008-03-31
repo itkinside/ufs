@@ -88,16 +88,13 @@ class Group(models.Model):
             state=Transaction.REJECTED_STATE)
     transaction_set = property(get_transaction_set, None, None)
 
-    def get_added_transaction_set(self):
-        """Returns all added transactions connected to group, excluding
-        committed and rejected"""
-        return self.transaction_set.filter(state=Transaction.ADDED_STATE)
-    added_transaction_set = property(
-        get_added_transaction_set, None, None)
+    def get_pending_transaction_set(self):
+        """Returns all pending transactions connected to group"""
+        return self.transaction_set.filter(state=Transaction.PENDING_STATE)
+    pending_transaction_set = property(get_pending_transaction_set, None, None)
 
     def get_committed_transaction_set(self):
-        """Returns all committed transactions connected to group, excluding
-        rejected"""
+        """Returns all committed transactions connected to group"""
         return self.transaction_set.filter(state=Transaction.COMMITTED_STATE)
     committed_transaction_set = property(
         get_committed_transaction_set, None, None)
@@ -108,11 +105,6 @@ class Group(models.Model):
             state=Transaction.REJECTED_STATE)
     rejected_transaction_set = property(
         get_rejected_transaction_set, None, None)
-
-    get_not_rejected_transaction_set = get_transaction_set
-    get_not_rejected_transaction_set.__doc__ = """Returns all non-rejected
-    transactions connected to group. Same as get_transaction_set()."""
-    not_rejected_transaction_set = property(get_transaction_set, None, None)
 
 
 class AccountManager(models.Manager):
@@ -263,16 +255,13 @@ class Account(models.Model):
             state=Transaction.REJECTED_STATE)
     transaction_set = property(get_transaction_set, None, None)
 
-    def get_added_transaction_set(self):
-        """Returns all added transactions connected to account, excluding
-        committed and rejected"""
-        return self.transaction_set.filter(state=Transaction.ADDED_STATE)
-    added_transaction_set = property(
-        get_added_transaction_set, None, None)
+    def get_pending_transaction_set(self):
+        """Returns all pending transactions connected to account"""
+        return self.transaction_set.filter(state=Transaction.PENDING_STATE)
+    pending_transaction_set = property(get_pending_transaction_set, None, None)
 
     def get_committed_transaction_set(self):
-        """Returns all committed transactions connected to account, excluding
-        rejected"""
+        """Returns all committed transactions connected to account"""
         return self.transaction_set.filter(state=Transaction.COMMITTED_STATE)
     committed_transaction_set = property(
         get_committed_transaction_set, None, None)
@@ -283,12 +272,6 @@ class Account(models.Model):
             state=Transaction.REJECTED_STATE)
     rejected_transaction_set = property(
         get_rejected_transaction_set, None, None)
-
-    get_not_rejected_transaction_set = get_transaction_set
-    get_not_rejected_transaction_set.__doc__ = """Returns all transactions that
-    have not been rejected connected to account. Same as
-    get_transaction_set()."""
-    not_rejected_transaction_set = property(get_transaction_set, None, None)
 
 
 class RoleAccount(models.Model):
@@ -384,11 +367,11 @@ class TransactionManager(models.Manager):
 
 class Transaction(models.Model):
     UNDEFINED_STATE = ''
-    ADDED_STATE = 'Add'
+    PENDING_STATE = 'Pen'
     COMMITTED_STATE = 'Com'
     REJECTED_STATE = 'Rej'
     TRANSACTION_STATE = (
-        (ADDED_STATE, _('Added')),
+        (PENDING_STATE, _('Pending')),
         (COMMITTED_STATE, _('Committed')),
         (REJECTED_STATE, _('Rejected')),
     )
@@ -470,24 +453,24 @@ class Transaction(models.Model):
         self.last_modified = datetime.datetime.now()
         super(Transaction, self).save()
 
-    def set_added(self, user, message=''):
+    def set_pending(self, user, message=''):
         if self.id is None:
             self.save()
 
-        if not self.is_added():
-            log = TransactionLog(type=self.ADDED_STATE, transaction=self)
+        if not (self.is_pending() or self.is_committed() or self.is_rejected()):
+            log = TransactionLog(type=self.PENDING_STATE, transaction=self)
             log.user = user
             if message is not None and message.strip() != '':
                 log.message = message
             log.save()
-            self.state = self.ADDED_STATE
+            self.state = self.PENDING_STATE
             self.last_modified = datetime.datetime.now()
             self.save()
         else:
-            raise InvalidTransaction('Could not set transaction as added')
+            raise InvalidTransaction('Could not set transaction as pending')
 
     def set_committed(self, user, message=''):
-        if not self.is_rejected() and self.is_added():
+        if self.is_pending() and not self.is_committed():
             log = TransactionLog(type=self.COMMITTED_STATE, transaction=self)
             log.user = user
             if message.strip() != '':
@@ -501,7 +484,7 @@ class Transaction(models.Model):
             raise InvalidTransaction('Could not set transaction as committed')
 
     def set_rejected(self, user, message=''):
-        if self.is_added() and not self.is_committed():
+        if self.is_pending() and not self.is_committed():
             log = TransactionLog(type=self.REJECTED_STATE, transaction=self)
             log.user = user
             if message.strip() != '':
@@ -526,30 +509,33 @@ class Transaction(models.Model):
                 'Could not set transaction as rejected')
 
 
-    def is_added(self):
-        return self.state == self.ADDED_STATE
+    def is_pending(self):
+        return self.state == self.PENDING_STATE
+    def has_pending(self):
+        return self.state in (
+            self.PENDING_STATE, self.COMMITTED_STATE, self.REJECTED_STATE)
+    is_editable = is_pending
 
     def is_committed(self):
         return self.state == self.COMMITTED_STATE
+    has_committed = is_committed
 
     def is_rejected(self):
         return self.state == self.REJECTED_STATE
+    has_committed = is_rejected
 
-    def is_editable(self):
-        return self.state == self.ADDED_STATE
-
-    def get_added(self):
-        if self.is_added() or self.is_committed() or self.is_rejected():
-            return self.log_set.filter(type=self.ADDED_STATE)[0]
-    added = property(get_added, None, None)
+    def get_pending(self):
+        if self.has_pending():
+            return self.log_set.filter(type=self.PENDING_STATE)[0]
+    pending = property(get_pending, None, None)
 
     def get_committed(self):
-        if self.is_committed():
+        if self.has_committed():
             return self.log_set.filter(type=self.COMMITTED_STATE)[0]
     committed = property(get_committed, None, None)
 
     def get_rejected(self):
-        if self.is_rejected():
+        if self.has_rejected():
             return self.log_set.filter(type=self.REJECTED_STATE)[0]
     rejected = property(get_rejected, None, None)
 
@@ -558,7 +544,7 @@ class Transaction(models.Model):
             return [('','')]
         else:
             states = dict(self.TRANSACTION_STATE)
-            del states[self.ADDED_STATE]
+            del states[self.PENDING_STATE]
             states = states.items()
             states.insert(0, ('',''))
             return states
@@ -617,9 +603,9 @@ class TransactionEntry(models.Model):
         max_digits=10, decimal_places=2, default=0)
 
     def save(self):
-        if self.transaction.is_added():
+        if self.transaction.is_pending():
             raise InvalidTransactionEntry(
-                'Can not add entries to existing transactions')
+                'Can not add entries to unpending transactions')
 
         if self.debit < 0 or self.credit < 0:
             raise InvalidTransactionEntry(
