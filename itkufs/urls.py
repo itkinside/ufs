@@ -2,6 +2,7 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 from django.contrib import databrowse
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import User
 
 databrowse.site.register(User)
 
