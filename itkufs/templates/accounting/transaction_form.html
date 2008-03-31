@@ -10,7 +10,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo; <a href="{% url create-transaction group.slug %}">
+    &raquo; <a href="{% url new-transaction group.slug %}">
         {% trans "New transaction" %}</a>
 {% endblock %}
 
@@ -24,7 +24,7 @@
 
 {% block content %}
 
-<form action="." method="post" id="createtransaction">
+<form action="." method="post" id="newtransaction">
     {% if errors %}
         <ul class="error">
             {% for e in errors %}

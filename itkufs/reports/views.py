@@ -7,8 +7,6 @@ from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _, ungettext
-from django.views.generic.create_update import create_object, update_object, delete_object
-from django.newforms import form_for_instance, form_for_model
 
 from itkufs.common.decorators import limit_to_group, limit_to_owner, limit_to_admin
 from itkufs.accounting.models import Group, Account
@@ -17,29 +15,32 @@ from itkufs.reports.forms import *
 
 @login_required
 @limit_to_group
-def show_list(request, group, list, is_admin=False):
+def view_list(request, group, list, is_admin=False):
     """Show list for printing"""
 
     if list.accounts.all().count():
-        accounts = list.accounts.filter(group=group, active=True).select_related(depth=1)
+        accounts = list.accounts.filter(group=group, active=True
+            ).select_related(depth=1)
     else:
-        accounts = group.user_account_set.filter(active=True).select_related(depth=1)
+        accounts = group.user_account_set.filter(active=True
+            ).select_related(depth=1)
 
     response = render_to_response('reports/list.html',
-                              {
-                                  'accounts': accounts,
-                                  'group': group,
-                                  'list': list,
-                                  'is_admin': is_admin,
-                              },
-                              context_instance=RequestContext(request))
+        {
+            'accounts': accounts,
+            'group': group,
+            'list': list,
+            'is_admin': is_admin,
+        },
+    context_instance=RequestContext(request))
     populate_xheaders(request, response, List, list.id)
     return response
 
 @login_required
 @limit_to_admin
-def edit_list(request, group, list=None, is_admin=False, type='new'):
-    """Edit list"""
+def new_edit_list(request, group, list=None, is_admin=False, type='new'):
+    """Create new or edit existing list"""
+
     if request.method == 'POST':
         data = request.POST
     else:
@@ -81,34 +82,43 @@ def edit_list(request, group, list=None, is_admin=False, type='new'):
                 elif column.instance.id:
                     column.instance.delete()
 
-            return HttpResponseRedirect(reverse('view-list', args=(group.slug, list.slug)))
+            return HttpResponseRedirect(reverse('view-list',
+                kwargs={
+                    'group': group.slug,
+                    'list': list.slug,
+                }))
 
     return render_to_response('reports/list_form.html',
-                              {
-                                  'is_admin': is_admin,
-                                  'group': group,
-                                  'type': type,
-                                  'listform': listform,
-                                  'columnforms': columnforms,
-                              },
-                              context_instance=RequestContext(request))
+        {
+            'is_admin': is_admin,
+            'group': group,
+            'type': type,
+            'listform': listform,
+            'columnforms': columnforms,
+        },
+        context_instance=RequestContext(request))
 
 @login_required
 @limit_to_admin
 def delete_list(request, group, list, is_admin=False):
+    """Delete list"""
+
     if request.method == 'POST':
         # FIXME maybe a bit naive here?
         list.delete()
         request.user.message_set.create(message=_('List deleted'))
-        return HttpResponseRedirect(reverse('group-summary', args=(group.slug,)))
+        return HttpResponseRedirect(reverse('group-summary',
+            kwargs={
+                'group': group.slug,
+            }))
 
     return render_to_response('reports/list_delete.html',
-                              {
-                                  'is_admin': is_admin,
-                                  'group': group,
-                                  'list': list,
-                              },
-                              context_instance=RequestContext(request))
+        {
+            'is_admin': is_admin,
+            'group': group,
+            'list': list,
+        },
+        context_instance=RequestContext(request))
 
 
 @login_required
@@ -162,13 +172,13 @@ def balance(request, group, is_admin=False):
     accounts['li_eq_sum'] += curr_year_net_income
 
     return render_to_response('reports/balance.html',
-                              {
-                                  'is_admin': is_admin,
-                                  'group': group,
-                                  'today': date.today(),
-                                  'accounts': accounts,
-                              },
-                              context_instance=RequestContext(request))
+        {
+            'is_admin': is_admin,
+            'group': group,
+            'today': date.today(),
+            'accounts': accounts,
+        },
+        context_instance=RequestContext(request))
 
 @login_required
 @limit_to_group
@@ -198,17 +208,11 @@ def income(request, group, is_admin=False):
     accounts['in_ex_diff'] = accounts['in_sum'] - accounts['ex_sum']
 
     return render_to_response('reports/income.html',
-                              {
-                                  'is_admin': is_admin,
-                                  'group': group,
-                                  'today': date.today(),
-                                  'accounts': accounts,
-                              },
-                              context_instance=RequestContext(request))
+        {
+            'is_admin': is_admin,
+            'group': group,
+            'today': date.today(),
+            'accounts': accounts,
+        },
+        context_instance=RequestContext(request))
 
-@login_required
-@limit_to_admin
-def settlement_summary(request, group, page='1', is_admin=False):
-    """Show settlement summary"""
-
-    pass # FIXME

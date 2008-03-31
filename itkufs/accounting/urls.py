@@ -2,46 +2,49 @@ from django.conf.urls.defaults import *
 from itkufs.accounting.views import *
 
 urlpatterns = patterns('',
-    ### Group
-
-    # Summary
+    ### Groups
     url(r'^(?P<group>[0-9a-z_-]+)/$',
         group_summary, name='group-summary'),
-
-    # Edit
     url(r'^(?P<group>[0-9a-z_-]+)/edit/$',
         edit_group, name='edit-group'),
 
-    # Actions
-    url(r'^(?P<group>[0-9a-z_-]+)/create-transaction/$',
-        create_transaction, name='create-transaction'),
+    ### Accounts
+    url(r'^(?P<group>[0-9a-z_-]+)/account/switch/$',
+        account_switch, name='account-switch'),
+    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/$',
+        account_summary, name='account-summary'),
+    url(r'^(?P<group>[0-9a-z_-]+)/new-account/$',
+        edit_account, {'type': 'new'}, name='new-account'),
+    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/edit/$',
+        edit_account, {'type': 'edit'}, name='edit-account'),
+
+    ### Settlements
+    url(r'^(?P<group>[0-9a-z_-]+)/settlement/(?P<settlement>\d+)/$',
+        settlement_details, name='settlement-summary'),
+    url(r'^(?P<group>[0-9a-z_-]+)/new-settlement/$',
+        new_edit_settlement, {'type': 'new'}, name='new-settlement'),
+    url(r'^(?P<group>[0-9a-z_-]+)/settlement/(?P<settlement>\d+)/edit/$',
+        new_edit_settlement, {'type': 'edit'}, name='edit-settlement'),
+    url(r'^(?P<group>[0-9a-z_-]+)/settlement/$',
+        settlement_list, name='settlement-list'),
+    url(r'^(?P<group>[0-9a-z_-]+)/settlement/p(?P<page>\d+)/$',
+        settlement_list, name='settlement-list-page'),
+
+    ### Transactions
+    url(r'^(?P<group>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/$',
+        transaction_details, name='transaction-details'),
+
+    # Admin transaction actions
+    url(r'^(?P<group>[0-9a-z_-]+)/new-transaction/$',
+        new_edit_transaction, name='new-transaction'),
     url(r'^(?P<group>[0-9a-z_-]+)/edit-transaction/(?P<transaction>\d+)/$',
-        create_transaction, name='edit-transaction'),
+        new_edit_transaction, name='edit-transaction'),
     url(r'^(?P<group>[0-9a-z_-]+)/approve-transaction/$',
         approve_transactions, name='approve-transactions'),
     url(r'^(?P<group>[0-9a-z_-]+)/reject_transaction/$',
         reject_transactions, name='reject-transactions'),
 
-    url(r'^(?P<group>[0-9a-z_-]+)/create-settlement/$',
-        create_settlement, name='create-settlement'),
-
-    ### Account
-
-    # Switch to another account
-    url(r'^(?P<group>[0-9a-z_-]+)/account/switch/$',
-        account_switch, name='account-switch'),
-
-    # Summary
-    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/$',
-        account_summary, name='account-summary'),
-
-    # New and edit
-    url(r'^(?P<group>[0-9a-z_-]+)/add/$',
-        edit_account, {'type': 'new'}, name='new-account'),
-    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/edit/$',
-        edit_account, {'type': 'edit'}, name='edit-account'),
-
-    # User actions
+    # User transaction actions
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/deposit/$',
         transfer, {'transfer_type': 'deposit'}, name='account-deposit'),
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/withdraw/$',
@@ -49,21 +52,15 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/transfer/$',
         transfer, {'transfer_type': 'transfer'}, name='account-transfer'),
 
-    ### Transactions
-
-    # Group
+    # Group transaction lists
     url(r'^(?P<group>[0-9a-z_-]+)/transaction/$',
         transaction_list, name='transaction-list-group'),
     url(r'^(?P<group>[0-9a-z_-]+)/transaction/p(?P<page>\d+)/$',
         transaction_list, name='transaction-list-group-page'),
 
-    # Account
+    # Account transaction lists
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/transaction/$',
         transaction_list, name='transaction-list-account'),
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/transaction/p(?P<page>\d+)/$',
         transaction_list, name='transaction-list-account-page'),
-
-    # Details
-    url(r'^(?P<group>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/$',
-        transaction_details, name='transaction-details'),
 )

@@ -37,12 +37,14 @@ def account_switch(request, group, is_admin=False):
 
     if request.method != 'POST':
         raise Http404
-
     group_slug = request.POST['group']
     account = get_object_or_404(Account, owner=request.user,
         group__slug=group_slug)
-    url = reverse('account-summary', args=(account.group.slug, account.slug))
-    return HttpResponseRedirect(url)
+    return HttpResponseRedirect(reverse('account-summary',
+        kwargs={
+            'group': account.group.slug,
+            'account': account.slug,
+        }))
 
 @login_required
 @limit_to_owner
@@ -93,7 +95,6 @@ def edit_group(request, group, is_admin=False):
 
             if old_logo and old_logo != group.get_logo_filename():
                 os.remove(old_logo)
-
             elif 'delete_logo' in form.cleaned_data and old_logo:
                 os.remove(group.get_logo_filename())
                 group.logo = ''
@@ -108,12 +109,12 @@ def edit_group(request, group, is_admin=False):
         form = GroupForm(instance=group)
 
     return render_to_response('accounting/group_form.html',
-                              {
-                                'is_admin': is_admin,
-                                'group': group,
-                                'form': form,
-                              },
-                              context_instance=RequestContext(request))
+        {
+            'is_admin': is_admin,
+            'group': group,
+            'form': form,
+        },
+        context_instance=RequestContext(request))
 
 @login_required
 @limit_to_admin
@@ -148,13 +149,55 @@ def edit_account(request, group, account=None, type='new',
         'group': group,
         'form': form,
     }
-
     if type == 'edit':
         extra['account'] = account
         extra['is_owner'] = is_owner
 
     return render_to_response('accounting/account_form.html', extra,
-                              context_instance=RequestContext(request))
+        context_instance=RequestContext(request))
+
+@login_required
+@limit_to_admin
+def settlement_list(request, group, page='1', is_admin=False):
+    """Show paginated list of settlements"""
+
+    pass # TODO: Implement using object_list
+
+@login_required
+@limit_to_admin
+def settlement_details(request, group, settlement, is_admin=False):
+    """Show settlement summary"""
+
+    pass # TODO: At least show all transactions related to a settlement
+
+@login_required
+@limit_to_admin
+def new_edit_settlement(request, group, is_admin=False):
+    """Create new and edit existing settlements"""
+
+    # TODO: Implement support for editing settlements
+
+    if request.method == 'POST':
+        form = SettlementForm(request.POST)
+
+        if form.is_valid():
+            settlement = form.save(commit=False)
+
+            settlement.group = group
+            settlement.save()
+
+            return HttpResponseRedirect(
+                reverse('group-summary', args=(group.slug,)))
+    else:
+        form = SettlementForm()
+
+    return render_to_response('accounting/settlement_form.html',
+        {
+            'is_admin': is_admin,
+            'group': group,
+            'form': form,
+        },
+        context_instance=RequestContext(request))
 
 @login_required
 @limit_to_group
@@ -163,25 +206,26 @@ def transaction_list(request, group, account=None, page='1',
     """Lists a group or an account's transactions"""
 
     if account and not is_owner and not is_admin:
-        # FIXME incorperate into decorator?
-        return HttpResponseForbidden(_('Forbidden if not account owner or group admin.'))
+        # FIXME: Incorporate into decorator. Jodal has an idea on this one.
+        return HttpResponseForbidden(
+            _('Forbidden if not account owner or group admin.'))
 
     # Get transactions
     transactions = (account or group).transaction_set_with_rejected
 
     # Pass on to generic view
     response = object_list(request, transactions,
-                       paginate_by=20,
-                       page=page,
-                       allow_empty=True,
-                       template_name='accounting/transaction_list.html',
-                       extra_context={
-                            'is_admin': is_admin,
-                            'is_owner': is_owner,
-                            'group': group,
-                            'account': account,
-                       },
-                       template_object_name='transaction')
+        paginate_by=20,
+        page=page,
+        allow_empty=True,
+        template_name='accounting/transaction_list.html',
+        extra_context={
+            'is_admin': is_admin,
+            'is_owner': is_owner,
+            'group': group,
+            'account': account,
+        },
+        template_object_name='transaction')
     populate_xheaders(request, response, Group, group.id)
     return response
 
@@ -190,7 +234,7 @@ def transaction_details(request, group, transaction, is_admin=False):
     """Shows all details about a transaction"""
 
     # Check that user is party of transaction or admin of group
-    # TODO: Look into doing this with a decorator
+    # FIXME: Do this with a decorator. Jodal has an idea on this one.
     if not is_admin and TransactionEntry.objects.filter(
         transaction__id=transaction,
         account__owner__id=request.user.id).count() == 0:
@@ -198,13 +242,15 @@ def transaction_details(request, group, transaction, is_admin=False):
             ' viewed by group admins or a party of the transaction.'))
 
     # Pass on to generic view
-    response = object_detail(request, Transaction.objects.all(), transaction,
-                       template_name='accounting/transaction_details.html',
-                       extra_context={
-                            'is_admin': is_admin,
-                            'group': group,
-                       },
-                       template_object_name='transaction')
+    response = object_detail(request,
+        Transaction.objects.all(),
+        transaction,
+        template_name='accounting/transaction_details.html',
+        extra_context={
+            'is_admin': is_admin,
+            'group': group,
+        },
+        template_object_name='transaction')
     populate_xheaders(request, response, Transaction, transaction)
     return response
 
@@ -230,8 +276,7 @@ def transfer(request, group, account=None, transfer_type=None,
         title = _('Withdrawal from account')
         form = DepositWithdrawForm(data)
     else:
-        return HttpResponseForbidden(
-            _('Forbidden if not group admin.'))
+        return HttpResponseForbidden(_('Forbidden if not group admin.'))
 
     if request.method == 'POST' and form.is_valid():
         amount = form.cleaned_data['amount']
@@ -241,7 +286,7 @@ def transfer(request, group, account=None, transfer_type=None,
             details = None
 
         transaction = Transaction(group=group)
-        # FIXME this shouldn't be need if we figure out a reasonable hack
+        # FIXME: save() shouldn't be need if we figure out a reasonable hack
         transaction.save()
 
         if transfer_type == 'deposit':
@@ -283,8 +328,7 @@ def transfer(request, group, account=None, transfer_type=None,
                 transaction.set_received(user=request.user)
 
         else:
-            return HttpResponseForbidden(
-                _('Forbidden if not group admin.'))
+            return HttpResponseForbidden(_('Forbidden if not group admin.'))
 
         request.user.message_set.create(
             message='Added transaction: %s' % transaction)
@@ -293,21 +337,22 @@ def transfer(request, group, account=None, transfer_type=None,
             args=[account.group.slug, account.slug]))
 
     return render_to_response('accounting/transfer.html',
-                              {
-                                  'is_admin': is_admin,
-                                  'is_owner': is_owner,
-                                  'account': account,
-                                  'type': transfer_type,
-                                  'title': title,
-                                  'form': form,
-                                  'group': group,
-                              },
-                              context_instance=RequestContext(request))
+        {
+            'is_admin': is_admin,
+            'is_owner': is_owner,
+            'account': account,
+            'type': transfer_type,
+            'title': title,
+            'form': form,
+            'group': group,
+        },
+        context_instance=RequestContext(request))
 
 @login_required
 @limit_to_admin
 def approve_transactions(request, group, page='1', is_admin=False):
     """Approve transactions from members and other groups"""
+
     transactions = []
     to_be_rejected = []
 
@@ -348,22 +393,22 @@ def approve_transactions(request, group, page='1', is_admin=False):
     if to_be_rejected:
         form = RejectTransactionForm()
         return render_to_response('accounting/reject_transactions.html',
-                           {
-                                'is_admin': is_admin,
-                                'group': group,
-                                'transactions': to_be_rejected,
-                                'form': form,
-                           },
-                           context_instance=RequestContext(request))
+            {
+                'is_admin': is_admin,
+                'group': group,
+                'transactions': to_be_rejected,
+                'form': form,
+            },
+            context_instance=RequestContext(request))
 
     return render_to_response('accounting/approve_transactions.html',
-                       {
-                            'is_admin': is_admin,
-                            'group': group,
-                            'approve': True,
-                            'transaction_list': transactions,
-                       },
-                       context_instance=RequestContext(request))
+        {
+            'is_admin': is_admin,
+            'group': group,
+            'approve': True,
+            'transaction_list': transactions,
+        },
+        context_instance=RequestContext(request))
 
 @login_required
 @limit_to_admin
@@ -393,43 +438,17 @@ def reject_transactions(request, group, is_admin=False):
         transaction.set_rejected(user=request.user,
             message=request.POST['reason'])
 
-    return HttpResponseRedirect(
-        reverse('approve-transactions', args=(group.slug,)))
-
-@login_required
-@limit_to_admin
-def create_settlement(request, group, is_admin=False):
-    """Admin view for creating new settlements"""
-
-    if request.method == 'POST':
-        form = SettlementForm(request.POST)
-
-        if form.is_valid():
-            settlement = form.save(commit=False)
-
-            settlement.group = group
-            settlement.save()
-
-            return HttpResponseRedirect(
-                reverse('group-summary', args=(group.slug,)))
-    else:
-        form = SettlementForm()
-
-    return render_to_response('accounting/settlement_form.html',
-        {
-            'is_admin': is_admin,
-            'group': group,
-            'form': form,
-        },
-        context_instance=RequestContext(request))
-
+    return HttpResponseRedirect(reverse('approve-transactions',
+        kwargs={
+            'group': group.slug,
+        }))
 
 @login_required
 @limit_to_admin
 # FIXME!! @db_transaction.commit_manually
 # Bugs when doing user.get_and_delete_messages "Transaction managed block ended
 # with pending COMMIT/ROLLBACK"
-def create_transaction(request, group, is_admin=False, transaction=None):
+def new_edit_transaction(request, group, is_admin=False, transaction=None):
     """Admin view for creating transactions"""
 
     if request.method == 'POST':
@@ -447,8 +466,10 @@ def create_transaction(request, group, is_admin=False, transaction=None):
 
     # FIXME use is_editable and only return forms that apply
 
-    settlement_form = TransactionSettlementForm(post, prefix='settlement', instance=transaction)
-    status_form = ChangeTransactionForm(post, choices=transaction.get_valid_logtype_choices())
+    settlement_form = TransactionSettlementForm(post, prefix='settlement',
+        instance=transaction)
+    status_form = ChangeTransactionForm(post,
+        choices=transaction.get_valid_logtype_choices())
 
     user_forms = []
     group_forms = []
@@ -479,7 +500,8 @@ def create_transaction(request, group, is_admin=False, transaction=None):
                         debit = form.cleaned_data['debit']
 
                         if credit > 0 or debit > 0:
-                            entry = TransactionEntry(credit=credit or 0, debit=debit or 0)
+                            entry = TransactionEntry(credit=credit or 0,
+                                debit=debit or 0)
                             entry.account = account
                             entry.transaction = transaction
                             entry.save()
@@ -511,18 +533,18 @@ def create_transaction(request, group, is_admin=False, transaction=None):
             errors.append(e)
         else:
             #db_transaction.commit()
-
             url = reverse('group-summary', args=(group.slug,))
             return HttpResponseRedirect(url)
 
     return render_to_response('accounting/transaction_form.html',
-                              {
-                                'is_admin': is_admin,
-                                'group': group,
-                                'settlement_form': settlement_form,
-                                'status_form': status_form,
-                                'group_forms': group_forms,
-                                'user_forms': user_forms,
-                                'errors': errors,
-                              },
-                              context_instance=RequestContext(request))
+        {
+            'is_admin': is_admin,
+            'group': group,
+            'settlement_form': settlement_form,
+            'status_form': status_form,
+            'group_forms': group_forms,
+            'user_forms': user_forms,
+            'errors': errors,
+        },
+        context_instance=RequestContext(request))
+

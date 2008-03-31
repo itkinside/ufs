@@ -9,8 +9,8 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo; <a href="{% url create-settlement group.slug %}">
-    {% trans "New settlement" %}</a>
+    &raquo; <a href="{% url new-settlement group.slug %}">
+        {% trans "New settlement" %}</a>
 {% endblock %}
 
 
