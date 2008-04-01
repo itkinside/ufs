@@ -234,9 +234,7 @@ def reject_transactions(request, group, is_admin=False):
 
 @login_required
 @limit_to_admin
-# FIXME!! @db_transaction.commit_manually
-# Bugs when doing user.get_and_delete_messages "Transaction managed block ended
-# with pending COMMIT/ROLLBACK"
+@db_transaction.commit_manually
 def new_edit_transaction(request, group, is_admin=False, transaction=None):
     """Admin view for creating transactions"""
 
@@ -302,11 +300,11 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
                 message= _('Your transaction has been added'))
 
         except InvalidTransaction, e:
-            #db_transaction.rollback()
+            db_transaction.rollback()
             transaction.delete()
             errors.append(e)
         else:
-            #db_transaction.commit()
+            db_transaction.commit()
             url = reverse('group-summary', args=(group.slug,))
             return HttpResponseRedirect(url)
 
