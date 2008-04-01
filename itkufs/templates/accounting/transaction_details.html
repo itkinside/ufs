@@ -52,7 +52,7 @@ FIXME (placement): <a href="{% url edit-transaction group.slug,transaction.id %}
     {% for e in transaction.entry_set.all %}
     <tr class="{% cycle 'evenrow' 'oddrow' %}
         {% if transaction.is_rejected %}rejected{% else %}
-        {% if not transaction.is_received %}pending{% endif %}{% endif %}">
+        {% if transaction.is_pending %}pending{% endif %}{% endif %}">
         <td class="account">
             {% if is_admin %}
                 {% ifnotequal e.account.group group %}
