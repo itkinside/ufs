@@ -126,23 +126,27 @@ caption {
 }
 table {
 	margin: 0.5em 0;
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
 }
-table th {
+th,td {
+	border-bottom: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+th {
 	background: #f0f0f0;
-	border: 1px solid #ccc;
 	padding: 0.3em;
 	color: #333;
 	font-weight: bolder;
 }
-table td {
-	border: 1px solid #ccc;
+td {
 	padding: 0.3em;
 	vertical-align: top;
 }
-table tr.evenrow, table tr.oddrow .state, table tr.oddrow .details {
+tr.evenrow, tr.oddrow .state, tr.oddrow .details {
 	background: white;
 }
-table tr.oddrow {
+tr.oddrow {
 	background: #eeeeec;
 }
 
