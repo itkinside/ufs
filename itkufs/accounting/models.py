@@ -604,14 +604,18 @@ class TransactionEntry(models.Model):
         max_digits=10, decimal_places=2, default=0)
 
     def save(self):
-        if self.transaction.is_pending():
+        if self.transaction.is_rejected():
             raise InvalidTransactionEntry(
-                'Can not add entries to unpending transactions')
+                'Can not add entries to rejected transactions')
+        if self.transaction.is_committed():
+            raise InvalidTransactionEntry(
+                'Can not add entries to committed transactions')
 
         if self.debit < 0 or self.credit < 0:
             raise InvalidTransactionEntry(
                 'Credit and debit must be positive or zero')
 
+        # FIXME decide if this condition should be relaxed
         if self.debit > 0 and self.credit > 0:
             raise InvalidTransactionEntry(
                 'Only credit or debit may be set')
