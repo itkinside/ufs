@@ -319,7 +319,7 @@ class LogTestCase(unittest.TestCase):
         self.group.save()
 
         self.transaction = Transaction(group=self.group)
-        self.transaction.set_registered(user=self.user)
+        self.transaction.set_pending(user=self.user)
 
     def tearDown(self):
         self.transaction.delete()
@@ -334,20 +334,20 @@ class LogTestCase(unittest.TestCase):
                                   user=self.user)
             log2 = TransactionLog(type=key, transaction=self.transaction,
                                   user=self.user)
-            if key != 'Reg':
+            if key != Transaction.PENDING_STATE:
                 log1.save()
             self.assertRaises(InvalidTransactionLog, log2.save)
 
     def testLogEntryModify(self):
         """Checks that modifying log entry raises error"""
         self.assertRaises(InvalidTransactionLog,
-            self.transaction.log_set.filter(type='Reg')[0].save)
+            self.transaction.log_set.filter(type=Transaction.PENDING_STATE)[0].save)
 
         for key, value in Transaction.TRANSACTION_STATE:
             log1 = TransactionLog(type=key, transaction=self.transaction,
                                   user=self.user)
 
-            if key != 'Reg':
+            if key != Transaction.PENDING_STATE:
                 log1.save()
                 self.assertRaises(InvalidTransactionLog, log1.save)
 
