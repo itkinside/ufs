@@ -239,7 +239,7 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
     """Admin view for creating transactions"""
 
     if transaction:
-        try:
+        try: # Use group to ensure that we aren't being tricked
             transaction = group.transaction_set.get(id=transaction)
         except Transaction.DoesNotExist:
             pass
@@ -247,34 +247,41 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
         transaction = Transaction(group=group)
 
     if request.method == 'POST':
-        post = request.POST
+        data = request.POST
     elif transaction.id:
-        post = {}
+        data = {}
+        # Load "fake" post data if we are editing a transaction
         for e in transaction.entry_set.all():
             if e.debit > 0:
-                post['%d-debit' % e.account.id] = e.debit
+                data['%d-debit' % e.account.id] = e.debit
             if e.credit > 0:
-                post['%d-credit' % e.account.id] = e.credit
+                data['%d-credit' % e.account.id] = e.credit
     else:
-        post = None
+        data = None
 
-    settlement_form = TransactionSettlementForm(post, prefix='settlement',
+    # Init forms
+    settlement_form = TransactionSettlementForm(data, prefix='settlement',
         instance=transaction)
 
     user_forms = []
     group_forms = []
 
     for account in group.user_account_set.filter(active=True):
-        user_forms.append((account, EntryForm(post, prefix=account.id)))
+        user_forms.append((account, EntryForm(data, prefix=account.id)))
 
     for account in group.group_account_set.filter(active=True):
-        group_forms.append((account, EntryForm(post, prefix=account.id)))
+        group_forms.append((account, EntryForm(data, prefix=account.id)))
 
     errors = []
 
     if request.method == 'POST' and settlement_form.is_valid():
+        entries = {}
+
         if transaction.id is None:
             transaction.save()
+        else:
+            for e in transaction.entry_set.all():
+                entries[e.account.id] = e
 
         transaction.settlement = settlement_form.cleaned_data['settlement']
 
@@ -287,25 +294,31 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
                         credit = form.cleaned_data['credit']
                         debit = form.cleaned_data['debit']
 
+                        if account.id in entries:
+                            entry = entries[account.id]
+                        else:
+                            entry = TransactionEntry(account=account,transaction=transaction)
+
                         if credit > 0 or debit > 0:
-                            entry = TransactionEntry(credit=credit or 0,
-                                debit=debit or 0)
-                            entry.account = account
-                            entry.transaction = transaction
+                            entry.credit = credit or 0
+                            entry.debit = debit or 0
                             entry.save()
+                        elif entry.id:
+                            entry.delete()
 
             details = settlement_form.cleaned_data['details']
 
             transaction.save()
-            transaction.set_pending(user=request.user, message=details)
+
+            if not transaction.is_pending():
+                transaction.set_pending(user=request.user, message=details)
 
             request.user.message_set.create(
                 message= _('Your transaction has been added'))
 
         except InvalidTransaction, e:
-            db_transaction.rollback()
-            transaction.delete()
             errors.append(e)
+            db_transaction.rollback()
         else:
             db_transaction.commit()
             url = reverse('group-summary', args=(group.slug,))
