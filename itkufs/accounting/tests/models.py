@@ -1,5 +1,5 @@
-from datetime import datetime
 import unittest
+from datetime import datetime as dt
 
 from django.db import IntegrityError
 
@@ -194,7 +194,7 @@ class TransactionTestCase(unittest.TestCase):
         for account in self.accounts:
             account.save()
 
-        self.before = datetime.now()
+        self.before = dt.now()
 
         self.transaction = Transaction(group=self.group)
         self.transaction.save()
@@ -203,9 +203,9 @@ class TransactionTestCase(unittest.TestCase):
         self.transaction.entry_set.add(TransactionEntry(
             account=self.accounts[1], credit=100))
 
-        self.transaction.set_registered(user=self.user)
+        self.transaction.set_pending(user=self.user)
 
-        self.after = datetime.now()
+        self.after = dt.now()
 
     def tearDown(self):
         self.transaction.delete()
@@ -232,7 +232,7 @@ class TransactionTestCase(unittest.TestCase):
         transaction.entry_set.add(TransactionEntry(
             account=self.accounts[0], credit=100))
         self.assertRaises(InvalidTransaction,
-            transaction.set_registered, user=self.user)
+            transaction.set_pending, user=self.user)
 
         transaction.delete()
 
@@ -251,104 +251,64 @@ class TransactionTestCase(unittest.TestCase):
 
         transaction.delete()
 
-    def testRegisteredLogEntry(self):
-        """Checks that a registered log entry is created"""
+    def testPendingLogEntry(self):
+        """Checks that a pending log entry is created"""
 
         transaction = self.transaction
 
-        self.assertEqual(transaction.is_registered(), True)
+        self.assertEqual(transaction.is_pending(), True)
         self.assertEqual(transaction.log_set.count(), 1)
-        self.assertEqual(transaction.log_set.filter(type='Reg').count(), 1)
+        self.assertEqual(transaction.log_set.filter(type=Transaction.PENDING_STATE).count(), 1)
 
-        registered = transaction.log_set.filter(type='Reg')[0].timestamp
+        pending = transaction.log_set.filter(type=Transaction.PENDING_STATE)[0].timestamp
 
-        self.assert_(registered > self.before)
-        self.assert_(registered < self.after)
+        self.assert_(pending > self.before)
+        self.assert_(pending < self.after)
 
-    def testPayedLogEntry(self):
-        """Checks creation of payed log entry"""
+    def testCommittedLogEntry(self):
+        """Checks that a committed log entry is created"""
 
         transaction = self.transaction
 
-        before = datetime.now()
-        transaction.set_payed(user=self.user)
-        after = datetime.now()
+        before = dt.now()
+        transaction.set_committed(user=self.user)
+        after = dt.now()
 
-        self.assertEqual(transaction.is_registered(), True)
-        self.assertEqual(transaction.is_payed(), True)
+        self.assertEqual(transaction.is_committed(), True)
         self.assertEqual(transaction.log_set.count(), 2)
-        self.assertEqual(transaction.log_set.filter(type='Pay').count(), 1)
+        self.assertEqual(transaction.log_set.filter(type=Transaction.COMMITTED_STATE).count(), 1)
 
-        payed = transaction.log_set.filter(type='Pay')[0].timestamp
-        self.assert_(payed > before)
-        self.assert_(payed < after)
+        committed = transaction.log_set.filter(type=Transaction.COMMITTED_STATE)[0].timestamp
+
+        self.assert_(committed > before)
+        self.assert_(committed < after)
 
     def testRejectLogEntry(self):
-        """Checks that registered transaction can be rejected"""
+        """Checks that pending transaction can be rejected"""
 
         transaction = self.transaction
-        self.assertEqual(transaction.is_registered(), True)
+        self.assertEqual(transaction.is_pending(), True)
 
-        before = datetime.now()
-        transaction.reject(message='Reason for rejecting', user=self.user)
-        after = datetime.now()
+        before = dt.now()
+        transaction.set_rejected(message='Reason for rejecting', user=self.user)
+        after = dt.now()
 
         self.assertEqual(transaction.is_rejected(), True)
         self.assertEqual(transaction.log_set.count(), 2)
-        self.assertEqual(transaction.log_set.filter(type='Rej').count(), 1)
+        self.assertEqual(transaction.log_set.filter(type=Transaction.REJECTED_STATE).count(), 1)
 
-        rejected = transaction.log_set.filter(type='Rej')[0].timestamp
+        rejected = transaction.log_set.filter(type=Transaction.REJECTED_STATE)[0].timestamp
         self.assert_(rejected > before)
         self.assert_(rejected < after)
 
-    def testRejectPayedTransaction(self):
-        """Test that rejecting payed transaction fails"""
+    def testRejectCommitedTransaction(self):
+        """Tests that rejecting committed transaction fails"""
 
         transaction = self.transaction
-        transaction.set_payed(user=self.user)
+        transaction.set_committed(user=self.user)
 
-        # FIXME: Maybe raise a different exception?
-        self.assertEqual(transaction.is_registered(), True)
-        self.assertEqual(transaction.is_payed(), True)
-        self.assertRaises(InvalidTransaction, transaction.reject,
-            'Reason for rejecting')
-
-    def testReceivePayedTransaction(self):
-        """Checks that we can set a payed transaction as received"""
-
-        transaction = self.transaction
-        transaction.set_payed(user=self.user)
-
-        before = datetime.now()
-        transaction.set_received(user=self.user)
-        after = datetime.now()
-
-        self.assertEqual(transaction.is_registered(), True)
-        self.assertEqual(transaction.is_payed(), True)
-        self.assertEqual(transaction.is_received(), True)
-        self.assertEqual(transaction.log_set.count(), 3)
-        self.assertEqual(transaction.log_set.filter(type='Rec').count(), 1)
-
-        received = transaction.log_set.filter(type='Rec')[0].timestamp
-        self.assert_(received > before)
-        self.assert_(received < after)
-
-    def testRejectReceivedTransaction(self):
-        """Tests that rejecting received transaction fails"""
-
-        transaction = self.transaction
-        transaction.set_payed(user=self.user)
-        transaction.set_received(user=self.user)
-
-        self.assertRaises(InvalidTransaction, transaction.reject,
-            'Reason for rejecting')
-
-    def testReceiveNotPayedTransaction(self):
-        """Checks that receiving a transaction that is not payed does not fail"""
-
-        transaction = self.transaction
-
-        transaction.set_received(user=self.user)
+        self.assertRaises(InvalidTransaction, transaction.set_rejected,
+            message='Reason for rejecting', user=self.user)
 
 class LogTestCase(unittest.TestCase):
     def setUp(self):
