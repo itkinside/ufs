@@ -24,9 +24,8 @@ class GroupTestCase(unittest.TestCase):
             account.save()
 
         self.transactions = {
-            'Reg': Transaction(group=self.group),
-            'Pay': Transaction(group=self.group),
-            'Rec': Transaction(group=self.group),
+            'Pen': Transaction(group=self.group),
+            'Com': Transaction(group=self.group),
             'Rej': Transaction(group=self.group),
         }
         for transaction in self.transactions.values():
@@ -35,14 +34,12 @@ class GroupTestCase(unittest.TestCase):
                 TransactionEntry(account=self.accounts[0], credit=100))
             transaction.entry_set.add(
                 TransactionEntry(account=self.accounts[1], debit=100))
-            transaction.set_registered(user=self.user)
+            transaction.set_pending(user=self.user)
 
         self.transactions['Undef'] = Transaction(group=self.group)
         self.transactions['Undef'].save()
 
-        self.transactions['Pay'].set_payed(user=self.user)
-        self.transactions['Rec'].set_payed(user=self.user)
-        self.transactions['Rec'].set_received(user=self.user)
+        self.transactions['Com'].set_committed(user=self.user)
         self.transactions['Rej'].set_rejected(user=self.user)
 
     def tearDown(self):
@@ -62,49 +59,28 @@ class GroupTestCase(unittest.TestCase):
         rejected"""
 
         set = self.group.transaction_set
-        self.assertEqual(set.count(), 3)
+        self.assertEqual(set.count(), 2)
 
     def testTransactionSetWithRejected(self):
         """Checks that transaction_set_with_rejected returns all
         transactions"""
 
         set = self.group.transaction_set_with_rejected
-        self.assertEqual(set.count(), 4)
-
-    def testRegisteredTransactionSet(self):
-        """Checks that registered_transaction_set returns all registered
-        transactions that is not rejected"""
-
-        set = self.group.registered_transaction_set
         self.assertEqual(set.count(), 3)
 
-    def testPayedTransactionSet(self):
-        """Checks that payed_transaction_set returns all payed
-        transactions that is not rejected"""
+    def testPendingTransactionSet(self):
+        """Checks that pending_transaction_set returns all pending
+        transactions"""
 
-        set = self.group.payed_transaction_set
-        self.assertEqual(set.count(), 2)
-
-    def testNotPayedTransactionSet(self):
-        """Checks that not_payed_transaction_set returns all unpayed
-        transactions that is not rejected"""
-
-        set = self.group.not_payed_transaction_set
+        set = self.group.pending_transaction_set
         self.assertEqual(set.count(), 1)
 
-    def testReceivedTransactionSet(self):
-        """Checks that received_transaction_set returns all received
-        transactions that is not rejected"""
+    def testCommittedTransactionSet(self):
+        """Checks that committed_transaction_set returns all committed
+        transactions that are not rejected"""
 
-        set = self.group.received_transaction_set
+        set = self.group.committed_transaction_set
         self.assertEqual(set.count(), 1)
-
-    def testNotReceivedTransactionSet(self):
-        """Checks that not_received_transaction_set returns all transactions
-        that has not been received, that is not rejected"""
-
-        set = self.group.not_received_transaction_set
-        self.assertEqual(set.count(), 2)
 
     def testRejectedTransactionSet(self):
         """Checks that rejected_transaction_set returns all rejected
@@ -113,15 +89,7 @@ class GroupTestCase(unittest.TestCase):
         set = self.group.rejected_transaction_set
         self.assertEqual(set.count(), 1)
 
-    def testNotReceivedTransactionSet(self):
-        """Checks that rejected_transaction_set returns all transactions that
-        is not rejected"""
-
-        set = self.group.not_rejected_transaction_set
-        self.assertEqual(set.count(), 3)
-
     #FIXME add user_account testcase and group account testcase!
-
 
 class AccountTestCase(unittest.TestCase):
     # FIXME: Test all account properties
