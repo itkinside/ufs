@@ -238,11 +238,6 @@ def reject_transactions(request, group, is_admin=False):
 def new_edit_transaction(request, group, is_admin=False, transaction=None):
     """Admin view for creating transactions"""
 
-    if request.method == 'POST':
-        post = request.POST
-    else:
-        post = None
-
     if transaction:
         try:
             transaction = group.transaction_set.get(id=transaction)
@@ -251,15 +246,23 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
     else:
         transaction = Transaction(group=group)
 
-    # FIXME use is_editable and only return forms that apply
+    if request.method == 'POST':
+        post = request.POST
+    elif transaction.id:
+        post = {}
+        for e in transaction.entry_set.all():
+            if e.debit > 0:
+                post['%d-debit' % e.account.id] = e.debit
+            if e.credit > 0:
+                post['%d-credit' % e.account.id] = e.credit
+    else:
+        post = None
 
     settlement_form = TransactionSettlementForm(post, prefix='settlement',
         instance=transaction)
 
     user_forms = []
     group_forms = []
-
-    entries = transaction.entry_set.select_related(depth=1)
 
     for account in group.user_account_set.filter(active=True):
         user_forms.append((account, EntryForm(post, prefix=account.id)))
@@ -269,7 +272,7 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
 
     errors = []
 
-    if post and settlement_form.is_valid():
+    if request.method == 'POST' and settlement_form.is_valid():
         if transaction.id is None:
             transaction.save()
 
@@ -308,6 +311,7 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
             url = reverse('group-summary', args=(group.slug,))
             return HttpResponseRedirect(url)
 
+    db_transaction.rollback()
     return render_to_response('accounting/transaction_form.html',
         {
             'is_admin': is_admin,
