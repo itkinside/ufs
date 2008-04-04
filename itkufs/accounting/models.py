@@ -163,6 +163,8 @@ class Account(models.Model):
     active = models.BooleanField(_('active'), default=True)
     ignore_block_limit = models.BooleanField(_('ignore block limit'),
         default=False)
+    blocked = models.BooleanField(_('set account as blocked'),
+        default=False)
 
     class Meta:
         ordering = ('group', 'type', 'name')
@@ -228,6 +230,9 @@ class Account(models.Model):
 
     def is_blocked(self):
         """Returns true if user account balance is below group block limit"""
+
+        if self.blocked:
+            return True
 
         if (not self.is_user_account()
             or self.ignore_block_limit
