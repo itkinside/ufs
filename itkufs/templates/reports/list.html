@@ -80,7 +80,7 @@
     {% for account in accounts %}
         {% with account.is_blocked as blocked %}
         <tr class="{% cycle evenrow,oddrow as row %}{% if blocked and not list.ignore_blocked %} blacklisted{% endif %}">
-            <th class="name"{% if list.double %}{% if not blocked or list.ignore_blocked %} rowspan="2"{% endif %}{%endif%}>
+            <th class="name"{% if list.double %}{% if not blocked or list.ignore_blocked %} rowspan="2"{% endif %}{% endif %}>
                 {% if is_admin %}
                     <a href="{% url edit-account group.slug,account.slug %}">{{ account.name }}</a>
                 {% else %}
@@ -88,7 +88,7 @@
                 {% endif %}
             </th>
             {% ifnotequal list.balance_width 0 %}
-            <td class="balance"{% if list.double %}{% if not blocked or list.ignore_blocked %} rowspan="2"{% endif %}{%endif%}>{{ account.user_balance|floatformat:2 }}</td>
+            <td class="balance"{% if list.double %}{% if not blocked or list.ignore_blocked %} rowspan="2"{% endif %}{% endif %}>{{ account.user_balance|floatformat:2 }}</td>
             {% endifnotequal %}
             {% for item in columns %}
                 {% if not blocked or list.ignore_blocked %}
