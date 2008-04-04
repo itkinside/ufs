@@ -204,14 +204,15 @@ def approve_transactions(request, group, page='1', is_admin=False):
 def reject_transactions(request, group, is_admin=False):
     """Reject transactions from members and other groups"""
 
-    if request.method != 'POST':
+    if request.method == 'POST':
+        data = request.POST
+        to_be_rejected = request.POST.getlist('transactions')
+        to_be_rejected = group.pending_transaction_set.filter(id__in=to_be_rejected)
+    else:
         return HttpResponseRedirect(
             reverse('group-summary', args=(group.slug,)))
 
-    form = RejectTransactionForm(request.POST)
-    to_be_rejected = request.POST.getlist('transactions')
-    to_be_rejected = Transaction.objects.filter(id__in=to_be_rejected,
-        group=group)
+    form = RejectTransactionForm(data)
 
     if not form.is_valid():
         return render_to_response('accounting/reject_transactions.html',
@@ -227,10 +228,13 @@ def reject_transactions(request, group, is_admin=False):
         transaction.set_rejected(user=request.user,
             message=request.POST['reason'])
 
-    return HttpResponseRedirect(reverse('approve-transactions',
-        kwargs={
-            'group': group.slug,
-        }))
+    if group.pending_transaction_set.count():
+        return HttpResponseRedirect(reverse('approve-transactions',
+            kwargs={
+                'group': group.slug,
+            }))
+    return HttpResponseRedirect(reverse('group-summary',
+        kwargs={'group': group.slug,}))
 
 @login_required
 @limit_to_admin

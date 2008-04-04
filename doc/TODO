@@ -59,7 +59,8 @@ This release
 - More interesting submenu.
 - Modify Account.balance() to return the balance at a given date, then modify
   the balance and income statements so that one can specify for which date you
-  want the report to be valid.
+  want the report to be valid. (partialy implmeneted, not done in SQL and we still
+  need something smart for graphs)
 - Review code
 - Write unit tests
 - Write documentation

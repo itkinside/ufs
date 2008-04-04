@@ -36,7 +36,7 @@ urlpatterns = patterns('',
         new_edit_transaction, name='edit-transaction'),
     url(r'^(?P<group>[0-9a-z_-]+)/approve-transaction/$',
         approve_transactions, name='approve-transactions'),
-    url(r'^(?P<group>[0-9a-z_-]+)/reject_transaction/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/reject-transaction/$',
         reject_transactions, name='reject-transactions'),
 
     # User transaction actions
