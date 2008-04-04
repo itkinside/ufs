@@ -230,9 +230,9 @@ tr.oddrow {
 #yui-main button {
 	background: #d3d7cf;
 	color: black;
+	margin: 0 1.5em;
 	margin-left: -1em;
 	clear: both;
-	display: block;
 }
 
 /* Account/group summary */

@@ -51,7 +51,7 @@
             <tr class="{% cycle evenrow,oddrow as rowcolors %}">
                 <td><a href="{{ a.get_absolute_url }}">{{ a.name }}</a></td>
                 <td>{{ a.get_type_display }}</td>
-                <td class="align_right">{{ a.balance }}</td>
+                <td id="balance-{{ a.id }}" class="balance number">{{ a.balance }}</td>
                 {{ f.as_table_row }}
             </tr>
         {% endfor %}
@@ -59,7 +59,7 @@
             <tr class="{% cycle rowcolors %}">
                 <td><a href="{{ a.get_absolute_url }}">{{ a.name }}</a></td>
                 <td>{{ a.get_type_display }}</td>
-                <td class="align_right">{{ a.balance }}</td>
+                <td id="balance-{{ a.id }}" class="balance number">{{ a.balance }}</td>
                 {{ f.as_table_row }}
             </tr>
         {% endfor %}

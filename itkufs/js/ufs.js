@@ -9,6 +9,7 @@
 }; */
 
 var Transaction = {
+  balance: {},
   // Add a sumrow to tables in form#createtransaction
   init: function() {
     var tbody = $$('#newtransaction tbody')[0];
@@ -30,31 +31,53 @@ var Transaction = {
         input.observe('click', Transaction.update);
       }
     )
+
+    tbody.select('.balance').each(
+      function(td) {
+        Transaction.balance[td.id] = Number(td.innerHTML);
+      }
+    );
     Transaction.update();
   },
   update: function() {
-    var inputs = $$('#newtransaction tbody input');
-
     var debit = 0;
     var credit = 0;
     var error = false;
 
-    inputs.each(
+    $$('#newtransaction tbody input').each(
       function(input) {
         var value = input.value;
 
         if (isNaN(value) || value < 0) {
-          input.parentNode.addClassName("error");
+          input.up().addClassName("error");
 	  error = true;
-        } else {
-          if (input.id.match(/debit/))
-            debit += Number(input.value);
-          else if (input.id.match(/credit/))
-            credit += Number(input.value);
-          input.parentNode.removeClassName('error');
+        } else if (value != '')  {
+          value = Number(value);
+
+          if (input.id.match(/debit/)) {
+            debit += value;
+	  } else if (input.id.match(/credit/)) {
+            credit += value;
+	  }
+          input.up().removeClassName('error');
         }
       }
-    )
+    );
+
+    $$('#newtransaction tbody .balance').each(
+      function(td) {
+        var diff = 0;
+	var d_value = Number(td.next().down('input').value);
+	var c_value = Number(td.next().next().down('input').value);
+
+	if (!isNaN(d_value) && d_value > 0)
+	  diff += d_value;
+	if (!isNaN(c_value) && c_value > 0)
+	  diff -= c_value;
+
+        td.update(Transaction.balance[td.id]  + diff);
+      }
+    );
 
     $('debit_sum').update(debit);
     $('credit_sum').update(credit);
