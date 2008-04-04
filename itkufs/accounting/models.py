@@ -199,8 +199,15 @@ class Account(models.Model):
             raise ValueError('Slug cannot be empty.')
         super(Account, self).save()
 
-    def balance(self):
-        if self.balance_sql:
+    def balance(self, date=None):
+        if date:
+            balance = 0
+            for e in self.transactionentry_set.filter(transaction__date__lte=date,
+                                        transaction__state=Transaction.COMMITTED_STATE):
+                balance += e.debit
+                balance -= e.credit
+            return balance
+        elif self.balance_sql:
             return self.balance_sql
         else:
             return 0
