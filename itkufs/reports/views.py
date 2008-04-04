@@ -19,11 +19,9 @@ def view_list(request, group, list, is_admin=False):
     """Show list for printing"""
 
     if list.accounts.all().count():
-        accounts = list.accounts.filter(group=group, active=True
-            ).select_related(depth=1)
+        accounts = list.accounts
     else:
-        accounts = group.user_account_set.filter(active=True
-            ).select_related(depth=1)
+        accounts = group.user_account_set
 
     response = render_to_response('reports/list.html',
         {

@@ -270,10 +270,10 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
     user_forms = []
     group_forms = []
 
-    for account in group.user_account_set.filter(active=True):
+    for account in group.user_account_set:
         user_forms.append((account, EntryForm(data, prefix=account.id)))
 
-    for account in group.group_account_set.filter(active=True):
+    for account in group.group_account_set:
         group_forms.append((account, EntryForm(data, prefix=account.id)))
 
     errors = []

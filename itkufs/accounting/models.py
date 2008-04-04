@@ -62,13 +62,13 @@ class Group(models.Model):
     def get_user_account_set(self):
         """Returns all user accounts belonging to group"""
         return self.account_set.filter(type=Account.LIABILITY_ACCOUNT,
-                                       owner__isnull=False)
+                                       owner__isnull=False, active=True)
     user_account_set = property(get_user_account_set, None, None)
 
     def get_group_account_set(self):
         """Returns all non-user accounts belonging to group"""
         return self.account_set.exclude(type=Account.LIABILITY_ACCOUNT,
-                                        owner__isnull=False)
+                                        owner__isnull=False, active=True)
     group_account_set = property(get_group_account_set, None, None)
 
 
