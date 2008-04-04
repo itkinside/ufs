@@ -162,9 +162,9 @@ class Account(models.Model):
         null=True, blank=True)
     active = models.BooleanField(_('active'), default=True)
     ignore_block_limit = models.BooleanField(_('ignore block limit'),
-        default=False)
-    blocked = models.BooleanField(_('set account as blocked'),
-        default=False)
+        default=False, help_text=_('Never block account automatically'))
+    blocked = models.BooleanField(_('blocked'), default=False,
+        help_text=_('Block account manually'))
 
     class Meta:
         ordering = ('group', 'type', 'name')
