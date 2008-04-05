@@ -51,7 +51,7 @@
     </tr>
     {% for t in transaction_list %}
     {% with t.entry_count_sql as rowspan %}
-    <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}">
+    <tr>
         {% for e in t.entry_set.select_related %}
             {% if forloop.first %}
                 <td rowspan="{{ rowspan }}" class="status
@@ -69,19 +69,19 @@
                     {% endblocktrans %}
                 </td>
             {% else %}
-                <tr class="{% cycle trclass %}">
+                <tr>
             {% endif %}
-            <td class="account{% if not e.account.active %} inactive{% endif %}">
+            <td class="account{% if not e.account.active %} inactive{% endif %} {% cycle 'evenrow' 'oddrow' as tdclass %}">
                 {% if is_admin %}
                     <a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{ e.account.name }}</a>
                 {% else %}
                     {{ e.account.name }}
                 {% endif %}
             </td>
-            <td class="align_right debit">
+            <td class="number {{ tdclass }}">
                 {{ e.debit|default:""|stringformat:"0.2f" }}
             </td>
-            <td class="align_right credit">
+            <td class="number {{ tdclass }}">
                 {{ e.credit|default:""|stringformat:"0.2f" }}
             </td>
             {% if forloop.first %}

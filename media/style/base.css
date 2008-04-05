@@ -143,10 +143,10 @@ td {
 	padding: 0.3em;
 	vertical-align: top;
 }
-tr.evenrow, tr.oddrow .state, tr.oddrow .details {
+.evenrow {
 	background: white;
 }
-tr.oddrow {
+.oddrow {
 	background: #eeeeec;
 }
 
