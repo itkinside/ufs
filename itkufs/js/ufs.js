@@ -75,7 +75,11 @@ var Transaction = {
 	if (!isNaN(c_value) && c_value > 0)
 	  diff -= c_value;
 
-        td.update(Transaction.balance[td.id]  + diff);
+        if(diff) {
+          td.update((Transaction.balance[td.id]  + diff)+'*');
+        } else {
+          td.update(Transaction.balance[td.id]);
+	}
       }
     );
 

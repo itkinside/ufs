@@ -23,7 +23,8 @@ This release
 		- Create new
 		- Register recievables
 		- Register payments
-- (jodal) group,is_admin,account,is_owner context processor
+- (jodal) group,is_admin,account,is_owner context processor (request does not
+  seem to contain enough data to do this)
 - set_rejected() must enforce who is allowed to alter state. A user may reject
   his withdrawal or deposit if state=pending. An admin may reject everything if
   state=pending.
