@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
@@ -207,9 +207,12 @@ def reject_transactions(request, group, transaction=None, is_admin=False):
         # Ensure that this is a user_transaction and the owner of the
         # account is the only one that can access this view
         # FIXME allow admin to use this?
-        to_be_rejected = [group.pending_transaction_set.get(
-            id=transaction, user_transaction=True,
-            entry_set__account__owner=request.user)]
+        try:
+            to_be_rejected = [group.pending_transaction_set.get(
+                id=transaction, user_transaction=True,
+                entry_set__account__owner=request.user)]
+        except Transaction.DoesNotExist:
+            raise Http404
     else:
         return HttpResponseRedirect(
             reverse('group-summary', args=(group.slug,)))
