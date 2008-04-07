@@ -79,6 +79,7 @@ class ChangeTransactionForm(forms.Form):
 
 
 class EntryForm(CustomForm):
+    # FIXME add clean_debit/credit so that we can ignore whitespaces :)
     debit = forms.DecimalField(min_value=0, required=False, widget=forms.TextInput(attrs={'size': 4, 'class': 'number'}))
     credit = forms.DecimalField(min_value=0, required=False, widget=forms.TextInput(attrs={'size': 4, 'class': 'number'}))
 

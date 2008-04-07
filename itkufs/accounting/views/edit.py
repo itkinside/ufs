@@ -293,7 +293,7 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
             for forms in [group_forms, user_forms]:
                 for account, form in forms:
                     if not form.is_valid():
-                        raise InvalidTransaction('Form was not valid')
+                        raise InvalidTransaction('Form was not valid, id: %d' % account.id)
                     else:
                         credit = form.cleaned_data['credit']
                         debit = form.cleaned_data['debit']

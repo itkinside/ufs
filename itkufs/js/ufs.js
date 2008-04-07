@@ -1,13 +1,3 @@
-/* var UFS = {
-  init: function() {
-    Menu.init();
-    Checkbox.init();
-    Transaction.init();
-    Select.init('id_admins');
-    Select.init('id_accounts');
-  }
-}; */
-
 var Transaction = {
   balance: {},
   // Add a sumrow to tables in form#createtransaction
