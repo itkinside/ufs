@@ -305,8 +305,7 @@ def new_edit_transaction(request, group, is_admin=False, transaction=None):
 
             transaction.save()
 
-            if not transaction.is_pending():
-                transaction.set_pending(user=request.user, message=details)
+            transaction.set_pending(user=request.user, message=details)
 
             request.user.message_set.create(
                 message= _('Your transaction has been added'))

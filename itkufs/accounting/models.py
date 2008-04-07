@@ -469,7 +469,7 @@ class Transaction(models.Model):
         if self.id is None:
             self.save()
 
-        if not (self.is_pending() or self.is_committed() or self.is_rejected()):
+        if not self.is_committed() and not self.is_rejected():
             log = TransactionLog(type=self.PENDING_STATE, transaction=self)
             log.user = user
             if message is not None and message.strip() != '':
@@ -579,7 +579,7 @@ class TransactionLog(models.Model):
                 'Altering transaction log entries is not allowed')
         if self.transaction.id is None:
             self.transaction.save()
-        if self.transaction.log_set.filter(type=self.type).count():
+        if self.type != Transaction.PENDING_STATE and self.transaction.log_set.filter(type=self.type).count():
             raise InvalidTransactionLog(
                 'Only one instance of each log type is allowed.')
         super(TransactionLog, self).save()
