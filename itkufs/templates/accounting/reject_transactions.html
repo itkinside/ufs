@@ -27,7 +27,7 @@
 {% block content %}
 
 <form method="post" action="{% url reject-transactions group.slug %}">
-    <label>Transactions:</label>
+    <label>Transaction{{ transactions|pluralize }}:</label>
     <ul id="rejectionlist">
     {% for t in transactions %}
         <li>{{ t }} <input type="hidden" name="transactions" value="{{ t.id }}" /></li>

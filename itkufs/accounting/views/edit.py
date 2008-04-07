@@ -113,8 +113,8 @@ def transfer(request, group, account=None, transfer_type=None,
 
             if amount <= account.user_balance() - (group.block_limit or 0):
                 request.user.message_set.create(message=
-                    _('Your tranfser has not been completed, your group admin
-                    needs to complete the transaction.'))
+                    _("""Your tranfser has not been completed, your group admin
+                    needs to complete the transaction."""))
                 transaction.set_committed(user=request.user)
 
         else:
@@ -140,7 +140,7 @@ def transfer(request, group, account=None, transfer_type=None,
 
 @login_required
 @limit_to_admin
-def approve_transactions(request, group, page='1', is_admin=False):
+def approve_transactions(request, group, transaction=None, page='1', is_admin=False):
     """Approve transactions from members and other groups"""
 
     transactions = []
@@ -194,14 +194,22 @@ def approve_transactions(request, group, page='1', is_admin=False):
         context_instance=RequestContext(request))
 
 @login_required
-@limit_to_admin
-def reject_transactions(request, group, is_admin=False):
+@limit_to_owner
+def reject_transactions(request, group, transaction=None, is_admin=False):
     """Reject transactions from members and other groups"""
 
     if request.method == 'POST':
         data = request.POST
         to_be_rejected = request.POST.getlist('transactions')
         to_be_rejected = group.pending_transaction_set.filter(id__in=to_be_rejected)
+    elif transaction:
+        data = None
+        # Ensure that this is a user_transaction and the owner of the
+        # account is the only one that can access this view
+        # FIXME allow admin to use this?
+        to_be_rejected = [group.pending_transaction_set.get(
+            id=transaction, user_transaction=True,
+            entry_set__account__owner=request.user)]
     else:
         return HttpResponseRedirect(
             reverse('group-summary', args=(group.slug,)))
@@ -221,6 +229,11 @@ def reject_transactions(request, group, is_admin=False):
     for transaction in to_be_rejected:
         transaction.set_rejected(user=request.user,
             message=request.POST['reason'])
+
+    if transaction:
+        return HttpResponseRedirect(reverse('account-summary',
+            kwargs={'group': group.slug, 'account':
+            group.account_set.get(owner=request.user).slug}))
 
     if group.pending_transaction_set.count():
         return HttpResponseRedirect(reverse('approve-transactions',

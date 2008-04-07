@@ -38,6 +38,8 @@ urlpatterns = patterns('',
         approve_transactions, name='approve-transactions'),
     url(r'^(?P<group>[0-9a-z_-]+)/reject-transaction/$',
         reject_transactions, name='reject-transactions'),
+    url(r'^(?P<group>[0-9a-z_-]+)/reject-transaction/(?P<transaction>\d+)/$',
+        reject_transactions, name='reject-transaction'),
 
     # User transaction actions
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/deposit/$',
