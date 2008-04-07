@@ -25,12 +25,6 @@ This release
 		- Register payments
 - (jodal) group,is_admin,account,is_owner context processor (request does not
   seem to contain enough data to do this)
-- set_rejected() must enforce who is allowed to alter state. A user may reject
-  his withdrawal or deposit if state=pending. An admin may reject everything if
-  state=pending.
-- multiple pending log entries?
-- User rejection of ones own pending withdrawals and deposits. (how can we tell
-  which transactions are in this category?)
 - Use decorators to control commit/rollback of transactions. At least in all
   views which has to do with transactions. Check possible Django bug :(
 - Transaction list and approve transaction view should resemble each other.
@@ -120,3 +114,12 @@ DONE
 - (adamcik) change_to requires fix
 - Should user/group_account_set only contain active accounts or all? (decided
   to only return active)
+- multiple pending log entries?
+- User rejection of ones own pending withdrawals and deposits. (how can we tell
+  which transactions are in this category?)
+
+WON'T FIX
+---------
+- set_rejected() must enforce who is allowed to alter state. A user may reject
+  his withdrawal or deposit if state=pending. An admin may reject everything if
+  state=pending.
