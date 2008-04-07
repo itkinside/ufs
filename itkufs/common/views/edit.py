@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
-from itkufs.common.decorators importmit_to_admin
+from itkufs.common.decorators import limit_to_admin
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
 
