@@ -325,6 +325,8 @@ class LogTestCase(unittest.TestCase):
         self.user.delete()
 
     def testLogEntryUniqePerType(self):
+        # FIXME this has changed! the test no longer covers our alowed
+        # behaivour
         """Checks that only one log entry of each type is allowed"""
 
         for key, value in Transaction.TRANSACTION_STATE:

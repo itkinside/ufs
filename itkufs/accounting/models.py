@@ -572,7 +572,6 @@ class TransactionLog(models.Model):
     timestamp =  models.DateTimeField(_('timestamp'), auto_now_add=True)
     user = models.ForeignKey(User, verbose_name=_('user'))
     message = models.CharField(_('message'), max_length=200, blank=True)
-    auto = models.BooleanField(default=False)
 
     def save(self):
         if self.id is not None:
@@ -587,7 +586,6 @@ class TransactionLog(models.Model):
 
     class Meta:
         ordering = ('timestamp',)
-        unique_together = (('transaction', 'type'),)
         verbose_name = _('transaction log entry')
         verbose_name_plural = _('transaction log entries')
 
