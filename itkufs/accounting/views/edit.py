@@ -121,6 +121,7 @@ def transfer(request, group, account=None, transfer_type=None,
             return HttpResponseForbidden(_('Forbidden if not group admin.'))
 
         request.user.message_set.create(
+            # FIXME better message, also reflect the message above
             message='Added transaction: %s' % transaction)
 
         return HttpResponseRedirect(reverse('account-summary',

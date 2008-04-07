@@ -647,7 +647,7 @@ class TransactionEntry(models.Model):
 
     def __unicode__(self):
         return _(u'%(account)s: debit %(debit)s, credit %(credit)s') % {
-            'account': self.account,
+            'account': self.account.name,
             'debit': self.debit,
             'credit': self.credit,
         }

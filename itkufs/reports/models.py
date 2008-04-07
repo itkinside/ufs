@@ -37,7 +37,7 @@ class List(models.Model):
     double = models.BooleanField(
         help_text=_('Use two rows per account'))
     ignore_blocked = models.BooleanField(
-        help_text=_('Exclude blocked accounts'))
+        help_text=_("Don't exclude blocked accounts"))
 
     class Meta:
         unique_together = (('slug', 'group'),)
