@@ -74,7 +74,7 @@ def transfer(request, group, account=None, transfer_type=None,
 
         bank_account = group.roleaccount_set.get(role=RoleAccount.BANK_ACCOUNT)
 
-        transaction = Transaction(group=group)
+        transaction = Transaction(group=group, user_transaction=True)
         # FIXME: save() shouldn't be need if we figure out a reasonable hack
         transaction.save()
 
