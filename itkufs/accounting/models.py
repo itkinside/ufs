@@ -346,11 +346,14 @@ class Settlement(models.Model):
     date = models.DateField(_('date'))
     comment = models.CharField(_('comment'), max_length=200, blank=True)
 
+    closed = models.BooleanField(default=False)
+
     class Meta:
         ordering = ('date',)
         verbose_name = _('settlement')
         verbose_name_plural = _('settlements')
-        unique_together = (('date', 'comment', 'group'),)
+        # FIXME: waiting for http://code.djangoproject.com/ticket/6523
+        # unique_together = (('date', 'comment', 'group'),)
 
     class Admin:
         pass
