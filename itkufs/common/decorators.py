@@ -11,7 +11,7 @@ def limit_to_group(function):
             return function(request, *args, **kwargs)
 
         # Disallow all other if the group is admin-only
-        if kwargs['group'].admin_only:
+        if kwargs['group'].admin_only and not kwargs['is_owner']:
             return HttpResponseForbidden(
                 _('Forbidden if not group admin.'))
 
