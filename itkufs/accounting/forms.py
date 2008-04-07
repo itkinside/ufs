@@ -1,5 +1,4 @@
 from django import newforms as forms
-from django.newforms.util import ValidationError
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 

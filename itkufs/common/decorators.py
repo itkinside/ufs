@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext as _
-from django.http import HttpResponseForbidden, Http404
+from django.http import HttpResponseForbidden
 
-from itkufs.accounting.models import Group, Account
+from itkufs.accounting.models import Group
 
 def limit_to_group(function):
     def wrapped(request, *args, **kwargs):

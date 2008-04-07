@@ -1,11 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.core.xheaders import populate_xheaders
 from django.http import HttpResponseForbidden
-from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.generic.list_detail import object_detail
 
-from itkufs.common.decorators import limit_to_group, limit_to_owner, limit_to_admin
+from itkufs.common.decorators import limit_to_group, limit_to_owner
 from itkufs.accounting.models import *
 
 @login_required

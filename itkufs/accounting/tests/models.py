@@ -1,8 +1,6 @@
 import unittest
 from datetime import datetime as dt
 
-from django.db import IntegrityError
-
 from itkufs.accounting.models import *
 
 class GroupTestCase(unittest.TestCase):

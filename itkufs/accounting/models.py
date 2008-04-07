@@ -2,7 +2,6 @@ import datetime
 
 from django.conf import settings
 from django.db import models, transaction
-from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_unicode

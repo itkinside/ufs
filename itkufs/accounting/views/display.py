@@ -1,21 +1,10 @@
-from datetime import date, datetime
-import os
-from urlparse import urlparse
-
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.core.xheaders import populate_xheaders
-from django.db.models import Q
-from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
-from django.newforms import form_for_instance, form_for_model
-from django.shortcuts import get_object_or_404, render_to_response
-from django.template import RequestContext
-from django.utils.translation import ugettext as _, ungettext
+from django.http import HttpResponseForbidden
+from django.utils.translation import ugettext as _
 from django.views.generic.list_detail import object_list, object_detail
-from django.db import transaction as db_transaction
 
-from itkufs.common.decorators import limit_to_group, limit_to_owner, limit_to_admin
+from itkufs.common.decorators import limit_to_group, limit_to_admin
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
 

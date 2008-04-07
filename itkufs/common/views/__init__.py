@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.utils.translation import ugettext as _, ungettext
+from django.utils.translation import ugettext as _
 
 from itkufs.accounting.models import Group, Account
 

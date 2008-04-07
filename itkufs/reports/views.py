@@ -1,15 +1,15 @@
-from datetime import date, datetime
+from datetime import date
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.xheaders import populate_xheaders
-from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils.translation import ugettext as _, ungettext
+from django.utils.translation import ugettext as _
 
-from itkufs.common.decorators import limit_to_group, limit_to_owner, limit_to_admin
-from itkufs.accounting.models import Group, Account
+from itkufs.common.decorators import limit_to_group, limit_to_admin
+from itkufs.accounting.models import Account
 from itkufs.reports.models import *
 from itkufs.reports.forms import *
 
