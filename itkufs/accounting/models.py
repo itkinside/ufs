@@ -399,6 +399,7 @@ class Transaction(models.Model):
     last_modified = models.DateTimeField(_('Last modified'), auto_now_add=True)
     state = models.CharField(_('state'), max_length=3,
         choices=TRANSACTION_STATE, blank=True)
+    user_transaction = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = _('transaction')
