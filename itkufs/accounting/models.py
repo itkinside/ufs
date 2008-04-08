@@ -628,11 +628,6 @@ class TransactionEntry(models.Model):
             raise InvalidTransactionEntry(
                 'Credit and debit must be positive or zero')
 
-        # FIXME decide if this condition should be relaxed
-        if self.debit > 0 and self.credit > 0:
-            raise InvalidTransactionEntry(
-                'Only credit or debit may be set')
-
         if self.debit == 0 and self.credit == 0:
             raise InvalidTransactionEntry(
                 'Create or debit must be positive')
