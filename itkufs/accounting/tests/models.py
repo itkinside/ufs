@@ -325,9 +325,7 @@ class LogTestCase(unittest.TestCase):
         self.user.delete()
 
     def testLogEntryUniqePerType(self):
-        # FIXME this has changed! the test no longer covers our alowed
-        # behaivour
-        """Checks that only one log entry of each type is allowed"""
+        """Checks that only one log entry of each type is allowed (except for pending)"""
 
         for key, value in Transaction.TRANSACTION_STATE:
             log1 = TransactionLog(type=key, transaction=self.transaction,
@@ -336,7 +334,7 @@ class LogTestCase(unittest.TestCase):
                                   user=self.user)
             if key != Transaction.PENDING_STATE:
                 log1.save()
-            self.assertRaises(InvalidTransactionLog, log2.save)
+                self.assertRaises(InvalidTransactionLog, log2.save)
 
     def testLogEntryModify(self):
         """Checks that modifying log entry raises error"""
@@ -377,11 +375,11 @@ class EntryTestCase(unittest.TestCase):
         self.user.delete()
 
     def testDebitAndCreditInSameEntry(self):
-        """Checks that setting both debit and credit will fail"""
+        """Checks that setting both debit and credit does not fail"""
 
         self.entry.debit = 100
         self.entry.credit = 100
-        self.assertRaises(InvalidTransactionEntry, self.entry.save)
+        self.entry.save()
 
     def testNegativeCredit(self):
         """Checks that inputing av negative credit raises an error"""
