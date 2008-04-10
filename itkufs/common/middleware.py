@@ -34,7 +34,7 @@ class UfsMiddleware:
                 try:
                     view_kwargs['settlement'] = \
                         view_kwargs['group'].settlement_set.get(
-                            slug=view_kwargs['settlement'])
+                            id=view_kwargs['settlement'])
                 except Settlement.DoesNotExist:
                     raise Http404
 
