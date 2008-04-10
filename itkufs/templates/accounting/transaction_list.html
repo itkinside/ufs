@@ -32,19 +32,11 @@
 {% block content %}
 
 {% if not transaction_list %}
-
-<p>{% trans "No transactions found." %}</p>
-
+    <p>{% trans "No transactions found." %}</p>
 {% else %}
-
-{% if is_paginated %}
     {% include "accounting/transaction_list_menu.html" %}
-{% endif %}
-
-{% include "accounting/transaction_list_table.html" %}
-
-{% include "accounting/transaction_list_menu.html" %}
-
+    {% include "accounting/transaction_list_table.html" %}
+    {% include "accounting/transaction_list_menu.html" %}
 {% endif %}
 
 {% endblock %}
