@@ -13,7 +13,7 @@ def group_summary(request, group, is_admin=False):
     """Show group summary"""
 
     response = object_detail(request, Group.objects.all(), group.id,
-        template_name='accounting/group_summary.html',
+        template_name='common/group_summary.html',
         template_object_name='group',
         extra_context={'is_admin': is_admin, 'all': 'all' in request.GET})
     populate_xheaders(request, response, Group, group.id)
@@ -44,7 +44,7 @@ def account_summary(request, group, account,
                 message=_('The account balance is below the warning limit.'))
 
     response = object_detail(request, Account.objects.all(), account.id,
-        template_name='accounting/account_summary.html',
+        template_name='common/account_summary.html',
         template_object_name='account',
         extra_context={
             'is_admin': is_admin,

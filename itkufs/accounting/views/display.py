@@ -52,16 +52,14 @@ def transaction_list(request, group, account=None, page='1',
     is_admin=False, is_owner=False):
     """Lists a group or an account's transactions"""
 
+    # FIXME: Incorporate into decorator. Jodal has an idea on this one.
     if account and not is_owner and not is_admin:
-        # FIXME: Incorporate into decorator. Jodal has an idea on this one.
         return HttpResponseForbidden(
             _('Forbidden if not account owner or group admin.'))
 
-    # Get transactions
-    transactions = (account or group).transaction_set_with_rejected
-
     # Pass on to generic view
-    response = object_list(request, transactions,
+    response = object_list(request,
+        (account or group).transaction_set_with_rejected,
         paginate_by=20,
         page=page,
         allow_empty=True,

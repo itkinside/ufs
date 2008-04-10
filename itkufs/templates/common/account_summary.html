@@ -77,7 +77,7 @@
 <div id="actions">
 <h3>{% trans "Actions" %}</h3>
 <ul>
-{% include "accounting/account_action.html" %}
+{% include "common/account_action.html" %}
 {% if is_admin %}
     <li class="admin"><a href="{% url edit-account group.slug,account.slug %}">
         {% trans "Edit account" %}</a></li>

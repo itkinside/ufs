@@ -47,7 +47,7 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
 <div id="actions">
 <h3>{% trans "Actions" %}</h3>
 <ul>
-{% include "accounting/group_action.html" %}
+{% include "common/group_action.html" %}
 {% if is_admin %}
 <li class="admin"><a href="{% url edit-group group.slug%}">
     {% trans "Edit group" %}</a></li>

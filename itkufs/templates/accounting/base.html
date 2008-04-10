@@ -49,7 +49,7 @@
                 {% trans "Settlements" %}</a></li>
             <li><a href="{% url transaction-list-group group.slug %}">
                 {% trans "Transactions" %}</a></li>
-            {% include "accounting/group_action.html" %}
+            {% include "common/group_action.html" %}
         </ul>
     {% endif %}
 
@@ -61,7 +61,7 @@
                 {% trans "Summary" %}</a></li>
             <li><a href="{% url transaction-list-account group.slug,account.slug %}">
                 {% trans "Transactions" %}</a></li>
-            {% include "accounting/account_action.html" %}
+            {% include "common/account_action.html" %}
         </ul>
     {% endif %}
 {% endblock %}

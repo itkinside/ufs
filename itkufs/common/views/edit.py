@@ -20,6 +20,7 @@ def edit_group(request, group, is_admin=False):
 
     if request.method == 'POST':
         form = GroupForm(data=request.POST, files=request.FILES, instance=group)
+
         if form.is_valid():
             form.save()
 
@@ -38,7 +39,7 @@ def edit_group(request, group, is_admin=False):
     else:
         form = GroupForm(instance=group)
 
-    return render_to_response('accounting/group_form.html',
+    return render_to_response('common/group_form.html',
         {
             'is_admin': is_admin,
             'group': group,
@@ -48,17 +49,18 @@ def edit_group(request, group, is_admin=False):
 
 @login_required
 @limit_to_admin
-def edit_account(request, group, account=None, type='new',
+def new_edit_account(request, group, account=None,
     is_admin=False, is_owner=False):
     """Create account or edit account properties"""
 
     if request.method == 'POST':
-        if type == 'edit':
+        if account is not None:
             form = AccountForm(instance=account, data=request.POST)
         else:
             form = AccountForm(data=request.POST)
+
         if form.is_valid():
-            if type== 'edit':
+            if account is not None:
                 form.save()
                 request.user.message_set.create(
                     message=_('Account successfully updated'))
@@ -69,20 +71,18 @@ def edit_account(request, group, account=None, type='new',
             return HttpResponseRedirect(reverse('account-summary',
                 args=(group.slug, account.slug)))
     else:
-        if type == 'edit':
+        if account is not None:
             form = AccountForm(instance=account)
         else:
             form = AccountForm()
 
-    extra = {
-        'is_admin': is_admin,
-        'group': group,
-        'form': form,
-    }
-    if type == 'edit':
-        extra['account'] = account
-        extra['is_owner'] = is_owner
-
-    return render_to_response('accounting/account_form.html', extra,
+    return render_to_response('common/account_form.html',
+        {
+            'is_admin': is_admin,
+            'group': group,
+            'is_owner': is_owner,
+            'account': account,
+            'form': form,
+        },
         context_instance=RequestContext(request))
 
