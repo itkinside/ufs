@@ -2,21 +2,34 @@
 {% load i18n %}
 
 {% block title %}
-    {% trans "New settlement" %}
+    {% if settlement %}
+        {% trans "Edit settlement" %}
+    {% else %}
+        {% trans "New settlement" %}
+    {% endif %}
     - {{ block.super }}
 {% endblock %}
 
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo; <a href="{% url new-settlement group.slug %}">
-        {% trans "New settlement" %}</a>
+    {% if settlement %}
+        &raquo; <a href="{% url edit-settlement group.slug,settlement.id %}">
+            {% trans "Edit settlement" %}</a>
+    {% else %}
+        &raquo; <a href="{% url new-settlement group.slug %}">
+            {% trans "New settlement" %}</a>
+    {% endif %}
 {% endblock %}
 
 
 {% block header %}
     {{ block.super }}
-    &ndash; {% trans "New settlement" %}
+    {% if settlement %}
+        &ndash; {% trans "Edit settlement" %}
+    {% else %}
+        &ndash; {% trans "New settlement" %}
+    {% endif %}
 {% endblock %}
 
 

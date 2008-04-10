@@ -13,29 +13,39 @@ from itkufs.accounting.forms import *
 
 @login_required
 @limit_to_admin
-def new_edit_settlement(request, group, type='new', is_admin=False):
+def new_edit_settlement(request, group, settlement=None, is_admin=False):
     """Create new and edit existing settlements"""
 
-    # TODO: Implement support for editing settlements
+    if not settlement.is_editable():
+        return HttpResponseForbidden(
+            _('Settlement is closed and cannot be edited.'))
 
     if request.method == 'POST':
-        form = SettlementForm(request.POST)
+        if settlement is not None:
+            form = SettlementForm(instance=settlement, data=request.POST)
+        else:
+            form = SettlementForm(data=request.POST)
 
         if form.is_valid():
-            settlement = form.save(commit=False)
+            if settlement is not None:
+                form.save()
+            else:
+                settlement = form.save(commit=False)
+                settlement.group = group
+                settlement.save()
 
-            settlement.group = group
-            settlement.save()
-
-            return HttpResponseRedirect(
-                reverse('group-summary', args=(group.slug,)))
+            return HttpResponseRedirect(settlement.get_absolute_url())
     else:
-        form = SettlementForm()
+        if settlement is not None:
+            form = SettlementForm(instance=settlement)
+        else:
+            form = SettlementForm()
 
     return render_to_response('accounting/settlement_form.html',
         {
             'is_admin': is_admin,
             'group': group,
+            'settlement': settlement,
             'form': form,
         },
         context_instance=RequestContext(request))
@@ -112,9 +122,9 @@ def transfer(request, group, account=None, transfer_type=None,
             transaction.set_pending(user=request.user, message=details)
 
             if amount <= account.user_balance() - (group.block_limit or 0):
-                request.user.message_set.create(message=
-                    _("""Your transfer has not been completed, your group admin
-                    needs to complete the transaction."""))
+                request.user.message_set.create(
+                    message=_('Your transaction has been added,'
+                        + 'but your group admin has to commit it.'))
                 transaction.set_committed(user=request.user)
 
         else:
