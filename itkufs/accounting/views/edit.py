@@ -141,7 +141,7 @@ def transfer(request, group, account=None, transfer_type=None,
 
 @login_required
 @limit_to_admin
-def approve_transactions(request, group, transaction=None, page='1', is_admin=False):
+def approve_transactions(request, group, page='1', is_admin=False):
     """Approve transactions from members and other groups"""
 
     transactions = []
@@ -203,14 +203,14 @@ def reject_transactions(request, group, transaction=None, is_admin=False):
         data = request.POST
         to_be_rejected = request.POST.getlist('transactions')
         to_be_rejected = group.pending_transaction_set.filter(id__in=to_be_rejected)
-    elif transaction:
+    elif transaction is not None:
         data = None
         # Ensure that this is a user_transaction and the owner of the
         # account is the only one that can access this view
         # FIXME allow admin to use this?
         try:
             to_be_rejected = [group.pending_transaction_set.get(
-                id=transaction, user_transaction=True,
+                id=transaction.id, user_transaction=True,
                 entry_set__account__owner=request.user)]
         except Transaction.DoesNotExist:
             raise Http404
@@ -234,31 +234,26 @@ def reject_transactions(request, group, transaction=None, is_admin=False):
         transaction.set_rejected(user=request.user,
             message=request.POST['reason'])
 
-    if transaction:
-        return HttpResponseRedirect(reverse('account-summary',
-            kwargs={'group': group.slug, 'account':
-            group.account_set.get(owner=request.user).slug}))
+    if transaction is not None:
+        return HttpResponseRedirect(reverse('account-summary', kwargs={
+            'group': group.slug,
+            'account': group.account_set.get(owner=request.user).slug
+        }))
 
     if group.pending_transaction_set.count():
         return HttpResponseRedirect(reverse('approve-transactions',
-            kwargs={
-                'group': group.slug,
-            }))
+            kwargs={'group': group.slug}))
+
     return HttpResponseRedirect(reverse('group-summary',
-        kwargs={'group': group.slug,}))
+        kwargs={'group': group.slug}))
 
 @login_required
 @limit_to_admin
 @db_transaction.commit_manually
-def new_edit_transaction(request, group, is_admin=False, transaction=None):
+def new_edit_transaction(request, group, transaction=None, is_admin=False):
     """Admin view for creating transactions"""
 
-    if transaction:
-        try: # Use group to ensure that we aren't being tricked
-            transaction = group.transaction_set.get(id=transaction)
-        except Transaction.DoesNotExist:
-            pass
-    else:
+    if transaction is None:
         transaction = Transaction(group=group)
 
     if request.method == 'POST':

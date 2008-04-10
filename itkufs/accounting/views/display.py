@@ -59,7 +59,7 @@ def transaction_details(request, group, transaction, is_admin=False):
     # Check that user is party of transaction or admin of group
     # FIXME: Do this with a decorator. Jodal has an idea on this one.
     if not is_admin and TransactionEntry.objects.filter(
-        transaction__id=transaction,
+        transaction=transaction,
         account__owner__id=request.user.id).count() == 0:
         return HttpResponseForbidden(_('The transaction may only be'
             ' viewed by group admins or a party of the transaction.'))
@@ -67,7 +67,7 @@ def transaction_details(request, group, transaction, is_admin=False):
     # Pass on to generic view
     response = object_detail(request,
         Transaction.objects.all(),
-        transaction,
+        transaction.id,
         template_name='accounting/transaction_details.html',
         extra_context={
             'is_admin': is_admin,

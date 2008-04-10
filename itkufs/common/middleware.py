@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.utils.translation import ugettext as _
 
-from itkufs.accounting.models import Group, Account
+from itkufs.accounting.models import Group, Account, Settlement, Transaction
 from itkufs.reports.models import List
 
 class UfsMiddleware:
@@ -28,6 +28,24 @@ class UfsMiddleware:
                 # Add account owner flag
                 if view_kwargs['account'].owner == request.user:
                     view_kwargs['is_owner'] = True
+
+            if 'settlement' in view_kwargs:
+                # Replace settlement ID with settlement object
+                try:
+                    view_kwargs['settlement'] = \
+                        view_kwargs['group'].settlement_set.get(
+                            slug=view_kwargs['settlement'])
+                except Settlement.DoesNotExist:
+                    raise Http404
+
+            if 'transaction' in view_kwargs:
+                # Replace transaction ID with transaction object
+                try:
+                    view_kwargs['transaction'] = \
+                        view_kwargs['group'].transaction_set.get(
+                            id=view_kwargs['transaction'])
+                except Transaction.DoesNotExist:
+                    raise Http404
 
             if 'list' in view_kwargs:
                 # Replace list slug with list object
