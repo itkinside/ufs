@@ -34,13 +34,18 @@
         <th>{% trans "Last modified" %}</th>
         <td>{{ transaction.last_modified|date:"Y-m-d H:i" }}</th>
     </tr>
-</table>
-
 {% if is_admin and transaction.is_editable %}
-FIXME (placement):
-<a href="{% url edit-transaction group.slug,transaction.id %}">Edit</a>
-<a href="{% url reject-transaction group.slug,transaction.id %}">Reject</a>
+    <tr>
+        <th>{% trans "Actions" %}</th>
+        <td>
+            <a href="{% url edit-transaction group.slug,transaction.id %}">
+                {% trans "Edit transaction" %}</a>
+            <a href="{% url reject-transaction group.slug,transaction.id %}">
+                {% trans "Reject transaction" %}</a>
+        </td>
+    </tr>
 {% endif %}
+</table>
 
 <h3>{% trans "Entries" %}</h3>
 
