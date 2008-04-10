@@ -16,7 +16,7 @@ from itkufs.accounting.forms import *
 def new_edit_settlement(request, group, settlement=None, is_admin=False):
     """Create new and edit existing settlements"""
 
-    if not settlement.is_editable():
+    if settlement is not None and not settlement.is_editable():
         return HttpResponseForbidden(
             _('Settlement is closed and cannot be edited.'))
 
