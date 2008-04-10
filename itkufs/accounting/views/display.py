@@ -9,14 +9,27 @@ from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
 
 @login_required
-@limit_to_admin
+@limit_to_group
 def settlement_list(request, group, page='1', is_admin=False):
     """Show paginated list of settlements"""
 
-    pass # TODO: Implement using object_list
+    # Pass on to generic view
+    response = object_list(request,
+        group.settlement_set.all(),
+        paginate_by=20,
+        page=page,
+        allow_empty=True,
+        template_name='accounting/settlement_list.html',
+        extra_context={
+            'is_admin': is_admin,
+            'group': group,
+        },
+        template_object_name='settlement')
+    populate_xheaders(request, response, Group, group.id)
+    return response
 
 @login_required
-@limit_to_admin
+@limit_to_group
 def settlement_details(request, group, settlement, is_admin=False):
     """Show settlement summary"""
 
@@ -74,5 +87,5 @@ def transaction_details(request, group, transaction, is_admin=False):
             'group': group,
         },
         template_object_name='transaction')
-    populate_xheaders(request, response, Transaction, transaction)
+    populate_xheaders(request, response, Transaction, transaction.id)
     return response

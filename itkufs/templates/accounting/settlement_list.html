@@ -1,0 +1,60 @@
+{% extends "accounting/base.html" %}
+{% load i18n %}
+
+
+{% block title %}
+    {% trans "Settlements" %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; <a href="{% url settlement-list group.slug %}">
+        {% trans "Settlements" %}</a>
+    {% if is_paginated %}
+        &raquo; {% trans "Page" %} {{ page }} {% trans "of" %} {{ pages }}
+    {% endif %}
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+    &ndash; {% trans "Settlements" %}
+{% endblock %}
+
+
+{% block content %}
+
+{% if not settlement_list %}
+
+<p>{% trans "No settlements found." %}</p>
+
+{% else %}
+
+{% if is_paginated %}
+    {% include "accounting/settlement_list_menu.html" %}
+{% endif %}
+
+<table class="tablelist">
+    <tr>
+        <th>{% trans "Date" %}</th>
+        <th>{% trans "Comment" %}</th>
+        <th>{% trans "Closed" %}</th>
+        <th>{% trans "Details" %}</th>
+    </tr>
+    {% for s in settlement_list %}
+    <tr class="{% cycle "evenrow" "oddrow" %}">
+        <td>{{ s.date }}</td>
+        <td>{{ s.comment }}</td>
+        <td>{{ s.closed|yesno:_("Yes,No") }}</td>
+        <td><a href="{{ s.get_absolute_url }}">{% trans "Details" %}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% include "accounting/settlement_list_menu.html" %}
+
+{% endif %}
+
+{% endblock %}

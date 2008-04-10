@@ -45,6 +45,8 @@
         <ul class="menulist">
             <li><a href="{{ group.get_absolute_url }}">
                 {% trans "Summary" %}</a></li>
+            <li><a href="{% url settlement-list group.slug %}">
+                {% trans "Settlements" %}</a></li>
             <li><a href="{% url transaction-list-group group.slug %}">
                 {% trans "Transactions" %}</a></li>
             {% include "accounting/group_action.html" %}

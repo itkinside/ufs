@@ -1,0 +1,29 @@
+{% load i18n %}
+
+{% if is_paginated %}
+    <p>
+    {% blocktrans %}{{ hits }} hits{% endblocktrans %}
+    &ndash;
+    {% if has_previous %}
+        <a href="{% url settlement-list-page group.slug,previous %}">
+        &lt;&lt; {% trans "Previous" %}</a>
+        &bull;
+    {% endif %}
+    {% for i in page_range %}
+        {% ifequal i page %}
+            {{ i }}
+        {% else %}
+            <a href="{% url settlement-list-page group.slug,i %}">
+            {{ i }}</a>
+        {% endifequal %}
+        {% if not forloop.last %}
+            &bull;
+        {% endif %}
+    {% endfor %}
+    {% if has_next %}
+        &bull;
+        <a href="{% url settlement-list-page group.slug,next %}">
+        {% trans "Next" %} &gt;&gt;</a>
+    {% endif %}
+    </p>
+{% endif %}
