@@ -12,11 +12,11 @@
 
 <table class="tabledetails">
     <tr>
-        <th>Transaction ID</th>
+        <th>{% trans "Transaction ID" %}</th>
         <td>{{ transaction.id }}</th>
     </tr>
     <tr>
-        <th>Settlement</th>
+        <th>{% trans "Settlement" %}</th>
         <td>
             {% if transaction.settlement %}
                 <a href="{% url settlement-details group.slug %}">
@@ -27,11 +27,11 @@
         </td>
     </tr>
     <tr>
-        <th>State</th>
+        <th>{% trans "State" %}</th>
         <td>{{ transaction.get_state_display }}</th>
     </tr>
     <tr>
-        <th>Last modified</th>
+        <th>{% trans "Last modified" %}</th>
         <td>{{ transaction.last_modified|date:"Y-m-d H:i" }}</th>
     </tr>
 </table>
