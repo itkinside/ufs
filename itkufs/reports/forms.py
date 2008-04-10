@@ -13,7 +13,7 @@ class ListForm(CustomModelForm):
         group = kwargs.pop('group')
         super(ListForm, self).__init__(*args, **kwargs)
 
-        self.fields['accounts'].widget.choices = [(a.id, a) for a in group.user_account_set]
+        self.fields['accounts'].choices = [(a.id, a.name) for a in group.user_account_set]
 
     def save(self, group=None, **kwargs):
         original_commit = kwargs.pop('commit', True)
