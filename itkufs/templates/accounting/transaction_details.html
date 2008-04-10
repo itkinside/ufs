@@ -19,7 +19,7 @@
         <th>{% trans "Settlement" %}</th>
         <td>
             {% if transaction.settlement %}
-                <a href="{% url settlement-details group.slug %}">
+                <a href="{{ transaction.settlement.get_absolute_url }}">
                     {{ transaction.settlement }}</a>
             {% else %}
                 {% trans "None" %}
