@@ -20,6 +20,13 @@ class TransactionSettlementForm(CustomModelForm):
     details = forms.CharField(label=_('Details'), required=False,
         widget=forms.widgets.Textarea(attrs={'rows': 2}))
 
+    def __init__(self, *args, **kwargs):
+        super(TransactionSettlementForm, self).__init__(*args, **kwargs)
+
+        if 'instance' in kwargs:
+            self.fields['settlement'].choices = [(s.id, s)
+                for s in kwargs['instance'].group.settlement_set.filter(closed=False)]
+
     class Meta:
         model = Transaction
         fields = ('settlement',)
