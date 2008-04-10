@@ -86,7 +86,7 @@ def transaction_details(request, group, transaction, is_admin=False):
         transaction=transaction,
         account__owner__id=request.user.id).count() == 0:
         return HttpResponseForbidden(_('The transaction may only be'
-            ' viewed by group admins or a party of the transaction.'))
+            + 'viewed by group admins or a party of the transaction.'))
 
     # Pass on to generic view
     response = object_detail(request,

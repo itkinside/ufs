@@ -28,9 +28,10 @@ This release
 - Use decorators to control commit/rollback of transactions. At least in all
   views which has to do with transactions. Check possible Django bug :(
 - Transaction list and approve transaction view should resemble each other.
-- If admin_only is set we should hide the parts of a large multitransaction
-  that is not linked to user, hiding at least numbers or entire users.
-- Assign AccountRoles.
+- (adamcik) If admin_only is set we should hide the parts of a large
+  multitransaction that is not linked to user, hiding at least numbers or
+  entire users.
+- (jodal) Assign AccountRoles.
 
 Done
 ~~~~
