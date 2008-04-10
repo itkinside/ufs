@@ -8,8 +8,8 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
 from itkufs.common.decorators import limit_to_admin
-from itkufs.accounting.models import *
-from itkufs.accounting.forms import *
+from itkufs.common.forms import GroupForm, AccountForm
+from itkufs.accounting.models import Group, Account
 
 @login_required
 @limit_to_admin
