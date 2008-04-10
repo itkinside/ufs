@@ -3,20 +3,6 @@ from bzrlib.errors import NotBranchError
 
 from django.conf import settings
 
-def ufs(request):
-    """
-    Returns common µFS variables used in most templates
-
-    The variables are:
-        group and is_admin
-        account and is_owner, if available
-
-    """
-
-    raise Exception()
-
-    pass # TODO
-
 def bzr(request):
     """Make the bzr rev number available in templates under the name BZRRREV"""
 
