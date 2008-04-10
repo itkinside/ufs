@@ -41,14 +41,20 @@
         <th>{% trans "Date" %}</th>
         <th>{% trans "Comment" %}</th>
         <th>{% trans "Closed" %}</th>
-        <th>{% trans "Details" %}</th>
+        <th>{% trans "Actions" %}</th>
     </tr>
     {% for s in settlement_list %}
     <tr class="{% cycle "evenrow" "oddrow" %}">
         <td>{{ s.date }}</td>
         <td>{{ s.comment }}</td>
         <td>{{ s.closed|yesno:_("Yes,No") }}</td>
-        <td><a href="{{ s.get_absolute_url }}">{% trans "Details" %}</a></td>
+        <td>
+            <a href="{{ s.get_absolute_url }}">{% trans "Details" %}</a>
+            {% if s.is_editable %}
+                <a href="{% url edit-settlement group.slug,s.id %}">
+                    {% trans "Edit" %}</a>
+            {% endif %}
+        </td>
     </tr>
     {% endfor %}
 </table>
