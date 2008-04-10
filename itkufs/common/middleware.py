@@ -42,7 +42,7 @@ class UfsMiddleware:
                 # Replace transaction ID with transaction object
                 try:
                     view_kwargs['transaction'] = \
-                        view_kwargs['group'].transaction_set.get(
+                        view_kwargs['group'].transaction_set_with_rejected.get(
                             id=view_kwargs['transaction'])
                 except Transaction.DoesNotExist:
                     raise Http404
