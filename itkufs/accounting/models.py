@@ -366,6 +366,12 @@ class Settlement(models.Model):
         else:
             return smart_unicode(self.date)
 
+    def get_absolute_url(self):
+        return reverse('settlement-details', kwargs={
+            'group': self.group.slug,
+            'settlement': self.id,
+        })
+
 
 class TransactionManager(models.Manager):
     def get_query_set(self):
