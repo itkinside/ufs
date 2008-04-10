@@ -8,8 +8,8 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
 from itkufs.common.decorators import limit_to_admin
-from itkufs.common.forms import GroupForm, AccountForm
-from itkufs.accounting.models import Group, Account
+from itkufs.common.forms import GroupForm, AccountForm, RoleAccountForm
+from itkufs.accounting.models import Group, Account, RoleAccount
 
 @login_required
 @limit_to_admin
@@ -86,3 +86,21 @@ def new_edit_account(request, group, account=None,
         },
         context_instance=RequestContext(request))
 
+@login_required
+@limit_to_admin
+def assign_role_accounts(request, group, is_admin=False):
+    """Assign role accounts to group"""
+
+    if request.method == 'POST':
+        pass # FIXME
+    else:
+        # FIXME
+        form = RoleAccountForm()
+
+    return render_to_response('common/role_account_form.html',
+        {
+            'is_admin': is_admin,
+            'group': group,
+            'form': form,
+        },
+        context_instance=RequestContext(request))

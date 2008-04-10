@@ -1,0 +1,31 @@
+{% extends "accounting/base.html" %}
+{% load i18n %}
+
+
+{% block title %}
+    {% trans "Assign role accounts" %}
+    - {{ block.super }}
+{% endblock %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; <a href="{% url assign-role-accounts group.slug %}">
+    {% trans "Assign role accounts" %}</a>
+{% endblock %}
+
+
+{% block header %}
+    {{ block.super }}
+    &ndash; {% trans "Assign role accounts" %}
+{% endblock %}
+
+
+{% block content %}
+
+<form action="." method="post">
+    {{ form.as_p }}
+    <p><button type="submit">{% trans "Save role accounts" %}</button></p>
+</form>
+
+{% endblock %}

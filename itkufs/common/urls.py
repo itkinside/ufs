@@ -22,6 +22,8 @@ urlpatterns = patterns('',
         group_summary, name='group-summary'),
     url(r'^(?P<group>[0-9a-z_-]+)/edit/$',
         edit_group, name='edit-group'),
+    url(r'^(?P<group>[0-9a-z_-]+)/assign-role-accounts/$',
+        assign_role_accounts, name='assign-role-accounts'),
 
     ### Accounts
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/$',

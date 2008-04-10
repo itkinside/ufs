@@ -4,7 +4,7 @@ from django.newforms.forms import BoundField, Form
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
 
-from itkufs.accounting.models import Account, Group
+from itkufs.accounting.models import Group, Account, RoleAccount
 
 def as_table_row(self):
     """Returns this form rendered as HTML <td>s -- excluding the
@@ -75,3 +75,8 @@ class GroupForm(CustomModelForm):
 
         kwargs['commit'] = original_commit
         return super(GroupForm, self).save(**kwargs)
+
+class RoleAccountForm(CustomModelForm):
+    class Meta:
+        model = RoleAccount
+    # FIXME: Not done
