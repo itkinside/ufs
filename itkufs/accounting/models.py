@@ -203,8 +203,9 @@ class Account(models.Model):
     def balance(self, date=None):
         if date:
             balance = 0
-            for e in self.transactionentry_set.filter(transaction__date__lte=date,
-                                        transaction__state=Transaction.COMMITTED_STATE):
+            for e in self.transactionentry_set.filter(
+                transaction__date__lte=date,
+                transaction__state=Transaction.COMMITTED_STATE):
                 balance += e.debit
                 balance -= e.credit
             return balance
@@ -345,8 +346,9 @@ class Settlement(models.Model):
     group = models.ForeignKey(Group, verbose_name=_('group'))
     date = models.DateField(_('date'))
     comment = models.CharField(_('comment'), max_length=200, blank=True)
-
-    closed = models.BooleanField(default=False)
+    closed = models.BooleanField(default=False,
+        help_text=_('Mark as closed when done adding transactions '
+            + 'to the settlement.'))
 
     class Meta:
         ordering = ('date',)

@@ -1,6 +1,7 @@
 µFS TODO
 ========
 
+
 Continuously
 ~~~~~~~~~~~~
 - Update Norwegian translation. Last done 2008-04-10
@@ -8,6 +9,7 @@ Continuously
 - Write/update unit tests
 - Test use cases
 - egrep -ir 'todo|fixme|xxx' itkufs/
+
 
 ACCOUNTING
 ----------
@@ -28,7 +30,6 @@ This release
 - Transaction list and approve transaction view should resemble each other.
 - If admin_only is set we should hide the parts of a large multitransaction
   that is not linked to user, hiding at least numbers or entire users.
-- Add the flag Settlement.closed.
 - Implement edit-settlement, settlement-list and settlement-details.
 - Assign AccountRoles.
 
@@ -41,6 +42,7 @@ Done
 - multiple pending log entries?
 - User rejection of ones own pending withdrawals and deposits. (how can we tell
   which transactions are in this category?)
+- Add the flag Settlement.closed.
 
 Wontfix
 ~~~~~~~
