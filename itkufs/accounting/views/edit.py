@@ -113,7 +113,7 @@ def transfer(request, group, account=None, transfer_type=None,
 
             if amount <= account.user_balance() - (group.block_limit or 0):
                 request.user.message_set.create(message=
-                    _("""Your tranfser has not been completed, your group admin
+                    _("""Your transfer has not been completed, your group admin
                     needs to complete the transaction."""))
                 transaction.set_committed(user=request.user)
 
