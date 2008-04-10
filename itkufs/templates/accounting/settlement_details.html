@@ -1,0 +1,49 @@
+{% extends "accounting/settlement_list.html" %}
+{% load i18n %}
+
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; {% trans "Settlement" %} {{ settlement.id }}</a>
+{% endblock %}
+
+
+{% block content %}
+
+<table class="tabledetails">
+    <tr>
+        <th>{% trans "Settlement ID" %}</th>
+        <td>{{ settlement.id }}</th>
+    </tr>
+    <tr>
+        <th>{% trans "Date" %}</th>
+        <td>{{ settlement.date }}</th>
+    </tr>
+    <tr>
+        <th>{% trans "Comment" %}</th>
+        <td>{{ settlement.comment }}</td>
+    </tr>
+    <tr>
+        <th>{% trans "Closed" %}</th>
+        <td>{{ settlement.closed|yesno:_("Yes,No") }}</th>
+    </tr>
+{% if is_admin and settlement.is_editable %}
+    <tr>
+        <th>{% trans "Actions" %}</th>
+        <td><a href="{% url edit-settlement group.slug,settlement.id %}">
+            Edit settlement</a></td>
+    </tr>
+{% endif %}
+</table>
+
+<h3>{% trans "Transactions" %}</h3>
+
+{% with settlement.transaction_set.all as transaction_list %}
+    {% if not transaction_list %}
+        <p>{% trans "No transactions found." %}</p>
+    {% else %}
+        {% include "accounting/transaction_list_table.html" %}
+    {% endif %}
+{% endwith %}
+
+{% endblock %}

@@ -33,7 +33,18 @@ def settlement_list(request, group, page='1', is_admin=False):
 def settlement_details(request, group, settlement, is_admin=False):
     """Show settlement summary"""
 
-    pass # TODO: At least show all transactions related to a settlement
+    # Pass on to generic view
+    response = object_detail(request,
+        Settlement.objects.all(),
+        settlement.id,
+        template_name='accounting/settlement_details.html',
+        extra_context={
+            'is_admin': is_admin,
+            'group': group,
+        },
+        template_object_name='settlement')
+    populate_xheaders(request, response, Settlement, settlement.id)
+    return response
 
 @login_required
 @limit_to_group
