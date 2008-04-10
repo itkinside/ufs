@@ -351,7 +351,7 @@ class Settlement(models.Model):
             + 'to the settlement.'))
 
     class Meta:
-        ordering = ('date',)
+        ordering = ('-date',)
         verbose_name = _('settlement')
         verbose_name_plural = _('settlements')
         # FIXME: waiting for http://code.djangoproject.com/ticket/6523
@@ -372,6 +372,8 @@ class Settlement(models.Model):
             'settlement': self.id,
         })
 
+    def is_editable(self):
+        return self.closed == False
 
 class TransactionManager(models.Manager):
     def get_query_set(self):
@@ -413,9 +415,9 @@ class Transaction(models.Model):
     user_transaction = models.BooleanField(default=True)
 
     class Meta:
+        ordering = ('-last_modified',)
         verbose_name = _('transaction')
         verbose_name_plural = _('transactions')
-        ordering = ('-last_modified',)
 
     class Admin:
         pass
