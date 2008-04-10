@@ -25,8 +25,8 @@ Version 1 requirements:
 - Enable all users to print new ``krysselister'', both for internal and
   external use.
 
-For details, please refer to doc/AccountingModel.txt and
-doc/AccountingViews.txt.
+For details, please refer to doc/AccountingModel.txt (and
+doc/historic/AccountingViews.txt).
 
 
 Version 2: Inventory
