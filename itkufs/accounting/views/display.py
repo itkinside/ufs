@@ -98,6 +98,7 @@ def transaction_details(request, group, transaction, is_admin=False):
         extra_context={
             'is_admin': is_admin,
             'group': group,
+            'user_account': group.account_set.get(owner=request.user),
         },
         template_object_name='transaction')
     populate_xheaders(request, response, Transaction, transaction.id)
