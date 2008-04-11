@@ -38,7 +38,7 @@
 
 <h3>{% trans "Transactions" %}</h3>
 
-{% with settlement.transaction_set.all as transaction_list %}
+{% with settlement.transaction_set.select_related as transaction_list %}
     {% if not transaction_list %}
         <p>{% trans "No transactions found." %}</p>
     {% else %}

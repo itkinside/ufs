@@ -12,7 +12,7 @@ from itkufs.accounting.models import *
 def group_summary(request, group, is_admin=False):
     """Show group summary"""
 
-    response = object_detail(request, Group.objects.all(), group.id,
+    response = object_detail(request, Group.objects.select_related(), group.id,
         template_name='common/group_summary.html',
         template_object_name='group',
         extra_context={'is_admin': is_admin, 'all': 'all' in request.GET})
@@ -43,7 +43,7 @@ def account_summary(request, group, account,
             request.user.message_set.create(
                 message=_('The account balance is below the warning limit.'))
 
-    response = object_detail(request, Account.objects.all(), account.id,
+    response = object_detail(request, Account.objects.select_related(), account.id,
         template_name='common/account_summary.html',
         template_object_name='account',
         extra_context={

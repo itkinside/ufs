@@ -57,7 +57,7 @@
         <th>{% trans "Credit" %}</th>
     </tr>
 
-    {% for e in transaction.entry_set.all %}
+    {% for e in transaction.entry_set.select_related %}
     <tr class="{% cycle 'evenrow' 'oddrow' %}
         {% if transaction.is_rejected %}rejected{% else %}
         {% if transaction.is_pending %}pending{% endif %}{% endif %}">
@@ -88,7 +88,7 @@
         <th>{% trans "Message" %}</th>
     </tr>
 
-    {% for l in transaction.log_set.all %}
+    {% for l in transaction.log_set.select_related %}
     <tr class="{% cycle 'evenrow' 'oddrow' %}">
         <td>{{ l.get_type_display }}</td>
         <td>{{ l.timestamp|date:"Y-m-d H:i" }}</td>

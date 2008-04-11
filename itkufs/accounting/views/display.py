@@ -15,7 +15,7 @@ def settlement_list(request, group, page='1', is_admin=False):
 
     # Pass on to generic view
     response = object_list(request,
-        group.settlement_set.all(),
+        group.settlement_set.select_related(),
         paginate_by=20,
         page=page,
         allow_empty=True,
@@ -35,7 +35,7 @@ def settlement_details(request, group, settlement, is_admin=False):
 
     # Pass on to generic view
     response = object_detail(request,
-        Settlement.objects.all(),
+        Settlement.objects.select_related(),
         settlement.id,
         template_name='accounting/settlement_details.html',
         extra_context={
@@ -62,7 +62,7 @@ def transaction_list(request, group, account=None, page='1',
 
     # Pass on to generic view
     response = object_list(request,
-        (account or group).transaction_set_with_rejected,
+        (account or group).transaction_set_with_rejected.select_related(),
         paginate_by=20,
         page=page,
         allow_empty=True,
