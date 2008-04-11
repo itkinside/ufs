@@ -35,14 +35,14 @@
                 {% if is_admin %}
                     <a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{ e.account.name }}</a>
                 {% else %}
-                    {% hide e.account e.account.name %}
+                    {% hide e e.account.name %}
                 {% endif %}
             </td>
             <td class="number {{ tdclass }}">
-                {% hide e.account e.debit %}
+                {% hide e e.debit %}
             </td>
             <td class="number {{ tdclass }}">
-                {% hide e.account e.credit %}
+                {% hide e e.credit %}
             </td>
             {% if forloop.first %}
                 <td rowspan="{{ rowspan }}" class="details">
