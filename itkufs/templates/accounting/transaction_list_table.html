@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load ufs %}
 
 <table class="tablelist">
     <tr>
@@ -34,14 +35,14 @@
                 {% if is_admin %}
                     <a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{ e.account.name }}</a>
                 {% else %}
-                    {{ e.account.name }}
+                    {% hide e.account e.account.name %}
                 {% endif %}
             </td>
             <td class="number {{ tdclass }}">
-                {{ e.debit|default:""|stringformat:"0.2f" }}
+                {% hide e.account e.debit %}
             </td>
             <td class="number {{ tdclass }}">
-                {{ e.credit|default:""|stringformat:"0.2f" }}
+                {% hide e.account e.credit %}
             </td>
             {% if forloop.first %}
                 <td rowspan="{{ rowspan }}" class="details">
