@@ -28,10 +28,8 @@ This release
 - Use decorators to control commit/rollback of transactions. At least in all
   views which has to do with transactions. Check possible Django bug :(
 - Transaction list and approve transaction view should resemble each other.
-- (adamcik) If admin_only is set we should hide the parts of a large
-  multitransaction that is not linked to user, hiding at least numbers or
-  entire users.
 - (jodal) Assign AccountRoles.
+- Fix number of queries that hide makes by using context and selecte related
 
 Done
 ~~~~
@@ -44,6 +42,9 @@ Done
   which transactions are in this category?)
 - (adamcik) Add the flag Settlement.closed.
 - (jodal) Implement edit-settlement, settlement-list and settlement-details.
+- (adamcik) If admin_only is set we should hide the parts of a large
+  multitransaction that is not linked to user, hiding at least numbers or
+  entire users.
 
 Wontfix
 ~~~~~~~
