@@ -120,11 +120,6 @@ class AccountManager(models.Manager):
                 WHERE account_id = accounting_account.id
                     AND accounting_transaction.state = '%s'
                 """ % Transaction.COMMITTED_STATE,
-            'is_user_account_sql':
-                """
-                (accounting_account.owner_id IS NOT NULL
-                    AND accounting_account.type = '%s')
-                """ % Account.LIABILITY_ACCOUNT,
             'group_block_limit_sql':
                 """
                 SELECT accounting_group.block_limit
@@ -226,7 +221,7 @@ class Account(models.Model):
 
     def is_user_account(self):
         """Returns true if a user account"""
-        return self.is_user_account_sql
+        return self.owner and self.type == self.LIABILITY_ACCOUNT
 
     def is_blocked(self):
         """Returns true if user account balance is below group block limit"""
