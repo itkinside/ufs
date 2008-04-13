@@ -31,6 +31,8 @@ class HideNode(Node):
             decimal = True
         except DecimalException:
             decimal = False
+        except UnicodeEncodeError:
+            decimal = False
 
         if context.get('is_admin', False):
             show = True
@@ -47,11 +49,11 @@ class HideNode(Node):
 
         if decimal:
             if value == 0:
-                return ''
+                return u''
             elif show:
-                return "%0.2f" % value
+                return u'%0.2f' % value
         elif show:
             return value
 
-        return '-'
+        return u'-'
 

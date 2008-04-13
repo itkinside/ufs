@@ -30,6 +30,7 @@ This release
 - Transaction list and approve transaction view should resemble each other.
 - (jodal) Assign AccountRoles.
 - Fix number of queries that hide makes by using context and selecte related
+- Owner can't access reject transaction for his own deposits and transfers
 
 Done
 ~~~~
