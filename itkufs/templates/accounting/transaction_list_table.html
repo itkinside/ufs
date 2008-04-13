@@ -35,7 +35,7 @@
                 {% if is_admin %}
                     <a href="{% url account-summary e.account.group.slug,e.account.slug%}">{{ e.account.name }}</a>
                 {% else %}
-                    {% hide e e.account.name %}
+                    {{ e.account.name }}
                 {% endif %}
             </td>
             <td class="number {{ tdclass }}">

@@ -24,34 +24,29 @@ class HideNode(Node):
         # FIXME this needs to be documentet and explainded alot better
         # FIXME store transaction with select related to reduce query count
         entry = self.entry.resolve(context)
-        value = self.value.resolve(context)
+        value = Decimal(self.value.resolve(context))
 
-        try:
-            value = Decimal(value)
-            decimal = True
-        except DecimalException:
-            decimal = False
-        except UnicodeEncodeError:
-            decimal = False
+        user_account = context.get('user_account', None)
+
+        # FIXME this is the correct check, but _way_ to instensive as far as
+        # the db is concerened
+        in_transaction = bool(entry.transaction.entry_set.filter(account=user_account).count() == 1)
 
         if context.get('is_admin', False):
             show = True
-        elif context.get('user_account', None) == entry.account:
+        elif user_account == entry.account:
             show = True
-        elif not decimal and not entry.account.is_user_account():
+        elif not entry.account.is_user_account() and in_transaction:
             show = True
-        elif entry.transaction.user_transaction:
+        elif entry.transaction.user_transaction and in_transaction:
             show = True
         else:
             show = False
 
-        if decimal:
-            if value == 0:
-                return u''
-            elif show:
-                return u'%0.2f' % value
+        if value == 0:
+            return u''
         elif show:
-            return value
-
-        return u'-'
+            return u'%0.2f' % value
+        else:
+            return u'-'
 
