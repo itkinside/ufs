@@ -29,12 +29,10 @@
         {% trans "My account" %}</a>
     </li>
 
-{% if not request.session.my_account.group.admin_only or is_admin %}
-    <li{% if request.session.my_account.group.admin_only %} class="admin"{% endif %}>
+    <li>
         <a href="{% url group-summary request.session.my_account.group.slug %}">
         {% trans "My group" %}{% if is_admin and group.not_payed_transaction_set.count %}*{% endif %}</a>
     </li>
-{% endif %}
 {% if is_admin %}
     <li class="admin"><a href="{% url edit-list group.slug,list.slug %}">
         {% trans "Edit" %}</a></li>

@@ -46,12 +46,9 @@
 <table class="tabledetails">
     <tr>
         <th>{% trans "Name" %}</th>
-        {% if not group.admin_only or is_admin %}
-            <td><a href="{% url group-summary group.slug %}">
-                {{ group.name }}</a></td>
-        {% else %}
-        <td>{{ group.name }}</td>
-        {% endif %}
+            <td>
+                <a href="{% url group-summary group.slug %}">{{ group.name }}</a>
+            </td>
     </tr>
 
     <tr>
@@ -86,7 +83,7 @@
 </div>
 {% endif %}
 
-{% if is_owner and not group.admin_only %}
+{% if is_owner %}
 <div id="lists">
 <h3>{% trans "Lists" %}</h3>
 <ul>

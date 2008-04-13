@@ -38,8 +38,6 @@ class HideNode(Node):
             show = True
         elif context.get('user_account', None) == entry.account:
             show = True
-        elif not decimal and not context['group'].admin_only:
-            show = True
         elif not decimal and not entry.account.is_user_account():
             show = True
         elif entry.transaction.user_transaction:

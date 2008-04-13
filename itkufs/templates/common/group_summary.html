@@ -89,8 +89,6 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
 </ul>
 </div>
 
-{% if is_admin or not group.admin_only %}
-
 <div id="accounts">
 {% if not group.account_set.count %}
 <h3>{% trans "Accounts" %}</h3>
@@ -158,6 +156,5 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
 {% endif %}
 </div>
 
-{% endif %}
 
 {% endblock %}

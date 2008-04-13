@@ -11,8 +11,6 @@ class Group(models.Model):
     name = models.CharField(_('name'), max_length=100)
     slug = models.SlugField(_('slug'), prepopulate_from=['name'], unique=True,
         help_text=_('A shortname used in URLs.'))
-    admin_only = models.BooleanField(default=True,
-        help_text=_('Only allow admins to view group details and reports.'))
     admins = models.ManyToManyField(User, verbose_name=_('admins'),
         null=True, blank=True, filter_interface=models.HORIZONTAL)
     warn_limit = models.IntegerField(_('warn limit'), null=True, blank=True,

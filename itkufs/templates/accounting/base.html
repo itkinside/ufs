@@ -13,18 +13,11 @@
 {% block breadcrumbs %}
     {{ block.super }} &raquo; {% trans "Accounting" %} &raquo;
     {% if account %}
-        {% if not group.admin_only or is_admin %}
-            <a href="{{ group.get_absolute_url }}">{{ group.name }}</a>
-        {% else %}
-            {{ group.name }}
-        {% endif %}
-        &raquo; <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
+        <a href="{{ group.get_absolute_url }}">{{ group.name }}</a>
+        &raquo;
+        <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
     {% else %}
-        {% if not group.admin_only or is_admin %}
-            <a href="{{ group.get_absolute_url }}">{{ group.name }}</a>
-        {% else %}
-            {{ group.name }}
-        {% endif %}
+        <a href="{{ group.get_absolute_url }}">{{ group.name }}</a>
     {% endif %}
 {% endblock %}
 
@@ -39,19 +32,17 @@
 
 
 {% block submenu %}
-    {% if not group.admin_only or is_admin %}
-        <h3>&laquo;{{ group.name }}&raquo;</h3>
+    <h3>&laquo;{{ group.name }}&raquo;</h3>
 
-        <ul class="menulist">
-            <li><a href="{{ group.get_absolute_url }}">
-                {% trans "Summary" %}</a></li>
-            <li><a href="{% url settlement-list group.slug %}">
-                {% trans "Settlements" %}</a></li>
-            <li><a href="{% url transaction-list-group group.slug %}">
-                {% trans "Transactions" %}</a></li>
-            {% include "common/group_action.html" %}
-        </ul>
-    {% endif %}
+    <ul class="menulist">
+        <li><a href="{{ group.get_absolute_url }}">
+            {% trans "Summary" %}</a></li>
+        <li><a href="{% url settlement-list group.slug %}">
+            {% trans "Settlements" %}</a></li>
+        <li><a href="{% url transaction-list-group group.slug %}">
+            {% trans "Transactions" %}</a></li>
+        {% include "common/group_action.html" %}
+    </ul>
 
     {% if account %}
         <h3>&laquo;{{ account.name }}&raquo;</h3>
