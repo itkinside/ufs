@@ -60,9 +60,16 @@ def transaction_list(request, group, account=None, page='1',
 
     user_account = group.account_set.get(owner=request.user)
 
+    transaction_list = (account or group).transaction_set_with_rejected.select_related()
+
+    # FIXME: This lookup should be done via TransactionEntry as this will
+    # greatly reduce the number of lookups needed, however this makes using the
+    # generic view hard/imposible.
+    #transaction_list = TransactionEntry.objects.filter(account__group=group).select_related(depth=1)
+
     # Pass on to generic view
     response = object_list(request,
-        (account or group).transaction_set_with_rejected.select_related(),
+        transaction_list,
         paginate_by=20,
         page=page,
         allow_empty=True,

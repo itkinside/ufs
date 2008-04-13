@@ -26,6 +26,12 @@ class HideNode(Node):
         entry = self.entry.resolve(context)
         value = Decimal(self.value.resolve(context))
 
+        # FIXME this is for debuging please remove (ask adamcik)
+        if value == 0:
+            return ''
+        else:
+            return value
+
         user_account = context.get('user_account', None)
 
         # FIXME this is the correct check, but _way_ to instensive as far as
