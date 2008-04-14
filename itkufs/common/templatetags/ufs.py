@@ -26,33 +26,12 @@ class HideNode(Node):
         entry = self.entry.resolve(context)
         value = Decimal(self.value.resolve(context))
 
-        # FIXME this is for debuging please remove (ask adamcik)
-        if value == 0:
-            return ''
-        else:
-            return value
-
-        user_account = context.get('user_account', None)
-
         # FIXME this is the correct check, but _way_ to instensive as far as
         # the db is concerened
-        in_transaction = bool(entry.transaction.entry_set.filter(account=user_account).count() == 1)
-
-        if context.get('is_admin', False):
-            show = True
-        elif user_account == entry.account:
-            show = True
-        elif not entry.account.is_user_account() and in_transaction:
-            show = True
-        elif entry.transaction.user_transaction and in_transaction:
-            show = True
-        else:
-            show = False
+        #in_transaction = bool(entry.transaction.entry_set.filter(account=user_account).count() == 1)
 
         if value == 0:
             return u''
-        elif show:
-            return u'%0.2f' % value
-        else:
-            return u'-'
+
+        return u'%0.2f' % value
 

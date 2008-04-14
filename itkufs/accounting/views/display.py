@@ -41,7 +41,6 @@ def settlement_details(request, group, settlement, is_admin=False):
         extra_context={
             'is_admin': is_admin,
             'group': group,
-            'user_account': group.account_set.get(owner=request.user),
         },
         template_object_name='settlement')
     populate_xheaders(request, response, Settlement, settlement.id)
@@ -57,8 +56,6 @@ def transaction_list(request, group, account=None, page='1',
     if account and not is_owner and not is_admin:
         return HttpResponseForbidden(
             _('Forbidden if not account owner or group admin.'))
-
-    user_account = group.account_set.get(owner=request.user)
 
     transaction_list = (account or group).transaction_set_with_rejected.select_related()
 
@@ -79,7 +76,6 @@ def transaction_list(request, group, account=None, page='1',
             'is_owner': is_owner,
             'group': group,
             'account': account,
-            'user_account': user_account,
         },
         template_object_name='transaction')
     populate_xheaders(request, response, Group, group.id)
@@ -105,7 +101,6 @@ def transaction_details(request, group, transaction, is_admin=False):
         extra_context={
             'is_admin': is_admin,
             'group': group,
-            'user_account': group.account_set.get(owner=request.user),
         },
         template_object_name='transaction')
     populate_xheaders(request, response, Transaction, transaction.id)
