@@ -84,7 +84,7 @@ def transfer(request, group, account=None, transfer_type=None,
 
         bank_account = group.roleaccount_set.get(role=RoleAccount.BANK_ACCOUNT)
 
-        transaction = Transaction(group=group, user_transaction=True)
+        transaction = Transaction(group=group)
         # FIXME: save() shouldn't be need if we figure out a reasonable hack
         transaction.save()
 
@@ -215,13 +215,11 @@ def reject_transactions(request, group, transaction=None, is_admin=False):
         to_be_rejected = group.pending_transaction_set.filter(id__in=to_be_rejected)
     elif transaction is not None:
         data = None
-        # Ensure that this is a user_transaction and the owner of the
-        # account is the only one that can access this view
-        # FIXME allow admin to use this?
         try:
+            # FIXME add count == 0 check for log_set__account__owner != request.user
+            # FIXME add can_reject to transaction
             to_be_rejected = [group.pending_transaction_set.get(
-                id=transaction.id, user_transaction=True,
-                entry_set__account__owner=request.user)]
+                id=transaction.id, entry_set__account__owner=request.user)]
         except Transaction.DoesNotExist:
             raise Http404
     else:
