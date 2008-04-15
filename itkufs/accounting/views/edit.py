@@ -122,10 +122,12 @@ def transfer(request, group, account=None, transfer_type=None,
             transaction.set_pending(user=request.user, message=details)
 
             if amount <= account.user_balance() - (group.block_limit or 0):
-                request.user.message_set.create(
-                    message=_('Your transaction has been added,'
-                        + 'but your group admin has to commit it.'))
                 transaction.set_committed(user=request.user)
+            else:
+                request.user.message_set.create(message=_(
+                      'Your transaction has been added,'
+                    + 'but your group admin has to commit it.'))
+
 
         else:
             return HttpResponseForbidden(_('Forbidden if not group admin.'))
