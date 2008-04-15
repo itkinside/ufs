@@ -32,4 +32,3 @@ def debug(request):
         from django.db import connection
         context_extras['sql_queries'] = connection.queries
     return context_extras
-

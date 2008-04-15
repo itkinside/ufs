@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.xheaders import populate_xheaders
+from django.db.models import Q
 from django.http import HttpResponseForbidden
 from django.utils.translation import ugettext as _
 from django.views.generic.list_detail import object_list, object_detail
@@ -57,7 +58,12 @@ def transaction_list(request, group, account=None, page='1',
         return HttpResponseForbidden(
             _('Forbidden if not account owner or group admin.'))
 
-    transaction_list = (account or group).transaction_set_with_rejected.select_related()
+    transaction_list = (account or group).transaction_set_with_rejected
+
+    if not is_admin:
+        transaction_list = transaction_list.filter(Q(private=False) | Q(entry_set__account__owner=request.user))
+
+    transaction_list = transaction_list.select_related()
 
     # FIXME: This lookup should be done via TransactionEntry as this will
     # greatly reduce the number of lookups needed, however this makes using the
@@ -76,6 +82,7 @@ def transaction_list(request, group, account=None, page='1',
             'is_owner': is_owner,
             'group': group,
             'account': account,
+            'user_account': group.account_set.get(owner=request.user),
         },
         template_object_name='transaction')
     populate_xheaders(request, response, Group, group.id)

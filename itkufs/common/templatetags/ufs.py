@@ -21,17 +21,14 @@ class HideNode(Node):
         self.entry = Variable(entry)
 
     def render(self, context):
-        # FIXME this needs to be documentet and explainded alot better
-        # FIXME store transaction with select related to reduce query count
         entry = self.entry.resolve(context)
         value = Decimal(self.value.resolve(context))
-
-        # FIXME this is the correct check, but _way_ to instensive as far as
-        # the db is concerened
-        #in_transaction = bool(entry.transaction.entry_set.filter(account=user_account).count() == 1)
 
         if value == 0:
             return u''
 
-        return u'%0.2f' % value
+        if context.get('is_admin',False) or context.get('user_account',None) == entry.account:
+            return u'%0.2f' % value
+        else:
+            return u'-'
 
