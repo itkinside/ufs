@@ -56,8 +56,8 @@
         <th>{% trans "Debit" %}</th>
         <th>{% trans "Credit" %}</th>
     </tr>
-
-    {% for e in transaction.entry_set.select_related %}
+    {% filter_entries transaction entry_list %}
+    {% for e in entry_list %}
     <tr class="{% cycle 'evenrow' 'oddrow' %}
         {% if transaction.is_rejected %}rejected{% else %}
         {% if transaction.is_pending %}pending{% endif %}{% endif %}">
@@ -69,10 +69,10 @@
             {% endif %}
         </td>
         <td class="align_right debit">
-            {% hide e e.debit %}
+            {{ e.debit|default:"" }}
         </td>
         <td class="align_right credit">
-            {% hide e e.credit %}
+            {{ e.credit|default:"" }}
         </td>
     </tr>
     {% endfor %}

@@ -1,6 +1,6 @@
 from decimal import Decimal, DecimalException
 
-from django.template import Library, Variable, TemplateSyntaxError, Node
+from django.template import Library, Variable, TemplateSyntaxError, Node, VariableDoesNotExist
 from django.db.models import Q
 
 register = Library()
@@ -28,7 +28,12 @@ class HideNode(Node):
     def render(self, context):
         transaction = Variable(self.transaction).resolve(context)
         is_admin = Variable('is_admin').resolve(context)
-        account = Variable('account').resolve(context)
+        try:
+            account = Variable('account').resolve(context)
+        except VariableDoesNotExist:
+            if not is_admin:
+                account = Variable('user').resolve(context).account_set.get(group=Variable('group').resolve(context))
+                context['account'] = account
 
         entry_list = transaction.entry_set.select_related()
 
