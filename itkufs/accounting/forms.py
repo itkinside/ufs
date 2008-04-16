@@ -55,8 +55,6 @@ class EntryForm(CustomForm):
 
 class DepositWithdrawForm(forms.Form):
     amount = forms.DecimalField(label=_('Amount'), required=True, min_value=0)
-    private = forms.BooleanField(label=_('Private'), required=True,
-        help_text=_('Make transfer hidden from other users'))
     details = forms.CharField(label=_('Details'), required=False,
         widget=forms.widgets.Textarea(attrs={'rows': 2}))
 

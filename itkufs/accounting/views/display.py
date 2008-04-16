@@ -58,17 +58,10 @@ def transaction_list(request, group, account=None, page='1',
         return HttpResponseForbidden(
             _('Forbidden if not account owner or group admin.'))
 
-    transaction_list = (account or group).transaction_set_with_rejected
+    transaction_list = (account or group).transaction_set_with_rejected.select_related()
 
-    if not is_admin:
-        transaction_list = transaction_list.filter(Q(private=False) | Q(entry_set__account__owner=request.user))
-
-    transaction_list = transaction_list.select_related()
-
-    # FIXME: This lookup should be done via TransactionEntry as this will
-    # greatly reduce the number of lookups needed, however this makes using the
-    # generic view hard/imposible.
-    #transaction_list = TransactionEntry.objects.filter(account__group=group).select_related(depth=1)
+    if account:
+        transaction_list = transaction_list.filter(entry_set__account=account)
 
     # Pass on to generic view
     response = object_list(request,

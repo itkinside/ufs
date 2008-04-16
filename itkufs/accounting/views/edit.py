@@ -78,14 +78,13 @@ def transfer(request, group, account=None, transfer_type=None,
     if request.method == 'POST' and form.is_valid():
         amount = form.cleaned_data['amount']
         details = form.cleaned_data['details'].strip()
-        private = form.cleaned_data['private']
 
         if details == '':
             details = None
 
         bank_account = group.roleaccount_set.get(role=RoleAccount.BANK_ACCOUNT)
 
-        transaction = Transaction(group=group, private=private)
+        transaction = Transaction(group=group)
         # FIXME: save() shouldn't be need if we figure out a reasonable hack
         transaction.save()
 
