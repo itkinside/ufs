@@ -1,34 +1,63 @@
-from django.template import Library, Variable, TemplateSyntaxError, Node
 from decimal import Decimal, DecimalException
+
+from django.template import Library, Variable, TemplateSyntaxError, Node
+from django.db.models import Q
 
 register = Library()
 
-@register.tag(name="hide")
+@register.tag(name="filter_entries")
 def do_hide(parser, token):
     try:
         # split_contents() knows not to split quoted strings.
-        tag_name, entry, value = token.split_contents()
+        tag_name, transaction, entry_list = token.split_contents()
     except ValueError:
-        raise TemplateSyntaxError, "%r tag requires exactly two arguments" % token.contents.split()[0]
-    if value[0] == value[-1] and value[0] in ('"', "'"):
+        raise TemplateSyntaxError, "%r tag requires exactly one arguments" % token.contents.split()[0]
+
+    if transaction[0] == transaction[-1] and transaction[0] in ('"', "'"):
+        raise TemplateSyntaxError, "%r tag only takes variables" % tag_name
+    if entry_list[0] == entry_list[-1] and entry_list[0] in ('"', "'"):
         raise TemplateSyntaxError, "%r tag only takes variables" % tag_name
 
-    return HideNode(entry, value)
+    return HideNode(transaction, entry_list)
 
 class HideNode(Node):
-    def __init__(self, entry, value):
-        self.value = Variable(value)
-        self.entry = Variable(entry)
+    def __init__(self, transaction, entry_list):
+        self.transaction = transaction
+        self.entry_list = entry_list
 
     def render(self, context):
-        entry = self.entry.resolve(context)
-        value = Decimal(self.value.resolve(context))
+        transaction = Variable(self.transaction).resolve(context)
+        is_admin = Variable('is_admin').resolve(context)
+        account = Variable('account').resolve(context)
 
-        if value == 0:
-            return u''
+        entry_list = transaction.entry_set.select_related()
 
-        if context.get('is_admin',False) or context.get('user_account',None) == entry.account:
-            return u'%0.2f' % value
-        else:
-            return u'-'
+        if account and not transaction.entry_count_sql == 2 and not is_admin:
+            entry_list = entry_list.extra(
+                select={
+                    'user_credit': """SELECT credit > 0 FROM accounting_transactionentry
+                                      WHERE transaction_id = %d AND account_id = %d"""
+                    % (transaction.id, account.id),
+                },
+            )
+
+            # Loop through entries not adding those that are on the samme side
+            # as the current user. Blank out values of the entry on the other
+            # side
+            tmp = []
+            for e in entry_list:
+                if e.account == account:
+                    tmp.append(e)
+                elif e.user_credit and e.debit:
+                    e.debit = '-'
+                    tmp.append(e)
+                elif not e.user_credit and e.credit:
+                    e.credit = '-'
+                    tmp.append(e)
+            entry_list = tmp
+
+        # Set what ever value self.entry_list is to our computed value
+        context[self.entry_list] = entry_list
+
+        return ''
 

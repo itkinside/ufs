@@ -10,11 +10,11 @@
         <th>{% trans "Details" %}</th>
     </tr>
     {% for t in transaction_list %}
-    {% with t.entry_count_sql as rowspan %}
+    {% filter_entries t entry_list %}
     <tr>
-        {% for e in t.entry_set.select_related %}
+        {% for e in entry_list %}
             {% if forloop.first %}
-                <td rowspan="{{ rowspan }}" class="status
+                <td rowspan="{{ entry_list|length }}" class="status
                     {% if t.is_rejected %}
                         rejected
                     {% else %}
@@ -39,19 +39,18 @@
                 {% endif %}
             </td>
             <td class="number {{ tdclass }}">
-                {% hide e e.debit %}
+                {{ e.debit|default:"" }}
             </td>
             <td class="number {{ tdclass }}">
-                {% hide e e.credit %}
+                {{ e.credit|default:"" }}
             </td>
             {% if forloop.first %}
-                <td rowspan="{{ rowspan }}" class="details">
+                <td rowspan="{{ entry_list|length }}" class="details">
                     <a href="{{ t.get_absolute_url }}">Details</a>
                 </td>
             {% endif %}
             </tr>
         {% endfor %}
     </tr>
-    {% endwith %}
     {% endfor %}
 </table>
