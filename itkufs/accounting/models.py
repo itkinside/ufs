@@ -123,7 +123,9 @@ class AccountManager(models.Manager):
                 SELECT accounting_group.block_limit
                 FROM accounting_group
                 WHERE accounting_group.id = accounting_account.group_id
-                """
+                """,
+            'is_user_account_sql':
+                """accounting_account.owner_id IS NOT NULL AND accounting_account.type = '%s'""" % Account.LIABILITY_ACCOUNT
             }
         )
 
@@ -219,6 +221,8 @@ class Account(models.Model):
 
     def is_user_account(self):
         """Returns true if a user account"""
+        if 'is_user_account_sql' in self:
+            return self.is_user_account_sql
         return self.owner and self.type == self.LIABILITY_ACCOUNT
 
     def is_blocked(self):
