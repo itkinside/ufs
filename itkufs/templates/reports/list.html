@@ -16,33 +16,37 @@
 
 <body>
 
-<p class="hidden">{% trans "<b>Invalid</b> list, do not use!" %} {% trans "Remember to use a web-browser that supports CSS2, ie" %} <a href="http://www.getfirefox.com/">Firefox</a>.</p>
+<p class="hidden">
+    {% trans "<b>Invalid</b> list, do not use!" %}
+    {% trans "Remember to use a web-browser that supports CSS2, ie" %}
+    <a href="http://www.getfirefox.com/">Firefox</a>.
+</p>
 
 {% with list.column_set.all as columns %}
 {% with list.total_width as width %}
 {% with list.total_column_count as colspan %}
 
 <div id="top" class="noprint">
-<ul id="menu">
-    <li>
-        <a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">
-        {% trans "My account" %}</a>
-    </li>
+    <ul id="menu">
+        <li>
+            <a href="{% url account-summary group.slug,request.session.my_account.slug %}">
+            {% trans "My account" %}</a>
+        </li>
 
-    <li>
-        <a href="{% url group-summary request.session.my_account.group.slug %}">
-        {% trans "My group" %}{% if is_admin and group.not_payed_transaction_set.count %}*{% endif %}</a>
-    </li>
-{% if is_admin %}
-    <li class="admin"><a href="{% url edit-list group.slug,list.slug %}">
-        {% trans "Edit" %}</a></li>
-    <li class="admin"><a href="{% url delete-list group.slug,list.slug %}">
-        {% trans "Delete" %}</a></li>
-{% endif %}
-</ul>
+        <li>
+            <a href="{% url group-summary request.session.my_account.group.slug %}">
+            {% trans "My group" %}{% if is_admin and group.not_payed_transaction_set.count %}*{% endif %}</a>
+        </li>
+    {% if is_admin %}
+        <li class="admin"><a href="{% url edit-list group.slug,list.slug %}">
+            {% trans "Edit" %}</a></li>
+        <li class="admin"><a href="{% url delete-list group.slug,list.slug %}">
+            {% trans "Delete" %}</a></li>
+    {% endif %}
+    </ul>
 
 <p id="reminder">
-    {% trans "Remember to print with backgrounds and landscape orientation." %}
+    {% trans "Remember to print with backgrounds and landscape orientation if preferred." %}
 </p>
 </div>
 
@@ -66,56 +70,58 @@
         <tr>
             <th style="width: {% widthratio list.account_width width 100 %}%">{% trans "Name" %}</th>
             {% ifnotequal list.balance_width 0 %}
-            <th style="width: {% widthratio list.balance_width width 100 %}%">{% trans "Balance" %}</th>
+                <th style="width: {% widthratio list.balance_width width 100 %}%">{% trans "Balance" %}</th>
             {% endifnotequal %}
-        {% for column in columns %}
-            <th style="width: {% widthratio column.width width 100 %}%">{{ column.name }}</th>
-        {% endfor %}
+            {% for column in columns %}
+                <th style="width: {% widthratio column.width width 100 %}%">{{ column.name }}</th>
+            {% endfor %}
         </tr>
     </thead>
 
     <tbody>
     {% for account in accounts %}
         {% with account.is_blocked as blocked %}
-        <tr class="{% cycle evenrow,oddrow as row %}{% if blocked and not list.ignore_blocked %} blacklisted{% endif %}">
-            <th class="name"{% if list.double %}{% if not blocked or list.ignore_blocked %} rowspan="2"{% endif %}{% endif %}>
-                {% if is_admin %}
-                    <a href="{% url edit-account group.slug,account.slug %}">{{ account.name }}</a>
-                {% else %}
-                    {{ account.name }}
+            <tr class="{% cycle evenrow,oddrow as row %}{% if blocked and not list.ignore_blocked %} blacklisted{% endif %}">
+                <th class="name"{% if list.double %}{% if not blocked or list.ignore_blocked %} rowspan="2"{% endif %}{% endif %}>
+                    {% if is_admin %}
+                        <a href="{% url edit-account group.slug,account.slug %}">{{ account.name }}</a>
+                    {% else %}
+                        {{ account.name }}
+                    {% endif %}
+                </th>
+                {% ifnotequal list.balance_width 0 %}
+                    <td class="balance"{% if list.double %}{% if not blocked or list.ignore_blocked %} rowspan="2"{% endif %}{% endif %}>
+                        {{ account.user_balance|floatformat:2 }}
+                    </td>
+                {% endifnotequal %}
+                {% for item in columns %}
+                    {% if not blocked or list.ignore_blocked %}
+                        <td{% if list.double %} class="double"{% endif %}></td>
+                    {% else %}
+                        <td><img src="{% url media "images/black.png" %}"/></td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            {% if list.double %}
+                {% if list.ignore_blocked or not blocked %}
+                    <tr class="{{ row }}">
+                        {% for item in columns %}
+                            {% if not blocked or list.ignore_blocked %}
+                                <td></td>
+                            {% else %}
+                               <td><img src="{% url media "images/black.png" %}"/></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
                 {% endif %}
-            </th>
-            {% ifnotequal list.balance_width 0 %}
-            <td class="balance"{% if list.double %}{% if not blocked or list.ignore_blocked %} rowspan="2"{% endif %}{% endif %}>{{ account.user_balance|floatformat:2 }}</td>
-            {% endifnotequal %}
-            {% for item in columns %}
-                {% if not blocked or list.ignore_blocked %}
-            <td{% if list.double %} class="double"{% endif %}></td>
-                {% else %}
-            <td><img src="{% url media "images/black.png" %}"/></td>
-                {% endif %}
-        {% endfor %}
-        </tr>
-        {% if list.double %}
-        {% if list.ignore_blocked or not blocked %}
-        <tr class="{{ row }}">
-            {% for item in columns %}
-                {% if not blocked or list.ignore_blocked %}
-            <td></td>
-                {% else %}
-            <td><img src="{% url media "images/black.png" %}"/></td>
-                {% endif %}
-        {% endfor %}
-        </tr>
-        {% endif %}
-        {% endif %}
+            {% endif %}
         {% endwith %}
     {% endfor %}
     </tbody>
 
     <tfoot>
         <tr>
-        <td colspan="{{ colspan }}">
+            <td colspan="{{ colspan }}">
                 {% trans "Blacklisted accounts are marked with" %}
                 <img src="{% url media "images/black.png" %}"/>
            </td>
