@@ -7,16 +7,33 @@ class GroupTestCase(unittest.TestCase):
     # FIXME: Test all group properties
 
     def setUp(self):
-        self.user = User(username='alice')
-        self.user.save()
+        self.users = [
+            User(username='alice'),
+            User(username='bob'),
+            User(username='darth'),
+        ]
+        for user in self.users:
+            user.save()
 
         self.group = Group(name='Group 1', slug='group1')
         self.group.save()
 
         self.accounts = [
-            Account(name='Account 1', slug='account1', group=self.group),
-            Account(name='Account 2', slug='account2', group=self.group),
-            Account(name='Account 3', slug='account3', group=self.group),
+            # Normal user account
+            Account(name='Account 1', slug='account1', group=self.group,
+                owner=self.users[0]),
+            # Normal user account
+            Account(name='Account 2', slug='account2', group=self.group,
+                owner=self.users[1]),
+            # Inactive user account
+            Account(name='Account 3', slug='account3', group=self.group,
+                owner=self.users[2], active=False),
+            # Group account
+            Account(name='Account 4', slug='account4', group=self.group,
+                type=Account.ASSET_ACCOUNT),
+            # Inactive group account
+            Account(name='Account 5', slug='account5', group=self.group,
+                type=Account.ASSET_ACCOUNT, active=False),
         ]
         for account in self.accounts:
             account.save()
@@ -32,13 +49,13 @@ class GroupTestCase(unittest.TestCase):
                 TransactionEntry(account=self.accounts[0], credit=100))
             transaction.entry_set.add(
                 TransactionEntry(account=self.accounts[1], debit=100))
-            transaction.set_pending(user=self.user)
+            transaction.set_pending(user=self.users[0])
 
         self.transactions['Undef'] = Transaction(group=self.group)
         self.transactions['Undef'].save()
 
-        self.transactions['Com'].set_committed(user=self.user)
-        self.transactions['Rej'].set_rejected(user=self.user)
+        self.transactions['Com'].set_committed(user=self.users[1])
+        self.transactions['Rej'].set_rejected(user=self.users[1])
 
     def tearDown(self):
         for transaction in self.transactions.values():
@@ -46,7 +63,39 @@ class GroupTestCase(unittest.TestCase):
         for account in self.accounts:
             account.delete()
         self.group.delete()
-        self.user.delete()
+        for user in self.users:
+            user.delete()
+
+    def testUnicode(self):
+        """Checks that __unicode__() returns group name"""
+
+        self.assertEquals(self.group.__unicode__(), self.group.name)
+
+    def testEmptySlugRaisesError(self):
+        """Checks that saving a group without a slug results in a ValueError"""
+
+        self.group.slug = ''
+        self.assertRaises(ValueError, self.group.save)
+
+    def testUserAccountSet(self):
+        """Checks that get_user_account_set returns all user accounts"""
+
+        result = self.group.get_user_account_set()
+        self.assert_(self.accounts[0] in result)
+        self.assert_(self.accounts[1] in result)
+        self.assert_(self.accounts[2] in result)
+        self.assert_(self.accounts[3] not in result)
+        self.assert_(self.accounts[4] not in result)
+
+    def testGroupAccountSet(self):
+        """Checks that get_group_account_set returns all group accounts"""
+
+        result = self.group.get_group_account_set()
+        self.assert_(self.accounts[0] not in result)
+        self.assert_(self.accounts[1] not in result)
+        self.assert_(self.accounts[2] not in result)
+        self.assert_(self.accounts[3] in result)
+        self.assert_(self.accounts[4] in result)
 
     ### Transaction set tests
     # Please keep in sync with Account's set tests
@@ -87,7 +136,6 @@ class GroupTestCase(unittest.TestCase):
         set = self.group.rejected_transaction_set
         self.assertEqual(set.count(), 1)
 
-    #FIXME add user_account testcase and group account testcase!
 
 class AccountTestCase(unittest.TestCase):
     # FIXME: Test all account properties
