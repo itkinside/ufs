@@ -86,7 +86,6 @@ INSTALLED_APPS = (
     'django.contrib.databrowse',
     'itkufs.common',
     'itkufs.accounting',
-    'itkufs.inventory',
     'itkufs.reports',
 )
 
@@ -107,6 +106,9 @@ LANGUAGES = (
 LOCALE_PATHS = (
     PROJECT_BASE + 'itkufs/locale/',
 )
+
+# Test runner
+TEST_RUNNER = 'itkufs.common.test_runner.run_tests_with_coverage'
 
 # Development version numbering
 BZR_BRANCH_DIR = PROJECT_BASE
