@@ -34,18 +34,7 @@ This release
 
 Done
 ~~~~
-- (adamcik) Complete edit-transaction
-- (adamcik) change_to requires fix
-- Should user/group_account_set only contain active accounts or all? (decided
-  to only return active)
-- multiple pending log entries?
-- User rejection of ones own pending withdrawals and deposits. (how can we tell
-  which transactions are in this category?)
-- (adamcik) Add the flag Settlement.closed.
-- (jodal) Implement edit-settlement, settlement-list and settlement-details.
-- (adamcik) If admin_only is set we should hide the parts of a large
-  multitransaction that is not linked to user, hiding at least numbers or
-  entire users.
+*lots*
 
 Wontfix
 ~~~~~~~
