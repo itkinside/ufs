@@ -221,7 +221,7 @@ class Account(models.Model):
 
     def is_user_account(self):
         """Returns true if a user account"""
-        if 'is_user_account_sql' in self:
+        if hasattr(self, 'is_user_account_sql'):
             return self.is_user_account_sql
         return self.owner and self.type == self.LIABILITY_ACCOUNT
 
