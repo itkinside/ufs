@@ -48,13 +48,16 @@ class Group(models.Model):
             bank = Account(name=ugettext('Bank'), slug='bank',
                            type=Account.ASSET_ACCOUNT, group=self)
             bank.save()
+            bank_role = RoleAccount(
+                group=self, role=RoleAccount.BANK_ACCOUNT, account=bank)
+            bank_role.save()
+
             cash = Account(name=ugettext('Cash'), slug='cash',
                            type=Account.ASSET_ACCOUNT, group=self)
             cash.save()
-
-            self.bank_account = bank
-            self.cash_account = cash
-            super(Group, self).save()
+            cash_role = RoleAccount(
+                group=self, role=RoleAccount.CASH_ACCOUNT, account=cash)
+            cash_role.save()
 
     def get_user_account_set(self):
         """Returns all user accounts belonging to group"""

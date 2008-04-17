@@ -34,6 +34,12 @@ class GroupTestCase(unittest.TestCase):
             # Inactive group account
             Account(name='Account 5', slug='account5', group=self.group,
                 type=Account.ASSET_ACCOUNT, active=False),
+            # Bank account
+            self.group.roleaccount_set.get(
+                role=RoleAccount.BANK_ACCOUNT).account,
+            # Cash account
+            self.group.roleaccount_set.get(
+                role=RoleAccount.CASH_ACCOUNT).account,
         ]
         for account in self.accounts:
             account.save()
@@ -80,26 +86,31 @@ class GroupTestCase(unittest.TestCase):
     def testUserAccountSet(self):
         """Checks that get_user_account_set returns all user accounts"""
 
-        result = self.group.get_user_account_set()
-        self.assert_(self.accounts[0] in result)
-        self.assert_(self.accounts[1] in result)
-        self.assert_(self.accounts[2] in result)
-        self.assert_(self.accounts[3] not in result)
-        self.assert_(self.accounts[4] not in result)
+        set = self.group.get_user_account_set()
+        self.assertEqual(set.count(), 3)
+        self.assert_(self.accounts[0] in set)
+        self.assert_(self.accounts[1] in set)
+        self.assert_(self.accounts[2] in set)
+        self.assert_(self.accounts[3] not in set)
+        self.assert_(self.accounts[4] not in set)
+        self.assert_(self.accounts[5] not in set)
+        self.assert_(self.accounts[6] not in set)
 
     def testGroupAccountSet(self):
         """Checks that get_group_account_set returns all group accounts"""
 
-        result = self.group.get_group_account_set()
-        self.assert_(self.accounts[0] not in result)
-        self.assert_(self.accounts[1] not in result)
-        self.assert_(self.accounts[2] not in result)
-        self.assert_(self.accounts[3] in result)
-        self.assert_(self.accounts[4] in result)
+        set = self.group.get_group_account_set()
+        self.assertEqual(set.count(), 4)
+        self.assert_(self.accounts[0] not in set)
+        self.assert_(self.accounts[1] not in set)
+        self.assert_(self.accounts[2] not in set)
+        self.assert_(self.accounts[3] in set)
+        self.assert_(self.accounts[4] in set)
+        self.assert_(self.accounts[5] in set)
+        self.assert_(self.accounts[6] in set)
 
     ### Transaction set tests
     # Please keep in sync with Account's set tests
-    # FIXME: Check more than count in the set tests?
 
     def testTransactionSet(self):
         """Checks that transaction_set returns all transactions that is not
@@ -107,6 +118,9 @@ class GroupTestCase(unittest.TestCase):
 
         set = self.group.transaction_set
         self.assertEqual(set.count(), 2)
+        self.assert_(self.transactions['Pen'] in set)
+        self.assert_(self.transactions['Com'] in set)
+        self.assert_(self.transactions['Rej'] not in set)
 
     def testTransactionSetWithRejected(self):
         """Checks that transaction_set_with_rejected returns all
@@ -114,6 +128,9 @@ class GroupTestCase(unittest.TestCase):
 
         set = self.group.transaction_set_with_rejected
         self.assertEqual(set.count(), 3)
+        self.assert_(self.transactions['Pen'] in set)
+        self.assert_(self.transactions['Com'] in set)
+        self.assert_(self.transactions['Rej'] in set)
 
     def testPendingTransactionSet(self):
         """Checks that pending_transaction_set returns all pending
@@ -121,6 +138,9 @@ class GroupTestCase(unittest.TestCase):
 
         set = self.group.pending_transaction_set
         self.assertEqual(set.count(), 1)
+        self.assert_(self.transactions['Pen'] in set)
+        self.assert_(self.transactions['Com'] not in set)
+        self.assert_(self.transactions['Rej'] not in set)
 
     def testCommittedTransactionSet(self):
         """Checks that committed_transaction_set returns all committed
@@ -128,6 +148,9 @@ class GroupTestCase(unittest.TestCase):
 
         set = self.group.committed_transaction_set
         self.assertEqual(set.count(), 1)
+        self.assert_(self.transactions['Pen'] not in set)
+        self.assert_(self.transactions['Com'] in set)
+        self.assert_(self.transactions['Rej'] not in set)
 
     def testRejectedTransactionSet(self):
         """Checks that rejected_transaction_set returns all rejected
@@ -135,6 +158,9 @@ class GroupTestCase(unittest.TestCase):
 
         set = self.group.rejected_transaction_set
         self.assertEqual(set.count(), 1)
+        self.assert_(self.transactions['Pen'] not in set)
+        self.assert_(self.transactions['Com'] not in set)
+        self.assert_(self.transactions['Rej'] in set)
 
 
 class AccountTestCase(unittest.TestCase):
