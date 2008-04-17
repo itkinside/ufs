@@ -62,6 +62,7 @@ class GroupForm(CustomModelForm):
         exclude = ('slug',)
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
         super(GroupForm, self).__init__(*args, **kwargs)
         if 'instance' not in kwargs or kwargs['instance'].logo == '':
             del self.fields['delete_logo']
@@ -69,6 +70,9 @@ class GroupForm(CustomModelForm):
     def clean_admins(self):
         if len(self.cleaned_data['admins']) == 0:
             raise forms.ValidationError(_('Group must have at least one admin'))
+
+        if self.user and self.user not in self.cleaned_data['admins']:
+            raise forms.ValidationError(_("You can't remove yourself as admin"))
 
     def save(self, **kwargs):
         original_commit = kwargs.pop('commit', True)

@@ -19,7 +19,7 @@ def edit_group(request, group, is_admin=False):
     old_logo = group.get_logo_filename()
 
     if request.method == 'POST':
-        form = GroupForm(data=request.POST, files=request.FILES, instance=group)
+        form = GroupForm(data=request.POST, files=request.FILES, instance=group, user=request.user)
 
         if form.is_valid():
             form.save()
