@@ -3,6 +3,7 @@ from django.newforms.models import ModelForm
 from django.newforms.forms import BoundField, Form
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
 from itkufs.accounting.models import Group, Account, RoleAccount
 
@@ -64,6 +65,10 @@ class GroupForm(CustomModelForm):
         super(GroupForm, self).__init__(*args, **kwargs)
         if 'instance' not in kwargs or kwargs['instance'].logo == '':
             del self.fields['delete_logo']
+
+    def clean_admins(self):
+        if len(self.cleaned_data['admins']) == 0:
+            raise forms.ValidationError(_('Group must have at least one admin'))
 
     def save(self, **kwargs):
         original_commit = kwargs.pop('commit', True)
