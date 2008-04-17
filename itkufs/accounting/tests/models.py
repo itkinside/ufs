@@ -1,11 +1,9 @@
 import unittest
-from datetime import datetime as dt
+import datetime
 
 from itkufs.accounting.models import *
 
 class GroupTestCase(unittest.TestCase):
-    # FIXME: Test all group properties
-
     def setUp(self):
         self.users = [
             User(username='alice'),
@@ -75,7 +73,12 @@ class GroupTestCase(unittest.TestCase):
     def testUnicode(self):
         """Checks that __unicode__() returns group name"""
 
-        self.assertEquals(self.group.__unicode__(), self.group.name)
+        self.assertEquals(self.group.name, self.group.__unicode__())
+
+    def testAbsoluteUrl(self):
+        """Checks that get_absolute_url() contains group slug"""
+
+        self.assert_(self.group.slug in self.group.get_absolute_url())
 
     def testEmptySlugRaisesError(self):
         """Checks that saving a group without a slug results in a ValueError"""
@@ -164,19 +167,40 @@ class GroupTestCase(unittest.TestCase):
 
 
 class AccountTestCase(unittest.TestCase):
-    # FIXME: Test all account properties
-
     def setUp(self):
-        self.user = User(username='alice')
-        self.user.save()
+        self.users = [
+            User(username='alice'),
+            User(username='bob'),
+            User(username='darth'),
+        ]
+        for user in self.users:
+            user.save()
 
         self.group = Group(name='Group 1', slug='group1')
         self.group.save()
 
         self.accounts = [
-            Account(name='Account 1', slug='account1', group=self.group),
-            Account(name='Account 2', slug='account2', group=self.group),
-            Account(name='Account 3', slug='account3', group=self.group),
+            # Normal user account
+            Account(name='Account 1', slug='account1', group=self.group,
+                owner=self.users[0]),
+            # Normal user account
+            Account(name='Account 2', slug='account2', group=self.group,
+                owner=self.users[1]),
+            # Inactive user account
+            Account(name='Account 3', slug='account3', group=self.group,
+                owner=self.users[2], active=False),
+            # Group account
+            Account(name='Account 4', slug='account4', group=self.group,
+                type=Account.ASSET_ACCOUNT),
+            # Inactive group account
+            Account(name='Account 5', slug='account5', group=self.group,
+                type=Account.ASSET_ACCOUNT, active=False),
+            # Bank account
+            self.group.roleaccount_set.get(
+                role=RoleAccount.BANK_ACCOUNT).account,
+            # Cash account
+            self.group.roleaccount_set.get(
+                role=RoleAccount.CASH_ACCOUNT).account,
         ]
         for account in self.accounts:
             account.save()
@@ -193,13 +217,13 @@ class AccountTestCase(unittest.TestCase):
                 TransactionEntry(account=self.accounts[0], credit=100))
             transaction.entry_set.add(
                 TransactionEntry(account=self.accounts[1], debit=100))
-            transaction.set_pending(user=self.user)
+            transaction.set_pending(user=self.users[0])
 
         self.transactions['Undef'] = Transaction(group=self.group)
         self.transactions['Undef'].save()
 
-        self.transactions['Com'].set_committed(user=self.user)
-        self.transactions['Rej'].set_rejected(user=self.user)
+        self.transactions['Com'].set_committed(user=self.users[2])
+        self.transactions['Rej'].set_rejected(user=self.users[2])
 
     def tearDown(self):
         for transaction in self.transactions.values():
@@ -207,11 +231,49 @@ class AccountTestCase(unittest.TestCase):
         for account in self.accounts:
             account.delete()
         self.group.delete()
-        self.user.delete()
+        for user in self.users:
+            user.delete()
+
+    def testUnicode(self):
+        """Checks that __unicode__() contains account and group name"""
+
+        result = self.account.__unicode__()
+        self.assert_(self.account.group.name in result)
+        self.assert_(self.account.name in result)
+
+    def testAbsoluteUrl(self):
+        """Checks that get_absolute_url() contains account and group slug"""
+
+        result = self.account.get_absolute_url()
+        self.assert_(self.account.group.slug in result)
+        self.assert_(self.account.slug in result)
+
+    def testEmptySlugRaisesError(self):
+        """Checks that saving an account without a slug results in a
+        ValueError"""
+
+        self.account.slug = ''
+        self.assertRaises(ValueError, self.account.save)
+
+    def testBalance(self):
+        """Checks that account balance is correct"""
+
+        # TODO: Add more transactions at different days and check balance
+        # inbetween using date kwarg
+
+        # FIXME: self.balance_sql does not seem to be available for unit tests
+
+        # User account after credit of 100
+        self.assertEqual(int(self.accounts[0].balance()), -100)
+        # User account after debit of 100
+        self.assertEqual(int(self.accounts[1].balance()), 100)
+        # User account balance yesterday, i.e. before any transactions
+        self.assertEqual(int(self.accounts[0].balance(
+            date=(datetime.date.today() - datetime.timedelta(1)))), 0)
+
 
     ### Transaction set tests
     # Please keep in sync with Group's set tests
-    # FIXME: Check more than count in the set tests?
 
     def testTransactionSet(self):
         """Checks that transaction_set returns all transactions that are not
@@ -219,6 +281,9 @@ class AccountTestCase(unittest.TestCase):
 
         set = self.account.transaction_set
         self.assertEqual(set.count(), 2)
+        self.assert_(self.transactions['Pen'] in set)
+        self.assert_(self.transactions['Com'] in set)
+        self.assert_(self.transactions['Rej'] not in set)
 
     def testTransactionSetWithRejected(self):
         """Checks that transaction_set_with_rejected returns all
@@ -226,6 +291,9 @@ class AccountTestCase(unittest.TestCase):
 
         set = self.account.transaction_set_with_rejected
         self.assertEqual(set.count(), 3)
+        self.assert_(self.transactions['Pen'] in set)
+        self.assert_(self.transactions['Com'] in set)
+        self.assert_(self.transactions['Rej'] in set)
 
     def testPendingTransactionSet(self):
         """Checks that pending_transaction_set returns all pending
@@ -233,6 +301,9 @@ class AccountTestCase(unittest.TestCase):
 
         set = self.account.pending_transaction_set
         self.assertEqual(set.count(), 1)
+        self.assert_(self.transactions['Pen'] in set)
+        self.assert_(self.transactions['Com'] not in set)
+        self.assert_(self.transactions['Rej'] not in set)
 
     def testCommittedTransactionSet(self):
         """Checks that committed_transaction_set returns all committed
@@ -240,6 +311,9 @@ class AccountTestCase(unittest.TestCase):
 
         set = self.account.committed_transaction_set
         self.assertEqual(set.count(), 1)
+        self.assert_(self.transactions['Pen'] not in set)
+        self.assert_(self.transactions['Com'] in set)
+        self.assert_(self.transactions['Rej'] not in set)
 
     def testRejectedTransactionSet(self):
         """Checks that rejected_transaction_set returns all rejected
@@ -247,8 +321,10 @@ class AccountTestCase(unittest.TestCase):
 
         set = self.account.rejected_transaction_set
         self.assertEqual(set.count(), 1)
+        self.assert_(self.transactions['Pen'] not in set)
+        self.assert_(self.transactions['Com'] not in set)
+        self.assert_(self.transactions['Rej'] in set)
 
-    # FIXME test that one account per user per group is enforced
 
 class TransactionTestCase(unittest.TestCase):
     def setUp(self):
@@ -266,7 +342,7 @@ class TransactionTestCase(unittest.TestCase):
         for account in self.accounts:
             account.save()
 
-        self.before = dt.now()
+        self.before = datetime.datetime.now()
 
         self.transaction = Transaction(group=self.group)
         self.transaction.save()
@@ -277,7 +353,7 @@ class TransactionTestCase(unittest.TestCase):
 
         self.transaction.set_pending(user=self.user)
 
-        self.after = dt.now()
+        self.after = datetime.datetime.now()
 
     def tearDown(self):
         self.transaction.delete()
@@ -342,9 +418,9 @@ class TransactionTestCase(unittest.TestCase):
 
         transaction = self.transaction
 
-        before = dt.now()
+        before = datetime.datetime.now()
         transaction.set_committed(user=self.user)
-        after = dt.now()
+        after = datetime.datetime.now()
 
         self.assertEqual(transaction.is_committed(), True)
         self.assertEqual(transaction.log_set.count(), 2)
@@ -361,9 +437,9 @@ class TransactionTestCase(unittest.TestCase):
         transaction = self.transaction
         self.assertEqual(transaction.is_pending(), True)
 
-        before = dt.now()
+        before = datetime.datetime.now()
         transaction.set_rejected(message='Reason for rejecting', user=self.user)
-        after = dt.now()
+        after = datetime.datetime.now()
 
         self.assertEqual(transaction.is_rejected(), True)
         self.assertEqual(transaction.log_set.count(), 2)

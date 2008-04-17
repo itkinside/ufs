@@ -109,7 +109,7 @@ class Group(models.Model):
 
 class AccountManager(models.Manager):
     def get_query_set(self):
-        return super(AccountManager,self).get_query_set().extra(
+        return super(AccountManager, self).get_query_set().extra(
             select={
             'balance_sql':
                 """
@@ -199,18 +199,18 @@ class Account(models.Model):
         super(Account, self).save()
 
     def balance(self, date=None):
-        if date:
+        if not date and hasattr(self, 'balance_sql'):
+            return self.balance_sql or 0
+        else:
+            entries = self.transactionentry_set.filter(
+                transaction__state=Transaction.COMMITTED_STATE)
+            if date is not None:
+                entries = entries.filter(transaction__date__lte=date )
             balance = 0
-            for e in self.transactionentry_set.filter(
-                transaction__date__lte=date,
-                transaction__state=Transaction.COMMITTED_STATE):
+            for e in entries:
                 balance += e.debit
                 balance -= e.credit
             return balance
-        elif self.balance_sql:
-            return self.balance_sql
-        else:
-            return 0
 
     def user_balance(self):
         """Returns account balance, but multiplies by -1 if the account is a
