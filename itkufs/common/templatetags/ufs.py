@@ -40,11 +40,15 @@ class HideNode(Node):
         if account and not transaction.entry_count_sql == 2 and not is_admin:
             entry_list = entry_list.extra(
                 select={
-                    'user_credit': """SELECT credit > 0 FROM accounting_transactionentry
+                    'user_credit': """SELECT credit > debit FROM accounting_transactionentry
                                       WHERE transaction_id = %d AND account_id = %d"""
                     % (transaction.id, account.id),
                 },
             )
+
+            # FIXME? if your account is the only credit/debit account in
+            # transaction show all debit/credit ammounts so that you know where
+            # your money went to.
 
             # Loop through entries not adding those that are on the samme side
             # as the current user. Blank out values of the entry on the other
