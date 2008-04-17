@@ -106,7 +106,7 @@ var Multiselect = {
 
 	new_parent.insert(old_parent.select('label')[0]);
 	var div = new Element('div', {'style': 'float:left'});
-	div.insert(new Element('span', {'style': 'vertical-align: top'}).update('Selected'));
+	div.insert(new Element('span', {'style': 'vertical-align: top; font-weight: bold'}).update('Selected'));
 	div.insert(selected);
 
 	new_parent.insert(div);
