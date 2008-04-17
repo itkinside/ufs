@@ -16,7 +16,6 @@ urlpatterns = patterns('',
         {'packages': ['itkufs']}, name='jsi18n'),
     (r'^i18n/', include('django.conf.urls.i18n')),
 
-    (r'^inventory/', include('itkufs.inventory.urls')),
     (r'^', include('itkufs.common.urls')),
     (r'^', include('itkufs.accounting.urls')),
     (r'^', include('itkufs.reports.urls')),
