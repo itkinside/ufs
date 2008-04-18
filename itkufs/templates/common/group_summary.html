@@ -105,7 +105,7 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
         <th>{% trans "Type" %}</th>
         <th>{% trans "Balance" %}</th>
     </tr>
-{% for account in group.user_account_set %}
+{% for account in group.user_account_set|dictsort:"name" %}
     {% if all or account.active %}
     <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
         {% if is_admin %}
@@ -129,7 +129,7 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
         <th>{% trans "Type" %}</th>
         <th>{% trans "Balance" %}</th>
     </tr>
-{% for account in group.group_account_set %}
+{% for account in group.group_account_set|dictsort:"name" %}
     {% if all or account.active %}
     <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
         {% if is_admin %}
