@@ -164,7 +164,7 @@ class Account(models.Model):
         help_text=_('Block account manually'))
 
     class Meta:
-        ordering = ('group', 'type', 'name')
+        ordering = ('group', 'name')
         unique_together = (('slug', 'group'), ('owner', 'group'))
         verbose_name = _('account')
         verbose_name_plural = _('accounts')
