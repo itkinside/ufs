@@ -1,4 +1,5 @@
 var Transaction = {
+  timeout: null,
   balance: {},
   // Add a sumrow to tables in form#createtransaction
   init: function() {
@@ -13,12 +14,18 @@ var Transaction = {
     row.insert(new Element('td', { 'id': 'credit_sum', 'class': 'number'}));
     tbody.insert(row);
 
-    tbody.observe('keyup', Transaction.update);
+    var wrapper = function() {
+      if (Transaction.timeout)
+      	clearTimeout(Transaction.timeout)
+      Transaction.timeout = setTimeout(Transaction.update, 500);
+    }
+
+    tbody.observe('keyup', wrapper);
 
     tbody.select('input').each(
       function(input) {
-        input.observe('change', Transaction.update);
-        input.observe('click', Transaction.update);
+        input.observe('change', wrapper);
+        input.observe('click', wrapper);
       }
     )
 
