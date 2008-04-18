@@ -19,9 +19,9 @@ def view_list(request, group, list, is_admin=False):
     """Show list for printing"""
 
     if list.accounts.all().count():
-        accounts = list.accounts
+        accounts = list.accounts.all()
     else:
-        accounts = group.user_account_set
+        accounts = group.user_account_set.filter(active=True)
 
     response = render_to_response('reports/list.html',
         {
@@ -36,7 +36,7 @@ def view_list(request, group, list, is_admin=False):
 
 @login_required
 @limit_to_admin
-def new_edit_list(request, group, list=None, is_admin=False, type='new'):
+def new_edit_list(request, group, list=None, is_admin=False):
     """Create new or edit existing list"""
 
     if request.method == 'POST':
@@ -44,13 +44,13 @@ def new_edit_list(request, group, list=None, is_admin=False, type='new'):
     else:
         data = None
 
-    if type == 'new':
+    if not list:
         columnforms = []
         listform = ListForm(data=data, group=group)
         for i in range(0,10): # Lock number of coloumns for new list
             columnforms.append( ColumnForm(data=data, prefix='new%s'%i))
 
-    elif type == 'edit':
+    else:
         if list is None:
             raise Http404
 
@@ -62,8 +62,6 @@ def new_edit_list(request, group, list=None, is_admin=False, type='new'):
 
         for i in range(0,3):
             columnforms.append( ColumnForm(data, prefix='new%s'%i) )
-    else:
-        raise Exception('Unknown type for edit_list')
 
     if data and listform.is_valid():
         forms_ok = True
@@ -79,6 +77,10 @@ def new_edit_list(request, group, list=None, is_admin=False, type='new'):
                     column.save(list=list)
                 elif column.instance.id:
                     column.instance.delete()
+
+            # Not completely sure why the modelform save doesn't
+            # fix this for us, so here goes:
+            list.accounts = listform.cleaned_data['accounts']
 
             return HttpResponseRedirect(reverse('view-list',
                 kwargs={
