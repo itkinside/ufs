@@ -68,13 +68,15 @@ class GroupForm(CustomModelForm):
             del self.fields['delete_logo']
 
     def clean_admins(self):
+        errors = []
         if len(self.cleaned_data['admins']) == 0:
-            raise forms.ValidationError(
-                _('The group must have at least one admin'))
+            errors.append(_('The group must have at least one admin'))
 
         if self.user and self.user not in self.cleaned_data['admins']:
-            raise forms.ValidationError(
-                _('You are not allowed to remove your own admin privileges'))
+            errors.append(_('You are not allowed to remove your own admin privileges'))
+
+        if errors:
+            raise forms.ValidationError(errors)
 
     def save(self, **kwargs):
         original_commit = kwargs.pop('commit', True)
