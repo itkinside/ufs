@@ -13,6 +13,7 @@ Dependencies
 - Patches from bug: #5853 and #5494
 - A database supported by Django
 
+Dependencies for testing
+------------------------
 
-:Authors: Stein Magnus Jodal
-:Version: 2007-11-04-1
+- `sudo easy_install coverage`
