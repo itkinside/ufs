@@ -114,12 +114,9 @@ class AccountManager(models.Manager):
             'balance_sql':
                 """
                 SELECT sum(debit) - sum(credit)
-                FROM accounting_transactionentry
-                    JOIN accounting_transaction
-                        ON (accounting_transactionentry.transaction_id
-                            = accounting_transaction.id)
-                WHERE account_id = accounting_account.id
-                    AND accounting_transaction.state = '%s'
+                FROM accounting_transactionentry AS te
+                JOIN accounting_transaction AS t ON (te.transaction_id = t.id)
+                WHERE account_id = accounting_account.id AND t.state = '%s'
                 """ % Transaction.COMMITTED_STATE,
             'group_block_limit_sql':
                 """
