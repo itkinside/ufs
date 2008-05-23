@@ -56,6 +56,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
+    'djangologging.middleware.LoggingMiddleware',
     'itkufs.common.middleware.UfsMiddleware',
 )
 

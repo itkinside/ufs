@@ -112,12 +112,6 @@ ul.menulist {
 	min-height: 20em;
 }
 
-/* Debug area */
-#debug {
-	margin: 1em 0;
-	text-align: left;
-}
-
 /* Table layouts */
 caption {
 	font-weight: bold;
