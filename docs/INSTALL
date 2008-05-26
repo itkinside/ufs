@@ -6,14 +6,20 @@ How to install
 
 FIXME
 
+
 Dependencies
 ------------
 
 - Django from SVN (pre-0.97)
-- Patches from bug: #5853 and #5494
-- A database supported by Django
+- Patches from bugs #5853 and #5494
+- A database supported by Django, e.g. PostgreSQL
+
 
 Dependencies for testing
 ------------------------
 
-- `sudo easy_install coverage`
+- ``sudo easy_install coverage``
+
+
+..
+    vim: ft=rst tw=74 ai

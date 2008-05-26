@@ -4,8 +4,8 @@ The accounting models
 Groups
 ------
 
-Groups are basically bars. It is used for grouping the bars own accounts and
-the accounts of the bar's members.
+Groups are basically bars. It is used for grouping the bars own accounts
+and the accounts of the bar's members.
 
 In addition to its name and slug it has several fields:
 
@@ -13,42 +13,42 @@ In addition to its name and slug it has several fields:
 Placeholder:
 
 If the group is not used by a real-world group (because they are not using
-µFS), but just is a placeholder for paying receiving transfers, the placeholder
-field is set to True. This is used when creating transactions related to other
-groups.
+µFS), but just is a placeholder for paying receiving transfers, the
+placeholder field is set to True. This is used when creating transactions
+related to other groups.
 
 
 Limits:
 
-warn_limit and block_limit can be used to warn and block accounts if their
-balance is below the given limit.
+``warn_limit`` and ``block_limit`` can be used to warn and block accounts
+if their balance is below the given limit.
 
 
 Admins:
 
-This is a many-to-many field, containing the user names of all users with admin
-access to the group and all of its accounts.
+This is a many-to-many field, containing the user names of all users with
+admin access to the group and all of its accounts.
 
 
 Typical accounts:
 
-bank_account and cash_account are pointers to two arbitrary accounts held by
-the group which works as bank and cash accounts. These are needed to receive
-transfers from other groups. Additional typical accounts, like sales_account,
-will probably be added in the future.
+``bank_account`` and ``cash_account`` are pointers to two arbitrary
+accounts held by the group which works as bank and cash accounts. These
+are needed to receive transfers from other groups. Additional typical
+accounts, like ``sales_account``, will probably be added in the future.
 
 
 User Accounts
 -------------
 
-- User accounts have an owner (e.g. a real person).
-- The name should be the name of the owner or another nickname to be shown
-  (e.g. on the krysselist).
-- Type is 'Liability' for all user accounts. Liability is credit owed to the
+- User accounts have an *owner*, e.g. a real person.
+- The *name* should be the name of the owner or another nickname to be
+  shown, e.g. on the *krysselist*.
+- Type is *Liability* for all user accounts. Liability is credit owed to the
   owner.
-- Active is a flag indicating if the owner still is an active member of the
-  bar.
-- The balance method gives the accounts balance at any time.
+- *Active* is a flag indicating if the owner still is an active member of
+  the group.
+- The ``balance`` method gives the accounts balance at any time.
 
 
 Group Accounts
@@ -56,24 +56,26 @@ Group Accounts
 
 Ownership:
 
-Group accounts do not have an owner, but belongs to a group. Owner is NULL for
-all group accounts.
+Group accounts do not have an owner, but belongs to a group. Owner is
+``NULL`` for all group accounts.
 
 
 Typical accounts:
 
-Most groups will at least have the two accounts 'Bank' and 'Cash'. Other
-accounts may for example be 'Income', 'Expense', 'Inventory' and 'Result'.
+Most groups will at least have the two accounts *Bank* and *Cash*. Other
+accounts may for example be *Income*, *Expense*, *Inventory* and *Result*.
 
 
 Account types:
 
 All accounts got an account type, examples follow:
-- 'Asset': 'Bank', 'Cash', 'Inventory', 'Hyttetur 2007' (debit to increase)
-- 'Liability': 'Supplier Debt', person accounts (credit to increase)
-- 'Equity': 'Capital' (credit to increase), 'Drawing' (debit to increase)
-- 'Income': 'Sales Income', 'Interest Revenues' (credit to increase)
-- 'Expense': 'Supplies Expense', 'Interest Expenses' (debit to increase)
+
+- *Asset*: *Bank*, *Cash*, *Inventory*, *Hyttetur 2007* (debit to increase)
+- *Liability*: *Supplier Debt*, person accounts (credit to increase)
+- *Equity*: *Capital* (credit to increase), *Drawing* (debit to increase)
+- *Income*: *Sales Income*, *Interest Revenues* (credit to increase)
+- *Expense*: *Supplies Expense*, *Interest Expenses* (debit to increase)
+
 See Wikipedia_ for more information on this.
 
 .. _Wikipedia: http://en.wikipedia.org/wiki/Account
@@ -81,9 +83,9 @@ See Wikipedia_ for more information on this.
 
 Active account:
 
-Active is a flag indicating if the account is still in use. E.g. if a bar
-changes it's real world bank account number, one would maybe create a new
-account for it and deactivate the old one.
+*Active* is a flag indicating if the account is still in use. E.g. if a
+group changes it's real world bank account number, one would maybe create
+a new account for it and deactivate the old one.
 
 
 Transactions
@@ -94,8 +96,8 @@ General restrictions:
 - A transaction may only include accounts belonging to a single group.
 
   E.g., one can never create transactions with entries for accounts in
-  different groups. However, one can create corresponding transactions in two
-  groups at the same time.
+  different groups. However, one can create corresponding transactions in
+  two groups at the same time.
 
 - All transactions must have positive sums on both the debit and credit side.
 
@@ -114,19 +116,21 @@ If the credit entry is a person's account and the debit entry is the bank
 account of the group the user account belongs to, it is a deposit from the
 person to the person's account.
 
-This gives that a negative amount on a liability account means that the person
-has money to spend. A positive amount means that the person owes the bar money.
+This gives that a negative amount on a liability account means that the
+person has money to spend. A positive amount means that the person owes
+the group money.
 
 
 Withdrawals:
 
-If the credit entry is a bar's bank account and the debit entry is a person's
-account, it is a withdrawal from the person's account to the person.
+If the credit entry is a bar's bank account and the debit entry is a
+person's account, it is a withdrawal from the person's account to the
+person.
 
 Typically a user registers a transactions of this kind when he wants to
-withdraw money, then a group admin transfers the real-world money and completes
-the transaction in µFS by setting the transaction's status to 'received' to
-signal that the debtor has received the money.
+withdraw money, then a group admin transfers the real-world money and
+completes the transaction in µFS by setting the transaction's status to
+'received' to signal that the debtor has received the money.
 
 
 Transaction between user accounts:
@@ -137,31 +141,31 @@ group admin does not have to approve the transaction.
 
 Registering sales:
 
-When a person buys anything from his own bar the corresponding sum will be
-registered as a transaction debiting the person's account and crediting the
-group's sale account.
+When a person buys anything from his own group the corresponding sum will
+be registered as a transaction debiting the person's account and crediting
+the group's sale account.
 
 
 Claiming expenses:
 
 When a person has bought anything in the real-world for the bar, the
-corresponding sum will be registered as a transaction crediting the person's
-account and debiting the group's expenses account.
+corresponding sum will be registered as a transaction crediting the
+person's account and debiting the group's expenses account.
 
 
 Settlements (aka 'BSF')
 -----------------------
 
-When people buy stuff at other bars, they build up debt between the bars. This
-debt is settled in 'settlements' also known as 'BSF'.
+When people buy stuff at other bars, they build up debt between the bars.
+This debt is settled in 'settlements' also known as 'BSF'.
 
 
 Example:
 
-The admin of group B creates an invoice for group A listing what each person in
-group A owes group B. The admin of group A then registers the amount to debit
-each user in group A and transfers the total to group B. Transactions-wise this
-is done in two-by-two steps:
+The admin of group B creates an invoice for group A listing what each
+person in group A owes group B. The admin of group A then registers the
+amount to debit each user in group A and transfers the total to group B.
+Transactions-wise this is done in two-by-two steps:
 
 Upon creation of an invoice by group B,
 
@@ -184,14 +188,15 @@ Upon payment of an invoice by group A,
 Workflow optimization:
 
 To optimize the workflow, the transaction in step two can be registered
-(status: registered) when group B creates the transaction in step one, and the
-transaction in step four can be registered (status: payed) when group A creates
-the transaction in step three.
+(status: registered) when group B creates the transaction in step one, and
+the transaction in step four can be registered (status: payed) when group
+A creates the transaction in step three.
 
-The group admin of the other group must in each case approve the transaction in
-his own group, either when he accepts the invoice in step two (if not,
-real-world communication is needed) or when he has received payment of an
-invoice in step four (if not, real-world communication is needed).
+The group admin of the other group must in each case approve the
+transaction in his own group, either when he accepts the invoice in step
+two (if not, real-world communication is needed) or when he has received
+payment of an invoice in step four (if not, real-world communication is
+needed).
 
 
 Workflow optimization pros:
@@ -203,5 +208,5 @@ reduces the need for pull-checking the real-world bank for new incoming
 payments.
 
 
-:Authors: Stein Magnus Jodal, Thomas Adamcik
-:Version: 2007-12-16-1
+..
+    vim: ft=rst tw=74 ai

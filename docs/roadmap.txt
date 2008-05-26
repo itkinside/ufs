@@ -22,7 +22,7 @@ Version 1 requirements:
   - from account to account (transfer)
   - from user account to (internal or external) bar account (payment)
   - from bar account to user account (repay expenses)
-- Enable all users to print new ``krysselister'', both for internal and
+- Enable all users to print new *krysselister*, both for internal and
   external use.
 
 For details, please refer to docs/AccountingModel.txt (and
@@ -65,8 +65,11 @@ Version 3 ideas:
 - Can use future bar codes on our ID cards for registering payments.
 - Both sales and payment can be replaced or supplemented by a touch screen
   monitor.
-- For motivation, please take a look at http://www.ping.uio.no/pils2000.shtml
+- For motivation, please take a look at `Pils 2000`_.
 
 
-:Authors: Stein Magnus Jodal, Thomas Adamcik
-:Version: 2007-11-04-1
+.. _Pils 2000: http://www.ping.uio.no/pils2000.shtml
+
+
+..
+    vim: ft=rst tw=74 ai

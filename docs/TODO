@@ -118,3 +118,6 @@ Even later release
 - µFS helps the admin improve the loss estimates based on inventory counts and
   sales reports
 
+
+..
+    vim: ft=rst tw=74 ai
