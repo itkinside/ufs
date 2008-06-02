@@ -131,15 +131,19 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
     </tr>
 {% for account in group.group_account_set %}
     {% if all or account.active %}
+    {% if all or account.balance %}
+    {# Django's if construct in templates is somewhat lacking, ugly work around for "complex" logic #}
     <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
         {% if is_admin %}
-        <td><a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a></td>
+        <td><a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a>
+        </td>
         {% else %}
         <td>{{ account.name }}</td>
         {% endif %}
         <td>{{ account.get_type_display }}</td>
-        <td class="align_right{% if account.is_blocked %} blocked{% endif %}">{{ account.balance|stringformat:"0.2f" }}</td>
+        <td class="align_right">{{ account.balance|stringformat:"0.2f" }}</td>
     </tr>
+    {% endif %}
     {% endif %}
 {% endfor %}
 </table>
@@ -147,9 +151,9 @@ is an asset, and their user account balance is positive."{% endblocktrans %}</p>
 
 <p class="clear">
 {% if all %}
-    <a href=".">{% trans "Hide inactive accounts" %}</a>
+    <a href=".">{% trans "Hide inactive/empty accounts" %}</a>
 {% else %}
-    <a href="?all">{% trans "Show inactive accounts" %}</a>
+    <a href="?all">{% trans "Show all accounts" %}</a>
 {% endif %}
 </p>
 

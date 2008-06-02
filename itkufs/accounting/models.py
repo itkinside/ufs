@@ -129,7 +129,6 @@ class AccountManager(models.Manager):
             }
         )
 
-
 class Account(models.Model):
     ASSET_ACCOUNT = 'As'          # Eiendeler/aktiva
     LIABILITY_ACCOUNT = 'Li'      # Gjeld/passiva
