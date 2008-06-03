@@ -78,18 +78,35 @@ class GroupForm(CustomModelForm):
         if errors:
             raise forms.ValidationError(errors)
 
-    def save(self, **kwargs):
+'''
+    def save(self, *args, **kwargs):
         original_commit = kwargs.pop('commit', True)
         kwargs['commit'] = False
-        group = super(GroupForm, self).save(**kwargs)
+        group = super(GroupForm, self).save(*args, **kwargs)
 
         if not group.slug:
             group.slug = slugify(group.name)
 
         kwargs['commit'] = original_commit
-        return super(GroupForm, self).save(**kwargs)
+        return super(GroupForm, self).save(*args, **kwargs)
+'''
+class RoleAccountModelChoiceField(forms.models.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.name
 
-class RoleAccountForm(CustomModelForm):
-    class Meta:
-        model = RoleAccount
-    # FIXME: Not done
+class RoleAccountForm(CustomForm):
+    def __init__(self, *args, **kwargs):
+        group = kwargs.pop('group', None)
+        super(RoleAccountForm, self).__init__(*args, **kwargs)
+
+        if group:
+            for type, name in RoleAccount.ACCOUNT_ROLE:
+                try:
+                    intial = RoleAccount.objects.get(group=group, role=type).account.id
+                except RoleAccount.DoesNotExist:
+                    intial = ''
+
+                self.fields[type] = RoleAccountModelChoiceField(group.group_account_set, initial=intial)
+        else:
+            raise Exception('Please supply a group kwarg for RoleAccountForm')
+

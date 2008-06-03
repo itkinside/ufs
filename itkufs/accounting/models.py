@@ -45,6 +45,8 @@ class Group(models.Model):
 
         # Create default accounts
         if not self.account_set.count():
+
+            # TODO change this into a magic loop?
             bank = Account(name=ugettext('Bank'), slug='bank',
                            type=Account.ASSET_ACCOUNT, group=self)
             bank.save()

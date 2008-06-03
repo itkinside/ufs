@@ -92,10 +92,21 @@ def assign_role_accounts(request, group, is_admin=False):
     """Assign role accounts to group"""
 
     if request.method == 'POST':
-        pass # FIXME
+        form = RoleAccountForm(request.POST, group=group)
+
+        if form.is_valid():
+            for type, name in RoleAccount.ACCOUNT_ROLE:
+                account = form.cleaned_data[type]
+                try: 
+                    role = group.roleaccount_set.get(role=type)
+                    if role.account != account:
+                        role.account = account
+                        role.save()
+                except RoleAccount.DoesNotExist:
+                    role = group.roleaccount_set.create(role=type, account=account)
+            return HttpResponseRedirect(reverse('group-summary', args=(group.slug,)))
     else:
-        # FIXME
-        form = RoleAccountForm()
+        form = RoleAccountForm(group=group)
 
     return render_to_response('common/role_account_form.html',
         {
