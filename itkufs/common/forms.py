@@ -78,7 +78,6 @@ class GroupForm(CustomModelForm):
         if errors:
             raise forms.ValidationError(errors)
 
-'''
     def save(self, *args, **kwargs):
         original_commit = kwargs.pop('commit', True)
         kwargs['commit'] = False
@@ -89,7 +88,7 @@ class GroupForm(CustomModelForm):
 
         kwargs['commit'] = original_commit
         return super(GroupForm, self).save(*args, **kwargs)
-'''
+
 class RoleAccountModelChoiceField(forms.models.ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.name
