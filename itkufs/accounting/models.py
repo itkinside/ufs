@@ -572,6 +572,14 @@ class Transaction(models.Model):
             states.insert(0, ('',''))
             return states
 
+    def css_class(self):
+        if self.is_rejected():
+            return 'rejected'
+        elif self.is_pending():
+            return 'pending'
+        else:
+            return 'committed'
+
 
 class TransactionLog(models.Model):
     transaction = models.ForeignKey(Transaction,
