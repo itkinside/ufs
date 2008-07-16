@@ -178,8 +178,8 @@ td {
 	background: transparent;
 	color: #a40000 !important;
 }
-.error input {
-	border: 1px solid #c00 !important;
+td.error {
+	background: #FDD;
 }
 .inactive td, .inactive {
 	text-decoration: line-through;
@@ -212,17 +212,10 @@ td {
 	height: 6em;
 }
 #yui-main input, #yui-main select, #yui-main textarea, #yui-main button {
-	border: 1px solid #ccc;
+	padding: 0.1em 0.2em;
 	font-size: 100%;
 }
-#yui-main input:focus, #yui-main textarea:focus {
-	background: #ffd;
-}
-#yui-main input:hover, #yui-main select:hover, #yui-main textarea:hover, #yui-main button:hover {
-	border: 1px solid #444;
-}
 #yui-main button {
-	background: #d3d7cf;
 	color: black;
 	margin: 0 1.5em;
 	margin-left: -1em;
@@ -245,14 +238,14 @@ td {
 
 /* Print style */
 @media print {
-        #menu, #debug, #ft, #hd, #bc {
-                display: none;
-        }
-        .yui-b  {
-                margin: 0 !important;
+	#menu, #debug, #ft, #hd, #bc {
+		display: none;
+	}
+	.yui-b  {
+		margin: 0 !important;
 		border: 0 !important;
-        }
-        body {
-                padding: 0;
-        }
+	}
+	body {
+		padding: 0;
+	}
 }
