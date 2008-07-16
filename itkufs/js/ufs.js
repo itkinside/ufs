@@ -14,20 +14,10 @@ var Transaction = {
     row.insert(new Element('td', { 'id': 'credit_sum', 'class': 'number'}));
     tbody.insert(row);
 
-    var wrapper = function() {
-      if (Transaction.timeout)
-      	clearTimeout(Transaction.timeout)
-      Transaction.timeout = setTimeout(Transaction.update, 500);
-    }
+    var check = new Element('button', {'type': 'button'}).update('Check values');
+    $$('#newtransaction button')[0].up().insert(check);
 
-    tbody.observe('keyup', wrapper);
-
-    tbody.select('input').each(
-      function(input) {
-        input.observe('change', wrapper);
-        input.observe('click', wrapper);
-      }
-    )
+    check.observe('click', Transaction.update);
 
     tbody.select('.balance').each(
       function(td) {
