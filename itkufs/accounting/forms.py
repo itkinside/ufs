@@ -24,7 +24,7 @@ class TransactionSettlementForm(CustomModelForm):
         super(TransactionSettlementForm, self).__init__(*args, **kwargs)
 
         if 'instance' in kwargs:
-            self.fields['settlement'].choices = [(s.id, s)
+            self.fields['settlement'].choices = [('', '')] + [(s.id, s)
                 for s in kwargs['instance'].group.settlement_set.filter(closed=False)]
 
     class Meta:
