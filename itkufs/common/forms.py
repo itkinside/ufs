@@ -78,6 +78,8 @@ class GroupForm(CustomModelForm):
         if errors:
             raise forms.ValidationError(errors)
 
+        return self.cleaned_data['admins']
+
     def save(self, *args, **kwargs):
         original_commit = kwargs.pop('commit', True)
         kwargs['commit'] = False
