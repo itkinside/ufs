@@ -1,8 +1,6 @@
 {% load i18n %}
 
 {% if is_admin %}
-<li class="admin"><a href="{% url new-settlement group.slug %}">
-     {% trans "New settlement" %}</a></li>
 <li class="admin"><a href="{% url new-transaction group.slug %}">
      {% trans "New transaction" %}</a></li>
 <li class="admin"><a href="{% url approve-transactions group.slug %}">
