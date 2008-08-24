@@ -440,6 +440,8 @@ class Transaction(models.Model):
             'transaction': self.id,
         })
 
+    # FIXME is this the right place to have commit on succes? Shouldn't it be
+    # higher up in a view etc?
     @transaction.commit_on_success
     def save(self):
         debit_sum = 0
