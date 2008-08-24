@@ -1,17 +1,13 @@
 # Django settings for itkufs project.
 
-# PROJECT_BASE, DATABASE_* and SECRET_KEY are included from a file which
-# is not committed to VCS
-from itkufs.settings.local import *
+import os
+PROJECT_BASE = os.path.dirname(os.path.abspath(__file__)) + '/../../'
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 TEMPLATE_STRING_IF_INVALID = ''
 
-ADMINS = (
-    ('ITK uFS', 'itk-ufs@samfundet.no'),
-)
-
+ADMINS = ()
 MANAGERS = ADMINS
 
 # Local time zone for this installation. All choices can be found here:
@@ -75,7 +71,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.core.context_processors.request',
     'itkufs.common.context_processors.bzr',
-    'itkufs.common.context_processors.debug',
 )
 
 INSTALLED_APPS = (
@@ -128,3 +123,7 @@ COVERAGE_MODULES = (
 
 # Development version numbering
 BZR_BRANCH_DIR = PROJECT_BASE
+
+# PROJECT_BASE, DATABASE_* and SECRET_KEY are included from a file which
+# is not committed to VCS
+from itkufs.settings.local import *
