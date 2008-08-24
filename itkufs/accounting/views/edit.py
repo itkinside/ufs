@@ -186,10 +186,6 @@ def approve_transactions(request, group, page='1', is_admin=False):
                 prefix="transaction%d" % t.id, label=False)
             transactions.append((t,form))
 
-    if not transactions:
-        request.user.message_set.create(message=_('No pending transactions found.'))
-        return HttpResponseRedirect(reverse('group-summary', args=[group.slug]))
-
     if to_be_rejected:
         form = RejectTransactionForm()
         return render_to_response('accounting/reject_transactions.html',
@@ -200,6 +196,11 @@ def approve_transactions(request, group, page='1', is_admin=False):
                 'form': form,
             },
             context_instance=RequestContext(request))
+
+    if not transactions:
+        request.user.message_set.create(message=_('No pending transactions found.'))
+        return HttpResponseRedirect(reverse('group-summary', args=[group.slug]))
+
 
     return render_to_response('accounting/approve_transactions.html',
         {
