@@ -451,10 +451,10 @@ class Transaction(models.Model):
 
         for entry in self.entry_set.all():
             if entry.debit > 0:
-                debit_sum += float(entry.debit)
+                debit_sum += entry.debit
                 debit_accounts.append(entry.account)
             elif entry.credit > 0:
-                credit_sum += float(entry.credit)
+                credit_sum += entry.credit
                 credit_accounts.append(entry.account)
 
         for account in debit_accounts + credit_accounts:
