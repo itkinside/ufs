@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-24 19:01+0200\n"
+"POT-Creation-Date: 2008-08-25 08:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -325,12 +325,12 @@ msgstr ""
 msgid "Your transaction has been added,"
 msgstr ""
 
-#: accounting/views/edit.py:190
+#: accounting/views/edit.py:201
 #: templates/accounting/approve_transactions.html:29
 msgid "No pending transactions found."
 msgstr ""
 
-#: accounting/views/edit.py:340
+#: accounting/views/edit.py:341
 msgid "Your transaction has been added"
 msgstr ""
 
@@ -434,11 +434,11 @@ msgstr ""
 msgid "Current year's net income"
 msgstr ""
 
-#: settings/__init__.py:104
+#: settings/__init__.py:98
 msgid "English"
 msgstr ""
 
-#: settings/__init__.py:105
+#: settings/__init__.py:99
 msgid "Norwegian"
 msgstr ""
 
@@ -857,9 +857,9 @@ msgid ""
 "In all group views <em>balance</em> is seen from the\n"
 "perspective of the group. If the group owes people money, it is a "
 "liability,\n"
-"and their user account balance is negative. If people owes the group money, "
+"and their user account balance is negative. If people owe the group money, "
 "it\n"
-"is an asset, and their user account balance is positive.\""
+"is an asset, and their user account balance is positive."
 msgstr ""
 
 #: templates/common/group_summary.html:53

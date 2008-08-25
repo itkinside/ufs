@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-24 19:01+0200\n"
+"POT-Creation-Date: 2008-08-25 08:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -196,7 +196,7 @@ msgstr "kommentar"
 
 #: accounting/models.py:348
 msgid "Mark as closed when done adding transactions "
-msgstr ""
+msgstr "Sett som avsluted når du er ferdig med å legge til overføringer"
 
 #: accounting/models.py:353 accounting/models.py:406
 msgid "settlement"
@@ -327,12 +327,12 @@ msgstr "Forbudt hvis ikke gruppeadministrator."
 msgid "Your transaction has been added,"
 msgstr "Din transaksjon er opprettet"
 
-#: accounting/views/edit.py:190
+#: accounting/views/edit.py:201
 #: templates/accounting/approve_transactions.html:29
 msgid "No pending transactions found."
 msgstr "Ingen ventende transaksjoner funnet."
 
-#: accounting/views/edit.py:340
+#: accounting/views/edit.py:341
 msgid "Your transaction has been added"
 msgstr "Din transaksjon er opprettet"
 
@@ -350,7 +350,9 @@ msgstr "Det er ikke mulig å fjerne dine egne admin rettigheter"
 
 #: common/widgets.py:46
 msgid "Select a valid choice. That choice is not one of the available choices."
-msgstr "Vennligst gjør et gyldig valg. Det valget er ikke et av de tilgjengelige valgene."
+msgstr ""
+"Vennligst gjør et gyldig valg. Det valget er ikke et av de tilgjengelige "
+"valgene."
 
 #: common/views/__init__.py:19
 msgid "Login failed"
@@ -436,11 +438,11 @@ msgstr "Medlemskontoer"
 msgid "Current year's net income"
 msgstr "Inneværende års nettoinntekt"
 
-#: settings/__init__.py:104
+#: settings/__init__.py:98
 msgid "English"
 msgstr "Engelsk"
 
-#: settings/__init__.py:105
+#: settings/__init__.py:99
 msgid "Norwegian"
 msgstr "Norsk"
 
@@ -872,13 +874,14 @@ msgid "Save group"
 msgstr "Lagre gruppe"
 
 #: templates/common/group_summary.html:8
+#, fuzzy
 msgid ""
 "In all group views <em>balance</em> is seen from the\n"
 "perspective of the group. If the group owes people money, it is a "
 "liability,\n"
-"and their user account balance is negative. If people owes the group money, "
+"and their user account balance is negative. If people owe the group money, "
 "it\n"
-"is an asset, and their user account balance is positive.\""
+"is an asset, and their user account balance is positive."
 msgstr ""
 "På alle gruppesider er <em>balansen</em> sett fra perspektivet til gruppen. "
 "Hvis gruppen skylder folk penger, så er det gjeld, og deres "
