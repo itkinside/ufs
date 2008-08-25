@@ -50,23 +50,21 @@
 </p>
 </div>
 
+<h1>{{ group.name }} &raquo; {{ list.name }}</h1>
+
+{% if group.logo %}
+<p id="logo"><img src="{% url media group.logo %}" alt="logo" /></p>
+{% endif %}
+
+<p id="secondary">
+  {% now "Y-m-d" %}
+  {% if group.email %} &ndash;
+  <a href="mailto:{{ group.email }}">{{group.email}}</a>
+  {% endif %}
+</p>
+
 <table>
     <thead>
-        <tr>
-            <th colspan="{{ colspan }}">
-                    <h1>{{ group.name }} &raquo; {{ list.name }}</h1>
-                    {% if group.logo %}
-                    <p id="logo"><img src="{% url media group.logo %}" alt="logo" /></p>
-                    {% endif %}
-
-                    <p id="secondary">
-                      {% now "Y-m-d" %}
-                      {% if group.email %} &ndash;
-                      <a href="mailto:{{ group.email }}">{{group.email}}</a>
-                      {% endif %}
-                    </p>
-            </th>
-        </tr>
         <tr>
             <th style="width: {% widthratio list.account_width width 100 %}%">{% trans "Name" %}</th>
             {% ifnotequal list.balance_width 0 %}
