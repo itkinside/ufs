@@ -3,7 +3,7 @@ body {
 	margin: 1px;
 }
 h1 {
-	font-size: 200%;
+	font-size: 131%;
 	font-family: serif;
 	font-weight: bold;
 	float: left;
@@ -27,6 +27,7 @@ a:hover {
 
 table {
 	width: 100%;
+	clear: both;
 }
 
 thead, tfoot {
