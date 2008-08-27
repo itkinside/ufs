@@ -22,6 +22,12 @@ h3 {
 	font-size: 153.9%;
 	margin: 0.2em 0;
 }
+hr {
+		color: #ccc;
+		background: #ccc;
+		height: 1px;
+		border: 0;
+}
 p {
 	margin: 0.5em 0;
 }
