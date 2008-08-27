@@ -229,10 +229,9 @@ def new_edit_list(request, group, list=None, is_admin=False):
             # fix this for us, so here goes:
             list.accounts = listform.cleaned_data['accounts']
 
-            return HttpResponseRedirect(reverse('view-list',
+            return HttpResponseRedirect(reverse('group-summary',
                 kwargs={
                     'group': group.slug,
-                    'list': list.slug,
                 }))
 
     return render_to_response('reports/list_form.html',
