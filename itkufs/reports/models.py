@@ -35,7 +35,7 @@ class List(models.Model):
         verbose_name=_('group'), related_name='list_set')
     accounts = models.ManyToManyField(Account, blank="true")
     double = models.BooleanField(
-        help_text=_('Use two rows per account'))
+        help_text=_('Use two rows per account'), editable=False)
     ignore_blocked = models.BooleanField(
         help_text=_("Don't exclude blocked accounts"))
 
