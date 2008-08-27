@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+
+{% block title %}
+    {{ flatpage.title }}
+    - {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; {{ flatpage.title }}
+{% endblock %}
+
+
+{% block header %}{% trans "Help" %}{% endblock %}
+
+
+{% block content %}
+    {{ flatpage.content|safe }}
+{% endblock %}

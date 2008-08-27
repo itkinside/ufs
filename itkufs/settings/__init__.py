@@ -52,6 +52,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'djangologging.middleware.LoggingMiddleware',
     'itkufs.common.middleware.UfsMiddleware',
 )
@@ -79,6 +80,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.webdesign',
     'django.contrib.databrowse',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
     'itkufs.common',
     'itkufs.accounting',
     'itkufs.reports',
