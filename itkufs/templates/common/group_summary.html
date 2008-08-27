@@ -77,8 +77,13 @@ is an asset, and their user account balance is positive.{% endblocktrans %}</p>
 <ul>
 {% if group.list_set.count %}
     {% for list in group.list_set.all %}
-    <li><a href="{% url view-list group.slug,list.slug %}">
-        {{ list.name }}</a></li>
+    <li>
+        <a href="{% url view-list group.slug,list.slug %}">{{ list.name }}</a>
+        {% if is_admin %}
+            (<a class="admin" href="{% url edit-list group.slug,list.slug %}">{{ _("edit") }}</a>,
+            <a class="admin" href="{% url delete-list group.slug,list.slug %}">{{ _("delete") }}</a>)
+        {% endif %}
+    </li>
     {% endfor %}
 {% else %}
     {% if is_admin %}

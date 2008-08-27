@@ -97,6 +97,7 @@ def pdf(request, group, list, is_admin=False):
         if a.is_blocked():
             if list.balance_width:
                 GRID_STYLE.add('BACKGROUND', (2,i+1), (-1,i+1), Color(0,0,0))
+                GRID_STYLE.add('TEXTCOLOR', (1,i+1), (1,i+1), Color(0.63,0,0))
             else:
                 GRID_STYLE.add('BACKGROUND', (1,i+1), (-1,i+1), Color(0,0,0))
 
