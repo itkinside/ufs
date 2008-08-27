@@ -34,6 +34,8 @@ class List(models.Model):
     group = models.ForeignKey(Group,
         verbose_name=_('group'), related_name='list_set')
     accounts = models.ManyToManyField(Account, blank="true")
+
+    # Set as editable=False as pdf does not support this (FIXME?)
     double = models.BooleanField(
         help_text=_('Use two rows per account'), editable=False)
     ignore_blocked = models.BooleanField(
