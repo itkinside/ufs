@@ -25,6 +25,13 @@ class ListManager(models.Manager):
 class List(models.Model):
     objects = ListManager()
 
+    LANDSCAPE = 'L'
+    PORTRAIT = 'P'
+    ORIENTATION_CHOICES = (
+        ('L', _('Landscape')),
+        ('P', _('Portrait'))
+    )
+
     name = models.CharField(_('name'), max_length=200)
     slug = models.SlugField(_('slug'), prepopulate_from=['name'])
     account_width = models.PositiveSmallIntegerField(_('account width'),
@@ -34,6 +41,8 @@ class List(models.Model):
     group = models.ForeignKey(Group,
         verbose_name=_('group'), related_name='list_set')
     accounts = models.ManyToManyField(Account, blank="true")
+
+    orientation = models.CharField(max_length=1, choices=ORIENTATION_CHOICES)
 
     # Set as editable=False as pdf does not support this (FIXME?)
     double = models.BooleanField(

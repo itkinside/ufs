@@ -37,8 +37,6 @@ def pdf(request, group, list, is_admin=False):
     response = HttpResponse(mimetype='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % slugify(filename)
 
-    # FIXME if landscape...
-    height, width = A4
     margin = 0.5*cm
 
     font_name = 'Times-Roman'
@@ -49,6 +47,11 @@ def pdf(request, group, list, is_admin=False):
 
     head_height = 30 # pt
     logo_height = 25 # pt
+
+    if list.orientation == list.LANDSCAPE:
+        height, width = A4
+    else:
+        width, height = A4
 
     # Create canvas for page and set fonts
     p = canvas.Canvas(response, (width,height))
