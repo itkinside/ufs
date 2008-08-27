@@ -107,14 +107,14 @@ def pdf(request, group, list, is_admin=False):
         row = [a.name]
 
         # Check if we need to reduce col font size
-        while col_width[0] < p.stringWidth(row[-1], font_name, font_size_name) and font_size_name > font_size_min:
+        while col_width[0] < p.stringWidth(row[-1], font_name, font_size_name) + 12 and font_size_name > font_size_min:
             font_size_name -= 1
 
         if list.balance_width:
             row.append(a.user_balance())
 
             # Check if we need to reduce col font size
-            while col_width[1] < p.stringWidth(str(row[-1]), font_name, font_size_balance) and font_size_balance > font_size_min:
+            while col_width[1] < p.stringWidth(str(row[-1]), font_name, font_size_balance) + 12 and font_size_balance > font_size_min:
                 font_size_balance -= 1
 
         row.extend([''] * list.listcolumn_count)
