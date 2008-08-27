@@ -1,17 +1,160 @@
 from datetime import date
+from reportlab.pdfgen import canvas
+from reportlab.platypus.tables import Table, GRID_STYLE
+from reportlab.platypus.flowables import Image
+from reportlab.lib.units import cm
+from reportlab.lib.colors import Color
+from reportlab.lib.pagesizes import A4
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.xheaders import populate_xheaders
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
+from django.template.defaultfilters import slugify
 
 from itkufs.common.decorators import limit_to_group, limit_to_admin
 from itkufs.accounting.models import Account
 from itkufs.reports.models import *
 from itkufs.reports.forms import *
+
+@login_required
+@limit_to_group
+def pdf(request, group, list, is_admin=False):
+    """PDF version of list"""
+
+    # Get accounts to show
+    if list.accounts.all().count():
+        accounts = list.accounts.all()
+    else:
+        accounts = group.user_account_set.filter(active=True)
+
+    # Create response
+    filename = '%s-%s-%s' % (date.today(), group, list)
+
+    response = HttpResponse(mimetype='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % slugify(filename)
+
+    # FIXME if landscape...
+    height, width = A4
+    margin = 0.5*cm
+
+    font_name = 'Times-Roman'
+    font_size = 14
+    font_size_name = font_size - 2
+    font_size_balance = font_size_name - 2
+    font_size_min = 5
+
+    head_height = 30 # pt
+    logo_height = 25 # pt
+
+    # Create canvas for page and set fonts
+    p = canvas.Canvas(response, (width,height))
+
+    if group.logo:
+        # Find scaling ratio
+        ratio = group.get_logo_width() / group.get_logo_height()
+
+        # Load logo with correct scaling
+        logo = Image(group.get_logo_filename(), width=logo_height*ratio, height=logo_height)
+
+        # Draw on first page
+        logo.drawOn(p, width - margin - logo_height*ratio, height - margin - logo_height)
+
+    # Setup rest of header
+    p.setFont(font_name, font_size)
+    p.drawString(margin, height - margin - font_size, '%s: %s' % (group, list.name))
+    p.setFont(font_name, font_size - 4)
+    p.drawString(margin, height - margin - font_size - font_size + 2, str(date.today()))
+    p.setFont(font_name, font_size)
+
+    # Store col widths
+    col_width = [list.account_width]
+    header = [_('Name')]
+
+    if list.balance_width:
+        header.append(_('Balance'))
+        col_width.append(list.balance_width)
+
+    for c in list.column_set.all():
+        header.append(c.name)
+        col_width.append(c.width)
+
+    # Calculate relative col widths over to absolute points
+    for i,w in enumerate(col_width):
+        col_width[i] = float(w) / float(list.listcolumn_width + list.balance_width + list.account_width) * (width-2*margin)
+
+    # Intialise table with header
+    data = [header]
+
+    # Add alternating backgrounds to style
+    GRID_STYLE.add('ROWBACKGROUNDS', (0,0), (-1,-1), [Color(1,1,1), Color(0.99,0.99,0.99)])
+
+    for i,a in enumerate(accounts):
+
+        if a.is_blocked():
+            if list.balance_width:
+                GRID_STYLE.add('BACKGROUND', (2,i+1), (-1,i+1), Color(0,0,0))
+            else:
+                GRID_STYLE.add('BACKGROUND', (1,i+1), (-1,i+1), Color(0,0,0))
+
+        row = [a.name]
+
+        # Check if we need to reduce col font size
+        while col_width[0] < p.stringWidth(row[-1], font_name, font_size_name) and font_size_name > font_size_min:
+            font_size_name -= 1
+
+        if list.balance_width:
+            row.append(a.user_balance())
+
+            # Check if we need to reduce col font size
+            while col_width[1] < p.stringWidth(str(row[-1]), font_name, font_size_balance) and font_size_balance > font_size_min:
+                font_size_balance -= 1
+
+        row.extend([''] * list.listcolumn_count)
+
+        data.append(row)
+
+    # Set font size for names
+    GRID_STYLE.add('FONTSIZE', (0,1), (0,i+1), font_size_name)
+
+    # Set font size for balance
+    if list.balance_width:
+        GRID_STYLE.add('FONTSIZE', (1,1), (1,i+1), font_size_balance)
+
+    # Create table
+    t = Table(data, colWidths=col_width, style=GRID_STYLE, repeatRows=1)
+
+    rest = None
+    while t:
+        # Figure out how big table will be
+        t_width, t_height = t.wrapOn(p, width-2*margin,height-margin-head_height)
+
+        if not rest and t_height > height - 2*margin - head_height:
+            t,rest = t.split(width-2*margin, height - margin - head_height)
+            continue
+
+        # Draw on canvas
+        t.drawOn(p, margin, height - t_height - margin - head_height)
+
+        if rest:
+            # set t to the second table and reset rest
+            t, rest= (rest, None)
+
+            # Show new page
+            p.showPage()
+
+            # Remove header spacing
+            head_height = 0
+        else:
+            # Leave loop
+            break
+
+    p.save()
+
+    return response
 
 @login_required
 @limit_to_group
