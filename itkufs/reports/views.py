@@ -49,6 +49,8 @@ def pdf(request, group, list, is_admin=False):
     foot_height = 15 # pt
     logo_height = 25 # pt
 
+    blacklisted_color = Color(0,0,0)
+
     if list.orientation == list.LANDSCAPE:
         height, width = A4
     else:
@@ -73,6 +75,12 @@ def pdf(request, group, list, is_admin=False):
     p.setFont(font_name, font_size - 4)
     p.drawString(margin, height - margin - font_size - font_size + 2, str(date.today()))
     p.drawString(margin, margin, list.comment)
+
+    blacklisted_note = _('Blacklisted accounts are marked with: ')
+
+    p.drawString(width - margin - 10 - p.stringWidth(blacklisted_note, font_name, font_size - 4), margin, blacklisted_note)
+    p.rect(width - margin - 10, margin, 8, 8, fill=1, stroke=0)
+
     p.setFont(font_name, font_size)
 
     # Store col widths
@@ -101,10 +109,10 @@ def pdf(request, group, list, is_admin=False):
 
         if a.is_blocked():
             if list.balance_width:
-                GRID_STYLE.add('BACKGROUND', (2,i+1), (-1,i+1), Color(0,0,0))
+                GRID_STYLE.add('BACKGROUND', (2,i+1), (-1,i+1), blacklisted_color)
                 GRID_STYLE.add('TEXTCOLOR', (1,i+1), (1,i+1), Color(0.63,0,0))
             else:
-                GRID_STYLE.add('BACKGROUND', (1,i+1), (-1,i+1), Color(0,0,0))
+                GRID_STYLE.add('BACKGROUND', (1,i+1), (-1,i+1), blacklisted_color)
 
         row = [a.name]
 
