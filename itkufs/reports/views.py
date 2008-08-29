@@ -46,6 +46,7 @@ def pdf(request, group, list, is_admin=False):
     font_size_min = 5
 
     head_height = 30 # pt
+    foot_height = 15 # pt
     logo_height = 25 # pt
 
     if list.orientation == list.LANDSCAPE:
@@ -71,6 +72,7 @@ def pdf(request, group, list, is_admin=False):
     p.drawString(margin, height - margin - font_size, '%s: %s' % (group, list.name))
     p.setFont(font_name, font_size - 4)
     p.drawString(margin, height - margin - font_size - font_size + 2, str(date.today()))
+    p.drawString(margin, margin, list.comment)
     p.setFont(font_name, font_size)
 
     # Store col widths
@@ -134,10 +136,10 @@ def pdf(request, group, list, is_admin=False):
     rest = None
     while t:
         # Figure out how big table will be
-        t_width, t_height = t.wrapOn(p, width-2*margin,height-margin-head_height)
+        t_width, t_height = t.wrapOn(p, width-2*margin,height-margin-head_height-foot_height)
 
         if not rest and t_height > height - 2*margin - head_height:
-            t,rest = t.split(width-2*margin, height - margin - head_height)
+            t,rest = t.split(width-2*margin, height - margin - head_height-foot_height)
             continue
 
         # Draw on canvas

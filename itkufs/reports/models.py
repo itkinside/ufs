@@ -41,8 +41,8 @@ class List(models.Model):
     group = models.ForeignKey(Group,
         verbose_name=_('group'), related_name='list_set')
     accounts = models.ManyToManyField(Account, blank="true")
-
-    orientation = models.CharField(max_length=1, choices=ORIENTATION_CHOICES)
+    orientation = models.CharField(_('orientation'), max_length=1, choices=ORIENTATION_CHOICES)
+    comment = models.TextField(_('comment'), blank=True, help_text=_('Comment shown at bottom on first page'))
 
     # Set as editable=False as pdf does not support this (FIXME?)
     double = models.BooleanField(
