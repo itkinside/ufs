@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-25 08:33+0200\n"
+"POT-Creation-Date: 2008-08-29 15:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -35,12 +35,12 @@ msgstr ""
 msgid "Reason"
 msgstr ""
 
-#: accounting/models.py:11 accounting/models.py:150 reports/models.py:28
-#: reports/models.py:69
+#: accounting/models.py:11 accounting/models.py:150 reports/models.py:35
+#: reports/models.py:80
 msgid "name"
 msgstr ""
 
-#: accounting/models.py:12 accounting/models.py:151 reports/models.py:29
+#: accounting/models.py:12 accounting/models.py:151 reports/models.py:36
 msgid "slug"
 msgstr ""
 
@@ -77,7 +77,7 @@ msgid "Contact address for group."
 msgstr ""
 
 #: accounting/models.py:27 accounting/models.py:153 accounting/models.py:297
-#: accounting/models.py:344 accounting/models.py:404 reports/models.py:35
+#: accounting/models.py:344 accounting/models.py:404 reports/models.py:42
 msgid "group"
 msgstr ""
 
@@ -190,7 +190,7 @@ msgstr ""
 msgid "date"
 msgstr ""
 
-#: accounting/models.py:346
+#: accounting/models.py:346 reports/models.py:45
 msgid "comment"
 msgstr ""
 
@@ -378,67 +378,105 @@ msgstr ""
 msgid "Account successfully created"
 msgstr ""
 
-#: reports/models.py:30
-msgid "account width"
-msgstr ""
-
 #: reports/models.py:31
-msgid "Relative width of cell"
+msgid "Landscape"
 msgstr ""
 
 #: reports/models.py:32
-msgid "balance width"
+msgid "Portrait"
 msgstr ""
 
-#: reports/models.py:33
-msgid "Relative width of cell, 0 to hide"
+#: reports/models.py:37
+msgid "account width"
 msgstr ""
 
 #: reports/models.py:38
-msgid "Use two rows per account"
+msgid "Relative width of cell"
+msgstr ""
+
+#: reports/models.py:39
+msgid "balance width"
 msgstr ""
 
 #: reports/models.py:40
-msgid "Don't exclude blocked accounts"
+msgid "Relative width of cell, 0 to hide"
 msgstr ""
 
-#: reports/models.py:44 reports/models.py:71
-msgid "list"
+#: reports/models.py:44
+msgid "orientation"
 msgstr ""
 
 #: reports/models.py:45
+msgid "Comment shown at bottom on first page"
+msgstr ""
+
+#: reports/models.py:49
+msgid "Use two rows per account"
+msgstr ""
+
+#: reports/models.py:50
+msgid "ignore blocked"
+msgstr ""
+
+#: reports/models.py:51
+msgid "Don't exclude blocked accounts"
+msgstr ""
+
+#: reports/models.py:55 reports/models.py:82
+msgid "list"
+msgstr ""
+
+#: reports/models.py:56
 msgid "lists"
 msgstr ""
 
-#: reports/models.py:70
+#: reports/models.py:81
 msgid "width"
 msgstr ""
 
-#: reports/models.py:78
+#: reports/models.py:89
 msgid "list item"
 msgstr ""
 
-#: reports/models.py:79
+#: reports/models.py:90
 msgid "list items"
 msgstr ""
 
-#: reports/views.py:109
+#: reports/views.py:79
+msgid "Blacklisted accounts are marked with: "
+msgstr ""
+
+#: reports/views.py:88 templates/common/account_summary.html:11
+#: templates/common/account_summary.html:48
+#: templates/common/group_summary.html:22 templates/reports/list.html:69
+#: templates/reports/list_form.html:57
+msgid "Name"
+msgstr ""
+
+#: reports/views.py:91 templates/accounting/transaction_form.html:44
+#: templates/common/account_summary.html:33
+#: templates/common/group_summary.html:113
+#: templates/common/group_summary.html:137 templates/reports/list.html:71
+msgid "Balance"
+msgstr ""
+
+#: reports/views.py:265
 msgid "List deleted"
 msgstr ""
 
-#: reports/views.py:155
+#: reports/views.py:311
 msgid "Member accounts"
 msgstr ""
 
-#: reports/views.py:169
+#: reports/views.py:325
 msgid "Current year's net income"
 msgstr ""
 
-#: settings/__init__.py:98
+#: settings/__init__.py:101
 msgid "English"
 msgstr ""
 
-#: settings/__init__.py:99
+#: settings/__init__.py:102
 msgid "Norwegian"
 msgstr ""
 
@@ -474,7 +512,8 @@ msgid "My group"
 msgstr ""
 
 #: templates/base.html:81 templates/common/group_summary.html:6
-#: templates/common/help.html:16 templates/reports/list_form.html:40
+#: templates/common/help.html:16 templates/flatpages/default.html:16
+#: templates/reports/list_form.html:40
 msgid "Help"
 msgstr ""
 
@@ -535,8 +574,8 @@ msgstr ""
 #: templates/accounting/transaction_details.html:55
 #: templates/accounting/transaction_form.html:42
 #: templates/accounting/transaction_list_table.html:7
-#: templates/common/group_summary.html:106
-#: templates/common/group_summary.html:130
+#: templates/common/group_summary.html:111
+#: templates/common/group_summary.html:135
 msgid "Account"
 msgstr ""
 
@@ -737,16 +776,9 @@ msgstr ""
 
 #: templates/accounting/transaction_form.html:43
 #: templates/common/account_summary.html:27
-#: templates/common/group_summary.html:107
-#: templates/common/group_summary.html:131
+#: templates/common/group_summary.html:112
+#: templates/common/group_summary.html:136
 msgid "Type"
-msgstr ""
-
-#: templates/accounting/transaction_form.html:44
-#: templates/common/account_summary.html:33
-#: templates/common/group_summary.html:108
-#: templates/common/group_summary.html:132 templates/reports/list.html:73
-msgid "Balance"
 msgstr ""
 
 #: templates/accounting/transaction_form.html:69
@@ -801,13 +833,6 @@ msgstr ""
 msgid "Account info"
 msgstr ""
 
-#: templates/common/account_summary.html:11
-#: templates/common/account_summary.html:48
-#: templates/common/group_summary.html:22 templates/reports/list.html:71
-#: templates/reports/list_form.html:57
-msgid "Name"
-msgstr ""
-
 #: templates/common/account_summary.html:17
 msgid "Owner"
 msgstr ""
@@ -838,8 +863,8 @@ msgstr ""
 
 #: templates/common/account_summary.html:98
 #: templates/common/account_summary.html:100
-#: templates/common/group_summary.html:86
-#: templates/common/group_summary.html:88
+#: templates/common/group_summary.html:91
+#: templates/common/group_summary.html:93
 msgid "No lists found"
 msgstr ""
 
@@ -888,28 +913,36 @@ msgstr ""
 msgid "Income statement"
 msgstr ""
 
-#: templates/common/group_summary.html:96
-#: templates/common/group_summary.html:100
+#: templates/common/group_summary.html:83
+msgid "edit"
+msgstr ""
+
+#: templates/common/group_summary.html:84
+msgid "delete"
+msgstr ""
+
+#: templates/common/group_summary.html:101
+#: templates/common/group_summary.html:105
 msgid "Accounts"
 msgstr ""
 
-#: templates/common/group_summary.html:97
+#: templates/common/group_summary.html:102
 msgid "No accounts found."
 msgstr ""
 
-#: templates/common/group_summary.html:104
+#: templates/common/group_summary.html:109
 msgid "User accounts"
 msgstr ""
 
-#: templates/common/group_summary.html:128
+#: templates/common/group_summary.html:133
 msgid "Group accounts"
 msgstr ""
 
-#: templates/common/group_summary.html:156
+#: templates/common/group_summary.html:161
 msgid "Hide inactive/empty accounts"
 msgstr ""
 
-#: templates/common/group_summary.html:158
+#: templates/common/group_summary.html:163
 msgid "Show all accounts"
 msgstr ""
 
@@ -1053,7 +1086,7 @@ msgid ""
 "Remember to print with backgrounds and landscape orientation if preferred."
 msgstr ""
 
-#: templates/reports/list.html:125
+#: templates/reports/list.html:123
 msgid "Blacklisted accounts are marked with"
 msgstr ""
 

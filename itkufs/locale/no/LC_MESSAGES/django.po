@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-25 08:33+0200\n"
+"POT-Creation-Date: 2008-08-29 15:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -35,12 +35,12 @@ msgstr "Til"
 msgid "Reason"
 msgstr "Årsak"
 
-#: accounting/models.py:11 accounting/models.py:150 reports/models.py:28
-#: reports/models.py:69
+#: accounting/models.py:11 accounting/models.py:150 reports/models.py:35
+#: reports/models.py:80
 msgid "name"
 msgstr "navn"
 
-#: accounting/models.py:12 accounting/models.py:151 reports/models.py:29
+#: accounting/models.py:12 accounting/models.py:151 reports/models.py:36
 msgid "slug"
 msgstr "slug"
 
@@ -77,7 +77,7 @@ msgid "Contact address for group."
 msgstr "Kontaktadresse for gruppen."
 
 #: accounting/models.py:27 accounting/models.py:153 accounting/models.py:297
-#: accounting/models.py:344 accounting/models.py:404 reports/models.py:35
+#: accounting/models.py:344 accounting/models.py:404 reports/models.py:42
 msgid "group"
 msgstr "gruppe"
 
@@ -190,7 +190,7 @@ msgstr "%(account)s er %(role)s for %(group)s"
 msgid "date"
 msgstr "dato"
 
-#: accounting/models.py:346
+#: accounting/models.py:346 reports/models.py:45
 msgid "comment"
 msgstr "kommentar"
 
@@ -297,9 +297,8 @@ msgid "Forbidden if not account owner or group admin."
 msgstr "Forbudt hvis ikke kontoeier eller gruppeadministrator."
 
 #: accounting/views/display.py:93
-#, fuzzy
 msgid "The transaction may only be"
-msgstr "transaksjonsinnslag"
+msgstr "Transaksjonen kan kun være"
 
 #: accounting/views/edit.py:21
 msgid "Settlement is closed and cannot be edited."
@@ -323,7 +322,6 @@ msgid "Forbidden if not group admin."
 msgstr "Forbudt hvis ikke gruppeadministrator."
 
 #: accounting/views/edit.py:128
-#, fuzzy
 msgid "Your transaction has been added,"
 msgstr "Din transaksjon er opprettet"
 
@@ -382,67 +380,105 @@ msgstr "Kontoen er oppdatert"
 msgid "Account successfully created"
 msgstr "Kontoen er opprettet"
 
-#: reports/models.py:30
+#: reports/models.py:31
+msgid "Landscape"
+msgstr "Landskap"
+
+#: reports/models.py:32
+msgid "Portrait"
+msgstr "Portrett"
+
+#: reports/models.py:37
 msgid "account width"
 msgstr "kontobredde"
 
-#: reports/models.py:31
+#: reports/models.py:38
 msgid "Relative width of cell"
 msgstr "Relativ cellebredde"
 
-#: reports/models.py:32
+#: reports/models.py:39
 msgid "balance width"
 msgstr "balansebredde"
 
-#: reports/models.py:33
+#: reports/models.py:40
 msgid "Relative width of cell, 0 to hide"
 msgstr "Relativ cellebredde, 0 for å skjule"
 
-#: reports/models.py:38
+#: reports/models.py:44
+msgid "orientation"
+msgstr "orientering"
+
+#: reports/models.py:45
+msgid "Comment shown at bottom on first page"
+msgstr "Kommentar som vises nederst på første siden"
+
+#: reports/models.py:49
 msgid "Use two rows per account"
 msgstr "Bruk to rader per konto"
 
-#: reports/models.py:40
+#: reports/models.py:50
+msgid "ignore blocked"
+msgstr "ignorer blokkeringsgrense"
+
+#: reports/models.py:51
 msgid "Don't exclude blocked accounts"
 msgstr "Ikke ekskluder svartelistede kontoer"
 
-#: reports/models.py:44 reports/models.py:71
+#: reports/models.py:55 reports/models.py:82
 msgid "list"
 msgstr "liste"
 
-#: reports/models.py:45
+#: reports/models.py:56
 msgid "lists"
 msgstr "lister"
 
-#: reports/models.py:70
+#: reports/models.py:81
 msgid "width"
 msgstr "bredde"
 
-#: reports/models.py:78
+#: reports/models.py:89
 msgid "list item"
 msgstr "listeelement"
 
-#: reports/models.py:79
+#: reports/models.py:90
 msgid "list items"
 msgstr "listeelementer"
 
-#: reports/views.py:109
+#: reports/views.py:79
+msgid "Blacklisted accounts are marked with: "
+msgstr "Svartelistede kontoer er merket med: "
+
+#: reports/views.py:88 templates/common/account_summary.html:11
+#: templates/common/account_summary.html:48
+#: templates/common/group_summary.html:22 templates/reports/list.html:69
+#: templates/reports/list_form.html:57
+msgid "Name"
+msgstr "Navn"
+
+#: reports/views.py:91 templates/accounting/transaction_form.html:44
+#: templates/common/account_summary.html:33
+#: templates/common/group_summary.html:113
+#: templates/common/group_summary.html:137 templates/reports/list.html:71
+msgid "Balance"
+msgstr "Balanse"
+
+#: reports/views.py:265
 msgid "List deleted"
 msgstr "Listen ble slettet"
 
-#: reports/views.py:155
+#: reports/views.py:311
 msgid "Member accounts"
 msgstr "Medlemskontoer"
 
-#: reports/views.py:169
+#: reports/views.py:325
 msgid "Current year's net income"
 msgstr "Inneværende års nettoinntekt"
 
-#: settings/__init__.py:98
+#: settings/__init__.py:101
 msgid "English"
 msgstr "Engelsk"
 
-#: settings/__init__.py:99
+#: settings/__init__.py:102
 msgid "Norwegian"
 msgstr "Norsk"
 
@@ -481,7 +517,8 @@ msgid "My group"
 msgstr "Min gruppe"
 
 #: templates/base.html:81 templates/common/group_summary.html:6
-#: templates/common/help.html:16 templates/reports/list_form.html:40
+#: templates/common/help.html:16 templates/flatpages/default.html:16
+#: templates/reports/list_form.html:40
 msgid "Help"
 msgstr "Hjelp"
 
@@ -542,8 +579,8 @@ msgstr "Tilstand"
 #: templates/accounting/transaction_details.html:55
 #: templates/accounting/transaction_form.html:42
 #: templates/accounting/transaction_list_table.html:7
-#: templates/common/group_summary.html:106
-#: templates/common/group_summary.html:130
+#: templates/common/group_summary.html:111
+#: templates/common/group_summary.html:135
 msgid "Account"
 msgstr "Konto"
 
@@ -581,7 +618,6 @@ msgstr "Oversikt"
 #: templates/accounting/settlement_list.html:6
 #: templates/accounting/settlement_list.html:14
 #: templates/accounting/settlement_list.html:23
-#, fuzzy
 msgid "Settlements"
 msgstr "oppgjør"
 
@@ -605,32 +641,27 @@ msgstr "Avvis"
 
 #: templates/accounting/settlement_details.html:7
 #: templates/accounting/transaction_details.html:20
-#, fuzzy
 msgid "Settlement"
 msgstr "oppgjør"
 
 #: templates/accounting/settlement_details.html:15
-#, fuzzy
 msgid "Settlement ID"
-msgstr "oppgjør"
+msgstr "oppgjør id"
 
 #: templates/accounting/settlement_details.html:19
 #: templates/accounting/settlement_list.html:41
-#, fuzzy
 msgid "Date"
 msgstr "dato"
 
 #: templates/accounting/settlement_details.html:23
 #: templates/accounting/settlement_list.html:42
-#, fuzzy
 msgid "Comment"
 msgstr "kommentar"
 
 #: templates/accounting/settlement_details.html:27
 #: templates/accounting/settlement_list.html:43
-#, fuzzy
 msgid "Closed"
-msgstr "svartelistet"
+msgstr "lukket"
 
 #: templates/accounting/settlement_details.html:28
 #: templates/accounting/settlement_list.html:50
@@ -649,9 +680,8 @@ msgstr "Oppgaver"
 #: templates/accounting/settlement_form.html:6
 #: templates/accounting/settlement_form.html:18
 #: templates/accounting/settlement_form.html:29
-#, fuzzy
 msgid "Edit settlement"
-msgstr "oppgjør"
+msgstr "rediger oppgjør"
 
 #: templates/accounting/settlement_form.html:8
 #: templates/accounting/settlement_form.html:21
@@ -665,9 +695,8 @@ msgid "Save settlement"
 msgstr "Lagre oppgjør"
 
 #: templates/accounting/settlement_list.html:31
-#, fuzzy
 msgid "No settlements found."
-msgstr "oppgjør"
+msgstr "Fant ingen oppgjør."
 
 #: templates/accounting/settlement_list.html:55 templates/reports/list.html:42
 msgid "Edit"
@@ -696,9 +725,8 @@ msgid "Transaction"
 msgstr "Transaksjon"
 
 #: templates/accounting/transaction_details.html:16
-#, fuzzy
 msgid "Transaction ID"
-msgstr "Transaksjon"
+msgstr "Transaksjons ID"
 
 #: templates/accounting/transaction_details.html:26
 #: templates/common/account_summary.html:59
@@ -709,12 +737,10 @@ msgid "None"
 msgstr "Ingen"
 
 #: templates/accounting/transaction_details.html:43
-#, fuzzy
 msgid "Edit transaction"
-msgstr "transaksjon"
+msgstr "Rediger transaksjon"
 
 #: templates/accounting/transaction_details.html:45
-#, fuzzy
 msgid "Reject transaction"
 msgstr "Avvis transaksjoner"
 
@@ -755,24 +781,17 @@ msgstr "Konto:"
 
 #: templates/accounting/transaction_form.html:43
 #: templates/common/account_summary.html:27
-#: templates/common/group_summary.html:107
-#: templates/common/group_summary.html:131
+#: templates/common/group_summary.html:112
+#: templates/common/group_summary.html:136
 msgid "Type"
 msgstr "Type"
-
-#: templates/accounting/transaction_form.html:44
-#: templates/common/account_summary.html:33
-#: templates/common/group_summary.html:108
-#: templates/common/group_summary.html:132 templates/reports/list.html:73
-msgid "Balance"
-msgstr "Balanse"
 
 #: templates/accounting/transaction_form.html:69
 msgid "Save transaction"
 msgstr "Lagre transaksjon"
 
 #: templates/accounting/transaction_list_table.html:18
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "\n"
 "                            <b>%(state)s</b> at %(last_modified)s\n"
@@ -822,13 +841,6 @@ msgstr "Lagre konto"
 msgid "Account info"
 msgstr "Kontoinformasjon"
 
-#: templates/common/account_summary.html:11
-#: templates/common/account_summary.html:48
-#: templates/common/group_summary.html:22 templates/reports/list.html:71
-#: templates/reports/list_form.html:57
-msgid "Name"
-msgstr "Navn"
-
 #: templates/common/account_summary.html:17
 msgid "Owner"
 msgstr "Eier"
@@ -859,8 +871,8 @@ msgstr "Lister"
 
 #: templates/common/account_summary.html:98
 #: templates/common/account_summary.html:100
-#: templates/common/group_summary.html:86
-#: templates/common/group_summary.html:88
+#: templates/common/group_summary.html:91
+#: templates/common/group_summary.html:93
 msgid "No lists found"
 msgstr "Ingen lister funnet"
 
@@ -892,9 +904,8 @@ msgstr ""
 #: templates/common/role_account_form.html:6
 #: templates/common/role_account_form.html:14
 #: templates/common/role_account_form.html:20
-#, fuzzy
 msgid "Assign role accounts"
-msgstr "rollekontoer"
+msgstr "Tildel rollekontoer"
 
 #: templates/common/group_summary.html:61 templates/reports/list_form.html:9
 #: templates/reports/list_form.html:24 templates/reports/list_form.html:34
@@ -915,30 +926,36 @@ msgstr "Balanseregnskap"
 msgid "Income statement"
 msgstr "Inntektsregnskap"
 
-#: templates/common/group_summary.html:96
-#: templates/common/group_summary.html:100
+#: templates/common/group_summary.html:83
+msgid "edit"
+msgstr "rediger"
+
+#: templates/common/group_summary.html:84
+msgid "delete"
+msgstr "Slett"
+
+#: templates/common/group_summary.html:101
+#: templates/common/group_summary.html:105
 msgid "Accounts"
 msgstr "Kontoer"
 
-#: templates/common/group_summary.html:97
+#: templates/common/group_summary.html:102
 msgid "No accounts found."
 msgstr "Ingen kontoer funnet."
 
-#: templates/common/group_summary.html:104
+#: templates/common/group_summary.html:109
 msgid "User accounts"
 msgstr "Medlemskontoer"
 
-#: templates/common/group_summary.html:128
+#: templates/common/group_summary.html:133
 msgid "Group accounts"
 msgstr "Gruppekontoer"
 
-#: templates/common/group_summary.html:156
-#, fuzzy
+#: templates/common/group_summary.html:161
 msgid "Hide inactive/empty accounts"
 msgstr "Skjul inaktive kontoer"
 
-#: templates/common/group_summary.html:158
-#, fuzzy
+#: templates/common/group_summary.html:163
 msgid "Show all accounts"
 msgstr "Vis inaktive kontoer"
 
@@ -1012,9 +1029,8 @@ msgstr ""
 "å opprette en konto til deg og koble kontoen til brukeren din.\n"
 
 #: templates/common/role_account_form.html:28
-#, fuzzy
 msgid "Save role accounts"
-msgstr "rollekontoer"
+msgstr "Lagre rollekontoer"
 
 #: templates/reports/balance.html:30
 msgid "Assets"
@@ -1093,12 +1109,11 @@ msgid "Delete"
 msgstr "Slett"
 
 #: templates/reports/list.html:49
-#, fuzzy
 msgid ""
 "Remember to print with backgrounds and landscape orientation if preferred."
-msgstr "Husk å skriv ut med bakgrunner og landskapsorientering."
+msgstr "Husk å skriv ut med bakgrunner og landskapsorientering om ønsket."
 
-#: templates/reports/list.html:125
+#: templates/reports/list.html:123
 msgid "Blacklisted accounts are marked with"
 msgstr "Svartelistede kontoer er merket med"
 

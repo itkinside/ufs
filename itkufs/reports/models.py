@@ -47,7 +47,7 @@ class List(models.Model):
     # Set as editable=False as pdf does not support this (FIXME?)
     double = models.BooleanField(
         help_text=_('Use two rows per account'), editable=False, default=False)
-    ignore_blocked = models.BooleanField(
+    ignore_blocked = models.BooleanField(_('ignore blocked'),
         help_text=_("Don't exclude blocked accounts"))
 
     class Meta:
