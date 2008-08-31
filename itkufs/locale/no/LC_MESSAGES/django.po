@@ -619,7 +619,7 @@ msgstr "Oversikt"
 #: templates/accounting/settlement_list.html:14
 #: templates/accounting/settlement_list.html:23
 msgid "Settlements"
-msgstr "oppgjør"
+msgstr "Oppgjør"
 
 #: templates/accounting/base.html:43 templates/accounting/base.html.py:54
 #: templates/accounting/settlement_details.html:39
@@ -886,7 +886,6 @@ msgid "Save group"
 msgstr "Lagre gruppe"
 
 #: templates/common/group_summary.html:8
-#, fuzzy
 msgid ""
 "In all group views <em>balance</em> is seen from the\n"
 "perspective of the group. If the group owes people money, it is a "
