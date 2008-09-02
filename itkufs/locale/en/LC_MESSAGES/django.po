@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-02 11:21+0200\n"
+"POT-Creation-Date: 2008-09-02 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -437,6 +437,10 @@ msgstr ""
 
 #: reports/models.py:90
 msgid "list items"
+msgstr ""
+
+#: reports/views.py:76
+msgid "Printed"
 msgstr ""
 
 #: reports/views.py:79
@@ -1007,23 +1011,23 @@ msgstr ""
 msgid "up to"
 msgstr ""
 
-#: templates/reports/income.html:30
+#: templates/reports/income.html:31
 msgid "Revenues and gains"
 msgstr ""
 
-#: templates/reports/income.html:39
+#: templates/reports/income.html:40
 msgid "Total revenues and gains"
 msgstr ""
 
-#: templates/reports/income.html:46
+#: templates/reports/income.html:51
 msgid "Expenses and losses"
 msgstr ""
 
-#: templates/reports/income.html:55
+#: templates/reports/income.html:60
 msgid "Total expenses and losses"
 msgstr ""
 
-#: templates/reports/income.html:62
+#: templates/reports/income.html:67
 msgid "Net income"
 msgstr ""
 

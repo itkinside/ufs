@@ -73,7 +73,7 @@ def pdf(request, group, list, is_admin=False):
     p.setFont(font_name, font_size)
     p.drawString(margin, height - margin - font_size, '%s: %s' % (group, list.name))
     p.setFont(font_name, font_size - 4)
-    p.drawString(margin, height - margin - font_size - font_size + 2, str(date.today()))
+    p.drawString(margin, height - margin - font_size - font_size + 2, '%s: %s' % (_('Printed'), str(date.today())))
     p.drawString(margin, margin, list.comment)
 
     blacklisted_note = _('Blacklisted accounts are marked with: ')
