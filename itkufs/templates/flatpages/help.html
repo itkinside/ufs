@@ -4,12 +4,14 @@
 
 {% block title %}
     {{ flatpage.title }}
+    - {% trans "Help" %}
     - {{ block.super }}
 {% endblock %}
 
 
 {% block breadcrumbs %}
     {{ block.super }}
+    &raquo; <a href="/help/">{% trans "Help" %}</a>
     &raquo; {{ flatpage.title }}
 {% endblock %}
 

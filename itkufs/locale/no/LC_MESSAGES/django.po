@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-29 15:49+0200\n"
+"POT-Creation-Date: 2008-09-02 11:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -207,17 +207,14 @@ msgid "settlements"
 msgstr "oppgjør"
 
 #: accounting/models.py:397 templates/accounting/approve_transactions.html:59
-#: templates/common/help.html:29
 msgid "Pending"
 msgstr "Avventer"
 
 #: accounting/models.py:398 templates/accounting/approve_transactions.html:63
-#: templates/common/help.html:36
 msgid "Committed"
 msgstr "Innsjekket"
 
 #: accounting/models.py:399 templates/accounting/approve_transactions.html:67
-#: templates/common/help.html:41
 msgid "Rejected"
 msgstr "Avvist"
 
@@ -517,7 +514,7 @@ msgid "My group"
 msgstr "Min gruppe"
 
 #: templates/base.html:81 templates/common/group_summary.html:6
-#: templates/common/help.html:16 templates/flatpages/default.html:16
+#: templates/flatpages/help.html:7 templates/flatpages/help.html.py:14
 #: templates/reports/list_form.html:40
 msgid "Help"
 msgstr "Hjelp"
@@ -958,55 +955,6 @@ msgstr "Skjul inaktive kontoer"
 msgid "Show all accounts"
 msgstr "Vis inaktive kontoer"
 
-#: templates/common/help.html:22 templates/common/help.html.py:26
-msgid "What do the transaction state terms mean?"
-msgstr "Hva betyr de forskjellige transaksjonstilstandene?"
-
-#: templates/common/help.html:23 templates/common/help.html.py:49
-msgid "Who do I contact about technical errors in &micro;FS?"
-msgstr "Hvem kontakter jeg ved tekniske feil i &micro;FS"
-
-#: templates/common/help.html:31
-msgid ""
-"The transaction has been registered as a valid\n"
-"        transaction with correct debit and credit entries, in this state no\n"
-"        accounts have been affected."
-msgstr ""
-"Transaksjonen har blitt registrert som en gyldig transaksjon med korrekt "
-"debet- og kreditinnslag. I denne tilstanden er ingen kontoer påvirket."
-
-#: templates/common/help.html:38
-msgid ""
-"The transaction is complete and the balance of the\n"
-"        accounts has been updated"
-msgstr ""
-"Transaksjonen er sjekket inn og kontobalansene\n"
-"        er oppdatert"
-
-#: templates/common/help.html:43
-msgid ""
-"The transaction has been rejected by the admin, please\n"
-"        see the transaction details for a reason."
-msgstr ""
-"Transaksjonen har blitt avvist av en administrator, vennligst\n"
-"        se transaksjonsdetaljene for begrunnelse."
-
-#: templates/common/help.html:51
-msgid ""
-"Please contact the &micro;FS developers at <a\n"
-"href=\"mailto:itk-ufs@samfundet.no\"> itk-ufs@samfundet.no</a> if you "
-"experience\n"
-"any technical errors. Please include a description of what you did, what "
-"you\n"
-"expected and what actually happened, including any error messages you may "
-"have\n"
-"gotten."
-msgstr ""
-"Vennligst kontakt &micro;FS-utviklerne på <a href=\"mailto:itk-ufs@samfundet."
-"no\">itk-ufs@samfundet.no</a> hvis du opplever tekniske problemer. Vennligst "
-"inkluder en beskrivelse av hva du gjorde, hva du forventet å skje og hva som "
-"faktisk skjedde, inkludert eventuelle feilmeldinger du har fått."
-
 #: templates/common/no_account.html:10 templates/common/no_account.html:17
 msgid "No account"
 msgstr "Ingen konto"
@@ -1152,6 +1100,51 @@ msgstr "Bredde"
 #: templates/reports/list_form.html:69
 msgid "Save list"
 msgstr "Lagre liste"
+
+#~ msgid "What do the transaction state terms mean?"
+#~ msgstr "Hva betyr de forskjellige transaksjonstilstandene?"
+
+#~ msgid "Who do I contact about technical errors in &micro;FS?"
+#~ msgstr "Hvem kontakter jeg ved tekniske feil i &micro;FS"
+
+#~ msgid ""
+#~ "The transaction has been registered as a valid\n"
+#~ "        transaction with correct debit and credit entries, in this state "
+#~ "no\n"
+#~ "        accounts have been affected."
+#~ msgstr ""
+#~ "Transaksjonen har blitt registrert som en gyldig transaksjon med korrekt "
+#~ "debet- og kreditinnslag. I denne tilstanden er ingen kontoer påvirket."
+
+#~ msgid ""
+#~ "The transaction is complete and the balance of the\n"
+#~ "        accounts has been updated"
+#~ msgstr ""
+#~ "Transaksjonen er sjekket inn og kontobalansene\n"
+#~ "        er oppdatert"
+
+#~ msgid ""
+#~ "The transaction has been rejected by the admin, please\n"
+#~ "        see the transaction details for a reason."
+#~ msgstr ""
+#~ "Transaksjonen har blitt avvist av en administrator, vennligst\n"
+#~ "        se transaksjonsdetaljene for begrunnelse."
+
+#~ msgid ""
+#~ "Please contact the &micro;FS developers at <a\n"
+#~ "href=\"mailto:itk-ufs@samfundet.no\"> itk-ufs@samfundet.no</a> if you "
+#~ "experience\n"
+#~ "any technical errors. Please include a description of what you did, what "
+#~ "you\n"
+#~ "expected and what actually happened, including any error messages you may "
+#~ "have\n"
+#~ "gotten."
+#~ msgstr ""
+#~ "Vennligst kontakt &micro;FS-utviklerne på <a href=\"mailto:itk-"
+#~ "ufs@samfundet.no\">itk-ufs@samfundet.no</a> hvis du opplever tekniske "
+#~ "problemer. Vennligst inkluder en beskrivelse av hva du gjorde, hva du "
+#~ "forventet å skje og hva som faktisk skjedde, inkludert eventuelle "
+#~ "feilmeldinger du har fått."
 
 #~ msgid "Only allow admins to view group details and reports."
 #~ msgstr "Kun tillat administratorer å se gruppedetaljer og rapporter."

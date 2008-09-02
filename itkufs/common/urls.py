@@ -13,10 +13,6 @@ urlpatterns = patterns('',
     url(r'^switch-group/$',
         switch_group, name='switch-group'),
 
-    # Help
-    url(r'help/$',
-        static_page, {'template': 'common/help.html'}, name='help'),
-
     ### Groups
     url(r'^(?P<group>[0-9a-z_-]+)/$',
         group_summary, name='group-summary'),
