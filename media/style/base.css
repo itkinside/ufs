@@ -4,9 +4,12 @@ body {
 	color: black;
 	padding: 1em;
 }
-h1, h2, h3 {
+h1, h2, h3, h4 {
 	font-family: georgia;
 	color: #333;
+}
+h2, h3, h4 {
+	margin: 0.6em 0 0.2em 0;
 }
 h1 {
 	/* background: ...; */ /* Defined in template, as logo URL is needed */
@@ -16,17 +19,18 @@ h1 {
 }
 h2 {
 	font-size: 182%;
-	margin: 0.3em 0;
 }
 h3 {
 	font-size: 153.9%;
-	margin: 0.2em 0;
+}
+h4 {
+	font-size: 123.1%;
 }
 hr {
-		color: #ccc;
-		background: #ccc;
-		height: 1px;
-		border: 0;
+	color: #ccc;
+	background: #ccc;
+	height: 1px;
+	border: 0;
 }
 p {
 	margin: 0.5em 0;
