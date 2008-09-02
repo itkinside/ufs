@@ -25,6 +25,7 @@
 
 {# <p>FIXME: Delimit income statement to time interval.</p> #}
 
+<div class="float_left">
 <table class="tablelist">
     <tr>
         <th colspan="2">{% trans "Revenues and gains" %}</th>
@@ -41,7 +42,11 @@
             <em>{{ accounts.in_sum|floatformat:2 }}</em>
         </td>
     </tr>
+</table>
+</div>
 
+<div class="float_left">
+<table class="tablelist">
     <tr>
         <th colspan="2">{% trans "Expenses and losses" %}</th>
     </tr>
@@ -63,5 +68,6 @@
         <th class="align_right">{{ accounts.in_ex_diff|floatformat:2 }}</th>
     </tr>
 </table>
+</div>
 
 {% endblock %}
