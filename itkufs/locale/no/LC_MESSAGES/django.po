@@ -239,7 +239,7 @@ msgstr "transaksjon"
 
 #: accounting/models.py:417
 msgid "transactions"
-msgstr "transaksjon"
+msgstr "transaksjoner"
 
 #: accounting/models.py:530
 #, python-format
