@@ -67,13 +67,21 @@
 
 <ul class="menulist" id="mainmenu">
     <li>
-        <a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">
+        {% if request.session.my_account %}
+            <a href="{% url account-summary request.session.my_account.group.slug,request.session.my_account.slug %}">
         {% trans "My account" %}</a>
+        {% else %}
+            {% trans "My account" %}
+        {% endif %}
     </li>
 
     <li>
-        <a href="{% url group-summary request.session.my_account.group.slug %}">
-        {% trans "My group" %}{% if is_admin and group.not_payed_transaction_set.count %}*{% endif %}</a>
+        {% if request.session.my_account %}
+            <a href="{% url group-summary request.session.my_account.group.slug %}">
+            {% trans "My group" %}{% if is_admin and group.not_payed_transaction_set.count %}*{% endif %}</a>
+        {% else %}
+            {% trans "My group" %}
+        {% endif %}
     </li>
 
     <li id="help">
@@ -98,7 +106,7 @@
     <div id="ft">
 
 {% block footer %}
-µFS v1.0-&beta;{{ BZRREV }}
+µFS v1.0-&beta;
 
 <span>&bull;</span>
 {% trans "User:" %} {{ user.username }}
