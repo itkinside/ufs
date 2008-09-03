@@ -248,7 +248,7 @@ def new_edit_list(request, group, list=None, is_admin=False):
         {
             'is_admin': is_admin,
             'group': group,
-            'type': type,
+            'list': list,
             'listform': listform,
             'columnforms': columnforms,
         },

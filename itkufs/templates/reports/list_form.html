@@ -3,36 +3,36 @@
 
 
 {% block title %}
-    {% ifequal type 'edit' %}
+    {% if list %}
         {% trans "Edit list" %}
     {% else %}
         {% trans "New list" %}
-    {% endifequal %}
+    {% endif %}
     - {{ block.super }}
 {% endblock %}
 
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo;  <a href="{% url view-list group.slug,listform.instance.slug %}">
-        {{ listform.instance.name }}</a>
-    {% ifequal type 'edit' %}
-        &raquo; <a href="{% url edit-list group.slug,listform.instance.slug %}">
+    {% if list %}
+        &raquo;  <a href="{% url view-list group.slug,list.slug %}">
+            {{ list.name }}</a>
+        &raquo; <a href="{% url edit-list group.slug,list.slug %}">
             {% trans "Edit list" %}</a>
     {% else %}
         &raquo; <a href="{% url new-list group.slug %}">
             {% trans "New list" %}</a>
-    {% endifequal %}
+    {% endif %}
 {% endblock %}
 
 
 {% block header %}
     {{ block.super }}
-    {% ifequal type 'edit' %}
+    {% if list %}
         &ndash; {% trans "Edit list" %}
     {% else %}
         &ndash; {% trans "New list" %}
-    {% endifequal %}
+    {% endif %}
 {% endblock %}
 
 {% block helptips %}
