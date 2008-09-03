@@ -8,13 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-02 17:14+0200\n"
+"POT-Creation-Date: 2008-09-03 22:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: accounting/admin.py:18
+msgid "Advanced options"
+msgstr ""
 
 #: accounting/forms.py:20 accounting/forms.py:58
 #: templates/accounting/approve_transactions.html:48
@@ -35,12 +39,12 @@ msgstr ""
 msgid "Reason"
 msgstr ""
 
-#: accounting/models.py:11 accounting/models.py:150 reports/models.py:35
-#: reports/models.py:80
+#: accounting/models.py:11 accounting/models.py:147 reports/models.py:35
+#: reports/models.py:74
 msgid "name"
 msgstr ""
 
-#: accounting/models.py:12 accounting/models.py:151 reports/models.py:36
+#: accounting/models.py:12 accounting/models.py:148 reports/models.py:36
 msgid "slug"
 msgstr ""
 
@@ -76,8 +80,8 @@ msgstr ""
 msgid "Contact address for group."
 msgstr ""
 
-#: accounting/models.py:27 accounting/models.py:153 accounting/models.py:297
-#: accounting/models.py:344 accounting/models.py:404 reports/models.py:42
+#: accounting/models.py:27 accounting/models.py:150 accounting/models.py:279
+#: accounting/models.py:319 accounting/models.py:377 reports/models.py:42
 msgid "group"
 msgstr ""
 
@@ -85,206 +89,202 @@ msgstr ""
 msgid "groups"
 msgstr ""
 
-#: accounting/models.py:50
+#: accounting/models.py:47
 msgid "Bank"
 msgstr ""
 
-#: accounting/models.py:57
+#: accounting/models.py:54
 msgid "Cash"
 msgstr ""
 
-#: accounting/models.py:141
+#: accounting/models.py:138
 msgid "Asset"
 msgstr ""
 
-#: accounting/models.py:142
+#: accounting/models.py:139
 msgid "Liability"
 msgstr ""
 
-#: accounting/models.py:143
+#: accounting/models.py:140
 msgid "Equity"
 msgstr ""
 
-#: accounting/models.py:144
+#: accounting/models.py:141
 msgid "Income"
 msgstr ""
 
-#: accounting/models.py:145
+#: accounting/models.py:142
 msgid "Expense"
 msgstr ""
 
-#: accounting/models.py:152
+#: accounting/models.py:149
 msgid "A shortname used in URLs etc."
 msgstr ""
 
-#: accounting/models.py:154 accounting/models.py:591
+#: accounting/models.py:151 accounting/models.py:559
 msgid "type"
 msgstr ""
 
-#: accounting/models.py:156
+#: accounting/models.py:153
 msgid "owner"
 msgstr ""
 
-#: accounting/models.py:158
+#: accounting/models.py:155
 msgid "active"
 msgstr ""
 
-#: accounting/models.py:159
+#: accounting/models.py:156
 msgid "ignore block limit"
 msgstr ""
 
-#: accounting/models.py:160
+#: accounting/models.py:157
 msgid "Never block account automatically"
 msgstr ""
 
-#: accounting/models.py:161
+#: accounting/models.py:158
 msgid "blocked"
 msgstr ""
 
-#: accounting/models.py:162
+#: accounting/models.py:159
 msgid "Block account manually"
 msgstr ""
 
-#: accounting/models.py:167 accounting/models.py:299 accounting/models.py:630
+#: accounting/models.py:164 accounting/models.py:281 accounting/models.py:597
 msgid "account"
 msgstr ""
 
-#: accounting/models.py:168
+#: accounting/models.py:165
 msgid "accounts"
 msgstr ""
 
-#: accounting/models.py:174
-msgid "Advanced options"
-msgstr ""
-
-#: accounting/models.py:292
+#: accounting/models.py:274
 msgid "Bank account"
 msgstr ""
 
-#: accounting/models.py:293
+#: accounting/models.py:275
 msgid "Cash account"
 msgstr ""
 
-#: accounting/models.py:294
+#: accounting/models.py:276
 msgid "Sale account"
 msgstr ""
 
-#: accounting/models.py:298
+#: accounting/models.py:280
 msgid "role"
 msgstr ""
 
-#: accounting/models.py:305
+#: accounting/models.py:287
 msgid "role account"
 msgstr ""
 
-#: accounting/models.py:306
+#: accounting/models.py:288
 msgid "role accounts"
 msgstr ""
 
-#: accounting/models.py:316
+#: accounting/models.py:291
 #, python-format
 msgid "%(account)s is %(role)s for %(group)s"
 msgstr ""
 
-#: accounting/models.py:345 accounting/models.py:408
+#: accounting/models.py:320 accounting/models.py:381
 msgid "date"
 msgstr ""
 
-#: accounting/models.py:346 reports/models.py:45
+#: accounting/models.py:321 reports/models.py:45
 msgid "comment"
 msgstr ""
 
-#: accounting/models.py:348
+#: accounting/models.py:323
 msgid "Mark as closed when done adding transactions "
 msgstr ""
 
-#: accounting/models.py:353 accounting/models.py:406
+#: accounting/models.py:328 accounting/models.py:379
 msgid "settlement"
 msgstr ""
 
-#: accounting/models.py:354
+#: accounting/models.py:329
 msgid "settlements"
 msgstr ""
 
-#: accounting/models.py:397 templates/accounting/approve_transactions.html:59
+#: accounting/models.py:370 templates/accounting/approve_transactions.html:59
 msgid "Pending"
 msgstr ""
 
-#: accounting/models.py:398 templates/accounting/approve_transactions.html:63
+#: accounting/models.py:371 templates/accounting/approve_transactions.html:63
 msgid "Committed"
 msgstr ""
 
-#: accounting/models.py:399 templates/accounting/approve_transactions.html:67
+#: accounting/models.py:372 templates/accounting/approve_transactions.html:67
 msgid "Rejected"
 msgstr ""
 
-#: accounting/models.py:409
+#: accounting/models.py:382
 msgid "May be used for date of the transaction if not today."
 msgstr ""
 
-#: accounting/models.py:410 templates/accounting/transaction_details.html:35
+#: accounting/models.py:383 templates/accounting/transaction_details.html:35
 msgid "Last modified"
 msgstr ""
 
-#: accounting/models.py:411
+#: accounting/models.py:384
 msgid "state"
 msgstr ""
 
-#: accounting/models.py:416 accounting/models.py:588 accounting/models.py:628
+#: accounting/models.py:389 accounting/models.py:558 accounting/models.py:595
 msgid "transaction"
 msgstr ""
 
-#: accounting/models.py:417
+#: accounting/models.py:390
 msgid "transactions"
 msgstr ""
 
-#: accounting/models.py:530
+#: accounting/models.py:500
 #, python-format
 msgid "Transaction %(id)d regarding your account "
 msgstr ""
 
-#: accounting/models.py:593
+#: accounting/models.py:561
 msgid "timestamp"
 msgstr ""
 
-#: accounting/models.py:594
+#: accounting/models.py:562
 msgid "user"
 msgstr ""
 
-#: accounting/models.py:595
+#: accounting/models.py:563
 msgid "message"
 msgstr ""
 
-#: accounting/models.py:610
+#: accounting/models.py:578
 msgid "transaction log entry"
 msgstr ""
 
-#: accounting/models.py:611
+#: accounting/models.py:579
 msgid "transaction log entries"
 msgstr ""
 
-#: accounting/models.py:623
+#: accounting/models.py:591
 #, python-format
 msgid "%(type)s at %(timestamp)s by %(user)s: %(message)s"
 msgstr ""
 
-#: accounting/models.py:631
+#: accounting/models.py:598
 msgid "debit amount"
 msgstr ""
 
-#: accounting/models.py:633
+#: accounting/models.py:600
 msgid "credit amount"
 msgstr ""
 
-#: accounting/models.py:656
+#: accounting/models.py:623
 msgid "transaction entry"
 msgstr ""
 
-#: accounting/models.py:657
+#: accounting/models.py:624
 msgid "transaction entries"
 msgstr ""
 
-#: accounting/models.py:661
+#: accounting/models.py:628
 #, python-format
 msgid "%(account)s: debit %(debit)s, credit %(credit)s"
 msgstr ""
@@ -313,21 +313,21 @@ msgstr ""
 msgid "Withdrawal from account"
 msgstr ""
 
-#: accounting/views/edit.py:76 accounting/views/edit.py:133
+#: accounting/views/edit.py:76 accounting/views/edit.py:134
 #: common/decorators.py:50
 msgid "Forbidden if not group admin."
 msgstr ""
 
-#: accounting/views/edit.py:128
+#: accounting/views/edit.py:129
 msgid "Your transaction has been added,"
 msgstr ""
 
-#: accounting/views/edit.py:201
+#: accounting/views/edit.py:202
 #: templates/accounting/approve_transactions.html:29
 msgid "No pending transactions found."
 msgstr ""
 
-#: accounting/views/edit.py:341
+#: accounting/views/edit.py:342
 msgid "Your transaction has been added"
 msgstr ""
 
@@ -419,7 +419,7 @@ msgstr ""
 msgid "Don't exclude blocked accounts"
 msgstr ""
 
-#: reports/models.py:55 reports/models.py:82
+#: reports/models.py:55 reports/models.py:76
 msgid "list"
 msgstr ""
 
@@ -427,15 +427,15 @@ msgstr ""
 msgid "lists"
 msgstr ""
 
-#: reports/models.py:81
+#: reports/models.py:75
 msgid "width"
 msgstr ""
 
-#: reports/models.py:89
+#: reports/models.py:82
 msgid "list item"
 msgstr ""
 
-#: reports/models.py:90
+#: reports/models.py:83
 msgid "list items"
 msgstr ""
 
@@ -473,11 +473,11 @@ msgstr ""
 msgid "Current year's net income"
 msgstr ""
 
-#: settings/__init__.py:101
+#: settings/__init__.py:102
 msgid "English"
 msgstr ""
 
-#: settings/__init__.py:102
+#: settings/__init__.py:103
 msgid "Norwegian"
 msgstr ""
 
@@ -504,37 +504,39 @@ msgstr ""
 msgid "&micro;FS Microfinance System"
 msgstr ""
 
-#: templates/base.html:71 templates/reports/list.html:33
+#: templates/base.html:72 templates/base.html.py:74
+#: templates/reports/list.html:33
 msgid "My account"
 msgstr ""
 
-#: templates/base.html:76 templates/reports/list.html:38
+#: templates/base.html:81 templates/base.html.py:83
+#: templates/reports/list.html:38
 msgid "My group"
 msgstr ""
 
-#: templates/base.html:81 templates/common/group_summary.html:6
+#: templates/base.html:89 templates/common/group_summary.html:6
 #: templates/flatpages/help.html:7 templates/flatpages/help.html.py:14
 #: templates/reports/list_form.html:40
 msgid "Help"
 msgstr ""
 
-#: templates/base.html:104
+#: templates/base.html:112
 msgid "User:"
 msgstr ""
 
-#: templates/base.html:111
+#: templates/base.html:119
 msgid "Group:"
 msgstr ""
 
-#: templates/base.html:118 templates/base.html.py:140
+#: templates/base.html:126 templates/base.html.py:148
 msgid "Go"
 msgstr ""
 
-#: templates/base.html:126
+#: templates/base.html:134
 msgid "Contact:"
 msgstr ""
 
-#: templates/base.html:133
+#: templates/base.html:141
 msgid "Language:"
 msgstr ""
 
@@ -1011,23 +1013,23 @@ msgstr ""
 msgid "up to"
 msgstr ""
 
-#: templates/reports/income.html:31
+#: templates/reports/income.html:30
 msgid "Revenues and gains"
 msgstr ""
 
-#: templates/reports/income.html:40
+#: templates/reports/income.html:39
 msgid "Total revenues and gains"
 msgstr ""
 
-#: templates/reports/income.html:51
+#: templates/reports/income.html:48
 msgid "Expenses and losses"
 msgstr ""
 
-#: templates/reports/income.html:60
+#: templates/reports/income.html:57
 msgid "Total expenses and losses"
 msgstr ""
 
-#: templates/reports/income.html:67
+#: templates/reports/income.html:64
 msgid "Net income"
 msgstr ""
 
