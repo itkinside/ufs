@@ -45,7 +45,10 @@ class AccountForm(CustomModelForm):
         account = super(AccountForm, self).save(**kwargs)
 
         if not account.slug:
-            account.slug = slugify(account.name)
+            if account.owner:
+                account.slug = account.owner.username
+            else:
+                account.slug = slugify(account.name)
         if group:
             account.group = group
 
