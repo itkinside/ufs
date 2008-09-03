@@ -1,10 +1,10 @@
-import django.newforms as forms
+from django import forms
 
 # From http://www.djangosnippets.org/snippets/200/
 class GroupedSelect(forms.Select):
     def render(self, name, value, attrs=None, choices=()):
         from django.utils.html import escape
-        from django.newforms.util import flatatt, smart_unicode
+        from django.forms.util import flatatt, smart_unicode
         if value is None: value = ''
         final_attrs = self.build_attrs(attrs, name=name)
         output = [u'<select%s>' % flatatt(final_attrs)]

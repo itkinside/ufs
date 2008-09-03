@@ -97,7 +97,7 @@ def assign_role_accounts(request, group, is_admin=False):
         if form.is_valid():
             for type, name in RoleAccount.ACCOUNT_ROLE:
                 account = form.cleaned_data[type]
-                try: 
+                try:
                     role = group.roleaccount_set.get(role=type)
                     if role.account != account:
                         role.account = account

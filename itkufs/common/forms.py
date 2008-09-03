@@ -1,6 +1,6 @@
-from django import newforms as forms
-from django.newforms.models import ModelForm
-from django.newforms.forms import BoundField, Form
+from django import forms
+from django.forms.models import ModelForm
+from django.forms.forms import BoundField, Form
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _

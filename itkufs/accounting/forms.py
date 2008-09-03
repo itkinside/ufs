@@ -1,4 +1,4 @@
-from django import newforms as forms
+from django import forms
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 

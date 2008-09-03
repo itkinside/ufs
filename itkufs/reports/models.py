@@ -33,7 +33,7 @@ class List(models.Model):
     )
 
     name = models.CharField(_('name'), max_length=200)
-    slug = models.SlugField(_('slug'), prepopulate_from=['name'])
+    slug = models.SlugField(_('slug'))
     account_width = models.PositiveSmallIntegerField(_('account width'),
         help_text=_('Relative width of cell'))
     balance_width = models.PositiveSmallIntegerField(_('balance width'),
@@ -55,12 +55,6 @@ class List(models.Model):
         verbose_name = _('list')
         verbose_name_plural = _('lists')
 
-    class Admin:
-        list_filter = ('group',)
-        list_display = ('group', 'name')
-        list_display_links = ('name',)
-        ordering = ('group', 'name')
-
     def __unicode__(self):
         return u'%s: %s' % (self.group, self.name)
 
@@ -77,10 +71,9 @@ class List(models.Model):
 
 
 class ListColumn(models.Model):
-    name = models.CharField(_('name'), max_length=200, core=True)
+    name = models.CharField(_('name'), max_length=200)
     width = models.PositiveSmallIntegerField(_('width'))
     list = models.ForeignKey(List, verbose_name=_('list'),
-        edit_inline=models.TABULAR, num_in_admin=8, num_extra_on_change=3,
         related_name='column_set')
 
     class Meta:

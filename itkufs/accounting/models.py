@@ -9,10 +9,10 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 
 class Group(models.Model):
     name = models.CharField(_('name'), max_length=100)
-    slug = models.SlugField(_('slug'), prepopulate_from=['name'], unique=True,
+    slug = models.SlugField(_('slug'), unique=True,
         help_text=_('A shortname used in URLs.'))
     admins = models.ManyToManyField(User, verbose_name=_('admins'),
-        null=True, blank=True, filter_interface=models.HORIZONTAL)
+        null=True, blank=True)
     warn_limit = models.IntegerField(_('warn limit'), null=True, blank=True,
         help_text=_('Warn user of low balance at this limit, '
             + 'leave blank for no limit.'))
@@ -26,9 +26,6 @@ class Group(models.Model):
         ordering = ('name',)
         verbose_name = _('group')
         verbose_name_plural = _('groups')
-
-    class Admin:
-        pass
 
     def __unicode__(self):
         return self.name
@@ -148,7 +145,7 @@ class Account(models.Model):
     objects = AccountManager()
 
     name = models.CharField(_('name'), max_length=100)
-    slug = models.SlugField(_('slug'), prepopulate_from=['name'],
+    slug = models.SlugField(_('slug'),
         help_text=_('A shortname used in URLs etc.'))
     group = models.ForeignKey(Group, verbose_name=_('group'))
     type = models.CharField(_('type'), max_length=2, choices=ACCOUNT_TYPE,
@@ -166,21 +163,6 @@ class Account(models.Model):
         unique_together = (('slug', 'group'), ('owner', 'group'))
         verbose_name = _('account')
         verbose_name_plural = _('accounts')
-
-    class Admin:
-        fields = (
-            (None,
-                {'fields': ('name', 'slug', 'group', 'owner')}),
-            (_('Advanced options'), {
-                'classes': 'collapse',
-                'fields' : ('type', 'active', 'ignore_block_limit')}),
-        )
-        list_display = ('group', 'name', 'type', 'owner', 'balance',
-            'active', 'ignore_block_limit')
-        list_display_links = ('name',)
-        list_filter = ('active', 'type', 'group')
-        list_per_page = 20
-        search_fields = ('name',)
 
     def __unicode__(self):
         return u'%s: %s' % (self.group, self.name)
@@ -305,13 +287,6 @@ class RoleAccount(models.Model):
         verbose_name = _('role account')
         verbose_name_plural = _('role accounts')
 
-    class Admin:
-        list_display = ('group', 'role', 'account')
-        list_display_links = ('group', 'role', 'account')
-        list_filter = ('group', 'role')
-        list_per_page = 20
-        search_fields = ('account',)
-
     def __unicode__(self):
         return _(u'%(account)s is %(role)s for %(group)s') % {
             'account': self.account.name,
@@ -355,9 +330,6 @@ class Settlement(models.Model):
         # FIXME: waiting for http://code.djangoproject.com/ticket/6523
         # unique_together = (('date', 'comment', 'group'),)
 
-    class Admin:
-        pass
-
     def __unicode__(self):
         if self.comment is not None:
             return u'%s: %s' % (self.date, self.comment)
@@ -372,6 +344,7 @@ class Settlement(models.Model):
 
     def is_editable(self):
         return self.closed == False
+
 
 class TransactionManager(models.Manager):
     def get_query_set(self):
@@ -415,9 +388,6 @@ class Transaction(models.Model):
         ordering = ('-last_modified',)
         verbose_name = _('transaction')
         verbose_name_plural = _('transactions')
-
-    class Admin:
-        pass
 
     def __unicode__(self):
         if self.entry_set.all().count():
@@ -585,10 +555,8 @@ class Transaction(models.Model):
 
 class TransactionLog(models.Model):
     transaction = models.ForeignKey(Transaction,
-        verbose_name=_('transaction'), related_name='log_set',
-        edit_inline=models.TABULAR, num_in_admin=3, max_num_in_admin=4,
-        num_extra_on_change=1)
-    type = models.CharField(_('type'), max_length=3, core=True,
+        verbose_name=_('transaction'), related_name='log_set')
+    type = models.CharField(_('type'), max_length=3,
         choices=Transaction.TRANSACTION_STATE)
     timestamp =  models.DateTimeField(_('timestamp'), auto_now_add=True)
     user = models.ForeignKey(User, verbose_name=_('user'))
@@ -624,10 +592,9 @@ class TransactionLog(models.Model):
 
 
 class TransactionEntry(models.Model):
-    transaction = models.ForeignKey(Transaction,
-        verbose_name=_('transaction'), related_name='entry_set',
-        edit_inline=models.TABULAR, num_in_admin=5, num_extra_on_change=3)
-    account = models.ForeignKey('Account', verbose_name=_('account'), core=True)
+    transaction = models.ForeignKey(Transaction, verbose_name=_('transaction'),
+        related_name='entry_set')
+    account = models.ForeignKey('Account', verbose_name=_('account'))
     debit = models.DecimalField(_('debit amount'),
         max_digits=10, decimal_places=2, default=0)
     credit = models.DecimalField(_('credit amount'),
