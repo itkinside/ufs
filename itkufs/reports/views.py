@@ -61,10 +61,10 @@ def pdf(request, group, list, is_admin=False):
 
     if group.logo:
         # Find scaling ratio
-        ratio = group.get_logo_width() / group.get_logo_height()
+        ratio = group.logo.width / group.logo.height
 
         # Load logo with correct scaling
-        logo = Image(group.get_logo_filename(), width=logo_height*ratio, height=logo_height)
+        logo = Image(group.logo.path, width=logo_height*ratio, height=logo_height)
 
         # Draw on first page
         logo.drawOn(p, width - margin - logo_height*ratio, height - margin - logo_height)
