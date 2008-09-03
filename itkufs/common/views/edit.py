@@ -16,18 +16,18 @@ from itkufs.accounting.models import Group, Account, RoleAccount
 def edit_group(request, group, is_admin=False):
     """Edit group properties"""
 
-    old_logo = group.get_logo_filename()
-
     if request.method == 'POST':
+        old_logo = group.logo.path
+
         form = GroupForm(data=request.POST, files=request.FILES, instance=group, user=request.user)
 
         if form.is_valid():
             form.save()
 
-            if old_logo and old_logo != group.get_logo_filename():
+            if old_logo and old_logo != group.logo.path:
                 os.remove(old_logo)
             elif 'delete_logo' in form.cleaned_data and old_logo:
-                os.remove(group.get_logo_filename())
+                os.remove(group.logo.path)
                 group.logo = ''
                 group.save()
 
