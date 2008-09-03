@@ -19,6 +19,8 @@ class Group(models.Model):
     block_limit = models.IntegerField(_('block limit'), null=True, blank=True,
         help_text=_('Limit for blacklisting user, leave blank for no limit.'))
     logo = models.ImageField(upload_to='logos', blank=True, help_text=_('A small image that will be added to lists.'))
+
+    # FIXME remove? (given that comments on lists cover this use case)
     email = models.EmailField(blank=True,
         help_text=_('Contact address for group.'))
 

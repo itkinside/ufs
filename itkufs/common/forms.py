@@ -55,7 +55,7 @@ class AccountForm(CustomModelForm):
 
 
 class GroupForm(CustomModelForm):
-    delete_logo = forms.BooleanField()
+    delete_logo = forms.BooleanField(required=False)
 
     class Meta:
         model = Group
