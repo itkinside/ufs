@@ -212,7 +212,7 @@ msgstr "Avventer"
 
 #: accounting/models.py:398 templates/accounting/approve_transactions.html:63
 msgid "Committed"
-msgstr "Innsjekket"
+msgstr "Bokført"
 
 #: accounting/models.py:399 templates/accounting/approve_transactions.html:67
 msgid "Rejected"
