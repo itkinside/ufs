@@ -31,6 +31,9 @@ def pdf(request, group, list, is_admin=False):
     else:
         accounts = group.user_account_set.filter(active=True)
 
+    if list.use_username:
+        accounts = accounts.order_by('owner__username')
+
     # Create response
     filename = '%s-%s-%s' % (date.today(), group, list)
 
@@ -114,7 +117,10 @@ def pdf(request, group, list, is_admin=False):
             else:
                 GRID_STYLE.add('BACKGROUND', (1,i+1), (-1,i+1), blacklisted_color)
 
-        row = [a.name]
+        if list.use_username:
+            row = [a.owner.username]
+        else:
+            row = [a.name]
 
         # Check if we need to reduce col font size
         while col_width[0] < p.stringWidth(row[-1], font_name, font_size_name) + 12 and font_size_name > font_size_min:

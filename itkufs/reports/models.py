@@ -49,6 +49,8 @@ class List(models.Model):
         help_text=_('Use two rows per account'), editable=False, default=False)
     ignore_blocked = models.BooleanField(_('ignore blocked'),
         help_text=_("Don't exclude blocked accounts"))
+    use_username = models.BooleanField(_('Use username'),
+        help_text=_('Owner usernames instead of account names'))
 
     class Meta:
         unique_together = (('slug', 'group'),)
