@@ -53,6 +53,9 @@ def pdf(request, group, list, is_admin=False):
     logo_height = 25 # pt
 
     blacklisted_color = Color(0,0,0)
+    blacklisted_text_color = Color(0.63,0,0)
+    even_color = Color(1,1,1)
+    odd_color = Color(0.95,0.95,0.95)
 
     if list.orientation == list.LANDSCAPE:
         height, width = A4
@@ -106,14 +109,14 @@ def pdf(request, group, list, is_admin=False):
     data = [header]
 
     # Add alternating backgrounds to style
-    GRID_STYLE.add('ROWBACKGROUNDS', (0,0), (-1,-1), [Color(1,1,1), Color(0.99,0.99,0.99)])
+    GRID_STYLE.add('ROWBACKGROUNDS', (0,0), (-1,-1), [even_color, odd_color])
 
     for i,a in enumerate(accounts):
 
         if a.is_blocked():
             if list.balance_width:
                 GRID_STYLE.add('BACKGROUND', (2,i+1), (-1,i+1), blacklisted_color)
-                GRID_STYLE.add('TEXTCOLOR', (1,i+1), (1,i+1), Color(0.63,0,0))
+                GRID_STYLE.add('TEXTCOLOR', (1,i+1), (1,i+1), blacklisted_text_color)
             else:
                 GRID_STYLE.add('BACKGROUND', (1,i+1), (-1,i+1), blacklisted_color)
 
