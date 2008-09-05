@@ -55,7 +55,7 @@ def pdf(request, group, list, is_admin=False):
     blacklisted_color = Color(0,0,0)
     blacklisted_text_color = Color(0.63,0,0)
     even_color = Color(1,1,1)
-    odd_color = Color(0.95,0.95,0.95)
+    odd_color = Color(0.97,0.97,0.97)
 
     if list.orientation == list.LANDSCAPE:
         height, width = A4
@@ -80,7 +80,14 @@ def pdf(request, group, list, is_admin=False):
     p.drawString(margin, height - margin - font_size, '%s: %s' % (group, list.name))
     p.setFont(font_name, font_size - 4)
     p.drawString(margin, height - margin - font_size - font_size + 2, '%s: %s' % (_('Printed'), str(date.today())))
-    p.drawString(margin, margin, list.comment)
+
+    footer = []
+    if group.email:
+        footer.append(group.email)
+    if list.comment.strip():
+        footer.append(list.comment)
+
+    p.drawString(margin, margin, ' - '.join(footer))
 
     blacklisted_note = _('Blacklisted accounts are marked with: ')
 
