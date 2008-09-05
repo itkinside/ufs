@@ -111,6 +111,7 @@ TEST_RUNNER = 'itkufs.common.test_runner.test_runner_with_coverage'
 COVERAGE_MODULES = (
     'itkufs',
     'itkufs.accounting',
+    'itkufs.accounting.admin',
     'itkufs.accounting.forms',
     'itkufs.accounting.models',
     'itkufs.accounting.urls',
@@ -118,6 +119,7 @@ COVERAGE_MODULES = (
     'itkufs.accounting.views.display',
     'itkufs.accounting.views.edit',
     'itkufs.reports',
+    'itkufs.reports.admin',
     'itkufs.reports.forms',
     'itkufs.reports.models',
     'itkufs.reports.urls',
