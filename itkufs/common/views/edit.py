@@ -17,7 +17,10 @@ def edit_group(request, group, is_admin=False):
     """Edit group properties"""
 
     if request.method == 'POST':
-        old_logo = group.logo.path
+        if group.logo:
+            old_logo = group.logo.path
+        else:
+            old_logo = None
 
         form = GroupForm(data=request.POST, files=request.FILES, instance=group, user=request.user)
 
@@ -27,6 +30,7 @@ def edit_group(request, group, is_admin=False):
             if old_logo and old_logo != group.logo.path:
                 os.remove(old_logo)
             elif 'delete_logo' in form.cleaned_data and old_logo:
+                # FIXME see if filestorage can clean this up for us
                 os.remove(group.logo.path)
                 group.logo = ''
                 group.save()
