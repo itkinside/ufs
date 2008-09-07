@@ -10,8 +10,6 @@ urlpatterns = patterns('',
     ### Lists
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<list>[0-9a-z_-]+)/$',
         pdf, name='view-list'),
-    url(r'^(?P<group>[0-9a-z_-]+)/html-list/(?P<list>[0-9a-z_-]+)/$',
-        view_list, name='view-list-html'),
     url(r'^(?P<group>[0-9a-z_-]+)/new-list/$',
         new_edit_list, name='new-list'),
     url(r'^(?P<group>[0-9a-z_-]+)/edit-list/(?P<list>[0-9a-z_-]+)/$',

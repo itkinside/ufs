@@ -187,27 +187,6 @@ def pdf(request, group, list, is_admin=False):
     return response
 
 @login_required
-@limit_to_group
-def view_list(request, group, list, is_admin=False):
-    """Show list for printing"""
-
-    if list.accounts.all().count():
-        accounts = list.accounts.all()
-    else:
-        accounts = group.user_account_set.filter(active=True)
-
-    response = render_to_response('reports/list.html',
-        {
-            'accounts': accounts,
-            'group': group,
-            'list': list,
-            'is_admin': is_admin,
-        },
-    context_instance=RequestContext(request))
-    populate_xheaders(request, response, List, list.id)
-    return response
-
-@login_required
 @limit_to_admin
 def new_edit_list(request, group, list=None, is_admin=False):
     """Create new or edit existing list"""
