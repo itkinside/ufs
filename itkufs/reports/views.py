@@ -345,15 +345,13 @@ def income(request, group, is_admin=False):
 
     # Incomes
     for account in group.account_set.filter(type=Account.INCOME_ACCOUNT):
-        balance = account.user_balance()
-        accounts['in'].append((account.name, balance))
-        accounts['in_sum'] += balance
+        accounts['in'].append(account)
+        accounts['in_sum'] += account.balance()
 
     # Expenses
     for account in group.account_set.filter(type=Account.EXPENSE_ACCOUNT):
-        balance = account.user_balance()
-        accounts['ex'].append((account.name, balance))
-        accounts['ex_sum'] += balance
+        accounts['ex'].append(account)
+        accounts['ex_sum'] += account.balance()
 
     # Net income
     accounts['in_ex_diff'] = accounts['in_sum'] + accounts['ex_sum']

@@ -29,10 +29,10 @@
     <tr>
         <th colspan="2">{% trans "Revenues and gains" %}</th>
     </tr>
-{% for name, balance in accounts.in %}
+{% for account in accounts.in %}
     <tr>
-        <td>&nbsp;&nbsp;{{ name }}</td>
-        <td class="align_right">{{ balance|floatformat:2 }}</td>
+        <td>&nbsp;&nbsp;{{ account.name }}</td>
+        <td class="align_right">{{ account.balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
@@ -47,10 +47,10 @@
     <tr>
         <th colspan="2">{% trans "Expenses and losses" %}</th>
     </tr>
-{% for name, balance in accounts.ex %}
+{% for account in accounts.ex %}
     <tr>
-        <td>&nbsp;&nbsp;{{ name }}</td>
-        <td class="align_right">{{ balance|floatformat:2 }}</td>
+        <td>&nbsp;&nbsp;{{ account.name }}</td>
+        <td class="align_right">{{ account.balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
