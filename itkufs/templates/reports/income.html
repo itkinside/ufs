@@ -31,7 +31,7 @@
     </tr>
 {% for account in accounts.in %}
     <tr>
-        <td>&nbsp;&nbsp;{{ account.name }}</td>
+        <td>&nbsp;&nbsp;<a href="{{ account.get_absolute_url }}">{{ account.name }}</a></td>
         <td class="align_right">{{ account.balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
@@ -49,7 +49,7 @@
     </tr>
 {% for account in accounts.ex %}
     <tr>
-        <td>&nbsp;&nbsp;{{ account.name }}</td>
+        <td>&nbsp;&nbsp;<a href="{{ account.get_absolute_url }}">{{ account.name }}</a></td>
         <td class="align_right">{{ account.balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
