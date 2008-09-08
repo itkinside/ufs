@@ -33,6 +33,14 @@ This release
   (adamcik: don't remeber what I meant by this off the top of my head, probably
   not critical for intial release)
 
+Nytt 2008-09-08
+- Ta bort custom ModelForm
+- Ta i bruk generic_create/update
+- Ta i bruk form_factories (hva er det?)
+- Få med TransactionLog i transaction-listen
+- Vise antall transactions selv når for få til pagination
+- Ta i bruk objektorientert pagination
+
 Done
 ~~~~
 *lots*
