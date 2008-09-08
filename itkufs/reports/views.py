@@ -356,7 +356,7 @@ def income(request, group, is_admin=False):
         accounts['ex_sum'] += balance
 
     # Net income
-    accounts['in_ex_diff'] = accounts['in_sum'] - accounts['ex_sum']
+    accounts['in_ex_diff'] = accounts['in_sum'] + accounts['ex_sum']
 
     return render_to_response('reports/income.html',
         {
