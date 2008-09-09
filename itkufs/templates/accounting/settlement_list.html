@@ -50,9 +50,11 @@
         <td>{{ s.closed|yesno:_("Yes,No") }}</td>
         <td>
             <a href="{{ s.get_absolute_url }}">{% trans "Details" %}</a>
-            {% if s.is_editable %}
+            {% if is_admin and s.is_editable %}
+                <span class="admin">
                 <a href="{% url edit-settlement group.slug,s.id %}">
                     {% trans "Edit" %}</a>
+                </span>
             {% endif %}
         </td>
     </tr>

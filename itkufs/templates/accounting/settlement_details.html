@@ -30,8 +30,10 @@
 {% if is_admin and settlement.is_editable %}
     <tr>
         <th>{% trans "Actions" %}</th>
-        <td><a href="{% url edit-settlement group.slug,settlement.id %}">
-            Edit settlement</a></td>
+        <td class="admin">
+            <a href="{% url edit-settlement group.slug,settlement.id %}">
+                Edit settlement</a>
+        </td>
     </tr>
 {% endif %}
 </table>
