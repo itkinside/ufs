@@ -1,5 +1,8 @@
 {% load i18n %}
 
+<li><a href="{% url transaction-list-account group.slug,account.slug %}">
+    {% trans "View transactions" %}</a></li>
+
 {% if is_owner %}
     <li><a href="{% url account-deposit group.slug,account.slug %}">
         {% trans "New deposit" %}</a></li>

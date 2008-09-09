@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 11:28+0200\n"
+"POT-Creation-Date: 2008-09-09 11:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -474,11 +474,11 @@ msgstr "Balanse"
 msgid "List deleted"
 msgstr "Listen ble slettet"
 
-#: reports/views.py:306
+#: reports/views.py:305
 msgid "Member accounts"
 msgstr "Medlemskontoer"
 
-#: reports/views.py:320
+#: reports/views.py:319
 msgid "Current year's net income"
 msgstr "Inneværende års nettoinntekt"
 
@@ -524,7 +524,7 @@ msgstr "Min konto"
 msgid "My group"
 msgstr "Min gruppe"
 
-#: templates/base.html:89 templates/accounting/base.html:63
+#: templates/base.html:89 templates/accounting/base.html:61
 #: templates/flatpages/help.html:7 templates/flatpages/help.html.py:14
 #: templates/reports/list_form.html:40
 msgid "Help"
@@ -629,7 +629,7 @@ msgstr "Oversikt"
 msgid "Settlements"
 msgstr "Oppgjør"
 
-#: templates/accounting/base.html:43 templates/accounting/base.html.py:54
+#: templates/accounting/base.html:43
 #: templates/accounting/settlement_details.html:39
 #: templates/accounting/transaction_list.html:5
 #: templates/accounting/transaction_list.html:14
@@ -638,7 +638,7 @@ msgstr "Oppgjør"
 msgid "Transactions"
 msgstr "Transaksjoner"
 
-#: templates/accounting/base.html:65
+#: templates/accounting/base.html:63
 msgid ""
 "<em>Balance</em> is always seen from the perspective of the\n"
 "group. If the group owes people money, it is a liability, and their user\n"
@@ -646,10 +646,10 @@ msgid ""
 "and\n"
 "their user account balance is positive."
 msgstr ""
-"<em>Balansen</em> er alltid sett fra perspektivet til gruppen. "
-"Hvis gruppen skylder folk penger, så er det gjeld, og deres "
-"brukerkontobalanse er negativ. Hvis folk skylder gruppen penger, så er det "
-"en eiendel, og brukerkontobalansen er positiv."
+"<em>Balansen</em> er alltid sett fra perspektivet til gruppen. Hvis gruppen "
+"skylder folk penger, så er det gjeld, og deres brukerkontobalanse er "
+"negativ. Hvis folk skylder gruppen penger, så er det en eiendel, og "
+"brukerkontobalansen er positiv."
 
 #: templates/accounting/reject_transactions.html:6
 #: templates/accounting/reject_transactions.html:23
@@ -830,15 +830,19 @@ msgstr "Registrer transaksjon"
 msgid "&micro;FS administration"
 msgstr "&micro;FS administrasjon"
 
-#: templates/common/account_action.html:5
+#: templates/common/account_action.html:4
+msgid "View transactions"
+msgstr "Vis transaksjoner"
+
+#: templates/common/account_action.html:8
 msgid "New deposit"
 msgstr "Nytt innskudd"
 
-#: templates/common/account_action.html:7
+#: templates/common/account_action.html:10
 msgid "New withdrawal"
 msgstr "Nytt uttak"
 
-#: templates/common/account_action.html:9
+#: templates/common/account_action.html:12
 msgid "New transfer"
 msgstr "Ny overføring"
 
@@ -993,31 +997,31 @@ msgstr "Lagre rollekontoer"
 msgid "Assets"
 msgstr "Eiendeler"
 
-#: templates/reports/balance.html:39
+#: templates/reports/balance.html:45
 msgid "Total assets"
 msgstr "Totale eiendeler"
 
-#: templates/reports/balance.html:50
+#: templates/reports/balance.html:56
 msgid "Liabilities and equities"
 msgstr "Egenkapital og gjeld"
 
-#: templates/reports/balance.html:54
+#: templates/reports/balance.html:60
 msgid "Liabilities"
 msgstr "Gjeld"
 
-#: templates/reports/balance.html:63
+#: templates/reports/balance.html:69
 msgid "Total liabilities"
 msgstr "Total gjeld"
 
-#: templates/reports/balance.html:70
+#: templates/reports/balance.html:76
 msgid "Equities"
 msgstr "Egenkapital"
 
-#: templates/reports/balance.html:79
+#: templates/reports/balance.html:85
 msgid "Total equities (Net worth)"
 msgstr "Total egenkapital (nettoverdi)"
 
-#: templates/reports/balance.html:86
+#: templates/reports/balance.html:92
 msgid "Total liabilities and equities"
 msgstr "Total egenkapital og gjeld"
 
@@ -1037,19 +1041,19 @@ msgstr "opp til"
 msgid "Revenues and gains"
 msgstr "Inntekter og gevinster"
 
-#: templates/reports/income.html:39
+#: templates/reports/income.html:45
 msgid "Total revenues and gains"
 msgstr "Totale inntekter og gevinster"
 
-#: templates/reports/income.html:48
+#: templates/reports/income.html:54
 msgid "Expenses and losses"
 msgstr "Utgifter og tap"
 
-#: templates/reports/income.html:57
+#: templates/reports/income.html:69
 msgid "Total expenses and losses"
 msgstr "Totale utgifter og tap"
 
-#: templates/reports/income.html:64
+#: templates/reports/income.html:76
 msgid "Net income"
 msgstr "Nettoinntekt"
 
