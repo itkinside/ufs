@@ -29,10 +29,16 @@
     <tr>
         <th colspan="2">{% trans "Assets" %}</th>
     </tr>
-{% for name, balance in accounts.as %}
+{% for account in accounts.as %}
     <tr>
-        <td>&nbsp;&nbsp;{{ name }}</td>
-        <td class="align_right">{{ balance|floatformat:2 }}</td>
+        <td>&nbsp;&nbsp;
+            {% if is_admin %}
+                <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
+            {% else %}
+                {{ account.name }}
+            {% endif %}
+        </td>
+        <td class="align_right">{{ account.user_balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>

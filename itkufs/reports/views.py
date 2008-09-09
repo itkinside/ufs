@@ -287,9 +287,8 @@ def balance(request, group, is_admin=False):
 
     # Assets
     for account in group.account_set.filter(type=Account.ASSET_ACCOUNT):
-        balance = account.user_balance()
-        accounts['as'].append((account.name, balance))
-        accounts['as_sum'] += balance
+        accounts['as'].append(account)
+        accounts['as_sum'] += account.user_balance()
 
     # Liabilities
     for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
