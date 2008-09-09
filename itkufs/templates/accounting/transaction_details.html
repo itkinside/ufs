@@ -39,10 +39,14 @@
     <tr>
         <th>{% trans "Actions" %}</th>
         <td>
-            <a href="{% url edit-transaction group.slug,transaction.id %}">
-                {% trans "Edit transaction" %}</a>
-            <a href="{% url reject-transaction group.slug,transaction.id %}">
-                {% trans "Reject transaction" %}</a>
+            <ul>
+                <li class="admin">
+                    <a href="{% url edit-transaction group.slug,transaction.id %}">
+                        {% trans "Edit transaction" %}</a></li>
+                <li class="admin">
+                    <a href="{% url reject-transaction group.slug,transaction.id %}">
+                        {% trans "Reject transaction" %}</a></li>
+            </ul>
         </td>
     </tr>
 {% endif %}
