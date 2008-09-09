@@ -41,6 +41,7 @@
 
 <table class="tablelist">
     <tr>
+            <th>{% trans "ID" %}</th>
             <th>{% trans "State" %}</th>
             <th>{% trans "Account" %}</th>
             <th>{% trans "Debit" %}</th>
@@ -53,6 +54,9 @@
     <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}
         {% if t.is_rejected %}rejected{% else %}
         {% if not t.is_received %}pending{% endif %}{% endif %}">
+        <td rowspan="{{ t.entry_set.all.count }}" class="id">
+            <a href="{{ t.get_absolute_url }}">{{ t.id }}</a>
+        </td>
         <td rowspan="{{ t.entry_set.all.count }}" class="state">
             <dl>
                 {% if t.is_pending %}
