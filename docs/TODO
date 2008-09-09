@@ -40,6 +40,9 @@ Nytt 2008-09-08
 - Få med TransactionLog i transaction-listen
 - Vise antall transactions selv når for få til pagination
 - Ta i bruk objektorientert pagination
+- Endre Transaction.get_{pending,committed,rejected} til å returnere alle
+  matches og ikke bare første. I allefall approve transactions må endres for
+  å håndtere en liste med resultater.
 
 Done
 ~~~~
