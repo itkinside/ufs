@@ -100,6 +100,10 @@
         </td>
         <td rowspan="{{ t.entry_set.all.count }}" class="details">
             {{ f.as_p }}
+            {% if t.is_editable %}
+                <a href="{% url edit-transaction group.slug,t.id %}">
+                    Edit transaction</a>
+            {% endif %}
         </td>
         {% endif %}
     </tr>
