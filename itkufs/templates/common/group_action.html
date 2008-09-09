@@ -1,8 +1,12 @@
 {% load i18n %}
 
+<li><a href="{% url settlement-list group.slug %}">
+    {% trans "View settlements" %}</a></li>
+<li><a href="{% url transaction-list-group group.slug %}">
+    {% trans "View transactions" %}</a></li>
 {% if is_admin %}
-<li class="admin"><a href="{% url new-transaction group.slug %}">
-     {% trans "New transaction" %}</a></li>
-<li class="admin"><a href="{% url approve-transactions group.slug %}">
-     {% trans "Approve transactions" %}{% if group.pending_transaction_set.count %}*{% endif %}</a></li>
+    <li class="admin"><a href="{% url new-transaction group.slug %}">
+         {% trans "New transaction" %}</a></li>
+    <li class="admin"><a href="{% url approve-transactions group.slug %}">
+         {% trans "Approve transactions" %}{% if group.pending_transaction_set.count %}*{% endif %}</a></li>
 {% endif %}

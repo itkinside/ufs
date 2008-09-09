@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 11:50+0200\n"
+"POT-Creation-Date: 2008-09-09 11:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -519,7 +519,7 @@ msgstr ""
 msgid "My group"
 msgstr ""
 
-#: templates/base.html:89 templates/accounting/base.html:61
+#: templates/base.html:89 templates/accounting/base.html:57
 #: templates/flatpages/help.html:7 templates/flatpages/help.html.py:14
 #: templates/reports/list_form.html:40
 msgid "Help"
@@ -547,7 +547,7 @@ msgstr ""
 
 #: templates/accounting/approve_transactions.html:6
 #: templates/accounting/approve_transactions.html:23
-#: templates/common/group_action.html:7
+#: templates/common/group_action.html:11
 msgid "Approve transactions"
 msgstr ""
 
@@ -613,27 +613,11 @@ msgstr ""
 msgid "Accounting"
 msgstr ""
 
-#: templates/accounting/base.html:39 templates/accounting/base.html.py:52
+#: templates/accounting/base.html:39 templates/accounting/base.html.py:48
 msgid "Summary"
 msgstr ""
 
-#: templates/accounting/base.html:41
-#: templates/accounting/settlement_list.html:6
-#: templates/accounting/settlement_list.html:14
-#: templates/accounting/settlement_list.html:23
-msgid "Settlements"
-msgstr ""
-
-#: templates/accounting/base.html:43
-#: templates/accounting/settlement_details.html:39
-#: templates/accounting/transaction_list.html:5
-#: templates/accounting/transaction_list.html:14
-#: templates/accounting/transaction_list.html:17
-#: templates/accounting/transaction_list.html:27
-msgid "Transactions"
-msgstr ""
-
-#: templates/accounting/base.html:63
+#: templates/accounting/base.html:59
 msgid ""
 "<em>Balance</em> is always seen from the perspective of the\n"
 "group. If the group owes people money, it is a liability, and their user\n"
@@ -689,6 +673,14 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
+#: templates/accounting/settlement_details.html:39
+#: templates/accounting/transaction_list.html:5
+#: templates/accounting/transaction_list.html:14
+#: templates/accounting/transaction_list.html:17
+#: templates/accounting/transaction_list.html:27
+msgid "Transactions"
+msgstr ""
+
 #: templates/accounting/settlement_form.html:6
 #: templates/accounting/settlement_form.html:18
 #: templates/accounting/settlement_form.html:29
@@ -704,6 +696,12 @@ msgstr ""
 
 #: templates/accounting/settlement_form.html:40
 msgid "Save settlement"
+msgstr ""
+
+#: templates/accounting/settlement_list.html:6
+#: templates/accounting/settlement_list.html:14
+#: templates/accounting/settlement_list.html:23
+msgid "Settlements"
 msgstr ""
 
 #: templates/accounting/settlement_list.html:31
@@ -783,7 +781,7 @@ msgstr ""
 #: templates/accounting/transaction_form.html:6
 #: templates/accounting/transaction_form.html:14
 #: templates/accounting/transaction_form.html:20
-#: templates/common/group_action.html:5
+#: templates/common/group_action.html:9
 msgid "New transaction"
 msgstr ""
 
@@ -818,7 +816,7 @@ msgstr ""
 msgid "&micro;FS administration"
 msgstr ""
 
-#: templates/common/account_action.html:4
+#: templates/common/account_action.html:4 templates/common/group_action.html:6
 msgid "View transactions"
 msgstr ""
 
@@ -887,6 +885,10 @@ msgstr ""
 #: templates/common/group_summary.html:80
 #: templates/common/group_summary.html:82
 msgid "No lists found"
+msgstr ""
+
+#: templates/common/group_action.html:4
+msgid "View settlements"
 msgstr ""
 
 #: templates/common/group_form.html:6 templates/common/group_form.html:14
