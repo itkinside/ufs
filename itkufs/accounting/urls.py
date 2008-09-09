@@ -32,13 +32,13 @@ urlpatterns = patterns('',
     # Admin transaction actions
     url(r'^(?P<group>[0-9a-z_-]+)/new-transaction/$',
         new_edit_transaction, name='new-transaction'),
-    url(r'^(?P<group>[0-9a-z_-]+)/edit-transaction/(?P<transaction>\d+)/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/edit/$',
         new_edit_transaction, name='edit-transaction'),
     url(r'^(?P<group>[0-9a-z_-]+)/approve-transaction/$',
         approve_transactions, name='approve-transactions'),
     url(r'^(?P<group>[0-9a-z_-]+)/reject-transaction/$',
         reject_transactions, name='reject-transactions'),
-    url(r'^(?P<group>[0-9a-z_-]+)/reject-transaction/(?P<transaction>\d+)/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/reject/$',
         reject_transactions, name='reject-transaction'),
 
     # User transaction actions
