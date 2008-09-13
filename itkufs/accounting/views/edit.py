@@ -290,6 +290,8 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
                 data['%d-debit' % e.account.id] = e.debit
             if e.credit > 0:
                 data['%d-credit' % e.account.id] = e.credit
+
+        data['settlement-settlement'] = transaction.settlement_id
     else:
         data = None
 
