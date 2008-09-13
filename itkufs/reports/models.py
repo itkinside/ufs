@@ -57,6 +57,8 @@ class List(models.Model):
         verbose_name = _('list')
         verbose_name_plural = _('lists')
 
+        ordering = ('name',)
+
     def __unicode__(self):
         return u'%s: %s' % (self.group, self.name)
 
