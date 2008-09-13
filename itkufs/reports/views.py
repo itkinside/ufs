@@ -96,6 +96,13 @@ def pdf(request, group, list, is_admin=False):
 
     p.setFont(font_name, font_size)
 
+    if not accounts:
+        no_accounts_message = _("Sorry, this list is empty.")
+        p.drawString(margin, height - font_size - margin - head_height, no_accounts_message)
+        p.save()
+
+        return response
+
     # Store col widths
     col_width = [list.account_width]
     header = [_('Name')]
