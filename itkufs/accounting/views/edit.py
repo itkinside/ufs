@@ -271,6 +271,14 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
 
     if transaction is None:
         transaction = Transaction(group=group)
+    elif not transaction.is_editable():
+        request.user.message_set.create(
+            message= _("Transaction %d can't be changed." % transaction.id))
+
+        db_transaction.commit()
+
+        url = reverse('group-summary', args=(group.slug,))
+        return HttpResponseRedirect(url)
 
     if request.method == 'POST':
         data = request.POST
