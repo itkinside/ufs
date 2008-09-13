@@ -368,6 +368,7 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
             'group_forms': group_forms,
             'user_forms': user_forms,
             'errors': errors,
+            'transaction': transaction,
         },
         context_instance=RequestContext(request))
 

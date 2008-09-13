@@ -3,15 +3,25 @@
 
 
 {% block title %}
-    {% trans "New transaction" %}
+    {% if transaction.id %}
+        {% trans "Edit transaction" %}
+    {% else %}
+        {% trans "New transaction" %}
+    {% endif %}
     - {{ block.super }}
 {% endblock %}
 
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo; <a href="{% url new-transaction group.slug %}">
-        {% trans "New transaction" %}</a>
+    &raquo;
+    <a href="{% url new-transaction group.slug %}">
+        {% if transaction.id %}
+            {% trans "Edit transaction" %}
+        {% else %}
+            {% trans "New transaction" %}
+        {% endif %}
+    </a>
 {% endblock %}
 
 
