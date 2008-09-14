@@ -173,11 +173,19 @@ def pdf(request, group, list, is_admin=False):
                 GRID_STYLE.add('SPAN', (1,i), (1,i+extra_row_height))
 
     # Set font size for names
-    GRID_STYLE.add('FONTSIZE', (0,1), (0,i), font_size_name)
+    GRID_STYLE.add('FONTSIZE', (0,1), (0,-1), font_size_name)
 
     # Set font size for balance
     if list.balance_width:
-        GRID_STYLE.add('FONTSIZE', (1,1), (1,i), font_size_balance)
+        GRID_STYLE.add('FONTSIZE', (1,1), (1,-1), font_size_balance)
+
+    if list.double:
+        if list.balance_width:
+            GRID_STYLE.add('TOPPADDING', (2,1), (-1,-1), 0)
+            GRID_STYLE.add('BOTTOMPADDING', (2,1), (-1,-1), 0)
+        else:
+            GRID_STYLE.add('TOPPADDING', (1,1), (-1,-1), 0)
+            GRID_STYLE.add('BOTTOMPADDING', (1,1), (-1,-1), 0)
 
     GRID_STYLE.add('VALIGN', (0,1), (-1,-1), 'TOP')
 
