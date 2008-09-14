@@ -57,6 +57,8 @@ def pdf(request, group, list, is_admin=False):
     even_color = Color(1,1,1)
     odd_color = Color(0.97,0.97,0.97)
 
+    alternate_colors = [even_color, odd_color]
+
     if list.orientation == list.LANDSCAPE:
         height, width = A4
     else:
@@ -96,6 +98,13 @@ def pdf(request, group, list, is_admin=False):
 
     p.setFont(font_name, font_size)
 
+    if not accounts:
+        no_accounts_message = _("Sorry, this list is empty.")
+        p.drawString(margin, height - font_size - margin - head_height, no_accounts_message)
+        p.save()
+
+        return response
+
     # Store col widths
     col_width = [list.account_width]
     header = [_('Name')]
@@ -115,17 +124,25 @@ def pdf(request, group, list, is_admin=False):
     # Intialise table with header
     data = [header]
 
-    # Add alternating backgrounds to style
-    GRID_STYLE.add('ROWBACKGROUNDS', (0,0), (-1,-1), [even_color, odd_color])
-
     for i,a in enumerate(accounts):
+        color = alternate_colors[(i+1)%2]
+
+        if list.double:
+            i *= 2
+            extra_row_height = 1
+        else:
+            extra_row_height = 0
+
+        i += 1
+
+        GRID_STYLE.add('BACKGROUND', (0,i), (-1,i+extra_row_height), color)
 
         if a.is_blocked():
             if list.balance_width:
-                GRID_STYLE.add('BACKGROUND', (2,i+1), (-1,i+1), blacklisted_color)
-                GRID_STYLE.add('TEXTCOLOR', (1,i+1), (1,i+1), blacklisted_text_color)
+                GRID_STYLE.add('BACKGROUND', (2,i), (-1,i+extra_row_height), blacklisted_color)
+                GRID_STYLE.add('TEXTCOLOR', (1,i), (1,i), blacklisted_text_color)
             else:
-                GRID_STYLE.add('BACKGROUND', (1,i+1), (-1,i+1), blacklisted_color)
+                GRID_STYLE.add('BACKGROUND', (1,i), (-1,i+extra_row_height), blacklisted_color)
 
         if list.use_username:
             row = [a.owner.username]
@@ -147,12 +164,30 @@ def pdf(request, group, list, is_admin=False):
 
         data.append(row)
 
+        if list.double:
+            data.append([''] * (list.listcolumn_count+1+extra_row_height))
+
+            GRID_STYLE.add('SPAN', (0,i), (0,i+extra_row_height))
+
+            if list.balance_width:
+                GRID_STYLE.add('SPAN', (1,i), (1,i+extra_row_height))
+
     # Set font size for names
-    GRID_STYLE.add('FONTSIZE', (0,1), (0,i+1), font_size_name)
+    GRID_STYLE.add('FONTSIZE', (0,1), (0,-1), font_size_name)
 
     # Set font size for balance
     if list.balance_width:
-        GRID_STYLE.add('FONTSIZE', (1,1), (1,i+1), font_size_balance)
+        GRID_STYLE.add('FONTSIZE', (1,1), (1,-1), font_size_balance)
+
+    if list.double:
+        if list.balance_width:
+            GRID_STYLE.add('TOPPADDING', (2,1), (-1,-1), 0)
+            GRID_STYLE.add('BOTTOMPADDING', (2,1), (-1,-1), 0)
+        else:
+            GRID_STYLE.add('TOPPADDING', (1,1), (-1,-1), 0)
+            GRID_STYLE.add('BOTTOMPADDING', (1,1), (-1,-1), 0)
+
+    GRID_STYLE.add('VALIGN', (0,1), (-1,-1), 'TOP')
 
     # Create table
     t = Table(data, colWidths=col_width, style=GRID_STYLE, repeatRows=1)
