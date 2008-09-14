@@ -165,7 +165,7 @@ def pdf(request, group, list, is_admin=False):
         data.append(row)
 
         if list.double:
-            data.append([''] * (list.listcolumn_count+1+extra_row_height))
+            data.append([''] * len(row))
 
             GRID_STYLE.add('SPAN', (0,i), (0,i+extra_row_height))
 
@@ -205,6 +205,8 @@ def pdf(request, group, list, is_admin=False):
         t.drawOn(p, margin, height - t_height - margin - head_height)
 
         if rest:
+            # FIXME indicate print time etc on second page (also page count)
+
             # set t to the second table and reset rest
             t, rest= (rest, None)
 
