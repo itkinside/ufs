@@ -194,10 +194,10 @@ td.error {
 	text-decoration: line-through;
 }
 .admin a {
-	color: #f57900 !important;
+	color: #C00 !important;
 }
 .admin a:hover {
-	color: #ce5c00 !important;
+	color: #A40000 !important;
 }
 .ok, .committed b {
 	color: #4e9a06;
