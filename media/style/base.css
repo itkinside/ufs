@@ -191,7 +191,7 @@ td.error {
 	background: #FDD;
 }
 .inactive td, .inactive {
-	text-decoration: line-through;
+	color: #888a85;
 }
 .admin a {
 	color: #C00 !important;
