@@ -224,6 +224,9 @@ td.error {
 	padding: 0.1em 0.2em;
 	font-size: 100%;
 }
+#yui-main textarea {
+	display: block;
+}
 #yui-main button {
 	color: black;
 	margin: 0 1.5em;
