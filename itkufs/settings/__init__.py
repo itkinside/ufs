@@ -16,6 +16,7 @@ TIME_ZONE = 'Europe/Oslo'
 
 DATE_FORMAT = 'Y-m-d'
 TIME_FORMAT = 'H:i'
+DATETIME_FORMAT = 'Y-m-d H:i'
 
 # Language code for this installation. All choices can be found here:
 # http://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes

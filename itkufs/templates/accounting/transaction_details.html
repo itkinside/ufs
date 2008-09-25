@@ -33,7 +33,7 @@
     </tr>
     <tr>
         <th>{% trans "Last modified" %}</th>
-        <td>{{ transaction.last_modified|date:"Y-m-d H:i" }}</th>
+        <td>{{ transaction.last_modified|date }} {{ transaction.last_modified|time }}</th>
     </tr>
 {% if is_admin and transaction.is_editable %}
     <tr>
