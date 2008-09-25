@@ -71,7 +71,7 @@
         {% if forloop.first %}
         <td rowspan="{{ t.entry_set.all.count }}">
             <dl>
-                {% for l in t.log_set.select_related %}
+                {% for l in t.log_set.all %}
                 <dt>{{ l.timestamp|date }} {{ l.timestamp|time }}</dt>
                 <dd>
                     <em>{{ l.user|default:_("Unknown") }}:</em>
