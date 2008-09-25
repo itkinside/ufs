@@ -73,10 +73,10 @@
             {% endif %}
         </td>
         <td class="align_right debit">
-            {{ e.debit|default:"" }}
+            {{ e.debit|creditformat }}
         </td>
         <td class="align_right credit">
-            {{ e.credit|default:"" }}
+            {{ e.credit|creditformat }}
         </td>
     </tr>
     {% endfor %}
