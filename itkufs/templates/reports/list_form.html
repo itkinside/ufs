@@ -57,9 +57,10 @@ all active accounts in the group is included. {% endblocktrans %}</p>
         <th>{% trans "Name" %}</th>
         <th>{% trans "Width" %}</th>
     </tr>
-{% for columnform in columnforms %}
+{% for c in columnforms %}
     <tr class="{% cycle evenrow,oddrow %}">
-        {{ columnform.as_table_row }}
+        <td{% if c.name.errors %} class="error"{% endif %}>{{ c.name }}</td>
+        <td{% if c.width.errors %} class="error"{% endif %}>{{ c.width }}</td>
     </tr>
 {% endfor %}
 </table>

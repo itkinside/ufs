@@ -1,11 +1,12 @@
 from django import forms
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
+from django.forms.models import ModelForm
+from django.forms.forms import Form
 
 from itkufs.accounting.models import *
-from itkufs.common.forms import CustomModelForm, CustomForm
 
-class SettlementForm(CustomModelForm):
+class SettlementForm(ModelForm):
     class Meta:
         model = Settlement
         exclude = ['group']
@@ -16,7 +17,7 @@ class SettlementForm(CustomModelForm):
             del self.fields['closed']
 
 
-class TransactionSettlementForm(CustomModelForm):
+class TransactionSettlementForm(ModelForm):
     details = forms.CharField(label=_('Details'), required=False,
         widget=forms.widgets.Textarea(attrs={'rows': 2}))
 
@@ -45,7 +46,7 @@ class ChangeTransactionForm(forms.Form):
         self.fields['change_to'].widget = forms.Select(choices=choices)
 
 
-class EntryForm(CustomForm):
+class EntryForm(Form):
     # FIXME add clean_debit/credit so that we can ignore whitespaces :)
     debit = forms.DecimalField(min_value=0, required=False,
         widget=forms.TextInput(attrs={'size': 4, 'class': 'number'}))

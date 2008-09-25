@@ -7,34 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from itkufs.accounting.models import Group, Account, RoleAccount
 
-def as_table_row(self):
-    """Returns this form rendered as HTML <td>s -- excluding the
-       <table></table> and <tr></tr>."""
-    output = []
-    for name, field in self.fields.items():
-        bf = BoundField(self, field, name)
-
-        if bf.errors:
-            error = u' class="error"'
-        else:
-            error = u''
-
-        output.append("<td%s>%s</td>" %(error, bf))
-
-    return mark_safe(u'\n'.join(output))
-
-
-class CustomModelForm(ModelForm):
-    pass
-CustomModelForm.as_table_row = as_table_row
-
-
-class CustomForm(Form):
-    pass
-CustomForm.as_table_row = as_table_row
-
-
-class AccountForm(CustomModelForm):
+class AccountForm(ModelForm):
     class Meta:
         model = Account
         exclude = ('slug', 'group')
@@ -57,7 +30,7 @@ class AccountForm(CustomModelForm):
         return account
 
 
-class GroupForm(CustomModelForm):
+class GroupForm(ModelForm):
     delete_logo = forms.BooleanField(required=False)
 
     class Meta:
@@ -98,7 +71,7 @@ class RoleAccountModelChoiceField(forms.models.ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.name
 
-class RoleAccountForm(CustomForm):
+class RoleAccountForm(Form):
     def __init__(self, *args, **kwargs):
         group = kwargs.pop('group', None)
         super(RoleAccountForm, self).__init__(*args, **kwargs)
