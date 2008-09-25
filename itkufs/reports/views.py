@@ -14,6 +14,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
+from django.forms.models import inlineformset_factory
 
 from itkufs.common.decorators import limit_to_group, limit_to_admin
 from itkufs.accounting.models import Account
@@ -234,47 +235,29 @@ def new_edit_list(request, group, list=None, is_admin=False):
         data = None
 
     if not list:
-        columnforms = []
+        ColumnFormSet = inlineformset_factory(List, ListColumn, extra=10)
+
+        columnformset = ColumnFormSet(data)
         listform = ListForm(data=data, group=group)
-        for i in range(0,10): # Lock number of coloumns for new list
-            columnforms.append( ColumnForm(data=data, prefix='new%s'%i))
 
     else:
+        ColumnFormSet = inlineformset_factory(List, ListColumn, extra=3)
         if list is None:
             raise Http404
 
         listform = ListForm(data, instance=list, group=group)
+        columnformset = ColumnFormSet(data, instance=list)
 
-        columnforms = []
-        for c in list.column_set.all():
-            columnforms.append( ColumnForm(data, instance=c, prefix=c.id) )
+    if data and listform.is_valid() and columnformset.is_valid():
+        list = listform.save(group=group)
 
-        for i in range(0,3):
-            columnforms.append( ColumnForm(data, prefix='new%s'%i) )
+        columnformset.instance = list
+        columns = columnformset.save()
 
-    if data and listform.is_valid():
-        forms_ok = True
-        for column in columnforms:
-            if not column.is_valid():
-                forms_ok = False
-                break
-        if forms_ok:
-            list = listform.save(group=group)
-
-            for column in columnforms:
-                if column.cleaned_data['name'] and column.cleaned_data['width']:
-                    column.save(list=list)
-                elif column.instance.id:
-                    column.instance.delete()
-
-            # Not completely sure why the modelform save doesn't
-            # fix this for us, so here goes:
-            list.accounts = listform.cleaned_data['accounts']
-
-            return HttpResponseRedirect(reverse('group-summary',
-                kwargs={
-                    'group': group.slug,
-                }))
+        return HttpResponseRedirect(reverse('group-summary',
+            kwargs={
+                'group': group.slug,
+            }))
 
     return render_to_response('reports/list_form.html',
         {
@@ -282,7 +265,7 @@ def new_edit_list(request, group, list=None, is_admin=False):
             'group': group,
             'list': list,
             'listform': listform,
-            'columnforms': columnforms,
+            'columnformset': columnformset,
         },
         context_instance=RequestContext(request))
 

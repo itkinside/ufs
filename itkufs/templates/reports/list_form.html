@@ -50,6 +50,7 @@ all active accounts in the group is included. {% endblocktrans %}</p>
 <form method="post" action="" id="neweditlist">
 {{ listform.as_p }}
 
+{{ columnformset.management_form }}
 
 <label>{% trans "Columns" %}:</label>
 <table class="tablelist">
@@ -57,15 +58,13 @@ all active accounts in the group is included. {% endblocktrans %}</p>
         <th>{% trans "Name" %}</th>
         <th>{% trans "Width" %}</th>
     </tr>
-{% for c in columnforms %}
+{% for c in columnformset.forms %}
     <tr class="{% cycle evenrow,oddrow %}">
-        <td{% if c.name.errors %} class="error"{% endif %}>{{ c.name }}</td>
+        <td{% if c.name.errors %} class="error"{% endif %}>{{ c.name }}{{ c.id }}</td>
         <td{% if c.width.errors %} class="error"{% endif %}>{{ c.width }}</td>
     </tr>
 {% endfor %}
 </table>
-
-<input type="hidden" name="count" value="{{ columnforms|length }}" />
 
 <button type="submit">{% trans "Save list" %}</button>
 
