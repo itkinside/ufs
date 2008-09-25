@@ -47,6 +47,8 @@ var Transaction = {
             credit += value;
 	  }
           input.up().removeClassName('error');
+        } else {
+          input.up().removeClassName('error');
         }
       }
     );

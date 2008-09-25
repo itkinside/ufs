@@ -62,7 +62,8 @@
                 <td><a href="{% url account-summary group.slug,a.slug %}">{{ a.name }}</a></td>
                 <td>{{ a.get_type_display }}</td>
                 <td id="balance-{{ a.id }}" class="balance number">{{ a.balance }}</td>
-                {{ f.as_table_row }}
+                <td{% if f.debit.errors %} class="error"{% endif %} id="{{ f.auto_id }}">{{ f.debit }}</td>
+                <td{% if f.credit.errors %} class="error"{% endif %} id="{{ f.auto_id }}">{{ f.credit }}</td>
             </tr>
         {% endfor %}
         {% for a,f in user_forms %}
@@ -70,7 +71,8 @@
                 <td><a href="{% url account-summary group.slug,a.slug %}">{{ a.name }}</a></td>
                 <td>{{ a.get_type_display }}</td>
                 <td id="balance-{{ a.id }}" class="balance number">{{ a.balance }}</td>
-                {{ f.as_table_row }}
+                <td{% if f.debit.errors %} class="error"{% endif %} id="{{ f.auto_id }}">{{ f.debit }}</td>
+                <td{% if f.credit.errors %} class="error"{% endif %} id="{{ f.auto_id }}">{{ f.credit }}</td>
             </tr>
         {% endfor %}
         </tbody>
