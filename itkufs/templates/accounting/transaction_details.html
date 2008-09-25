@@ -97,7 +97,7 @@
         <td>{{ l.get_type_display }}</td>
         <td>{{ l.timestamp|date:"Y-m-d H:i" }}</td>
         <td><a href="mailto:{{ l.user.email }}">{{ l.user }}</a>{% if l.auto %} ({% trans "auto" %}){% endif %}</td>
-        <td>{{ l.message }}</td>
+        <td>{{ l.message|default:_("No transaction log message") }}</td>
     </tr>
     {% endfor %}
 </table>
