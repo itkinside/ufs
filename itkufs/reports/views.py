@@ -119,7 +119,7 @@ def pdf(request, group, list, is_admin=False):
 
     # Calculate relative col widths over to absolute points
     for i,w in enumerate(col_width):
-        col_width[i] = float(w) / float(list.listcolumn_width + list.balance_width + list.account_width) * (width-2*margin)
+        col_width[i] = float(w) / float((list.listcolumn_width or 0) + list.balance_width + list.account_width) * (width-2*margin)
 
     # Intialise table with header
     data = [header]
@@ -154,7 +154,7 @@ def pdf(request, group, list, is_admin=False):
             font_size_name -= 1
 
         if list.balance_width:
-            row.append(a.user_balance())
+            row.append('%d' % a.user_balance())
 
             # Check if we need to reduce col font size
             while col_width[1] < p.stringWidth(str(row[-1]), font_name, font_size_balance) + 12 and font_size_balance > font_size_min:
