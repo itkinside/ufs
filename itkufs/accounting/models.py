@@ -523,17 +523,17 @@ class Transaction(models.Model):
 
     def get_pending(self):
         if self.has_pending():
-            return self.log_set.filter(type=self.PENDING_STATE)[0]
+            return self.log_set.filter(type=self.PENDING_STATE).lastest('timestamp')
     pending = property(get_pending, None, None)
 
     def get_committed(self):
         if self.has_committed():
-            return self.log_set.filter(type=self.COMMITTED_STATE)[0]
+            return self.log_set.filter(type=self.COMMITTED_STATE).lastest('timestamp')
     committed = property(get_committed, None, None)
 
     def get_rejected(self):
         if self.has_rejected():
-            return self.log_set.filter(type=self.REJECTED_STATE)[0]
+            return self.log_set.filter(type=self.REJECTED_STATE).lastest('timestamp')
     rejected = property(get_rejected, None, None)
 
     def get_valid_logtype_choices(self):
