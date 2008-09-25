@@ -129,6 +129,5 @@ COVERAGE_MODULES = (
 # Development version numbering
 BZR_BRANCH_DIR = PROJECT_BASE
 
-# PROJECT_BASE, DATABASE_* and SECRET_KEY are included from a file which
-# is not committed to VCS
+# DATABASE_* and SECRET_KEY are included from a file which is not in VCS
 from itkufs.settings.local import *
