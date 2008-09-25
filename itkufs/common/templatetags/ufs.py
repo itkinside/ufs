@@ -1,9 +1,19 @@
 from decimal import Decimal, DecimalException
 
 from django.template import Library, Variable, TemplateSyntaxError, Node, VariableDoesNotExist
+from django.template.defaultfilters import stringfilter
 from django.db.models import Q
 
 register = Library()
+
+@register.filter
+def creditformat(value):
+    if value is None:
+        return '-'
+    elif value == 0:
+        return ''
+    else:
+        return '%.2f' % value
 
 @register.tag(name="filter_entries")
 def do_hide(parser, token):
@@ -30,26 +40,21 @@ class HideNode(Node):
     def render(self, context):
         transaction = self.transaction.resolve(context)
         is_admin = self.is_admin.resolve(context)
-        entry_list = transaction.entry_set.select_related()
-
-        if is_admin:
-            # Return quickly if we can
-            context[self.entry_list] = entry_list
-            return ''
+        entry_list = transaction.entry_set.select_related('account__owner')
 
         try:
+            group_view = False
             account = self.account.resolve(context)
         except VariableDoesNotExist:
             account = None
+
+        if not account:
+            group_view = True
 
         # This is not inside the except on purpose, please don't change.
         if not account:
             # Figure out which account we are allowed to show
             account = Variable('user').resolve(context).account_set.get(group=Variable('group').resolve(context))
-            context['account'] = account
-            show_all = True
-        else:
-            show_all = False
 
         if transaction.entry_count_sql == 2:
             for e in entry_list:
@@ -61,13 +66,14 @@ class HideNode(Node):
 
         # Add extra sub-query that asks if user is on credit side of
         # transaction.
-        entry_list = entry_list.extra(
-            select={
-                'user_credit': """SELECT credit > debit FROM accounting_transactionentry
-                                  WHERE transaction_id = %d AND account_id = %d"""
-                % (transaction.id, account.id),
-            },
-        )
+        if not group_view:
+            entry_list = entry_list.extra(
+                select={
+                    'user_credit': """SELECT credit > debit FROM accounting_transactionentry
+                                      WHERE transaction_id = %d AND account_id = %d"""
+                    % (transaction.id, account.id),
+                },
+            )
 
         # FIXME? if your account is the only credit/debit account in
         # transaction show all debit/credit ammounts so that you know where
@@ -78,14 +84,24 @@ class HideNode(Node):
         # side
         tmp = []
         for e in entry_list:
-            if e.account == account:
+            if group_view:
+                if not is_admin and e.account != account and e.account.owner:
+                    if e.debit:
+                        e.debit = None
+                    else:
+                        e.credit = None
                 tmp.append(e)
-            elif (show_all or e.user_credit) and e.debit:
-                e.debit = '-'
-                tmp.append(e)
-            elif (show_all or not e.user_credit) and e.credit:
-                e.credit = '-'
-                tmp.append(e)
+            else:
+                if e.account == account or not e.account.owner:
+                    tmp.append(e)
+                elif e.user_credit and e.debit:
+                    if not is_admin:
+                        e.debit = None
+                    tmp.append(e)
+                elif not e.user_credit and e.credit:
+                    if not is_admin:
+                        e.credit = None
+                    tmp.append(e)
 
         entry_list = tmp
 

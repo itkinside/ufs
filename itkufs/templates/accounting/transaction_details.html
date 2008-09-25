@@ -33,7 +33,7 @@
     </tr>
     <tr>
         <th>{% trans "Last modified" %}</th>
-        <td>{{ transaction.last_modified|date:"Y-m-d H:i" }}</th>
+        <td>{{ transaction.last_modified|date }} {{ transaction.last_modified|time }}</th>
     </tr>
 {% if is_admin and transaction.is_editable %}
     <tr>
@@ -73,10 +73,10 @@
             {% endif %}
         </td>
         <td class="align_right debit">
-            {{ e.debit|default:"" }}
+            {{ e.debit|creditformat }}
         </td>
         <td class="align_right credit">
-            {{ e.credit|default:"" }}
+            {{ e.credit|creditformat }}
         </td>
     </tr>
     {% endfor %}
@@ -97,7 +97,7 @@
         <td>{{ l.get_type_display }}</td>
         <td>{{ l.timestamp|date:"Y-m-d H:i" }}</td>
         <td><a href="mailto:{{ l.user.email }}">{{ l.user }}</a>{% if l.auto %} ({% trans "auto" %}){% endif %}</td>
-        <td>{{ l.message }}</td>
+        <td>{{ l.message|default:_("No transaction log message") }}</td>
     </tr>
     {% endfor %}
 </table>

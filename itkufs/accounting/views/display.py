@@ -58,7 +58,7 @@ def transaction_list(request, group, account=None, page='1',
         return HttpResponseForbidden(
             _('Forbidden if not account owner or group admin.'))
 
-    transaction_list = (account or group).transaction_set_with_rejected.select_related()
+    transaction_list = (account or group).transaction_set_with_rejected.all()
 
     if account:
         transaction_list = transaction_list.filter(entry_set__account=account)

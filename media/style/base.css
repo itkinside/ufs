@@ -9,7 +9,7 @@ h1, h2, h3, h4 {
 	color: #333;
 }
 h2, h3, h4 {
-	margin: 0.6em 0 0.2em 0;
+	margin: 0.6em 0 0.2em -0.3em;
 }
 h1 {
 	/* background: ...; */ /* Defined in template, as logo URL is needed */
@@ -47,9 +47,6 @@ ul ul li {
 }
 ul ul ul li {
 	list-style: circle;
-}
-dt {
-	font-weight: bold;
 }
 dd {
 	margin-left: 1em;
@@ -174,6 +171,10 @@ td {
 	clear: both;
 }
 
+.debit, .credit {
+	text-align: right;
+}
+
 /* colors */
 .pending, .comment, .comment a, .none {
 	background: transparent;
@@ -199,7 +200,7 @@ td.error {
 .admin a:hover {
 	color: #A40000 !important;
 }
-.ok, .committed b {
+.ok, .committed {
 	color: #4e9a06;
 }
 
@@ -223,6 +224,9 @@ td.error {
 #yui-main input, #yui-main select, #yui-main textarea, #yui-main button {
 	padding: 0.1em 0.2em;
 	font-size: 100%;
+}
+#yui-main textarea {
+	display: block;
 }
 #yui-main button {
 	color: black;

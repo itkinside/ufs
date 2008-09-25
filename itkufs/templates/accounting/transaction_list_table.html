@@ -3,7 +3,7 @@
 
 <table class="tablelist">
     <tr>
-        <th>{% trans "State" %}</th>
+        <th>{% trans "ID" %}</th>
         <th>{% trans "Account" %}</th>
         <th>{% trans "Debit" %}</th>
         <th>{% trans "Credit" %}</th>
@@ -14,10 +14,8 @@
         <tr>
             {% for e in entry_list %}
                 {% if forloop.first %}
-                    <td rowspan="{{ entry_list|length }}" class="status {{ t.css_class }}">
-                        {% blocktrans with t.get_state_display as state and t.last_modified|date:"Y-m-d H:i" as last_modified %}
-                            <b>{{ state }}</b> at {{ last_modified }}
-                        {% endblocktrans %}
+                    <td rowspan="{{ entry_list|length }}">
+                        <a href="{{ t.get_absolute_url }}">{{ t.id }}</a>
                     </td>
                 {% else %}
                     <tr>
@@ -30,14 +28,25 @@
                     {% endif %}
                 </td>
                 <td class="number {{ tdclass }}">
-                    {{ e.debit|default:"" }}
+                    {{ e.debit|creditformat }}
                 </td>
                 <td class="number {{ tdclass }}">
-                    {{ e.credit|default:"" }}
+                    {{ e.credit|creditformat }}
                 </td>
                 {% if forloop.first %}
-                    <td rowspan="{{ entry_list|length }}" class="details">
-                        <a href="{{ t.get_absolute_url }}">Details</a>
+                    <td rowspan="{{ entry_list|length }}">
+                        <dl>
+                            {% for l in t.log_set.select_related %}
+                            <dt>
+                                <b class="{{ l.css_class }}">{{ l.get_type_display }}</b>
+                                {{ l.timestamp|date }} {{ l.timestamp|time }}
+                            </dt>
+                            <dd>
+                                <em>{{ l.user|default:_("Unknown") }}:</em>
+                                {{ l.message|default:_("No transaction log message") }}
+                            </dd>
+                            {% endfor %}
+                        </dl>
                     </td>
                 {% endif %}
                 </tr>

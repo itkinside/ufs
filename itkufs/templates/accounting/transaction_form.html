@@ -43,6 +43,19 @@
         </ul>
     {% endif %}
 
+    {% if transaction.log_set.all %}
+    <p><label>Transactionlog:</label></p>
+    <dl>
+        {% for l in transaction.log_set.all %}
+        <dt>{{ l.timestamp|date }} {{ l.timestamp|time }}</dt>
+        <dd>
+            <em>{{ l.user|default:_("Unknown") }}:</em>
+            {{ l.message|default:_("No transaction log message") }}
+        </dd>
+        {% endfor %}
+    </dl>
+    {% endif %}
+
     {{ settlement_form.as_p }}
 
     <label>{% trans "Account:" %}</label>
