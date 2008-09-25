@@ -200,7 +200,7 @@ td.error {
 .admin a:hover {
 	color: #A40000 !important;
 }
-.ok, .committed b {
+.ok, .committed {
 	color: #4e9a06;
 }
 

@@ -592,6 +592,13 @@ class TransactionLog(models.Model):
             d['timestamp'] = self.timestamp.strftime(settings.DATETIME_FORMAT)
         return _(u'%(type)s at %(timestamp)s by %(user)s: %(message)s') % d
 
+    def css_class(self):
+        if self.type == Transaction.REJECTED_STATE:
+            return 'rejected'
+        elif self.type == Transaction.PENDING_STATE:
+            return 'pending'
+        else:
+            return 'committed'
 
 class TransactionEntry(models.Model):
     transaction = models.ForeignKey(Transaction, verbose_name=_('transaction'),
