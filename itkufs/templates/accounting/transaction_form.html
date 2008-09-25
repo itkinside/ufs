@@ -50,7 +50,7 @@
         <dt>{{ l.timestamp|date }} {{ l.timestamp|time }}</dt>
         <dd>
             <em>{{ l.user|default:_("Unknown") }}:</em>
-            {{ l.message|default:"-" }}
+            {{ l.message|default:_("No transaction log message") }}
         </dd>
         {% endfor %}
     </dl>
