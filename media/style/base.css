@@ -48,9 +48,6 @@ ul ul li {
 ul ul ul li {
 	list-style: circle;
 }
-dt {
-	font-weight: bold;
-}
 dd {
 	margin-left: 1em;
 }
@@ -172,6 +169,10 @@ td {
 }
 .clear {
 	clear: both;
+}
+
+.debit, .credit {
+	text-align: right;
 }
 
 /* colors */

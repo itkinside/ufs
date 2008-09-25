@@ -42,7 +42,6 @@
 <table class="tablelist">
     <tr>
             <th>{% trans "ID" %}</th>
-            <th>{% trans "State" %}</th>
             <th>{% trans "Account" %}</th>
             <th>{% trans "Debit" %}</th>
             <th>{% trans "Credit" %}</th>
@@ -51,65 +50,45 @@
 
     </tr>
     {% for t, f in transaction_list %}
-    <tr class="{% cycle 'evenrow' 'oddrow' as trclass %}
-        {% if t.is_rejected %}rejected{% else %}
-        {% if not t.is_received %}pending{% endif %}{% endif %}">
-        <td rowspan="{{ t.entry_set.all.count }}" class="id">
+    <tr>
+        <td rowspan="{{ t.entry_set.all.count }}">
             <a href="{{ t.get_absolute_url }}">{{ t.id }}</a>
         </td>
-        <td rowspan="{{ t.entry_set.all.count }}" class="state">
-            <dl>
-                {% if t.is_pending %}
-                <dt>{% trans "Pending" %}:</dt>
-                <dd>{{ t.pending.timestamp|date:"Y-m-d H:i" }}</dd>
-                {% endif %}
-                {% if t.is_committed %}
-                <dt>{% trans "Committed" %}:</dt>
-                <dd>{{ t.committed.timestamp|date:"Y-m-d H:i" }}</dd>
-                {% endif %}
-                {% if t.is_rejected %}
-                <dt>{% trans "Rejected" %}:</dt>
-                <dd>{{ t.rejected.timestamp|date:"Y-m-d H:i" }}</dd>
-                {% endif %}
-            </dl>
-        </td>
         {% for e in t.entry_set.all %}
-        <td class="account">
+        <td>
             <a href="{% url account-summary e.account.group.slug,e.account.slug %}">{{ e.account.name }}</a>
         </td>
-        <td class="align_right debit">
+        <td class="debit {% cycle evenrow,oddrow as class %}">
             {% if e.debit %}
-            {{e.debit|stringformat:"0.2f"}}
+                {{e.debit|stringformat:"0.2f"}}
             {% endif %}
         </td>
-        <td class="align_right credit">
+        <td class="credit {{ class }}">
             {% if e.credit %}
-            {{e.credit|stringformat:"0.2f"}}
+                {{e.credit|stringformat:"0.2f"}}
             {% endif %}
         </td>
         {% if forloop.first %}
-        <td rowspan="{{ t.entry_set.all.count }}" class="details">
+        <td rowspan="{{ t.entry_set.all.count }}">
             <dl>
-                <dt>{{ t.pending.user|default:"Unknown" }}: </dt>
-                <dd class="registered">{{ t.pending.message|default:"(None)" }}</dd>
-                {% if t.rejected %}
-                <dt>{{ t.rejected.user|default:"Unknown" }}: </dt>
-                <dd class="rejected">{{ t.rejected.message|default:"(None)" }}</dd>
-                {% endif %}
+                {% for l in t.log_set.select_related %}
+                <dt>{{ l.timestamp|date }} {{ l.timestamp|time }}</dt>
+                <dd>
+                    <em>{{ l.user|default:_("Unknown") }}:</em>
+                    {{ l.message|default:"-" }}
+                </dd>
+                {% endfor %}
             </dl>
         </td>
-        <td rowspan="{{ t.entry_set.all.count }}" class="details">
+        <td rowspan="{{ t.entry_set.all.count }}">
             {{ f.as_p }}
-            {% if t.is_editable %}
-                <a href="{% url edit-transaction group.slug,t.id %}">
-                    Edit transaction</a>
-            {% endif %}
+            <a href="{% url edit-transaction group.slug,t.id %}">
+                Edit transaction
+            </a>
         </td>
         {% endif %}
     </tr>
-    <tr class="{{ trclass }}
-        {% if t.is_rejected %}rejected{% else %}
-        {% if not t.is_received %}pending{% endif %}{% endif %}">
+    <tr>
         {% endfor %}
     </tr>
     {% endfor %}
