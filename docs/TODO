@@ -34,26 +34,18 @@ This release
   not critical for intial release)
 
 Nytt 2008-09-08
-- Ta bort custom ModelForm
 - Ta i bruk generic_create/update
-- Ta i bruk formset_factories
-- Få med TransactionLog i transaction-listen
-- Vise antall transactions selv når for få til pagination
+- Ta i bruk formset_factories (still missing for new transaction, perhaps not a
+  good switch there)
 - Ta i bruk objektorientert pagination
-- Endre Transaction.get_{pending,committed,rejected} til å returnere alle
-  matches og ikke bare første. I allefall approve transactions må endres for
-  å håndtere en liste med resultater. Samme gjelder edit transaction.
+
 Nytt 2008-09-17
 - cron nag mail, evt send mail til knapp. Siden kan gi et forslag til default
   tekst med Template variabler (http://docs.python.org/lib/node40.html) feks.
--  visningen på /<group>/transaction på er litt tynn om du ikke er admin, mens
-   /<group>/account/<account>/transaction/ er for mye når du _er_ admin
 
-   * Alltid fjern alle på samme siden når man er i "konto-modus", er man admin
-     får man se alle beløp, er man brukeren får man se eget beløp.
-
-   * Group view, vis alle innslag. Admin vis alt, ellers vise alle beløp til
-     kontoer som ikke har noen eier. (is_admin OR owner IS NULL or owner = user)
+Nytt 2008-09-25
+- bsf wizzard
+- utlegg skjema
 
 Done
 ~~~~
