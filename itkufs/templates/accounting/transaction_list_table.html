@@ -30,10 +30,10 @@
                     {% endif %}
                 </td>
                 <td class="number {{ tdclass }}">
-                    {{ e.debit|default:"" }}
+                    {{ e.debit|default:""|floatformat:"2" }}
                 </td>
                 <td class="number {{ tdclass }}">
-                    {{ e.credit|default:"" }}
+                    {{ e.credit|default:""|floatformat:"2" }}
                 </td>
                 {% if forloop.first %}
                     <td rowspan="{{ entry_list|length }}" class="details">
