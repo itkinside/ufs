@@ -48,15 +48,14 @@ class HideNode(Node):
         except VariableDoesNotExist:
             account = None
 
+        # This is not inside the except on purpose, please don't change.
         if not account:
             group_view = True
 
-        # This is not inside the except on purpose, please don't change.
-        if not account:
             # Figure out which account we are allowed to show
             account = Variable('user').resolve(context).account_set.get(group=Variable('group').resolve(context))
 
-        if transaction.entry_count_sql == 2:
+        if transaction.entry_count_sql == 2 and not group_view:
             for e in entry_list:
                 if e.account == account:
                     context[self.entry_list] = entry_list
