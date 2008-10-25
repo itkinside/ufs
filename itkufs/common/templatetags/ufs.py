@@ -1,6 +1,5 @@
-from decimal import Decimal, DecimalException
-
-from django.template import Library, Variable, TemplateSyntaxError, Node, VariableDoesNotExist
+from django.template import Library, Variable, TemplateSyntaxError, Node, \
+            VariableDoesNotExist
 from django.template.defaultfilters import stringfilter
 from django.db.models import Q
 
@@ -21,7 +20,8 @@ def do_hide(parser, token):
         # split_contents() knows not to split quoted strings.
         tag_name, transaction, entry_list = token.split_contents()
     except ValueError:
-        raise TemplateSyntaxError, "%r tag requires exactly two arguments" % token.contents.split()[0]
+        raise TemplateSyntaxError, "%r tag requires exactly two arguments" \
+                    % token.contents.split()[0]
 
     if transaction[0] == transaction[-1] and transaction[0] in ('"', "'"):
         raise TemplateSyntaxError, "%r tag only takes variables" % tag_name
@@ -48,12 +48,12 @@ class HideNode(Node):
         except VariableDoesNotExist:
             account = None
 
-        # This is not inside the except on purpose, please don't change.
         if not account:
             group_view = True
 
             # Figure out which account we are allowed to show
-            account = Variable('user').resolve(context).account_set.get(group=Variable('group').resolve(context))
+            account = Variable('user').resolve(context).account_set. \
+                        get(group=Variable('group').resolve(context))
 
         if transaction.entry_count_sql == 2 and not group_view:
             for e in entry_list:
@@ -68,9 +68,10 @@ class HideNode(Node):
         if not group_view:
             entry_list = entry_list.extra(
                 select={
-                    'user_credit': """SELECT credit > debit FROM accounting_transactionentry
-                                      WHERE transaction_id = %d AND account_id = %d"""
-                    % (transaction.id, account.id),
+                    'user_credit': """
+                        SELECT credit > debit FROM accounting_transactionentry
+                        WHERE transaction_id = %d AND account_id = %d
+                    """ % (transaction.id, account.id),
                 },
             )
 
