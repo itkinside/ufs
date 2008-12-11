@@ -12,6 +12,20 @@ class AccountForm(ModelForm):
         model = Account
         exclude = ('slug', 'group')
 
+    def __init__(self, *args, **kwargs):
+        group = kwargs.pop('group', None)
+        super(AccountForm, self).__init__(*args, **kwargs)
+
+        self.group = group
+
+    def clean_owner(self):
+        owner = self.cleaned_data['owner']
+
+        if self.group and self.group.account_set.filter(owner=owner):
+            raise forms.ValidationError(_('Users may only have one account per group'))
+
+        return owner
+
     def save(self, group=None, **kwargs):
         original_commit = kwargs.pop('commit', True)
         kwargs['commit'] = False

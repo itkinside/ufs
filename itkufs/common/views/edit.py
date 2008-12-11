@@ -59,9 +59,9 @@ def new_edit_account(request, group, account=None,
 
     if request.method == 'POST':
         if account is not None:
-            form = AccountForm(instance=account, data=request.POST)
+            form = AccountForm(instance=account, data=request.POST, group=group)
         else:
-            form = AccountForm(data=request.POST)
+            form = AccountForm(data=request.POST, group=group)
 
         if form.is_valid():
             if account is not None:
