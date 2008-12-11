@@ -1,0 +1,6 @@
+# This is an absolute minimal itkufs.settings.local module.
+# You may use it for development as is.
+
+DATABASE_ENGINE = 'sqlite3'
+DATABASE_NAME = 'itkufs.sqlite'
+SECRET_KEY = '123changemetosomethingmorerandom456789'
