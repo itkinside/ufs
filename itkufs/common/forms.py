@@ -18,10 +18,19 @@ class AccountForm(ModelForm):
 
         self.group = group
 
+    def clean_name(self):
+        name = self.cleaned_data['name']
+
+        if self.group and name and  self.group.account_set.filter(name=name).count():
+            raise forms.ValidationError(
+                _('An account with this name allready exists'))
+
+        return name
+
     def clean_owner(self):
         owner = self.cleaned_data['owner']
 
-        if self.group and self.group.account_set.filter(owner=owner).count():
+        if self.group and owner and self.group.account_set.filter(owner=owner).count():
             raise forms.ValidationError(
                 _('Users may only have one account per group'))
 
