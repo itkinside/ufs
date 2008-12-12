@@ -55,10 +55,18 @@ class EntryForm(Form):
 
 
 class DepositWithdrawForm(forms.Form):
-    amount = forms.DecimalField(label=_('Amount'), required=True, min_value=0)
+    amount = forms.DecimalField(label=_('Amount'), required=True, min_value=0,
+                decimal_places=2, max_digits=10)
     details = forms.CharField(label=_('Details'), required=False,
         widget=forms.widgets.Textarea(attrs={'rows': 2}))
 
+    def clean_amount(self):
+        amount = self.cleaned_data['amount']
+
+        if amount <= 0:
+            raise forms.ValidationError(_('Amount must be greater than zero'))
+
+        return amount
 
 class TransferForm(DepositWithdrawForm):
     credit_account = forms.ChoiceField(label=_('To'), required=True)
