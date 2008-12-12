@@ -21,8 +21,9 @@ class AccountForm(ModelForm):
     def clean_owner(self):
         owner = self.cleaned_data['owner']
 
-        if self.group and self.group.account_set.filter(owner=owner):
-            raise forms.ValidationError(_('Users may only have one account per group'))
+        if self.group and self.group.account_set.filter(owner=owner).count():
+            raise forms.ValidationError(
+                _('Users may only have one account per group'))
 
         return owner
 
