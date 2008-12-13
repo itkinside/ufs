@@ -116,11 +116,14 @@ def pdf(request, group, list, is_admin=False):
 
     if list.short_name_width:
         col_width.append(list.short_name_width)
-        header.append(_(u'Nick'))
+        header.append('')
 
     if list.balance_width:
         header.append(_(u'Balance'))
         col_width.append(list.balance_width)
+
+    if list.short_name_width and list.account_width:
+        GRID_STYLE.add('SPAN', (0,0), (1,0))
 
     base_x = len(header)
 
