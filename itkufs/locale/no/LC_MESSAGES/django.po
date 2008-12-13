@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-13 21:47+0100\n"
+"POT-Creation-Date: 2008-12-13 21:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Espen Molven <molven@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -336,9 +336,9 @@ msgid "No pending transactions found."
 msgstr "Ingen ventende transaksjoner funnet."
 
 #: accounting/views/edit.py:276
-#, fuzzy, python-format
+#, python-format
 msgid "Transaction %d can't be changed."
-msgstr "Transaksjonen er opprettet"
+msgstr "Transaksjon %d kan ikke endres"
 
 #: accounting/views/edit.py:352
 msgid "Your transaction has been added"
@@ -414,9 +414,8 @@ msgid "Portrait"
 msgstr "Portrett"
 
 #: reports/models.py:37
-#, fuzzy
 msgid "account name width"
-msgstr "kolonebredde for kontonavn"
+msgstr "bredde på kontonavn"
 
 #: reports/models.py:38 reports/models.py:40 reports/models.py:42
 msgid "Relative width of cell, 0 to hide"
@@ -643,9 +642,8 @@ msgstr "Ukjent"
 #: templates/accounting/transaction_details.html:100
 #: templates/accounting/transaction_form.html:53
 #: templates/accounting/transaction_list_table.html:46
-#, fuzzy
 msgid "No transaction log message"
-msgstr "transaksjonlogginnslag"
+msgstr "Ingen melding i transaksjonsloggen"
 
 #: templates/accounting/approve_transactions.html:104
 msgid "Update"
