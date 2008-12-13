@@ -21,6 +21,9 @@ class AccountForm(ModelForm):
     def clean_name(self):
         name = self.cleaned_data['name']
 
+        if self.instance:
+            return name
+
         if self.group and name and  self.group.account_set.filter(name=name).count():
             raise forms.ValidationError(
                 _('An account with this name allready exists'))
@@ -29,6 +32,9 @@ class AccountForm(ModelForm):
 
     def clean_owner(self):
         owner = self.cleaned_data['owner']
+
+        if self.instance:
+            return owner
 
         if self.group and owner and self.group.account_set.filter(owner=owner).count():
             raise forms.ValidationError(
