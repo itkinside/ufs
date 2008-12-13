@@ -47,13 +47,20 @@ class AccountForm(ModelForm):
 
     def clean_owner(self):
         owner = self.cleaned_data['owner']
+        user = None
 
-        for b in get_backends():
-            if hasattr(b, 'create_user'):
-                user = b.create_user(owner)
+        if owner == '':
+            return None
 
-            if user:
-                break
+        try:
+            user = User.objects.get(username=owner)
+        except User.DoesNotExist:
+            for b in get_backends():
+                if hasattr(b, 'create_user'):
+                    user = b.create_user(owner)
+
+                    if user:
+                        break
 
         if not user:
             raise forms.ValidationError(
