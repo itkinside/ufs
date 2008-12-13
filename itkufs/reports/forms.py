@@ -22,10 +22,13 @@ class ListForm(ModelForm):
         short_name_width = self.cleaned_data['short_name_width']
 
         if account_width == 0 and short_name_width == 0:
+            fields = {
+                'field1': self.fields['account_width'].label,
+                'field2': self.fields['short_name_width'].label
+            }
+
             raise forms.ValidationError(
-                _(u'"%s" or "%s" must be greater than zero') % (
-                    self.fields['account_width'].label,
-                    self.fields['short_name_width'].label))
+                _(u'"%(field1)s" or "%(field2)s" must be greater than zero') % fields)
         return self.cleaned_data
 
     def save(self, group=None, **kwargs):
