@@ -19,7 +19,7 @@ class AccountForm(ModelForm):
     def __init__(self, *args, **kwargs):
         group = kwargs.pop('group', None)
 
-        if kwargs['instance'] and kwargs['instance'].owner:
+        if 'instance' in kwargs and kwargs['instance'].owner:
             initial = kwargs.pop('initial', {})
             initial['owner'] = kwargs['instance'].owner.username
             kwargs['initial'] = initial
