@@ -5,8 +5,16 @@ from django.contrib import databrowse
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 
-admin.autodiscover()
+from itkufs import admin
 databrowse.site.register(User)
+
+if 'itkufs.accounting' in settings.INSTALLED_APPS:
+    import itkufs.accounting.admin
+    import itkufs.accounting.data
+
+if 'itkufs.reports' in settings.INSTALLED_APPS:
+    import itkufs.reports.admin
+    import itkufs.reports.data
 
 urlpatterns = patterns('',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),

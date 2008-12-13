@@ -1,10 +1,6 @@
 from django.conf.urls.defaults import *
-from django.contrib import databrowse
 
 from itkufs.reports.views import *
-
-databrowse.site.register(List)
-databrowse.site.register(ListColumn)
 
 urlpatterns = patterns('',
     ### Lists

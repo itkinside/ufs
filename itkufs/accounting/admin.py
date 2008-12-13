@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
+from itkufs.admin import site
 from itkufs.accounting.models import Group, Account, RoleAccount, \
         Settlement, Transaction, TransactionLog, TransactionEntry
 
@@ -52,8 +53,8 @@ class TransactionAdmin(admin.ModelAdmin):
         TransactionEntryInline,
     ]
 
-admin.site.register(Group, GroupAdmin)
-admin.site.register(Account, AccountAdmin)
-admin.site.register(RoleAccount, RoleAccountAdmin)
-admin.site.register(Settlement)
-admin.site.register(Transaction, TransactionAdmin)
+site.register(Group, GroupAdmin)
+site.register(Account, AccountAdmin)
+site.register(RoleAccount, RoleAccountAdmin)
+site.register(Settlement)
+site.register(Transaction, TransactionAdmin)

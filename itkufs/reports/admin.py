@@ -1,6 +1,8 @@
 from django.contrib import admin
 from itkufs.reports.models import List, ListColumn
 
+from itkufs.admin import site
+
 class ListColumnInline(admin.TabularInline):
     model = ListColumn
     extra = 3
@@ -17,4 +19,4 @@ class ListAdmin(admin.ModelAdmin):
         'slug': ('name',),
     }
 
-admin.site.register(List, ListAdmin)
+site.register(List, ListAdmin)
