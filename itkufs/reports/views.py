@@ -80,9 +80,9 @@ def pdf(request, group, list, is_admin=False):
 
     # Setup rest of header
     p.setFont(font_name, font_size)
-    p.drawString(margin, height - margin - font_size, '%s: %s' % (group, list.name))
+    p.drawString(margin, height - margin - font_size, u'%s: %s' % (group, list.name))
     p.setFont(font_name, font_size - 4)
-    p.drawString(margin, height - margin - font_size - font_size + 2, '%s: %s' % (_('Printed'), str(date.today())))
+    p.drawString(margin, height - margin - font_size - font_size + 2, u'%s: %s' % (_('Printed'), str(date.today())))
 
     footer = []
     if group.email:
@@ -90,9 +90,9 @@ def pdf(request, group, list, is_admin=False):
     if list.comment.strip():
         footer.append(list.comment)
 
-    p.drawString(margin, margin, ' - '.join(footer))
+    p.drawString(margin, margin, u' - '.join(footer))
 
-    blacklisted_note = _('Blacklisted accounts are marked with: ')
+    blacklisted_note = _(u'Blacklisted accounts are marked with: ')
 
     p.drawString(width - margin - 10 - p.stringWidth(blacklisted_note, font_name, font_size - 4), margin, blacklisted_note)
     p.rect(width - margin - 10, margin, 8, 8, fill=1, stroke=0)
@@ -100,7 +100,7 @@ def pdf(request, group, list, is_admin=False):
     p.setFont(font_name, font_size)
 
     if not accounts:
-        no_accounts_message = _("Sorry, this list is empty.")
+        no_accounts_message = _(u"Sorry, this list is empty.")
         p.drawString(margin, height - font_size - margin - head_height, no_accounts_message)
         p.save()
 
@@ -108,10 +108,10 @@ def pdf(request, group, list, is_admin=False):
 
     # Store col widths
     col_width = [list.account_width]
-    header = [_('Name')]
+    header = [_(u'Name')]
 
     if list.balance_width:
-        header.append(_('Balance'))
+        header.append(_(u'Balance'))
         col_width.append(list.balance_width)
 
     for c in list.column_set.all():
