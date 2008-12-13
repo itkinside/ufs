@@ -153,8 +153,8 @@ def pdf(request, group, list, is_admin=False):
 
         if a.is_blocked():
             if list.balance_width:
-                GRID_STYLE.add('TEXTCOLOR', (1,i), (1,i), blacklisted_text_color)
-            GRID_STYLE.add('BACKGROUND', (base_x+1,i), (-1,i+extra_row_height), blacklisted_color)
+                GRID_STYLE.add('TEXTCOLOR', (base_x-1,i), (base_x-1,i), blacklisted_text_color)
+            GRID_STYLE.add('BACKGROUND', (base_x,i), (-1,i+extra_row_height), blacklisted_color)
 
         row = []
 
@@ -182,7 +182,10 @@ def pdf(request, group, list, is_admin=False):
             while col_width[len(row)-1] < p.stringWidth(str(row[-1]), font_name, font_size_balance) + 12 and font_size_balance > font_size_min:
                 font_size_balance -= 1
 
-        row.extend(header[base_x:])
+        if not a.is_blocked():
+            row.extend(header[base_x:])
+        else:
+            row.extend([''] * len(header[base_x:]))
 
         data.append(row)
 
