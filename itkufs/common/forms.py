@@ -90,6 +90,10 @@ class AccountForm(ModelForm):
                 account.slug = account.owner.username
             else:
                 account.slug = slugify(account.name)
+
+        if not account.short_name and account.owner:
+            account.short_name = account.owner.username
+
         if group:
             account.group = group
 
