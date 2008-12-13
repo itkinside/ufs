@@ -57,6 +57,7 @@ def pdf(request, group, list, is_admin=False):
     blacklisted_text_color = Color(0.63,0,0)
     even_color = Color(1,1,1)
     odd_color = Color(0.97,0.97,0.97)
+    faint_color = Color(0.70, 0.70, 0.70)
 
     alternate_colors = [even_color, odd_color]
 
@@ -161,7 +162,9 @@ def pdf(request, group, list, is_admin=False):
             while col_width[1] < p.stringWidth(str(row[-1]), font_name, font_size_balance) + 12 and font_size_balance > font_size_min:
                 font_size_balance -= 1
 
-        row.extend([''] * list.listcolumn_count)
+            row.extend(header[2:])
+        else:
+            row.extend(header[1:])
 
         data.append(row)
 
@@ -179,6 +182,11 @@ def pdf(request, group, list, is_admin=False):
     # Set font size for balance
     if list.balance_width:
         GRID_STYLE.add('FONTSIZE', (1,1), (1,-1), font_size_balance)
+        GRID_STYLE.add('TEXTCOLOR', (2,1), (-1,-1), faint_color)
+        GRID_STYLE.add('ALIGN', (2,1), (-1,-1), 'LEFT')
+    else:
+        GRID_STYLE.add('TEXTCOLOR', (1,1), (-1,-1), faint_color)
+        GRID_STYLE.add('ALIGN', (1,1), (-1,-1), 'LEFT')
 
     if list.double:
         if list.balance_width:
