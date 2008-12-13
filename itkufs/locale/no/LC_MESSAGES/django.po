@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-13 20:36+0100\n"
+"POT-Creation-Date: 2008-12-13 21:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Espen Molven <molven@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -403,7 +403,7 @@ msgstr "Kontoen er opprettet"
 #: reports/forms.py:31
 #, python-format
 msgid "\"%(field1)s\" or \"%(field2)s\" must be greater than zero"
-msgstr ""
+msgstr "\"%(field1)s\" eller \"%(field2)s\" må være større enn null"
 
 #: reports/models.py:31
 msgid "Landscape"
