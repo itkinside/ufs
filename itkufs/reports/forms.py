@@ -18,6 +18,7 @@ class ListForm(ModelForm):
 
     def save(self, group=None, **kwargs):
         original_commit = kwargs.pop('commit', True)
+
         kwargs['commit'] = False
         list = super(ListForm, self).save(**kwargs)
 
@@ -28,6 +29,8 @@ class ListForm(ModelForm):
 
         if original_commit:
             list.save()
+            list.accounts = self.cleaned_data['accounts']
+
         return list
 
 class ColumnForm(ModelForm):
