@@ -1,19 +1,30 @@
+from pwd import getpwnam
+
 from django import forms
 from django.forms.models import ModelForm
 from django.forms.forms import BoundField, Form
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
 
 from itkufs.accounting.models import Group, Account, RoleAccount
 
 class AccountForm(ModelForm):
+    owner = forms.CharField(required=False)
+
     class Meta:
         model = Account
-        exclude = ('slug', 'group')
+        exclude = ('slug', 'group', 'owner')
 
     def __init__(self, *args, **kwargs):
         group = kwargs.pop('group', None)
+
+        if kwargs['instance'] and kwargs['instance'].owner:
+            initial = kwargs.pop('initial', {})
+            initial['owner'] = kwargs['instance'].owner.username
+            kwargs['initial'] = initial
+
         super(AccountForm, self).__init__(*args, **kwargs)
 
         self.group = group
@@ -21,28 +32,51 @@ class AccountForm(ModelForm):
     def clean_name(self):
         name = self.cleaned_data['name']
 
-        if self.instance:
-            return name
+        if self.group:
+            accounts = self.group.account_set.filter(name=name)
 
-        if self.group and name and  self.group.account_set.filter(name=name).count():
-            raise forms.ValidationError(
-                _('An account with this name allready exists'))
+            if self.instance:
+                accounts = accounts.exclude(id=self.instance.id).count()
+            else:
+                accounts = accounts.count()
+
+            if accounts:
+                raise forms.ValidationError(
+                    _('An account with this name allready exists'))
 
         return name
 
     def clean_owner(self):
         owner = self.cleaned_data['owner']
 
-        if self.instance:
-            return owner
-
-        if self.group and owner and self.group.account_set.filter(owner=owner).count():
+        try:
+            getpwnam(owner)
+        except KeyError:
             raise forms.ValidationError(
-                _('Users may only have one account per group'))
+                _('Username does not exist'))
+
+        if self.group:
+            accounts = self.group.account_set.filter(owner__username=owner)
+
+            if self.instance:
+                accounts = accounts.exclude(id=self.instance.id).count()
+            else:
+                accounts = accounts.count()
+
+            if accounts:
+                raise forms.ValidationError(
+                    _('Users may only have one account per group'))
 
         return owner
 
     def save(self, group=None, **kwargs):
+        user = self.cleaned_data['owner']
+
+        owner, created = User.objects.get_or_create(
+                username=user, email='%s@samfundet.no' % user)
+
+        self.cleaned_data['owner'] = owner
+
         original_commit = kwargs.pop('commit', True)
         kwargs['commit'] = False
         account = super(AccountForm, self).save(**kwargs)
