@@ -147,7 +147,7 @@ class Account(models.Model):
     objects = AccountManager()
 
     name = models.CharField(_('name'), max_length=100)
-    short_name = models.CharField(_('short name'), max_length=100)
+    short_name = models.CharField(_('short name'), max_length=100, blank=True)
     slug = models.SlugField(_('slug'),
         help_text=_('A shortname used in URLs etc.'))
     group = models.ForeignKey(Group, verbose_name=_('group'))
