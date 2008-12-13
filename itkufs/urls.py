@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/(.*)', admin.site.root),
     (r'^databrowse/(.*)',
-        user_passes_test(lambda u: u.is_staff)(databrowse.site.root)),
+        user_passes_test(lambda u: u.is_superuser)(databrowse.site.root)),
 
     # View for magic i18n translation of js
     url(r'^i18n/js/$', 'django.views.i18n.javascript_catalog',
