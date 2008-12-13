@@ -7,6 +7,9 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 TEMPLATE_STRING_IF_INVALID = ''
 
+# Disable superbackoffice
+BACKOFFICE = False
+
 ADMINS = ()
 MANAGERS = ADMINS
 
