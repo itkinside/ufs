@@ -44,6 +44,7 @@ def pdf(request, group, list, is_admin=False):
     margin = 0.5*cm
 
     font_name = 'Times-Roman'
+    font_name_bold = 'Times-Bold'
     font_size = 14
     font_size_name = font_size - 2
     font_size_balance = font_size_name - 2
@@ -157,6 +158,9 @@ def pdf(request, group, list, is_admin=False):
 
         if list.balance_width:
             row.append('%d' % a.user_balance())
+
+            if a.needs_warning():
+                GRID_STYLE.add('FONTNAME', (0,i), (1,i), font_name_bold)
 
             # Check if we need to reduce col font size
             while col_width[1] < p.stringWidth(str(row[-1]), font_name, font_size_balance) + 12 and font_size_balance > font_size_min:
