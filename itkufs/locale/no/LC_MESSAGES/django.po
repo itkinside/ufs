@@ -62,7 +62,7 @@ msgstr "administratorer"
 
 #: accounting/models.py:16
 msgid "warn limit"
-msgstr "advarselsgrense"
+msgstr "advarselgrense"
 
 #: accounting/models.py:17
 msgid "Warn user of low balance at this limit, "
@@ -147,7 +147,7 @@ msgstr "ignorer blokkeringsgrense"
 
 #: accounting/models.py:160
 msgid "Never block account automatically"
-msgstr "Aldri svartelist konto automatisk"
+msgstr "Ikke merk konto som svartelistet automagisk"
 
 #: accounting/models.py:161
 msgid "blocked"
@@ -155,7 +155,7 @@ msgstr "svartelistet"
 
 #: accounting/models.py:162
 msgid "Block account manually"
-msgstr "Svartelist konto manuelt"
+msgstr "Merk konto som svartelistet"
 
 #: accounting/models.py:167 accounting/models.py:284 accounting/models.py:607
 msgid "account"
@@ -171,7 +171,7 @@ msgstr "Bankkonto"
 
 #: accounting/models.py:278
 msgid "Cash account"
-msgstr "Contantkonto"
+msgstr "Kontantkonto"
 
 #: accounting/models.py:279
 msgid "Sale account"
@@ -204,7 +204,7 @@ msgstr "kommentar"
 
 #: accounting/models.py:326
 msgid "Mark as closed when done adding transactions "
-msgstr "Sett som avslutet når du er ferdig med å legge til overføringer"
+msgstr "Sett som avsluttet når du er ferdig med å legge til overføringer"
 
 #: accounting/models.py:331 accounting/models.py:382
 msgid "settlement"
@@ -264,10 +264,12 @@ msgid "message"
 msgstr "melding"
 
 #: accounting/models.py:581
+#, fuzzy
 msgid "transaction log entry"
-msgstr "transaksjonslogginnslag"
+msgstr "transaksjonslogg"
 
 #: accounting/models.py:582
+#, fuzzy
 msgid "transaction log entries"
 msgstr "transaksjonlogginnslag"
 
@@ -285,10 +287,12 @@ msgid "credit amount"
 msgstr "kreditbeløp"
 
 #: accounting/models.py:633
+#, fuzzy
 msgid "transaction entry"
 msgstr "transaksjonsinnslag"
 
 #: accounting/models.py:634
+#, fuzzy
 msgid "transaction entries"
 msgstr "transaksjonsinnslag"
 
@@ -350,7 +354,7 @@ msgstr "Forbudt hvis ikke gruppemedlem eller -administrator."
 
 #: common/forms.py:44
 msgid "An account with this name allready exists"
-msgstr "Det finnes allerede ein konto med dette navnet"
+msgstr "Det finnes allerede en konto med dette navnet"
 
 #: common/forms.py:66
 msgid "Username does not exist"
@@ -386,7 +390,7 @@ msgstr "Kontobalansen er under blokkeringsgrensen."
 
 #: common/views/display.py:44
 msgid "The account balance is below the warning limit."
-msgstr "Kontobalansen er under advarselsgrensen."
+msgstr "Kontobalansen er under advarselgrensen."
 
 #: common/views/edit.py:39
 msgid "Group successfully updated"
@@ -427,7 +431,7 @@ msgstr "kolonnebredde for kallenavn"
 
 #: reports/models.py:41
 msgid "balance width"
-msgstr "Kolonnebredde for ballanse"
+msgstr "Kolonnebredde for balanse"
 
 #: reports/models.py:46
 msgid "orientation"
@@ -686,7 +690,7 @@ msgstr "oppgjør"
 
 #: templates/accounting/settlement_details.html:15
 msgid "Settlement ID"
-msgstr "oppgjørsid"
+msgstr "oppgjørs-id"
 
 #: templates/accounting/settlement_details.html:19
 #: templates/accounting/settlement_list.html:41
@@ -912,7 +916,7 @@ msgstr "Gruppeinformasjon"
 #: templates/common/account_summary.html:55
 #: templates/common/group_summary.html:16
 msgid "Warning limit"
-msgstr "Advarselsgrense"
+msgstr "Advarselgrense"
 
 #: templates/common/account_summary.html:63
 #: templates/common/group_summary.html:25
@@ -953,6 +957,7 @@ msgstr "Ny liste"
 #: templates/common/role_account_form.html:6
 #: templates/common/role_account_form.html:14
 #: templates/common/role_account_form.html:20
+#, fuzzy
 msgid "Assign role accounts"
 msgstr "Tildel rollekontoer"
 
@@ -985,7 +990,7 @@ msgstr "Kontoer"
 
 #: templates/common/group_summary.html:93
 msgid "No accounts found."
-msgstr "Ingen kontoer funnet."
+msgstr "Finner ingen kontoer."
 
 #: templates/common/group_summary.html:100
 msgid "User accounts"
