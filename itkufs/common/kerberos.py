@@ -8,7 +8,10 @@ class KerberosBackend:
         if request and 'REMOTE_USER' in request.META:
             username = request.META['REMOTE_USER'].split('@')[0]
 
-            return self.create_user(username)
+            try:
+                return User.objects.get(username=username)
+            except User.DoesNotExist:
+                return self.create_user(username)
 
         return None
 
@@ -24,12 +27,9 @@ class KerberosBackend:
         except KeyError:
             return None
 
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            email = '%s@%s' % (username, settings.MAIL_DOMAIN)
-            user = User(username=username, password='In Kerberos')
-            user.email = email
-            user.save()
+        email = '%s@%s' % (username, settings.MAIL_DOMAIN)
+        user = User(username=username, password='In Kerberos')
+        user.email = email
+        user.save()
 
         return user
