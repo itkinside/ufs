@@ -34,8 +34,10 @@ class List(models.Model):
 
     name = models.CharField(_('name'), max_length=200)
     slug = models.SlugField(_('slug'))
-    account_width = models.PositiveSmallIntegerField(_('account width'),
-        help_text=_('Relative width of cell'))
+    account_width = models.PositiveSmallIntegerField(_('account name width'),
+        help_text=_('Relative width of cell, 0 to hide'))
+    short_name_width = models.PositiveSmallIntegerField(_('short name width'),
+        help_text=_('Relative width of cell, 0 to hide'))
     balance_width = models.PositiveSmallIntegerField(_('balance width'),
         help_text=_('Relative width of cell, 0 to hide'))
     group = models.ForeignKey(Group,
@@ -48,8 +50,6 @@ class List(models.Model):
         help_text=_('Use two rows per account'), default=False)
     ignore_blocked = models.BooleanField(_('ignore blocked'),
         help_text=_("Don't exclude blocked accounts"))
-    use_username = models.BooleanField(_('Use username'),
-        help_text=_('Owner usernames instead of account names'))
 
     class Meta:
         unique_together = (('slug', 'group'),)

@@ -32,9 +32,6 @@ def pdf(request, group, list, is_admin=False):
     else:
         accounts = group.user_account_set.filter(active=True)
 
-    if list.use_username:
-        accounts = accounts.order_by('owner__username')
-
     # Create response
     filename = '%s-%s-%s' % (date.today(), group, list)
 
@@ -47,6 +44,7 @@ def pdf(request, group, list, is_admin=False):
     font_name_bold = 'Times-Bold'
     font_size = 14
     font_size_name = font_size - 2
+    font_size_short_name = font_size - 2
     font_size_balance = font_size_name - 2
     font_size_min = 5
 
@@ -90,7 +88,7 @@ def pdf(request, group, list, is_admin=False):
     if group.email:
         footer.append(group.email)
     if list.comment.strip():
-        footer.append(list.comment)
+        footer.append(list.comment.replace('\n', ' ').replace('\r', ' '))
 
     p.drawString(margin, margin, u' - '.join(footer))
 
@@ -109,12 +107,22 @@ def pdf(request, group, list, is_admin=False):
         return response
 
     # Store col widths
-    col_width = [list.account_width]
-    header = [_(u'Name')]
+    col_width = []
+    header = []
+
+    if list.account_width:
+        col_width.append(list.account_width)
+        header.append(_(u'Name'))
+
+    if list.short_name_width:
+        col_width.append(list.short_name_width)
+        header.append(_(u'Nick'))
 
     if list.balance_width:
         header.append(_(u'Balance'))
         col_width.append(list.balance_width)
+
+    base_x = len(header)
 
     for c in list.column_set.all():
         header.append(c.name)
@@ -122,7 +130,7 @@ def pdf(request, group, list, is_admin=False):
 
     # Calculate relative col widths over to absolute points
     for i,w in enumerate(col_width):
-        col_width[i] = float(w) / float((list.listcolumn_width or 0) + list.balance_width + list.account_width) * (width-2*margin)
+        col_width[i] = float(w) / float((list.listcolumn_width or 0) + list.balance_width + (list.account_width or 0) + (list.short_name_width or 0)) * (width-2*margin)
 
     # Intialise table with header
     data = [header]
@@ -142,33 +150,36 @@ def pdf(request, group, list, is_admin=False):
 
         if a.is_blocked():
             if list.balance_width:
-                GRID_STYLE.add('BACKGROUND', (2,i), (-1,i+extra_row_height), blacklisted_color)
                 GRID_STYLE.add('TEXTCOLOR', (1,i), (1,i), blacklisted_text_color)
-            else:
-                GRID_STYLE.add('BACKGROUND', (1,i), (-1,i+extra_row_height), blacklisted_color)
+            GRID_STYLE.add('BACKGROUND', (base_x+1,i), (-1,i+extra_row_height), blacklisted_color)
 
-        if list.use_username:
-            row = [a.owner.username]
-        else:
-            row = [a.name]
+        row = []
 
-        # Check if we need to reduce col font size
-        while col_width[0] < p.stringWidth(row[-1], font_name, font_size_name) + 12 and font_size_name > font_size_min:
-            font_size_name -= 1
+        if list.account_width:
+            row.append(a.name)
+
+            # Check if we need to reduce col font size
+            while col_width[len(row)-1] < p.stringWidth(row[-1], font_name, font_size_name) + 12 and font_size_name > font_size_min:
+                font_size_name -= 1
+
+        if list.short_name_width:
+            row.append(a.short_name or u'')
+
+            # Check if we need to reduce col font size
+            while col_width[len(row)-1] < p.stringWidth(row[-1], font_name, font_size_name) + 12 and font_size_short_name > font_size_min:
+                font_size_short_name -= 1
 
         if list.balance_width:
             row.append('%d' % a.user_balance())
 
             if a.needs_warning():
-                GRID_STYLE.add('FONTNAME', (0,i), (1,i), font_name_bold)
+                GRID_STYLE.add('FONTNAME', (0,i), (base_x-1,i), font_name_bold)
 
             # Check if we need to reduce col font size
-            while col_width[1] < p.stringWidth(str(row[-1]), font_name, font_size_balance) + 12 and font_size_balance > font_size_min:
+            while col_width[len(row)-1] < p.stringWidth(str(row[-1]), font_name, font_size_balance) + 12 and font_size_balance > font_size_min:
                 font_size_balance -= 1
 
-            row.extend(header[2:])
-        else:
-            row.extend(header[1:])
+        row.extend(header[base_x:])
 
         data.append(row)
 
@@ -182,15 +193,16 @@ def pdf(request, group, list, is_admin=False):
 
     # Set font size for names
     GRID_STYLE.add('FONTSIZE', (0,1), (0,-1), font_size_name)
+    GRID_STYLE.add('ALIGN', (0,0), (-1,-1), 'LEFT')
+
+    GRID_STYLE.add('FONTNAME', (0,0), (-1,0), font_name_bold)
 
     # Set font size for balance
     if list.balance_width:
-        GRID_STYLE.add('FONTSIZE', (1,1), (1,-1), font_size_balance)
-        GRID_STYLE.add('TEXTCOLOR', (2,1), (-1,-1), faint_color)
-        GRID_STYLE.add('ALIGN', (2,1), (-1,-1), 'LEFT')
-    else:
-        GRID_STYLE.add('TEXTCOLOR', (1,1), (-1,-1), faint_color)
-        GRID_STYLE.add('ALIGN', (1,1), (-1,-1), 'LEFT')
+        GRID_STYLE.add('FONTSIZE', (base_x-1,1), (base_x-1,-1), font_size_balance)
+        GRID_STYLE.add('ALIGN', (base_x-1,1), (base_x-1,-1), 'RIGHT')
+
+    GRID_STYLE.add('TEXTCOLOR', (base_x,1), (-1,-1), faint_color)
 
     if list.double:
         if list.balance_width:

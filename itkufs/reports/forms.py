@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.forms.models import ModelForm
 from django.forms.forms import Form
@@ -15,6 +16,17 @@ class ListForm(ModelForm):
         super(ListForm, self).__init__(*args, **kwargs)
 
         self.fields['accounts'].choices = [(a.id, a.name) for a in group.user_account_set]
+
+    def clean(self):
+        account_width = self.cleaned_data['account_width']
+        short_name_width = self.cleaned_data['short_name_width']
+
+        if account_width == 0 and short_name_width == 0:
+            raise forms.ValidationError(
+                _(u'"%s" or "%s" must be greater than zero') % (
+                    self.fields['account_width'].label,
+                    self.fields['short_name_width'].label))
+        return self.cleaned_data
 
     def save(self, group=None, **kwargs):
         original_commit = kwargs.pop('commit', True)
