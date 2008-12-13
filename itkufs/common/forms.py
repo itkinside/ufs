@@ -5,7 +5,7 @@ from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from django.contrib.auth import get_backends
+from django.contrib import auth
 
 from itkufs.accounting.models import Group, Account, RoleAccount
 
@@ -55,10 +55,9 @@ class AccountForm(ModelForm):
         try:
             user = User.objects.get(username=owner)
         except User.DoesNotExist:
-            for b in get_backends():
-                if hasattr(b, 'create_user'):
-                    user = b.create_user(owner)
-
+            for auth_backend in auth.get_backends():
+                if hasattr(auth_backend, 'get_or_create_user'):
+                    user = auth_backend.get_or_create_user(owner)
                     if user:
                         break
 
