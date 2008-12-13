@@ -1,5 +1,3 @@
-from pwd import getpwnam
-
 from django import forms
 from django.forms.models import ModelForm
 from django.forms.forms import BoundField, Form
@@ -7,6 +5,7 @@ from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from django.contrib.auth import get_backends
 
 from itkufs.accounting.models import Group, Account, RoleAccount
 
@@ -49,14 +48,19 @@ class AccountForm(ModelForm):
     def clean_owner(self):
         owner = self.cleaned_data['owner']
 
-        try:
-            getpwnam(owner)
-        except KeyError:
+        for b in get_backends():
+            if hasattr(b, 'create_user'):
+                user = b.create_user(owner)
+
+            if user:
+                break
+
+        if not user:
             raise forms.ValidationError(
                 _('Username does not exist'))
 
         if self.group:
-            accounts = self.group.account_set.filter(owner__username=owner)
+            accounts = self.group.account_set.filter(owner=user)
 
             if self.instance:
                 accounts = accounts.exclude(id=self.instance.id).count()
@@ -67,18 +71,12 @@ class AccountForm(ModelForm):
                 raise forms.ValidationError(
                     _('Users may only have one account per group'))
 
-        return owner
+        return user
 
     def save(self, group=None, **kwargs):
-        user = self.cleaned_data['owner']
-
-        owner, created = User.objects.get_or_create(
-                username=user, email='%s@samfundet.no' % user)
-
-        self.cleaned_data['owner'] = owner
-
         original_commit = kwargs.pop('commit', True)
         kwargs['commit'] = False
+
         account = super(AccountForm, self).save(**kwargs)
 
         if not account.slug:
