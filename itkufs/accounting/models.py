@@ -37,10 +37,10 @@ class Group(models.Model):
             'group': self.slug,
         })
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if not len(self.slug):
             raise ValueError('Slug cannot be empty.')
-        super(Group, self).save()
+        super(Group, self).save(*args, **kwargs)
 
         # Create default accounts
         if not self.account_set.count():
@@ -176,10 +176,10 @@ class Account(models.Model):
             'account': self.slug,
         })
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if not len(self.slug):
             raise ValueError('Slug cannot be empty.')
-        super(Account, self).save()
+        super(Account, self).save(*args, **kwargs)
 
     def balance(self, date=None):
         if not date and hasattr(self, 'balance_sql'):
@@ -416,7 +416,7 @@ class Transaction(models.Model):
     # FIXME is this the right place to have commit on succes? Shouldn't it be
     # higher up in a view etc?
     @transaction.commit_on_success
-    def save(self):
+    def save(self, *args, **kwargs):
         debit_sum = 0
         credit_sum = 0
         debit_accounts = []
@@ -449,7 +449,7 @@ class Transaction(models.Model):
         if self.date is None:
             self.date = datetime.date.today()
         self.last_modified = datetime.datetime.now()
-        super(Transaction, self).save()
+        super(Transaction, self).save(*args, **kwargs)
 
     def set_pending(self, user, message=''):
         if self.id is None:
@@ -565,7 +565,7 @@ class TransactionLog(models.Model):
     user = models.ForeignKey(User, verbose_name=_('user'))
     message = models.CharField(_('message'), max_length=200, blank=True)
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.id is not None:
             raise InvalidTransactionLog(
                 'Altering transaction log entries is not allowed')
@@ -574,7 +574,7 @@ class TransactionLog(models.Model):
         if self.type != Transaction.PENDING_STATE and self.transaction.log_set.filter(type=self.type).count():
             raise InvalidTransactionLog(
                 'Only one instance of each log type is allowed.')
-        super(TransactionLog, self).save()
+        super(TransactionLog, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ('timestamp',)
@@ -610,7 +610,7 @@ class TransactionEntry(models.Model):
     credit = models.DecimalField(_('credit amount'),
         max_digits=10, decimal_places=2, default=0)
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.transaction.is_rejected():
             raise InvalidTransactionEntry(
                 'Can not add entries to rejected transactions')
@@ -626,7 +626,7 @@ class TransactionEntry(models.Model):
             raise InvalidTransactionEntry(
                 'Create or debit must be positive')
 
-        super(TransactionEntry, self).save()
+        super(TransactionEntry, self).save(*kargs, **kwargs)
 
     class Meta:
         unique_together = (('transaction', 'account'),)
