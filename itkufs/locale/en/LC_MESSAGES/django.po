@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-13 21:58+0100\n"
+"POT-Creation-Date: 2008-12-14 09:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: accounting/admin.py:18
+#: accounting/admin.py:31
 msgid "Advanced options"
 msgstr ""
 
@@ -330,6 +330,11 @@ msgstr ""
 msgid "Your transaction has been added,"
 msgstr ""
 
+#: accounting/views/edit.py:138
+#, python-format
+msgid "Added transaction: %s"
+msgstr ""
+
 #: accounting/views/edit.py:202
 #: templates/accounting/approve_transactions.html:29
 msgid "No pending transactions found."
@@ -360,11 +365,11 @@ msgstr ""
 msgid "Users may only have one account per group"
 msgstr ""
 
-#: common/forms.py:117
+#: common/forms.py:121
 msgid "The group must have at least one admin"
 msgstr ""
 
-#: common/forms.py:120
+#: common/forms.py:124
 msgid "You are not allowed to remove your own admin privileges"
 msgstr ""
 
@@ -494,23 +499,23 @@ msgstr ""
 msgid "Balance"
 msgstr ""
 
-#: reports/views.py:307
+#: reports/views.py:308
 msgid "List deleted"
 msgstr ""
 
-#: reports/views.py:352
+#: reports/views.py:353
 msgid "Member accounts"
 msgstr ""
 
-#: reports/views.py:366
+#: reports/views.py:367
 msgid "Current year's net income"
 msgstr ""
 
-#: settings/__init__.py:105
+#: settings/__init__.py:108
 msgid "English"
 msgstr ""
 
-#: settings/__init__.py:106
+#: settings/__init__.py:109
 msgid "Norwegian"
 msgstr ""
 

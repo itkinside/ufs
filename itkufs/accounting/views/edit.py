@@ -135,7 +135,7 @@ def transfer(request, group, account=None, transfer_type=None,
 
         request.user.message_set.create(
             # FIXME better message, also reflect the message above
-            message='Added transaction: %s' % transaction)
+            message=_('Added transaction: %s') % transaction)
 
         return HttpResponseRedirect(reverse('account-summary',
             args=[account.group.slug, account.slug]))
