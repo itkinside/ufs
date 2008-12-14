@@ -63,6 +63,11 @@ def transaction_list(request, group, account=None, page='1',
     if account:
         transaction_list = transaction_list.filter(entry_set__account=account)
 
+    try:
+        user_account = group.account_set.get(owner=request.user)
+    except Account.DoesNotExist:
+        user_account = None
+
     # Pass on to generic view
     response = object_list(request,
         transaction_list,
@@ -75,7 +80,7 @@ def transaction_list(request, group, account=None, page='1',
             'is_owner': is_owner,
             'group': group,
             'account': account,
-            'user_account': group.account_set.get(owner=request.user),
+            'user_account': user_account,
         },
         template_object_name='transaction')
     populate_xheaders(request, response, Group, group.id)
