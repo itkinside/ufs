@@ -58,7 +58,7 @@ class Command(BaseCommand):
     def _get_full_name(self, username):
         try:
             return getpwnam(username)[4].split(',')[0]
-        except IndexError:
+        except (IndexError, KeyError):
             self.logger.warning('Failed to extract full name for "%s"',
                 username, exc_info=True)
 
