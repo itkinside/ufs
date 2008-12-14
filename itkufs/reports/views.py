@@ -175,7 +175,7 @@ def pdf(request, group, list, is_admin=False):
             if not short_name and a.owner:
                 short_name = a.owner.username
 
-            row.append(short_name or '')
+            row.append(short_name or a.name)
 
             # Check if we need to reduce col font size
             while col_width[len(row)-1] < p.stringWidth(row[-1], font_name, font_size_name) + 12 and font_size_short_name > font_size_min:
