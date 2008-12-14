@@ -32,6 +32,9 @@ def pdf(request, group, list, is_admin=False):
     else:
         accounts = group.user_account_set.filter(active=True)
 
+    if not list.account_width:
+        accounts = accounts.order_by('short_name', 'owner__username')
+
     # Create response
     filename = '%s-%s-%s' % (date.today(), group, list)
 
@@ -109,14 +112,15 @@ def pdf(request, group, list, is_admin=False):
 
     # Store col widths
     col_width = []
-    header = []
+    header = [_(u'Name')]
 
     if list.account_width:
         col_width.append(list.account_width)
-        header.append(_(u'Name'))
 
     if list.short_name_width:
         col_width.append(list.short_name_width)
+
+    if list.account_width and list.short_name_width:
         header.append('')
 
     if list.balance_width:
@@ -162,7 +166,12 @@ def pdf(request, group, list, is_admin=False):
                 font_size_name -= 1
 
         if list.short_name_width:
-            row.append(a.short_name or u'')
+            short_name = a.short_name
+
+            if not short_name and a.owner:
+                short_name = a.owner.username
+
+            row.append(short_name or '')
 
             # Check if we need to reduce col font size
             while col_width[len(row)-1] < p.stringWidth(row[-1], font_name, font_size_name) + 12 and font_size_short_name > font_size_min:
