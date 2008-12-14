@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
@@ -9,6 +10,9 @@ site = AdminSite()
 class CustomUserAdmin(UserAdmin):
     # Remove group editing
     fieldsets = UserAdmin.fieldsets[:-1]
+
+    def has_delete_permission(self, request, obj=None):
+        return getattr(settings, 'BACKOFFICE', False)
 
 class CustomFlatPageAdmin(FlatPageAdmin):
     list_filter = []
