@@ -18,9 +18,16 @@ from django.contrib.auth.models import User
 group = Group.objects.get(slug=sys.argv[1])
 name  = getpwnam(sys.argv[2])[4].split(',')[0]
 
-owner, created = User.objects.get_or_create(username=sys.argv[2], email='%s@samfundet.no' % sys.argv[2])
+owner, created = User.objects.get_or_create(
+        username=sys.argv[2], email='%s@samfundet.no' % sys.argv[2])
 
-account, created = Account.objects.get_or_create(group=group, owner=owner, defaults={'name': name, 'type': Account.LIABILITY_ACCOUNT, 'slug': sys.argv[2]})
+account, created = Account.objects.get_or_create(
+        group=group, owner=owner, defaults={
+            'name': name,
+            'short_name': sys.argv[2],
+            'type': Account.LIABILITY_ACCOUNT,
+            'slug': sys.argv[2],
+        })
 
 if created:
     print "Created new account for user %s" % owner
