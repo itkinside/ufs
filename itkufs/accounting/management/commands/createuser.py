@@ -61,6 +61,7 @@ class Command(BaseCommand):
         except (IndexError, KeyError):
             self.logger.warning('Failed to extract full name for "%s"',
                 username, exc_info=True)
+            return username
 
     def _get_confirmation(self, username, full_name):
         answer = raw_input('Add %s (%s)? y/N ' % (username, full_name))
