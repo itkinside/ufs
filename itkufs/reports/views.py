@@ -21,19 +21,23 @@ from itkufs.accounting.models import Account
 from itkufs.reports.models import *
 from itkufs.reports.forms import *
 
+_list = list
+
 @login_required
 @limit_to_group
 def pdf(request, group, list, is_admin=False):
     """PDF version of list"""
 
     # Get accounts to show
-    if list.accounts.all().count():
-        accounts = list.accounts.all()
+    if list.user_accounts.all().count():
+        accounts = list.user_accounts.all()
     else:
         accounts = group.user_account_set.filter(active=True)
 
     if not list.account_width:
         accounts = accounts.order_by('short_name', 'owner__username')
+
+    accounts = _list(accounts) + _list(list.group_accounts.all())
 
     # Create response
     filename = '%s-%s-%s' % (date.today(), group, list)
