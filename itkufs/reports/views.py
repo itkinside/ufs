@@ -3,7 +3,7 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus.tables import Table, GRID_STYLE
 from reportlab.platypus.flowables import Image
 from reportlab.lib.units import cm
-from reportlab.lib.colors import Color
+from reportlab.lib.colors import HexColor
 from reportlab.lib.pagesizes import A4
 
 from django.contrib.auth.decorators import login_required
@@ -52,11 +52,12 @@ def pdf(request, group, list, is_admin=False):
     foot_height = 15 # pt
     logo_height = 25 # pt
 
-    blacklisted_color = Color(0,0,0)
-    blacklisted_text_color = Color(0.63,0,0)
-    even_color = Color(1,1,1)
-    odd_color = Color(0.97,0.97,0.97)
-    faint_color = Color(0.70, 0.70, 0.70)
+    blacklisted_color = HexColor('#000000')
+    blacklisted_text_color = HexColor('#A40000')
+    warn_text_color = HexColor('#F57900')
+    even_color = HexColor('#FFFFFF')
+    odd_color = HexColor('#FAFAFA')
+    faint_color = HexColor('#BABDB6')
 
     alternate_colors = [even_color, odd_color]
 
@@ -151,11 +152,6 @@ def pdf(request, group, list, is_admin=False):
 
         GRID_STYLE.add('BACKGROUND', (0,i), (-1,i+extra_row_height), color)
 
-        if a.is_blocked():
-            if list.balance_width:
-                GRID_STYLE.add('TEXTCOLOR', (base_x-1,i), (base_x-1,i), blacklisted_text_color)
-            GRID_STYLE.add('BACKGROUND', (base_x,i), (-1,i+extra_row_height), blacklisted_color)
-
         row = []
 
         if list.account_width:
@@ -179,15 +175,22 @@ def pdf(request, group, list, is_admin=False):
             # if needs to be moved if you want to change that
             if a.needs_warning():
                 GRID_STYLE.add('FONTNAME', (0,i), (base_x-1,i), font_name_bold)
+                GRID_STYLE.add('TEXTCOLOR', (base_x-1,i), (base_x-1,i), warn_text_color)
 
             # Check if we need to reduce col font size
             while col_width[len(row)-1] < p.stringWidth(str(row[-1]), font_name, font_size_balance) + 12 and font_size_balance > font_size_min:
                 font_size_balance -= 1
 
-        if not a.is_blocked():
-            row.extend(header[base_x:])
-        else:
+        if a.is_blocked():
+            if list.balance_width:
+                GRID_STYLE.add('TEXTCOLOR', (base_x-1,i), (base_x-1,i), blacklisted_text_color)
+                GRID_STYLE.add('FONTNAME', (0,i), (base_x-1,i), font_name_bold)
+            GRID_STYLE.add('BACKGROUND', (base_x,i), (-1,i+extra_row_height), blacklisted_color)
+
             row.extend([''] * len(header[base_x:]))
+
+        else:
+            row.extend(header[base_x:])
 
         data.append(row)
 
