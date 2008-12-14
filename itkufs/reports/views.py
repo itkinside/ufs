@@ -175,6 +175,8 @@ def pdf(request, group, list, is_admin=False):
         if list.balance_width:
             row.append('%d' % a.user_balance())
 
+            # XXX: currently warnings are only shown if balance is shown, this
+            # if needs to be moved if you want to change that
             if a.needs_warning():
                 GRID_STYLE.add('FONTNAME', (0,i), (base_x-1,i), font_name_bold)
 
@@ -211,12 +213,8 @@ def pdf(request, group, list, is_admin=False):
     GRID_STYLE.add('TEXTCOLOR', (base_x,1), (-1,-1), faint_color)
 
     if list.double:
-        if list.balance_width:
-            GRID_STYLE.add('TOPPADDING', (2,1), (-1,-1), 0)
-            GRID_STYLE.add('BOTTOMPADDING', (2,1), (-1,-1), 0)
-        else:
-            GRID_STYLE.add('TOPPADDING', (1,1), (-1,-1), 0)
-            GRID_STYLE.add('BOTTOMPADDING', (1,1), (-1,-1), 0)
+        GRID_STYLE.add('TOPPADDING', (base_x,1), (-1,-1), 2)
+        GRID_STYLE.add('BOTTOMPADDING', (base_x,1), (-1,-1), 2)
 
     GRID_STYLE.add('VALIGN', (0,1), (-1,-1), 'TOP')
 
