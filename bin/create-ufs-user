@@ -1,4 +1,10 @@
 #!/usr/bin/python
+'''
+# Example code for creating accounts for all users with primary group ark
+for u in `getent passwd | awk -F: '$4=="230" { print $1 }'`; do
+    python ../bin/create-ufs-user ark $u;
+done
+'''
 
 import sys
 import os
