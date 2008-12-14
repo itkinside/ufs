@@ -118,6 +118,7 @@
 <div style="display: inline;">
 {% trans "Group:" %}
 <select name="group">
+    {# FIXME this is missing the groups where the user is just admin #}
     {% for account in request.user.account_set.all %}
     <option value="{{ account.group.slug }}"{% ifequal account.group.slug request.session.my_account.group.slug %} selected="selected"{% endifequal %}>
             {{ account.group }}</option>
