@@ -11,6 +11,10 @@
         <th>{% trans "Name" %}</th>
         <td>{{ account.name }}</td>
     </tr>
+    <tr>
+        <th>{% trans "Short name" %}</th>
+        <td>{{ account.short_name|default:"-" }}</td>
+    </tr>
 
     <tr>
     {% if account.owner %}
