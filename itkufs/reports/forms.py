@@ -52,18 +52,14 @@ class ColumnForm(ModelForm):
     name = forms.CharField(max_length=100, required=False)
     width = forms.IntegerField(min_value=0, required=False, widget=forms.TextInput(attrs={'size': 4, 'class': 'number'}))
 
+    def clean(self):
+        if self.cleaned_data['width'] and not self.cleaned_data['name']:
+            raise forms.ValidationError(_('Name missing'))
+        elif not self.cleaned_data['width'] and self.cleaned_data['name']:
+            raise forms.ValidationError(_('Width missing'))
+
+        return self.cleaned_data
+
     class Meta:
         model = ListColumn
         fields = ('name', 'width')
-
-    def save(self, list=None, **kwargs):
-        original_commit = kwargs.pop('commit', True)
-        kwargs['commit'] = False
-        column = super(ColumnForm, self).save(**kwargs)
-
-        if list:
-           column.list = list
-
-        if original_commit:
-            column.save()
-        return column

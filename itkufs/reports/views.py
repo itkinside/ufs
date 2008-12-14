@@ -275,13 +275,13 @@ def new_edit_list(request, group, list=None, is_admin=False):
         data = None
 
     if not list:
-        ColumnFormSet = inlineformset_factory(List, ListColumn, extra=10)
+        ColumnFormSet = inlineformset_factory(List, ListColumn, extra=10, form=ColumnForm)
 
         columnformset = ColumnFormSet(data)
         listform = ListForm(data=data, group=group)
 
     else:
-        ColumnFormSet = inlineformset_factory(List, ListColumn, extra=3)
+        ColumnFormSet = inlineformset_factory(List, ListColumn, extra=3, form=ColumnForm)
         if list is None:
             raise Http404
 
@@ -292,7 +292,14 @@ def new_edit_list(request, group, list=None, is_admin=False):
         list = listform.save(group=group)
 
         columnformset.instance = list
-        columns = columnformset.save()
+        columns = columnformset.save(commit=False)
+
+        for c in columns:
+            if not c.name and not c.width:
+                if c.id:
+                    c.delete()
+            else:
+                c.save()
 
         return HttpResponseRedirect(reverse('group-summary',
             kwargs={

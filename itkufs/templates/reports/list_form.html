@@ -60,8 +60,8 @@ all active accounts in the group is included. {% endblocktrans %}</p>
     </tr>
 {% for c in columnformset.forms %}
     <tr class="{% cycle evenrow,oddrow %}">
-        <td{% if c.name.errors %} class="error"{% endif %}>{{ c.name }}{{ c.id }}</td>
-        <td{% if c.width.errors %} class="error"{% endif %}>{{ c.width }}</td>
+        <td{% if c.name.errors or c.errors %} class="error"{% endif %}>{{ c.name }}{{ c.id }}</td>
+        <td{% if c.width.errors or c.errors %} class="error"{% endif %}>{{ c.width }}</td>
     </tr>
 {% endfor %}
 </table>
