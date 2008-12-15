@@ -626,7 +626,7 @@ class TransactionEntry(models.Model):
             raise InvalidTransactionEntry(
                 'Create or debit must be positive')
 
-        super(TransactionEntry, self).save(*kargs, **kwargs)
+        super(TransactionEntry, self).save(*args, **kwargs)
 
     class Meta:
         unique_together = (('transaction', 'account'),)
