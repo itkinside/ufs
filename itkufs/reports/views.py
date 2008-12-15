@@ -76,21 +76,22 @@ def pdf(request, group, list, is_admin=False):
     # Create canvas for page and set fonts
     p = canvas.Canvas(response, (width,height))
 
-    if group.logo:
-        # Find scaling ratio
-        ratio = group.logo.width / group.logo.height
+    def draw_header():
+        if group.logo:
+            # Find scaling ratio
+            ratio = group.logo.width / group.logo.height
 
-        # Load logo with correct scaling
-        logo = Image(group.logo.path, width=logo_height*ratio, height=logo_height)
+            # Load logo with correct scaling
+            logo = Image(group.logo.path, width=logo_height*ratio, height=logo_height)
 
-        # Draw on first page
-        logo.drawOn(p, width - margin - logo_height*ratio, height - margin - logo_height)
+            # Draw on first page
+            logo.drawOn(p, width - margin - logo_height*ratio, height - margin - logo_height)
 
-    # Setup rest of header
-    p.setFont(font_name, font_size)
-    p.drawString(margin, height - margin - font_size, u'%s: %s' % (group, list.name))
-    p.setFont(font_name, font_size - 4)
-    p.drawString(margin, height - margin - font_size - font_size + 2, u'%s: %s' % (_('Printed'), str(date.today())))
+        # Setup rest of header
+        p.setFont(font_name, font_size)
+        p.drawString(margin, height - margin - font_size, u'%s: %s' % (group, list.name))
+        p.setFont(font_name, font_size - 4)
+        p.drawString(margin, height - margin - font_size - font_size + 2, u'%s: %s' % (_('Printed'), str(date.today())))
 
     footer = []
     if group.email:
@@ -98,18 +99,21 @@ def pdf(request, group, list, is_admin=False):
     if list.comment.strip():
         footer.append(list.comment.replace('\n', ' ').replace('\r', ' '))
 
-    p.drawString(margin, margin, u' - '.join(footer))
+    def draw_footer():
+        p.drawString(margin, margin, u' - '.join(footer))
 
-    blacklisted_note = _(u'Blacklisted accounts are marked with: ')
+        blacklisted_note = _(u'Blacklisted accounts are marked with: ')
 
-    p.drawString(width - margin - 10 - p.stringWidth(blacklisted_note, font_name, font_size - 4), margin, blacklisted_note)
-    p.rect(width - margin - 10, margin, 8, 8, fill=1, stroke=0)
+        p.drawString(width - margin - 10 - p.stringWidth(blacklisted_note, font_name, font_size - 4), margin, blacklisted_note)
+        p.rect(width - margin - 10, margin, 8, 8, fill=1, stroke=0)
 
-    p.setFont(font_name, font_size)
+        p.setFont(font_name, font_size)
 
     if not accounts:
         no_accounts_message = _(u"Sorry, this list is empty.")
+        draw_header()
         p.drawString(margin, height - font_size - margin - head_height, no_accounts_message)
+        draw_footer()
         p.save()
 
         return response
@@ -247,7 +251,9 @@ def pdf(request, group, list, is_admin=False):
             continue
 
         # Draw on canvas
+        draw_header()
         t.drawOn(p, margin, height - t_height - margin - head_height)
+        draw_footer()
 
         if rest:
             # FIXME indicate print time etc on second page (also page count)
@@ -257,9 +263,6 @@ def pdf(request, group, list, is_admin=False):
 
             # Show new page
             p.showPage()
-
-            # Remove header spacing
-            head_height = 0
         else:
             # Leave loop
             break
