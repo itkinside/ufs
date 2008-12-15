@@ -19,8 +19,8 @@ class ListForm(ModelForm):
         self.fields['group_accounts'].choices = [(a.id, a.name) for a in group.group_account_set]
 
     def clean(self):
-        account_width = self.cleaned_data['account_width']
-        short_name_width = self.cleaned_data['short_name_width']
+        account_width = self.cleaned_data.get('account_width', 0)
+        short_name_width = self.cleaned_data.get('short_name_width', 0)
 
         if account_width == 0 and short_name_width == 0:
             fields = {
