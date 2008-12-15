@@ -1,7 +1,21 @@
 import coverage
 
-from django.test.simple import run_tests as django_test_runner
+from django.test.simple import run_tests as django_test_runner, get_apps
 from django.conf import settings
+
+def test_runner(test_labels, verbosity=1, interactive=True,
+    extra_tests=[]):
+
+    if not test_labels:
+        test_labels = []
+
+        for app in get_apps():
+            if app.__name__.startswith('itkufs'):
+                test_labels.append(app.__name__.split('.')[1])
+
+    return django_test_runner(test_labels, verbosity, interactive,
+                                      extra_tests)
+
 
 def test_runner_with_coverage(test_labels, verbosity=1, interactive=True,
     extra_tests=[]):
@@ -13,7 +27,7 @@ def test_runner_with_coverage(test_labels, verbosity=1, interactive=True,
         coverage.use_cache(0) # Do not cache any of the coverage.py stuff
         coverage.start()
 
-    test_results = django_test_runner(test_labels, verbosity, interactive,
+    test_results = test_runner(test_labels, verbosity, interactive,
                                       extra_tests)
 
     # Stop code coverage after tests have completed
