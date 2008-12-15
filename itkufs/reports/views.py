@@ -242,12 +242,15 @@ def pdf(request, group, list, is_admin=False):
     t = Table(data, colWidths=col_width, style=GRID_STYLE, repeatRows=1)
 
     rest = None
+    avail_w = width-2*margin
+    avail_h = height - 2*margin - head_height - foot_height
+
     while t:
         # Figure out how big table will be
-        t_width, t_height = t.wrapOn(p, width-2*margin,height-margin-head_height-foot_height)
+        t_width, t_height = t.wrapOn(p, avail_w, avail_h)
 
         if not rest and t_height > height - 2*margin - head_height:
-            t,rest = t.split(width-2*margin, height - margin - head_height-foot_height)
+            t,rest = t.split(avail_w, avail_h)
             continue
 
         # Draw on canvas
@@ -256,8 +259,6 @@ def pdf(request, group, list, is_admin=False):
         draw_footer()
 
         if rest:
-            # FIXME indicate print time etc on second page (also page count)
-
             # set t to the second table and reset rest
             t, rest= (rest, None)
 
