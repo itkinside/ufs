@@ -43,8 +43,10 @@ class List(models.Model):
     group = models.ForeignKey(Group,
         verbose_name=_('group'), related_name='list_set')
 
-    user_accounts = models.ManyToManyField(Account, blank="true", related_name='user_list_set')
-    group_accounts = models.ManyToManyField(Account, blank="true", related_name='group_list_set')
+    add_active_accounts = models.BooleanField(_('Add active user accounts'),
+        default=True, help_text=_('Should all active accounts be added by default'))
+
+    extra_accounts = models.ManyToManyField(Account, blank="true")
 
     orientation = models.CharField(_('orientation'), max_length=1, choices=ORIENTATION_CHOICES)
     comment = models.TextField(_('comment'), blank=True, help_text=_('Comment shown at bottom on first page'))

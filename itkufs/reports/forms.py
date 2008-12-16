@@ -15,8 +15,7 @@ class ListForm(ModelForm):
         group = kwargs.pop('group')
         super(ListForm, self).__init__(*args, **kwargs)
 
-        self.fields['user_accounts'].choices = [(a.id, a.name) for a in group.user_account_set]
-        self.fields['group_accounts'].choices = [(a.id, a.name) for a in group.group_account_set]
+        self.fields['extra_accounts'].choices = [(a.id, a.name) for a in group.account_set.all()]
 
     def clean(self):
         account_width = self.cleaned_data.get('account_width', 0)
@@ -45,8 +44,7 @@ class ListForm(ModelForm):
 
         if original_commit:
             list.save()
-            list.user_accounts = self.cleaned_data['user_accounts']
-            list.group_accounts = self.cleaned_data['group_accounts']
+            list.extra_accounts = self.cleaned_data['extra_accounts']
 
         return list
 

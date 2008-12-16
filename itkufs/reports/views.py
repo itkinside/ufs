@@ -28,16 +28,21 @@ _list = list
 def pdf(request, group, list, is_admin=False):
     """PDF version of list"""
 
-    # Get accounts to show
-    if list.user_accounts.all().count():
-        accounts = list.user_accounts.all()
+    all_accounts = group.account_set.all()
+    extra_accounts = list.extra_accounts.values_list('id', flat=True)
+
+    if list.account_width:
+        all_accounts = all_accounts.order_by('name', 'owner__username')
     else:
-        accounts = group.user_account_set.filter(active=True)
+        all_accounts = all_accounts.order_by('short_name', 'owner__username')
 
-    if not list.account_width:
-        accounts = accounts.order_by('short_name', 'owner__username')
-
-    accounts = _list(accounts) + _list(list.group_accounts.all())
+    accounts = []
+    # Get accounts to show
+    for a in all_accounts:
+        if list.add_active_accounts and a.is_user_account():
+            accounts.append(a)
+        elif a.id in extra_accounts:
+            accounts.append(a)
 
     # Create response
     filename = '%s-%s-%s' % (date.today(), group, list)
