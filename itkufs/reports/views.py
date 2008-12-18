@@ -109,7 +109,7 @@ def pdf(request, group, list, is_admin=False):
 
         blacklisted_note = _(u'Blacklisted accounts are marked with: ')
 
-        p.drawString(width - margin - 10 - p.stringWidth(blacklisted_note, font_name, font_size - 4), margin, blacklisted_note)
+        p.drawRightString(width - margin - 10, margin, blacklisted_note)
         p.rect(width - margin - 10, margin, 8, 8, fill=1, stroke=0)
 
         p.setFont(font_name, font_size)
