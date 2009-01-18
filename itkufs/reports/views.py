@@ -36,6 +36,8 @@ def pdf(request, group, list, is_admin=False):
     else:
         all_accounts = all_accounts.order_by('short_name', 'owner__username')
 
+    columns = list.column_set.all()
+
     accounts = []
     # Get accounts to show
     for a in all_accounts:
@@ -123,6 +125,15 @@ def pdf(request, group, list, is_admin=False):
 
         return response
 
+    elif not columns:
+        no_columns_message = _(u"Sorry, this list isn't set up correctly, please add some columns.")
+        draw_header()
+        p.drawString(margin, height - font_size - margin - head_height, no_columns_message)
+        draw_footer()
+        p.save()
+
+        return response
+
     # Store col widths
     col_width = []
     header = [_(u'Name')]
@@ -145,7 +156,7 @@ def pdf(request, group, list, is_admin=False):
 
     base_x = len(header)
 
-    for c in list.column_set.all():
+    for c in columns:
         header.append(c.name)
         col_width.append(c.width)
 
