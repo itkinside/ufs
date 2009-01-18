@@ -83,7 +83,9 @@ def pdf(request, group, list, is_admin=False):
     # Create canvas for page and set fonts
     p = canvas.Canvas(response, (width,height))
 
-    if group.logo:
+    show_logo = bool(group.logo and group.logo.storage.exists(group.logo.path))
+
+    if show_logo:
         # Find scaling ratio
         ratio = group.logo.width / group.logo.height
 
@@ -91,7 +93,7 @@ def pdf(request, group, list, is_admin=False):
         logo = Image(group.logo.path, width=logo_height*ratio, height=logo_height)
 
     def draw_header():
-        if group.logo:
+        if show_logo:
             logo.drawOn(p, width - margin - logo_height*ratio, height - margin - logo_height)
 
         # Setup rest of header
