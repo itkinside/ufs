@@ -16,3 +16,6 @@ ALTER TABLE reports_list_accounts RENAME TO reports_list_extra_accounts;
 -- intermedatie state with group_accounts and user_accounts
 -- ALTER TABLE reports_list_user_accounts RENAME TO reports_list_extra_accounts;
 -- DROP TABLE reports_list_group_accounts;
+
+ALTER TABLE accounting_account ADD group_account boolean;
+UPDATE accounting_account set group_account = NOT (accounting_account.owner_id IS NOT NULL AND accounting_account.type = 'Li');

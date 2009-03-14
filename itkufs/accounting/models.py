@@ -47,14 +47,14 @@ class Group(models.Model):
 
             # TODO change this into a magic loop?
             bank = Account(name=ugettext('Bank'), slug='bank',
-                           type=Account.ASSET_ACCOUNT, group=self)
+                group_account=True, type=Account.ASSET_ACCOUNT, group=self)
             bank.save()
             bank_role = RoleAccount(
                 group=self, role=RoleAccount.BANK_ACCOUNT, account=bank)
             bank_role.save()
 
             cash = Account(name=ugettext('Cash'), slug='cash',
-                           type=Account.ASSET_ACCOUNT, group=self)
+                group_account=True, type=Account.ASSET_ACCOUNT, group=self)
             cash.save()
             cash_role = RoleAccount(
                 group=self, role=RoleAccount.CASH_ACCOUNT, account=cash)
@@ -62,14 +62,12 @@ class Group(models.Model):
 
     def get_user_account_set(self):
         """Returns all user accounts belonging to group"""
-        return self.account_set.filter(
-            type=Account.LIABILITY_ACCOUNT, owner__isnull=False)
+        return self.account_set.exclude(group_account=True)
     user_account_set = property(get_user_account_set, None, None)
 
     def get_group_account_set(self):
         """Returns all non-user accounts belonging to group"""
-        return self.account_set.exclude(
-            type=Account.LIABILITY_ACCOUNT, owner__isnull=False)
+        return self.account_set.filter(group_account=True)
     group_account_set = property(get_group_account_set, None, None)
 
 
@@ -125,8 +123,6 @@ class AccountManager(models.Manager):
                 FROM accounting_group
                 WHERE accounting_group.id = accounting_account.group_id
                 """,
-            'is_user_account_sql':
-                """accounting_account.owner_id IS NOT NULL AND accounting_account.type = '%s'""" % Account.LIABILITY_ACCOUNT
             }
         )
 
@@ -160,6 +156,8 @@ class Account(models.Model):
         default=False, help_text=_('Never block account automatically'))
     blocked = models.BooleanField(_('blocked'), default=False,
         help_text=_('Block account manually'))
+    group_account = models.BooleanField(_('group account'), default=False,
+        help_text=_('Does this account belong to the group?'))
 
     class Meta:
         ordering = ('group', 'name')
@@ -207,9 +205,7 @@ class Account(models.Model):
 
     def is_user_account(self):
         """Returns true if a user account"""
-        if hasattr(self, 'is_user_account_sql'):
-            return self.is_user_account_sql
-        return self.owner and self.type == self.LIABILITY_ACCOUNT
+        return not self.group_account
 
     def is_blocked(self):
         """Returns true if user account balance is below group block limit"""
@@ -493,12 +489,7 @@ class Transaction(models.Model):
             self.last_modified = datetime.datetime.now()
             self.save()
 
-            users = {}
-            for entry in self.entry_set.all():
-                if entry.account.is_user_account():
-                    users[entry.account.owner] = entry.account.owner
-
-            for user in users.values():
+            for user in User.objects.filter(account__transactionentry__transaction=self):
                 user.message_set.create(
                     message=_('Transaction %(id)d regarding your account '
                         + 'has been rejected.') % {'id': self.id})
