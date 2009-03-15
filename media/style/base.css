@@ -240,7 +240,7 @@ td.error {
         float: left;
         margin-right: 3em;
 }
-#transactions, #accounts, #accounts .comment, #transactions table {
+#transactions, #accounts, #accounts .comment, #transactions table, #activate {
         clear: both;
 }
 /* New list page */

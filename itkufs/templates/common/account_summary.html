@@ -108,4 +108,16 @@
 </div>
 {% endif %}
 
+
+{% if not account.active %}
+    {% if is_owner or is_admin %}
+        <div id="activate">
+            <h3>{% trans "Activate account" %}</h3>
+            <form method="post" action="{% url activate-account group.slug,account.slug %}">
+                <button type="submit">{% trans "Activate account" %}</button>
+            </form>
+        </div>
+    {% endif %}
+{% endif %}
+
 {% endblock %}

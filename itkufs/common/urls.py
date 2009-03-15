@@ -28,4 +28,6 @@ urlpatterns = patterns('',
         new_edit_account, name='new-account'),
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/edit/$',
         new_edit_account, name='edit-account'),
+    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/activate/$',
+        activate_account, name='activate-account'),
 )

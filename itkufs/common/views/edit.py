@@ -52,6 +52,22 @@ def edit_group(request, group, is_admin=False):
         context_instance=RequestContext(request))
 
 @login_required
+def activate_account(request, group, account=None,
+    is_admin=False, is_owner=False):
+    """Create account or edit account properties"""
+
+    if request.method == 'POST':
+        if account and (is_owner or is_admin):
+            account.active = True
+            account.save()
+
+            request.user.message_set.create(
+                message=_('Account successfully activated.'))
+
+    return HttpResponseRedirect(reverse('account-summary',
+        args=(group.slug, account.slug)))
+
+@login_required
 @limit_to_admin
 def new_edit_account(request, group, account=None,
     is_admin=False, is_owner=False):
