@@ -3,7 +3,31 @@ from django.template import Library, Variable, TemplateSyntaxError, Node, \
 from django.template.defaultfilters import stringfilter
 from django.db.models import Q
 
+from itkufs.common.utils import callsign_sorted as ufs_sorted
+
 register = Library()
+
+@register.tag
+def ufs_sort(parser, token):
+    try:
+        tag_name, variable = token.split_contents()
+    except ValueError:
+        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
+    if (variable[0] == variable[-1] and variable[0] in ('"', "'")):
+        raise template.TemplateSyntaxError, "%r tag's argument should not be in quotes" % tag_name
+    return SortedNode(variable)
+
+class SortedNode(Node):
+    def __init__(self, variable):
+        self.variable = variable
+
+    def render(self, context):
+        objects = Variable(self.variable).resolve(context)
+        objects = ufs_sorted(list(objects))
+
+        context[self.variable] = objects
+
+        return ''
 
 @register.filter
 def creditformat(value):
