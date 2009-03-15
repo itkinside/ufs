@@ -10,6 +10,7 @@ var Transaction = {
     row.insert(new Element('td').update('Sum'));
     row.insert(new Element('td'));
     row.insert(new Element('td'));
+    row.insert(new Element('td'));
     row.insert(new Element('td', { 'id': 'debit_sum', 'class': 'number'}));
     row.insert(new Element('td', { 'id': 'credit_sum', 'class': 'number'}));
     tbody.insert(row);
