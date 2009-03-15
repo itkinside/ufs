@@ -16,6 +16,7 @@ from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 from django.forms.models import inlineformset_factory
 
+from itkufs.common.utils import callsign_sorted as ufs_sorted
 from itkufs.common.decorators import limit_to_group, limit_to_admin
 from itkufs.accounting.models import Account
 from itkufs.reports.models import *
@@ -45,6 +46,8 @@ def pdf(request, group, list, is_admin=False):
             accounts.append(a)
         elif a.id in extra_accounts:
             accounts.append(a)
+
+    accounts = ufs_sorted(accounts)
 
     # Create response
     filename = '%s-%s-%s' % (date.today(), group, list)
