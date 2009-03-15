@@ -6,6 +6,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.db import transaction as db_transaction
 
+from itkufs.common.utils import callsign_sorted as ufs_sorted
 from itkufs.common.decorators import limit_to_owner, limit_to_admin
 from itkufs.accounting.models import *
 from itkufs.accounting.forms import *
@@ -302,10 +303,10 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
     user_forms = []
     group_forms = []
 
-    for account in group.user_account_set.filter(active=True):
+    for account in ufs_sorted(group.user_account_set.filter(active=True)):
         user_forms.append((account, EntryForm(data, prefix=account.id)))
 
-    for account in group.group_account_set.filter(active=True):
+    for account in ufs_sorted(group.group_account_set.filter(active=True)):
         group_forms.append((account, EntryForm(data, prefix=account.id)))
 
     errors = []
