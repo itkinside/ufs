@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-21 13:18+0100\n"
+"POT-Creation-Date: 2009-03-15 21:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Espen Molven <molven@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -43,12 +43,12 @@ msgstr "Til"
 msgid "Reason"
 msgstr "Årsak"
 
-#: accounting/models.py:11 accounting/models.py:149 reports/models.py:35
+#: accounting/models.py:11 accounting/models.py:145 reports/models.py:35
 #: reports/models.py:82
 msgid "name"
 msgstr "navn"
 
-#: accounting/models.py:12 accounting/models.py:151 reports/models.py:36
+#: accounting/models.py:12 accounting/models.py:147 reports/models.py:36
 msgid "slug"
 msgstr "slug"
 
@@ -84,8 +84,8 @@ msgstr "Lite bilde som vises på lister"
 msgid "Contact address for group."
 msgstr "Kontaktadresse for gruppen."
 
-#: accounting/models.py:29 accounting/models.py:153 accounting/models.py:282
-#: accounting/models.py:322 accounting/models.py:380 reports/models.py:44
+#: accounting/models.py:29 accounting/models.py:149 accounting/models.py:278
+#: accounting/models.py:318 accounting/models.py:376 reports/models.py:44
 msgid "group"
 msgstr "gruppe"
 
@@ -101,202 +101,206 @@ msgstr "Bank"
 msgid "Cash"
 msgstr "Kontanter"
 
-#: accounting/models.py:140
+#: accounting/models.py:136
 msgid "Asset"
 msgstr "Eiendel/aktiva"
 
-#: accounting/models.py:141
+#: accounting/models.py:137
 msgid "Liability"
 msgstr "Gjeld/passiva"
 
-#: accounting/models.py:142
+#: accounting/models.py:138
 msgid "Equity"
 msgstr "Egenkapital"
 
-#: accounting/models.py:143
+#: accounting/models.py:139
 msgid "Income"
 msgstr "Inntekt"
 
-#: accounting/models.py:144
+#: accounting/models.py:140
 msgid "Expense"
 msgstr "Utgift"
 
-#: accounting/models.py:150
+#: accounting/models.py:146
 msgid "short name"
 msgstr "Kortnavn"
 
-#: accounting/models.py:152
+#: accounting/models.py:148
 msgid "A shortname used in URLs etc."
 msgstr "Et kortnavn brukt i URL-er o.l."
 
-#: accounting/models.py:154 accounting/models.py:562
+#: accounting/models.py:150 accounting/models.py:553
 msgid "type"
 msgstr "type"
 
-#: accounting/models.py:156
+#: accounting/models.py:152
 msgid "owner"
 msgstr "eier"
 
-#: accounting/models.py:158
+#: accounting/models.py:154
 msgid "active"
 msgstr "aktiv"
 
-#: accounting/models.py:159
+#: accounting/models.py:155
 msgid "ignore block limit"
 msgstr "ignorer blokkeringsgrense"
 
-#: accounting/models.py:160
+#: accounting/models.py:156
 msgid "Never block account automatically"
 msgstr "Ikke merk konto som svartelistet automagisk"
 
-#: accounting/models.py:161
+#: accounting/models.py:157
 msgid "blocked"
 msgstr "svartelistet"
 
-#: accounting/models.py:162
+#: accounting/models.py:158
 msgid "Block account manually"
 msgstr "Merk konto som svartelistet"
 
-#: accounting/models.py:167 accounting/models.py:284 accounting/models.py:607
+#: accounting/models.py:159
+msgid "group account"
+msgstr "Gruppekonto"
+
+#: accounting/models.py:160
+msgid "Does this account belong to the group?"
+msgstr "Hører denne kontoen til gruppen?"
+
+#: accounting/models.py:165 accounting/models.py:280 accounting/models.py:598
 msgid "account"
 msgstr "konto"
 
-#: accounting/models.py:168
+#: accounting/models.py:166
 msgid "accounts"
 msgstr "kontoer"
 
-#: accounting/models.py:277
+#: accounting/models.py:273
 msgid "Bank account"
 msgstr "Bankkonto"
 
-#: accounting/models.py:278
+#: accounting/models.py:274
 msgid "Cash account"
 msgstr "Kontantkonto"
 
-#: accounting/models.py:279
+#: accounting/models.py:275
 msgid "Sale account"
 msgstr "Salgskonto"
 
-#: accounting/models.py:283
+#: accounting/models.py:279
 msgid "role"
 msgstr "rolle"
 
-#: accounting/models.py:290
+#: accounting/models.py:286
 msgid "role account"
 msgstr "rollekonto"
 
-#: accounting/models.py:291
+#: accounting/models.py:287
 msgid "role accounts"
 msgstr "rollekontoer"
 
-#: accounting/models.py:294
+#: accounting/models.py:290
 #, python-format
 msgid "%(account)s is %(role)s for %(group)s"
 msgstr "%(account)s er %(role)s for %(group)s"
 
-#: accounting/models.py:323 accounting/models.py:384
+#: accounting/models.py:319 accounting/models.py:380
 msgid "date"
 msgstr "dato"
 
-#: accounting/models.py:324 reports/models.py:52
+#: accounting/models.py:320 reports/models.py:52
 msgid "comment"
 msgstr "kommentar"
 
-#: accounting/models.py:326
+#: accounting/models.py:322
 msgid "Mark as closed when done adding transactions "
 msgstr "Sett som avsluttet når du er ferdig med å legge til overføringer"
 
-#: accounting/models.py:331 accounting/models.py:382
+#: accounting/models.py:327 accounting/models.py:378
 msgid "settlement"
 msgstr "oppgjør"
 
-#: accounting/models.py:332
+#: accounting/models.py:328
 msgid "settlements"
 msgstr "oppgjør"
 
-#: accounting/models.py:373
+#: accounting/models.py:369
 msgid "Pending"
 msgstr "Avventer"
 
-#: accounting/models.py:374
+#: accounting/models.py:370
 msgid "Committed"
 msgstr "Bokført"
 
-#: accounting/models.py:375
+#: accounting/models.py:371
 msgid "Rejected"
 msgstr "Avvist"
 
-#: accounting/models.py:385
+#: accounting/models.py:381
 msgid "May be used for date of the transaction if not today."
 msgstr "Kan brukes for transaksjonsdato, hvis ikke i dag."
 
-#: accounting/models.py:386 templates/accounting/transaction_details.html:35
+#: accounting/models.py:382 templates/accounting/transaction_details.html:35
 msgid "Last modified"
 msgstr "Sist endret"
 
-#: accounting/models.py:387
+#: accounting/models.py:383
 msgid "state"
 msgstr "tilstand"
 
-#: accounting/models.py:392 accounting/models.py:561 accounting/models.py:605
+#: accounting/models.py:388 accounting/models.py:552 accounting/models.py:596
 msgid "transaction"
 msgstr "transaksjon"
 
-#: accounting/models.py:393
+#: accounting/models.py:389
 msgid "transactions"
 msgstr "transaksjoner"
 
-#: accounting/models.py:503
+#: accounting/models.py:494
 #, python-format
 msgid "Transaction %(id)d regarding your account "
 msgstr "Transaksjon %(id)d som angår din konto "
 
-#: accounting/models.py:564
+#: accounting/models.py:555
 msgid "timestamp"
 msgstr "tidsstempel"
 
-#: accounting/models.py:565
+#: accounting/models.py:556
 msgid "user"
 msgstr "bruker"
 
-#: accounting/models.py:566
+#: accounting/models.py:557
 msgid "message"
 msgstr "melding"
 
-#: accounting/models.py:581
-#, fuzzy
+#: accounting/models.py:572
 msgid "transaction log entry"
-msgstr "transaksjonslogg"
+msgstr "transaksjonslogginnslag"
 
-#: accounting/models.py:582
-#, fuzzy
+#: accounting/models.py:573
 msgid "transaction log entries"
 msgstr "transaksjonlogginnslag"
 
-#: accounting/models.py:594
+#: accounting/models.py:585
 #, python-format
 msgid "%(type)s at %(timestamp)s by %(user)s: %(message)s"
 msgstr "%(type)s ved %(timestamp)s av %(user)s: %(message)s"
 
-#: accounting/models.py:608
+#: accounting/models.py:599
 msgid "debit amount"
 msgstr "debetbeløp"
 
-#: accounting/models.py:610
+#: accounting/models.py:601
 msgid "credit amount"
 msgstr "kreditbeløp"
 
-#: accounting/models.py:633
-#, fuzzy
+#: accounting/models.py:624
 msgid "transaction entry"
 msgstr "transaksjonsinnslag"
 
-#: accounting/models.py:634
-#, fuzzy
+#: accounting/models.py:625
 msgid "transaction entries"
 msgstr "transaksjonsinnslag"
 
-#: accounting/models.py:638
+#: accounting/models.py:629
 #, python-format
 msgid "%(account)s: debit %(debit)s, credit %(credit)s"
 msgstr "%(account)s: debet %(debit)s, kredit %(credit)s"
@@ -309,47 +313,47 @@ msgstr "Bare eieren av kontoen eller en gruppeadministrator kan gjøre dette."
 msgid "The transaction may only be"
 msgstr "Transaksjonen kan kun være"
 
-#: accounting/views/edit.py:21
+#: accounting/views/edit.py:22
 msgid "Settlement is closed and cannot be edited."
 msgstr "Oppgjøret er avsluttet og kan ikke redigeres."
 
-#: accounting/views/edit.py:67
+#: accounting/views/edit.py:68
 msgid "Transfer from account"
 msgstr "Overføring fra konto"
 
-#: accounting/views/edit.py:70
+#: accounting/views/edit.py:71
 msgid "Deposit to account"
 msgstr "Innskudd til konto"
 
-#: accounting/views/edit.py:73
+#: accounting/views/edit.py:74
 msgid "Withdrawal from account"
 msgstr "Uttak fra konto"
 
-#: accounting/views/edit.py:76 accounting/views/edit.py:134
+#: accounting/views/edit.py:77 accounting/views/edit.py:135
 #: common/decorators.py:50
 msgid "Forbidden if not group admin."
 msgstr "Bare gruppeadministratiren kan gjøre dette."
 
-#: accounting/views/edit.py:129
+#: accounting/views/edit.py:130
 msgid "Your transaction has been added,"
 msgstr "Transaksjonen er opprettet"
 
-#: accounting/views/edit.py:138
+#: accounting/views/edit.py:139
 #, python-format
 msgid "Added transaction: %s"
 msgstr "La til transaksjon: %s"
 
-#: accounting/views/edit.py:202
+#: accounting/views/edit.py:203
 #: templates/accounting/approve_transactions.html:29
 msgid "No pending transactions found."
 msgstr "Ingen ventende transaksjoner funnet."
 
-#: accounting/views/edit.py:276
+#: accounting/views/edit.py:277
 #, python-format
 msgid "Transaction %d can't be changed."
 msgstr "Transaksjon %d kan ikke endres"
 
-#: accounting/views/edit.py:352
+#: accounting/views/edit.py:353
 msgid "Your transaction has been added"
 msgstr "Transaksjonen er opprettet"
 
@@ -369,11 +373,15 @@ msgstr "Brukernavnet finnes ikke"
 msgid "Users may only have one account per group"
 msgstr "Brukere kan bare ha en konto for hver gruppe"
 
-#: common/forms.py:121
+#: common/forms.py:86
+msgid "Group accounts can not have owners."
+msgstr "Gruppekontoer kan ikke har eiere."
+
+#: common/forms.py:129
 msgid "The group must have at least one admin"
 msgstr "Gruppen må ha minst en administrator"
 
-#: common/forms.py:124
+#: common/forms.py:132
 msgid "You are not allowed to remove your own admin privileges"
 msgstr "Det er ikke mulig å fjerne dine egne administratorrettigheter."
 
@@ -385,15 +393,11 @@ msgstr "Du må velge et at de tilgjengelige valgene"
 msgid "Login failed"
 msgstr "Innlogging feilet"
 
-#: common/views/display.py:31
-msgid "This account is inactive."
-msgstr "Denne kontoen er inaktiv."
-
-#: common/views/display.py:39
+#: common/views/display.py:35
 msgid "The account balance is below the block limit,"
 msgstr "Kontobalansen er under blokkeringsgrensen."
 
-#: common/views/display.py:44
+#: common/views/display.py:40
 msgid "The account balance is below the warning limit."
 msgstr "Kontobalansen er under advarselgrensen."
 
@@ -401,11 +405,15 @@ msgstr "Kontobalansen er under advarselgrensen."
 msgid "Group successfully updated"
 msgstr "Gruppen er oppdatert"
 
-#: common/views/edit.py:70
+#: common/views/edit.py:65
+msgid "Account successfully activated."
+msgstr "Kontoen er ble aktivert."
+
+#: common/views/edit.py:86
 msgid "Account successfully updated"
 msgstr "Kontoen er oppdatert"
 
-#: common/views/edit.py:74
+#: common/views/edit.py:90
 msgid "Account successfully created"
 msgstr "Kontoen er opprettet"
 
@@ -447,9 +455,8 @@ msgid "balance width"
 msgstr "Kolonnebredde for balanse"
 
 #: reports/models.py:46
-#, fuzzy
 msgid "Add active user accounts"
-msgstr "Skjul inaktive kontoer"
+msgstr "Legg til alle aktive brukerkontoer"
 
 #: reports/models.py:47
 msgid "Should all active accounts be added by default"
@@ -495,40 +502,44 @@ msgstr "listeelement"
 msgid "list items"
 msgstr "listeelementer"
 
-#: reports/views.py:99
+#: reports/views.py:106
 msgid "Printed"
 msgstr "Skrevet ut"
 
-#: reports/views.py:110
+#: reports/views.py:117
 msgid "Blacklisted accounts are marked with: "
 msgstr "Svartelistede kontoer er merket med: "
 
-#: reports/views.py:118
+#: reports/views.py:125
 msgid "Sorry, this list is empty."
 msgstr "Listen er tom"
 
-#: reports/views.py:128 templates/common/account_summary.html:11
+#: reports/views.py:134
+msgid "Sorry, this list isn't set up correctly, please add some columns."
+msgstr "Beklager, listen er ikke satt opp rikig, legg til noen koloner først."
+
+#: reports/views.py:144 templates/common/account_summary.html:11
 #: templates/common/account_summary.html:52
 #: templates/common/group_summary.html:11 templates/reports/list_form.html:58
 msgid "Name"
 msgstr "Navn"
 
-#: reports/views.py:140 templates/accounting/transaction_form.html:67
+#: reports/views.py:156 templates/accounting/transaction_form.html:67
 #: templates/common/account_summary.html:37
 #: templates/common/group_summary.html:104
-#: templates/common/group_summary.html:128
+#: templates/common/group_summary.html:132
 msgid "Balance"
 msgstr "Balanse"
 
-#: reports/views.py:340
+#: reports/views.py:356
 msgid "List deleted"
 msgstr "Listen ble slettet"
 
-#: reports/views.py:385
+#: reports/views.py:401
 msgid "Member accounts"
 msgstr "Medlemskontoer"
 
-#: reports/views.py:399
+#: reports/views.py:415
 msgid "Current year's net income"
 msgstr "Nettoinntekt inneværende år"
 
@@ -558,9 +569,9 @@ msgid ""
 "ufs@samfundet.no</a>, together with what you did leading up to the error, "
 "and what you expected to happen instead of the error."
 msgstr ""
-"Rapporter denne feilen til <a href=\"mailto:itk-ufs@samfundet.no"
-"\">itk-ufs@samfundet.no</a>, sammen med hva du gjorde før feilen oppstod, og "
-"hva du forventet at skulle skje istedenfor denne feilen."
+"Rapporter denne feilen til <a href=\"mailto:itk-ufs@samfundet.no\">itk-"
+"ufs@samfundet.no</a>, sammen med hva du gjorde før feilen oppstod, og hva du "
+"forventet at skulle skje istedenfor denne feilen."
 
 #: templates/base.html:26
 msgid "&micro;FS Microfinance System"
@@ -636,7 +647,7 @@ msgstr "ID"
 #: templates/accounting/transaction_form.html:65
 #: templates/accounting/transaction_list_table.html:7
 #: templates/common/group_summary.html:102
-#: templates/common/group_summary.html:126
+#: templates/common/group_summary.html:130
 msgid "Account"
 msgstr "Konto"
 
@@ -676,7 +687,6 @@ msgid "Update"
 msgstr "Oppdater"
 
 #: templates/accounting/base.html:14
-#, fuzzy
 msgid "Accounting"
 msgstr "Kontoførsel"
 
@@ -871,11 +881,11 @@ msgstr "Konto:"
 #: templates/accounting/transaction_form.html:66
 #: templates/common/account_summary.html:31
 #: templates/common/group_summary.html:103
-#: templates/common/group_summary.html:127
+#: templates/common/group_summary.html:131
 msgid "Type"
 msgstr "Type"
 
-#: templates/accounting/transaction_form.html:94
+#: templates/accounting/transaction_form.html:96
 msgid "Save transaction"
 msgstr "Lagre transaksjon"
 
@@ -924,7 +934,6 @@ msgid "Account info"
 msgstr "Kontoinformasjon"
 
 #: templates/common/account_summary.html:15
-#, fuzzy
 msgid "Short name"
 msgstr "Kallenavn"
 
@@ -963,6 +972,11 @@ msgstr "Lister"
 msgid "No lists found"
 msgstr "Ingen lister funnet"
 
+#: templates/common/account_summary.html:115
+#: templates/common/account_summary.html:117
+msgid "Activate account"
+msgstr "Aktiver konto"
+
 #: templates/common/group_action.html:4
 msgid "View settlements"
 msgstr "Vis oppgjør"
@@ -985,7 +999,6 @@ msgstr "Ny liste"
 #: templates/common/role_account_form.html:6
 #: templates/common/role_account_form.html:14
 #: templates/common/role_account_form.html:20
-#, fuzzy
 msgid "Assign role accounts"
 msgstr "Tildel rollekontoer"
 
@@ -1024,15 +1037,15 @@ msgstr "Finner ingen kontoer."
 msgid "User accounts"
 msgstr "Medlemskontoer"
 
-#: templates/common/group_summary.html:124
+#: templates/common/group_summary.html:128
 msgid "Group accounts"
 msgstr "Gruppekontoer"
 
-#: templates/common/group_summary.html:152
+#: templates/common/group_summary.html:160
 msgid "Hide inactive/empty accounts"
 msgstr "Skjul inaktive kontoer"
 
-#: templates/common/group_summary.html:154
+#: templates/common/group_summary.html:162
 msgid "Show all accounts"
 msgstr "Vis inaktive kontoer"
 
@@ -1057,7 +1070,6 @@ msgstr ""
 "for å opprette en konto, og koble den til brukeren din.\n"
 
 #: templates/common/role_account_form.html:28
-#, fuzzy
 msgid "Save role accounts"
 msgstr "Lagre rollekontoer"
 
@@ -1165,6 +1177,9 @@ msgstr "Bredde"
 #: templates/reports/list_form.html:69
 msgid "Save list"
 msgstr "Lagre liste"
+
+#~ msgid "This account is inactive."
+#~ msgstr "Denne kontoen er inaktiv."
 
 #~ msgid "Relative width of cell"
 #~ msgstr "Relativ cellebredde"
