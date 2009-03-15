@@ -79,6 +79,14 @@ class AccountForm(ModelForm):
 
         return user
 
+    def clean_group_account(self):
+        group_account = self.cleaned_data['group_account']
+
+        if self.data['owner'] and group_account:
+            raise forms.ValidationError(_("Group accounts can not have owners."))
+
+        return group_account
+
     def save(self, group=None, **kwargs):
         original_commit = kwargs.pop('commit', True)
         kwargs['commit'] = False
