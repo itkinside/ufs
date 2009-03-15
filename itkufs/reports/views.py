@@ -388,7 +388,7 @@ def balance(request, group, is_admin=False):
 
     # Liabilities
     for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
-                                            owner__isnull=True):
+                                            group_account=True):
         balance = account.user_balance()
         accounts['li'].append((account.name, balance))
         accounts['li_sum'] += balance
@@ -396,7 +396,7 @@ def balance(request, group, is_admin=False):
     # Accumulated member accounts liabilities
     member_balance_sum = 0
     for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
-                                            owner__isnull=False):
+                                            group_account=False):
         member_balance_sum += account.user_balance()
     accounts['li'].append((_('Member accounts'), member_balance_sum))
     accounts['li_sum'] += member_balance_sum
