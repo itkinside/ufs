@@ -10,6 +10,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.generic.list_detail import object_list
 from django.conf import settings
+from django.db import transaction as db_transaction
 
 from itkufs.common.decorators import limit_to_group, limit_to_admin
 from itkufs.accounting.models import Account
@@ -42,6 +43,7 @@ def view_public_list(request, group, list, is_admin=False):
 
 @login_required
 @limit_to_admin
+@db_transaction.commit_on_success
 def new_edit_list(request, group, list=None, is_admin=False):
     """Create new or edit existing list"""
 
@@ -53,8 +55,8 @@ def new_edit_list(request, group, list=None, is_admin=False):
     if not list:
         ColumnFormSet = inlineformset_factory(List, ListColumn, extra=10, form=ColumnForm)
 
-        columnformset = ColumnFormSet(data)
         listform = ListForm(data=data, group=group)
+        columnformset = ColumnFormSet(data)
 
     else:
         ColumnFormSet = inlineformset_factory(List, ListColumn, extra=3, form=ColumnForm)
@@ -64,23 +66,24 @@ def new_edit_list(request, group, list=None, is_admin=False):
         listform = ListForm(data, instance=list, group=group)
         columnformset = ColumnFormSet(data, instance=list)
 
-    if data and listform.is_valid() and columnformset.is_valid():
+    if data and listform.is_valid():
         list = listform.save(group=group)
+        columnformset = ColumnFormSet(data, instance=list)
 
-        columnformset.instance = list
-        columns = columnformset.save(commit=False)
+        if columnformset.is_valid():
+            columns = columnformset.save(commit=False)
 
-        for c in columns:
-            if not c.name and not c.width:
-                if c.id:
-                    c.delete()
-            else:
-                c.save()
+            for c in columns:
+                if not c.name and not c.width:
+                    if c.id:
+                        c.delete()
+                else:
+                    c.save()
 
-        return HttpResponseRedirect(reverse('group-summary',
-            kwargs={
-                'group': group.slug,
-            }))
+            return HttpResponseRedirect(reverse('group-summary',
+                kwargs={
+                    'group': group.slug,
+                }))
 
     return render_to_response('reports/list_form.html',
         {
@@ -94,6 +97,7 @@ def new_edit_list(request, group, list=None, is_admin=False):
 
 @login_required
 @limit_to_admin
+@db_transaction.commit_on_success
 def delete_list(request, group, list, is_admin=False):
     """Delete list"""
 
