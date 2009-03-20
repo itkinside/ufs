@@ -108,6 +108,7 @@
 {% block footer %}
 µFS v1.0
 
+{% if user.username %}
 <span>&bull;</span>
 {% trans "User:" %} {{ user.username }}
 
@@ -150,6 +151,7 @@
 </div>
 </form>
 
+{% endif %}
 {% endblock %}
 
     </div>
