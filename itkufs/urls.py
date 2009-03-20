@@ -27,6 +27,11 @@ urlpatterns = patterns('',
         {'packages': ['itkufs']}, name='jsi18n'),
     (r'^i18n/', include('django.conf.urls.i18n')),
 
+    # Pull in lists before so that nothing else manages to catch the url
+    url(r'^lists/$', 'itkufs.reports.views.public_lists', name="public-lists"),
+    url(r'^lists/(?P<group>[0-9a-z_-]+)/(?P<list>[0-9a-z_-]+)/$',
+        'itkufs.reports.views.view_public_list', name="view-public-list"),
+
     (r'^', include('itkufs.common.urls')),
     (r'^', include('itkufs.accounting.urls')),
     (r'^', include('itkufs.reports.urls')),

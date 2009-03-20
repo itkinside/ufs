@@ -1,22 +1,16 @@
 from datetime import date
-from reportlab.pdfgen import canvas
-from reportlab.platypus.tables import Table, GRID_STYLE
-from reportlab.platypus.flowables import Image
-from reportlab.lib.units import cm
-from reportlab.lib.colors import HexColor
-from reportlab.lib.pagesizes import A4
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.xheaders import populate_xheaders
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.forms.models import inlineformset_factory
+from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
-from django.template.defaultfilters import slugify
-from django.forms.models import inlineformset_factory
+from django.views.generic.list_detail import object_list
+from django.conf import settings
 
-from itkufs.common.utils import callsign_sorted as ufs_sorted
 from itkufs.common.decorators import limit_to_group, limit_to_admin
 from itkufs.accounting.models import Account
 from itkufs.reports.models import *
@@ -25,7 +19,30 @@ from itkufs.reports.pdf import pdf
 
 _list = list
 
-pdf = login_required(limit_to_group(pdf))
+def public_lists(request):
+    if request.META.get('REMOTE_ADDR') not in settings.INTERNAL_IPS:
+        return HttpResponseForbidden(_('Permision denied'))
+
+    lists = List.objects.filter(public=True).select_related('group') \
+        .order_by('group__name', 'name')
+
+    return object_list(request,
+        lists,
+        allow_empty=True,
+        template_name='reports/public_lists.html',
+        template_object_name='public')
+
+@login_required
+@limit_to_group
+def view_list(request, group, list, is_admin=False):
+    return pdf(request, group, list, is_admin=False)
+
+def view_public_list(request, group, list, is_admin=False):
+    if (request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS or
+            not list.public):
+        raise Http404
+
+    return pdf(request, group, list, is_admin)
 
 @login_required
 @limit_to_admin
