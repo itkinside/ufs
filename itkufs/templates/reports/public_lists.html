@@ -9,6 +9,10 @@
     {% trans "Public lists" %}
 {% endblock %}
 
+{% block breadcrumbs %}
+    {{ block.super }} &raquo; {% trans "Public lists" %}
+{% endblock %}
+
 {% block menu %}
     <ul>
         <li><a href="/">Frontpage</a></li>

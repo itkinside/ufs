@@ -8,7 +8,9 @@
 {% block breadcrumbs %}
     {{ block.super }}
     &raquo; {% trans "Reports" %}
+    {% if group %}
     &raquo; <a href="{{ group.get_absolute_url }}">{{ group.name }}</a>
+    {% endif %}
 {% endblock %}
 
 
