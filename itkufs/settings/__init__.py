@@ -136,7 +136,7 @@ COVERAGE_MODULES = (
 BZR_BRANCH_DIR = PROJECT_BASE
 
 from itkufs.common.utils import CIDRList
-INTERNAL_IPS = CIDRList(['129.241.93.0/24'])
+INTERNAL_IPS = CIDRList(['129.241.93.0/24', '2001:700:300:1800::/56'])
 
 # DATABASE_* and SECRET_KEY are included from a file which is not in VCS
 from itkufs.settings.local import *
