@@ -108,12 +108,14 @@
     {% for account in user_accounts %}
         {% if all or account.active %}
         <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
+            <td{% if not account.short_name %} colspan="2"{% endif %}>
             {% if is_admin %}
-            <td><a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a></td>
+            <a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a>
             {% else %}
-            <td>{{ account.name }}</td>
+            {{ account.name }}
             {% endif %}
-            <td>{{ account.short_name|default:"-" }}</td>
+            </td>
+            {% if account.short_name %}<td>{{ account.short_name|default:"-" }}</td>{% endif %}
             <td>{{ account.get_type_display }}</td>
             <td class="align_right{% if account.is_blocked %} blocked{% endif %}">{{ account.balance|stringformat:"0.2f" }}</td>
         </tr>
@@ -138,13 +140,14 @@
         {% if all or account.balance %}
         {# Django's if construct in templates is somewhat lacking, ugly work around for "complex" logic #}
         <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
+            <td{% if not account.short_name %} colspan="2"{% endif %}>
             {% if is_admin %}
-            <td><a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a>
-            </td>
+            <a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a>
             {% else %}
-            <td>{{ account.name }}</td>
+            {{ account.name }}
             {% endif %}
-            <td>{{ account.short_name|default:"-" }}</td>
+            </td>
+            {% if account.short_name %}<td>{{ account.short_name|default:"-" }}</td>{% endif %}
             <td>{{ account.get_type_display }}</td>
             <td class="align_right">{{ account.balance|stringformat:"0.2f" }}</td>
         </tr>
