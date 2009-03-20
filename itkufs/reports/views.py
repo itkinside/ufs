@@ -20,9 +20,6 @@ from itkufs.reports.pdf import pdf
 _list = list
 
 def public_lists(request):
-    if request.META.get('REMOTE_ADDR') not in settings.INTERNAL_IPS:
-        return HttpResponseForbidden(_('Permision denied'))
-
     lists = List.objects.filter(public=True).select_related('group') \
         .order_by('group__name', 'name')
 
@@ -38,8 +35,7 @@ def view_list(request, group, list, is_admin=False):
     return pdf(request, group, list, is_admin=False)
 
 def view_public_list(request, group, list, is_admin=False):
-    if (request.META.get('REMOTE_ADDR') not in settings.INTERNAL_IPS or
-            not list.public):
+    if not list.public:
         raise Http404
 
     return pdf(request, group, list, is_admin)
