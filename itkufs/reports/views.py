@@ -29,7 +29,7 @@ _list = list
 def pdf(request, group, list, is_admin=False):
     """PDF version of list"""
 
-    all_accounts = group.account_set.all()
+    all_accounts = group.account_set.filter(active=True)
     extra_accounts = list.extra_accounts.values_list('id', flat=True)
 
     if list.account_width:
