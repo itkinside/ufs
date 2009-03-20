@@ -1,9 +1,21 @@
 import re
+import locale
 
 CALLSIGN_RE = re.compile(r'^[A-Z]+[0-9][A-Z0-9]*[A-Z]$')
 
 def callsign_sorted(objects):
-    return sorted(objects, callsign_cmp)
+    current_locale = locale.getlocale()
+    locale.setlocale(locale.LC_COLLATE, ("nb_NO", 'UTF-8'))
+
+    sorted_list = sorted(objects, callsign_cmp, callsign_key)
+
+    locale.setlocale(locale.LC_COLLATE, current_locale)
+
+    return sorted_list
+
+def callsign_key(value):
+    return (locale.strxfrm(value.name.lower().encode('utf-8')),
+            value.short_name)
 
 def callsign_cmp(x, y):
     '''
@@ -15,8 +27,8 @@ def callsign_cmp(x, y):
             4. Other names
     '''
 
-    x_short_name = x.short_name or ''
-    y_short_name = y.short_name or ''
+    x_short_name = x[1] or ''
+    y_short_name = y[1] or ''
 
     x_is_callsign = CALLSIGN_RE.match(x_short_name)
     y_is_callsign = CALLSIGN_RE.match(y_short_name)
@@ -47,4 +59,4 @@ def callsign_cmp(x, y):
     elif y_is_callsign:
         return 1
 
-    return cmp(x.name, y.name)
+    return cmp(x[0], y[0])
