@@ -38,7 +38,7 @@ def view_list(request, group, list, is_admin=False):
     return pdf(request, group, list, is_admin=False)
 
 def view_public_list(request, group, list, is_admin=False):
-    if (request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS or
+    if (request.META.get('REMOTE_ADDR') not in settings.INTERNAL_IPS or
             not list.public):
         raise Http404
 
