@@ -22,7 +22,7 @@ var Transaction = {
 
     tbody.select('.balance').each(
       function(td) {
-        Transaction.balance[td.id] = Number(td.innerHTML);
+        Transaction.balance[td.id] = Number(td.innerHTML) * 100;
       }
     );
     Transaction.update();
@@ -34,7 +34,7 @@ var Transaction = {
 
     $$('#newtransaction tbody input').each(
       function(input) {
-        var value = input.value;
+        var value = input.value * 100;
 
         if (isNaN(value) || value < 0) {
           input.up().addClassName("error");
@@ -57,8 +57,8 @@ var Transaction = {
     $$('#newtransaction tbody .balance').each(
       function(td) {
         var diff = 0;
-	var d_value = Number(td.next().down('input').value);
-	var c_value = Number(td.next().next().down('input').value);
+	var d_value = Number(td.next().down('input').value) * 100;
+	var c_value = Number(td.next().next().down('input').value) * 100;
 
 	if (!isNaN(d_value) && d_value > 0)
 	  diff += d_value;
@@ -66,15 +66,15 @@ var Transaction = {
 	  diff -= c_value;
 
         if(diff) {
-          td.update((Transaction.balance[td.id]  + diff)+'*');
+          td.update((Transaction.balance[td.id]  + diff)/100+'*');
         } else {
-          td.update(Transaction.balance[td.id]);
+          td.update(Transaction.balance[td.id]/100);
 	}
       }
     );
 
-    $('debit_sum').update(debit);
-    $('credit_sum').update(credit);
+    $('debit_sum').update(debit / 100);
+    $('credit_sum').update(credit / 100);
 
     if (debit != credit || error) {
       $('debit_sum').removeClassName('ok');
