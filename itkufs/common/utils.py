@@ -1,4 +1,16 @@
 import re
+from IPy import IP
+
+class CIDRList(list):
+    def __init__(self, seq=()):
+        super(CIDRList, self).__init__(map(IP, seq))
+
+    def __contains__(self, other):
+        for range in self:
+            if other in range:
+                return True
+
+        return False
 
 CALLSIGN_RE = re.compile(r'^[A-Z]+[0-9][A-Z0-9]*[A-Z]$')
 

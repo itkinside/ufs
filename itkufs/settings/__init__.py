@@ -135,5 +135,8 @@ COVERAGE_MODULES = (
 # Development version numbering
 BZR_BRANCH_DIR = PROJECT_BASE
 
+from itkufs.common.utils import CIDRList
+INTERNAL_IPS = CIDRList(['129.241.93.0/24'])
+
 # DATABASE_* and SECRET_KEY are included from a file which is not in VCS
 from itkufs.settings.local import *
