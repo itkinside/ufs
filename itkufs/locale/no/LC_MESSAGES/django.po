@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-15 21:02+0100\n"
+"POT-Creation-Date: 2009-03-20 19:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Espen Molven <molven@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -519,7 +519,7 @@ msgid "Sorry, this list isn't set up correctly, please add some columns."
 msgstr "Beklager, listen er ikke satt opp rikig, legg til noen koloner først."
 
 #: reports/views.py:144 templates/common/account_summary.html:11
-#: templates/common/account_summary.html:52
+#: templates/common/account_summary.html:57
 #: templates/common/group_summary.html:11 templates/reports/list_form.html:58
 msgid "Name"
 msgstr "Navn"
@@ -527,7 +527,7 @@ msgstr "Navn"
 #: reports/views.py:156 templates/accounting/transaction_form.html:67
 #: templates/common/account_summary.html:37
 #: templates/common/group_summary.html:104
-#: templates/common/group_summary.html:132
+#: templates/common/group_summary.html:134
 msgid "Balance"
 msgstr "Balanse"
 
@@ -647,7 +647,7 @@ msgstr "ID"
 #: templates/accounting/transaction_form.html:65
 #: templates/accounting/transaction_list_table.html:7
 #: templates/common/group_summary.html:102
-#: templates/common/group_summary.html:130
+#: templates/common/group_summary.html:132
 msgid "Account"
 msgstr "Konto"
 
@@ -743,13 +743,14 @@ msgstr "lukket"
 #: templates/accounting/settlement_details.html:28
 #: templates/accounting/settlement_list.html:50
 #: templates/common/account_summary.html:43
+#: templates/common/account_summary.html:48
 msgid "Yes,No"
 msgstr "Ja,Nei"
 
 #: templates/accounting/settlement_details.html:32
 #: templates/accounting/settlement_list.html:44
 #: templates/accounting/transaction_details.html:40
-#: templates/common/account_summary.html:79
+#: templates/common/account_summary.html:84
 #: templates/common/group_summary.html:37
 msgid "Actions"
 msgstr "Oppgaver"
@@ -821,8 +822,8 @@ msgid "Transaction ID"
 msgstr "Transaksjons-ID"
 
 #: templates/accounting/transaction_details.html:26
-#: templates/common/account_summary.html:63
-#: templates/common/account_summary.html:71
+#: templates/common/account_summary.html:68
+#: templates/common/account_summary.html:76
 #: templates/common/group_summary.html:20
 #: templates/common/group_summary.html:29
 msgid "None"
@@ -881,11 +882,11 @@ msgstr "Konto:"
 #: templates/accounting/transaction_form.html:66
 #: templates/common/account_summary.html:31
 #: templates/common/group_summary.html:103
-#: templates/common/group_summary.html:131
+#: templates/common/group_summary.html:133
 msgid "Type"
 msgstr "Type"
 
-#: templates/accounting/transaction_form.html:96
+#: templates/accounting/transaction_form.html:100
 msgid "Save transaction"
 msgstr "Lagre transaksjon"
 
@@ -915,7 +916,7 @@ msgstr "Ny overføring"
 
 #: templates/common/account_form.html:7 templates/common/account_form.html:19
 #: templates/common/account_form.html:30
-#: templates/common/account_summary.html:84
+#: templates/common/account_summary.html:89
 msgid "Edit account"
 msgstr "Endre konto"
 
@@ -945,35 +946,39 @@ msgstr "Eier"
 msgid "Active"
 msgstr "Aktiv"
 
-#: templates/common/account_summary.html:49
+#: templates/common/account_summary.html:47
+msgid "Group account"
+msgstr "Gruppekonto"
+
+#: templates/common/account_summary.html:54
 #: templates/common/group_summary.html:8
 msgid "Group info"
 msgstr "Gruppeinformasjon"
 
-#: templates/common/account_summary.html:59
+#: templates/common/account_summary.html:64
 #: templates/common/group_summary.html:16
 msgid "Warning limit"
 msgstr "Advarselgrense"
 
-#: templates/common/account_summary.html:67
+#: templates/common/account_summary.html:72
 #: templates/common/group_summary.html:25
 msgid "Blocking limit"
 msgstr "Blokkeringsgrense"
 
-#: templates/common/account_summary.html:92
+#: templates/common/account_summary.html:97
 #: templates/common/group_summary.html:65
 msgid "Lists"
 msgstr "Lister"
 
-#: templates/common/account_summary.html:102
-#: templates/common/account_summary.html:104
+#: templates/common/account_summary.html:107
+#: templates/common/account_summary.html:109
 #: templates/common/group_summary.html:82
 #: templates/common/group_summary.html:84
 msgid "No lists found"
 msgstr "Ingen lister funnet"
 
-#: templates/common/account_summary.html:115
-#: templates/common/account_summary.html:117
+#: templates/common/account_summary.html:120
+#: templates/common/account_summary.html:122
 msgid "Activate account"
 msgstr "Aktiver konto"
 
@@ -1037,15 +1042,15 @@ msgstr "Finner ingen kontoer."
 msgid "User accounts"
 msgstr "Medlemskontoer"
 
-#: templates/common/group_summary.html:128
+#: templates/common/group_summary.html:130
 msgid "Group accounts"
 msgstr "Gruppekontoer"
 
-#: templates/common/group_summary.html:160
+#: templates/common/group_summary.html:163
 msgid "Hide inactive/empty accounts"
 msgstr "Skjul inaktive kontoer"
 
-#: templates/common/group_summary.html:162
+#: templates/common/group_summary.html:165
 msgid "Show all accounts"
 msgstr "Vis inaktive kontoer"
 

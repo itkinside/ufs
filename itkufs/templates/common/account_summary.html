@@ -42,6 +42,11 @@
         <th>{% trans "Active" %}</th>
         <td>{{ account.active|yesno:_("Yes,No") }}</td>
     </tr>
+
+    <tr>
+        <th>{% trans "Group account" %}</th>
+        <td>{{ account.group_account|yesno:_("Yes,No") }}</td>
+    </tr>
 </table>
 </div>
 
