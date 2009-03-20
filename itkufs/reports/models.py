@@ -43,6 +43,9 @@ class List(models.Model):
     group = models.ForeignKey(Group,
         verbose_name=_('group'), related_name='list_set')
 
+    public = models.BooleanField(_('Public'), default=False,
+        help_text=_('Should this list be publicly available'))
+
     add_active_accounts = models.BooleanField(_('Add active user accounts'),
         default=True, help_text=_('Should all active accounts be added by default'))
 
