@@ -39,10 +39,6 @@ Nytt 2008-09-08
   good switch there)
 - Ta i bruk objektorientert pagination
 
-Nytt 2008-09-17
-- cron nag mail, evt send mail til knapp. Siden kan gi et forslag til default
-  tekst med Template variabler (http://docs.python.org/lib/node40.html) feks.
-
 Nytt 2008-09-25
 - bsf wizzard
 - utlegg skjema
@@ -51,6 +47,7 @@ Done
 ~~~~
 *lots*
 - (adamcik) Assign AccountRoles.
+- (adamcik) cron nag mail
 
 Wontfix
 ~~~~~~~
