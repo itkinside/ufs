@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-20 19:56+0100\n"
+"POT-Creation-Date: 2009-03-21 15:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -44,7 +44,7 @@ msgid "Reason"
 msgstr ""
 
 #: accounting/models.py:11 accounting/models.py:145 reports/models.py:35
-#: reports/models.py:82
+#: reports/models.py:85
 msgid "name"
 msgstr ""
 
@@ -206,7 +206,7 @@ msgstr ""
 msgid "date"
 msgstr ""
 
-#: accounting/models.py:320 reports/models.py:52
+#: accounting/models.py:320 reports/models.py:55
 msgid "comment"
 msgstr ""
 
@@ -303,6 +303,36 @@ msgstr ""
 #: accounting/models.py:629
 #, python-format
 msgid "%(account)s: debit %(debit)s, credit %(credit)s"
+msgstr ""
+
+#: accounting/management/commands/sendmail.py:102
+#, python-format
+msgid "Warning limit passed in %(group)s"
+msgstr ""
+
+#: accounting/management/commands/sendmail.py:103
+#, python-format
+msgid ""
+"Your current account balance of %(balance).2f, is below the _warning limit_ %"
+"(limit).2f\n"
+"\n"
+"To fix this either deposit more money or contact one of the group\n"
+"administrators.\n"
+msgstr ""
+
+#: accounting/management/commands/sendmail.py:109
+#, python-format
+msgid "Block limit passed in %(group)s"
+msgstr ""
+
+#: accounting/management/commands/sendmail.py:110
+#, python-format
+msgid ""
+"Your current account balance of %(balance).2f, is below the _block limit_ %"
+"(limit).2f\n"
+"\n"
+"To fix this either deposit more money or contact one of the group\n"
+"administrators.\n"
 msgstr ""
 
 #: accounting/views/display.py:59 common/decorators.py:38
@@ -455,91 +485,99 @@ msgid "balance width"
 msgstr ""
 
 #: reports/models.py:46
-msgid "Add active user accounts"
+msgid "Public"
 msgstr ""
 
 #: reports/models.py:47
+msgid "Should this list be publicly available"
+msgstr ""
+
+#: reports/models.py:49
+msgid "Add active user accounts"
+msgstr ""
+
+#: reports/models.py:50
 msgid "Should all active accounts be added by default"
 msgstr ""
 
-#: reports/models.py:51
+#: reports/models.py:54
 msgid "orientation"
 msgstr ""
 
-#: reports/models.py:52
+#: reports/models.py:55
 msgid "Comment shown at bottom on first page"
 msgstr ""
 
-#: reports/models.py:55
+#: reports/models.py:58
 msgid "Use two rows per account"
 msgstr ""
 
-#: reports/models.py:56
+#: reports/models.py:59
 msgid "ignore blocked"
 msgstr ""
 
-#: reports/models.py:57
+#: reports/models.py:60
 msgid "Don't exclude blocked accounts"
 msgstr ""
 
-#: reports/models.py:61 reports/models.py:84
+#: reports/models.py:64 reports/models.py:87
 msgid "list"
 msgstr ""
 
-#: reports/models.py:62
+#: reports/models.py:65
 msgid "lists"
 msgstr ""
 
-#: reports/models.py:83
+#: reports/models.py:86
 msgid "width"
 msgstr ""
 
-#: reports/models.py:90
+#: reports/models.py:93
 msgid "list item"
 msgstr ""
 
-#: reports/models.py:91
+#: reports/models.py:94
 msgid "list items"
 msgstr ""
 
-#: reports/views.py:106
+#: reports/pdf.py:92
 msgid "Printed"
 msgstr ""
 
-#: reports/views.py:117
+#: reports/pdf.py:103
 msgid "Blacklisted accounts are marked with: "
 msgstr ""
 
-#: reports/views.py:125
+#: reports/pdf.py:111
 msgid "Sorry, this list is empty."
 msgstr ""
 
-#: reports/views.py:134
+#: reports/pdf.py:120
 msgid "Sorry, this list isn't set up correctly, please add some columns."
 msgstr ""
 
-#: reports/views.py:144 templates/common/account_summary.html:11
+#: reports/pdf.py:130 templates/common/account_summary.html:11
 #: templates/common/account_summary.html:57
 #: templates/common/group_summary.html:11 templates/reports/list_form.html:58
 msgid "Name"
 msgstr ""
 
-#: reports/views.py:156 templates/accounting/transaction_form.html:67
+#: reports/pdf.py:142 templates/accounting/transaction_form.html:67
 #: templates/common/account_summary.html:37
 #: templates/common/group_summary.html:104
 #: templates/common/group_summary.html:134
 msgid "Balance"
 msgstr ""
 
-#: reports/views.py:356
+#: reports/views.py:107
 msgid "List deleted"
 msgstr ""
 
-#: reports/views.py:401
+#: reports/views.py:152
 msgid "Member accounts"
 msgstr ""
 
-#: reports/views.py:415
+#: reports/views.py:166
 msgid "Current year's net income"
 msgstr ""
 
@@ -588,23 +626,23 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: templates/base.html:112
+#: templates/base.html:113
 msgid "User:"
 msgstr ""
 
-#: templates/base.html:119
+#: templates/base.html:120
 msgid "Group:"
 msgstr ""
 
-#: templates/base.html:127 templates/base.html.py:149
+#: templates/base.html:128 templates/base.html.py:150
 msgid "Go"
 msgstr ""
 
-#: templates/base.html:135
+#: templates/base.html:136
 msgid "Contact:"
 msgstr ""
 
-#: templates/base.html:142
+#: templates/base.html:143
 msgid "Language:"
 msgstr ""
 
@@ -1099,11 +1137,11 @@ msgstr ""
 msgid "Total liabilities and equities"
 msgstr ""
 
-#: templates/reports/base.html:10 templates/reports/base.html.py:20
+#: templates/reports/base.html:10 templates/reports/base.html.py:22
 msgid "Reports"
 msgstr ""
 
-#: templates/reports/base.html:24
+#: templates/reports/base.html:26
 msgid "Back to group"
 msgstr ""
 
@@ -1168,4 +1206,9 @@ msgstr ""
 
 #: templates/reports/list_form.html:69
 msgid "Save list"
+msgstr ""
+
+#: templates/reports/public_lists.html:5 templates/reports/public_lists.html:9
+#: templates/reports/public_lists.html:13
+msgid "Public lists"
 msgstr ""
