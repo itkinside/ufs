@@ -43,7 +43,7 @@ class Command(BaseCommand):
         accounts = self._get_accounts(group)
         emails = self._build_emails(accounts)
 
-        if not options['yes']:
+        if not options['yes'] and not options['debug']:
             answer = raw_input(u"Send emails y/N ".encode('utf-8'))
 
             if answer.lower() != 'y':
