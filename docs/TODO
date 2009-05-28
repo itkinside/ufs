@@ -30,8 +30,8 @@ This release
 - Transaction list and approve transaction view should resemble each other.
 - Owner can't access reject transaction for his own deposits and transfers
 - Change properties to transaction manager methods where it makes sense (ask adamcik)
-  (adamcik: don't remeber what I meant by this off the top of my head, probably
-  not critical for intial release)
+  some of the helpers that we have defined as properties on the model should probably
+  be Manager methods instead
 
 Nytt 2008-09-08
 - Ta i bruk generic_create/update
