@@ -3,6 +3,7 @@ Usage: ./manage.py sendmail -g GROUP
 """
 
 import sys
+import logging
 from optparse import make_option
 
 from django.conf import settings
@@ -25,6 +26,12 @@ class Command(BaseCommand):
         make_option('-l', '--lang', dest='lang', default='en',
             help='Language to use for emails'),
     )
+
+    def __init__(self, *args, **kwargs):
+        super(Command, self).__init__(*args, **kwargs)
+
+        logging.basicConfig()
+        self.logger = logging.getLogger('itkufs.accounting.sendmail')
 
     def handle(self, *args, **options):
         if not options['group_slug']:
