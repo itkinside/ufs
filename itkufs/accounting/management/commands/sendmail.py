@@ -9,7 +9,7 @@ from optparse import make_option
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _, activate, get_language
 from django.core.management.base import BaseCommand
-from django.core.mail import send_mass_mail
+from django.core.mail import EmailMessage, SMTPConnection
 
 from itkufs.accounting.models import Account, Group
 
@@ -54,7 +54,8 @@ class Command(BaseCommand):
             if options['debug']:
                 self._print_debug(emails)
             else:
-                send_mass_mail(emails)
+                connection = SMTPConnection()
+                connection.send_messages(emails)
 
     def _set_language(self, lang):
         activate(lang)
@@ -82,26 +83,41 @@ class Command(BaseCommand):
         return emails
 
     def _send_warning_mail(self, account):
+        to_email = account.owner.email
         subject = WARNING_SUBJECT % {'group': account.group}
         message = WARNING_MESSAGE % {'balance': account.user_balance(), 'limit': account.group.warn_limit}
         message += SIGNATURE
 
-        return (subject, message, FROM_EMAIL, [account.owner.email])
+        group_email = account.group.email
+        if group_email:
+            headers = {'CC': group_email,
+                       'Reply-To': group_email}
+        else:
+            headers = {}
+
+        return EmailMessage(subject, message, FROM_EMAIL, [to_email], headers=headers)
 
     def _send_blocked_mail(self, account):
         subject = BLOCK_SUBJECT % {'group': account.group}
         message = BLOCK_MESSAGE % {'balance': account.user_balance(), 'limit': account.group.block_limit}
         message += SIGNATURE
 
-        return (subject, message, FROM_EMAIL, [account.owner.email])
+        group_email = account.group.email
+        if group_email:
+            headers = {'CC': group_email,
+                       'Reply-To': group_email}
+        else:
+            headers = {}
+
+        return EmailMessage(subject, message, FROM_EMAIL, [to_email], headers=headers)
 
     def _print_debug(self, emails):
-        for subject, message, from_email, to_email in emails:
-            print "From: %s" % from_email
-            print "To: %s" % ';'.join(to_email)
-            print "Subject: %s" % subject
+        for email in emails:
+            print "From: %s" % email.from_email
+            print "To: %s" % ';'.join(email.to)
+            print "Subject: %s" % email.subject
             print ""
-            print message
+            print email.body
             print "="*80
 
 FROM_EMAIL = 'ufs-web@samfundet.no'
