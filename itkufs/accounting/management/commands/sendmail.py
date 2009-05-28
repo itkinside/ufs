@@ -54,7 +54,7 @@ class Command(BaseCommand):
             if options['debug']:
                 self._print_debug(emails)
             else:
-                pass #send_mass_mail(emails)
+                send_mass_mail(emails)
 
     def _set_language(self, lang):
         activate(lang)
@@ -102,7 +102,7 @@ class Command(BaseCommand):
             print "Subject: %s" % subject
             print ""
             print message
-            print "---===---"
+            print "="*80
 
 FROM_EMAIL = 'ufs-web@samfundet.no'
 
