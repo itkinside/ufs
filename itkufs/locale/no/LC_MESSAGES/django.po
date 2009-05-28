@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-21 15:56+0100\n"
+"POT-Creation-Date: 2009-05-28 17:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Espen Molven <molven@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -42,6 +42,44 @@ msgstr "Til"
 #: accounting/forms.py:86
 msgid "Reason"
 msgstr "Årsak"
+
+#: accounting/messages.py:3 accounting/management/commands/sendmail.py:109
+#, python-format
+msgid "Warning limit passed in %(group)s"
+msgstr "Advarselgrensen i gruppen %(group)s er passert"
+
+#: accounting/messages.py:4 accounting/management/commands/sendmail.py:110
+#, python-format
+msgid ""
+"Your current account balance of %(balance).2f, is below the _warning limit_ %"
+"(limit).2f\n"
+"\n"
+"To fix this either deposit more money or contact one of the group\n"
+"administrators.\n"
+msgstr ""
+"Balansen din på %(balance).2f, er under _advarselgrensen_ %(limit).2f\n"
+"\n"
+"Sett inn mer penger eller ta kontakt med ansvarlig for gruppen for å fikse\n"
+"dette.\n"
+
+#: accounting/messages.py:10 accounting/management/commands/sendmail.py:116
+#, python-format
+msgid "Block limit passed in %(group)s"
+msgstr "Blokkeringgrensen i gruppen %(group)s er passert"
+
+#: accounting/messages.py:11 accounting/management/commands/sendmail.py:117
+#, python-format
+msgid ""
+"Your current account balance of %(balance).2f, is below the _block limit_ %"
+"(limit).2f\n"
+"\n"
+"To fix this either deposit more money or contact one of the group\n"
+"administrators.\n"
+msgstr ""
+"Balansen din på %(balance).2f, er under _blokkeringsgrensen_ %(limit).2f\n"
+"\n"
+"Sett inn mer penger eller ta kontakt med ansvarlig for gruppen for å fikse\n"
+"dette.\n"
 
 #: accounting/models.py:11 accounting/models.py:145 reports/models.py:35
 #: reports/models.py:85
@@ -305,44 +343,6 @@ msgstr "transaksjonsinnslag"
 msgid "%(account)s: debit %(debit)s, credit %(credit)s"
 msgstr "%(account)s: debet %(debit)s, kredit %(credit)s"
 
-#: accounting/management/commands/sendmail.py:102
-#, python-format
-msgid "Warning limit passed in %(group)s"
-msgstr "Advarselgrensen i gruppen %(group)s er passert"
-
-#: accounting/management/commands/sendmail.py:103
-#, python-format
-msgid ""
-"Your current account balance of %(balance).2f, is below the _warning limit_ %"
-"(limit).2f\n"
-"\n"
-"To fix this either deposit more money or contact one of the group\n"
-"administrators.\n"
-msgstr ""
-"Balansen din på %(balance).2f, er under _advarselgrensen_ %(limit).2f\n"
-"\n"
-"Sett inn mer penger eller ta kontakt med ansvarlig for gruppen for å fikse\n"
-"dette.\n"
-
-#: accounting/management/commands/sendmail.py:109
-#, python-format
-msgid "Block limit passed in %(group)s"
-msgstr "Blokkeringgrensen i gruppen %(group)s er passert"
-
-#: accounting/management/commands/sendmail.py:110
-#, python-format
-msgid ""
-"Your current account balance of %(balance).2f, is below the _block limit_ %"
-"(limit).2f\n"
-"\n"
-"To fix this either deposit more money or contact one of the group\n"
-"administrators.\n"
-msgstr ""
-"Balansen din på %(balance).2f, er under _blokkeringsgrensen_ %(limit).2f\n"
-"\n"
-"Sett inn mer penger eller ta kontakt med ansvarlig for gruppen for å fikse\n"
-"dette.\n"
-
 #: accounting/views/display.py:59 common/decorators.py:38
 msgid "Forbidden if not account owner or group admin."
 msgstr "Bare eieren av kontoen eller en gruppeadministrator kan gjøre dette."
@@ -494,11 +494,11 @@ msgstr "Kolonnebredde for balanse"
 
 #: reports/models.py:46
 msgid "Public"
-msgstr ""
+msgstr "Offentlig"
 
 #: reports/models.py:47
 msgid "Should this list be publicly available"
-msgstr ""
+msgstr "Skal listen være offentlig tilgjengelig"
 
 #: reports/models.py:49
 msgid "Add active user accounts"
@@ -1214,7 +1214,7 @@ msgid ""
 "which accounts will be put on this list. An empty account list implies that\n"
 "all active accounts in the group is included. "
 msgstr ""
-" Ved å velge <em>kontoer</em> fra listen kan du bestemme hvem som skal\n"
+"Ved å velge <em>kontoer</em> fra listen kan du bestemme hvem som skal\n"
 "med på listen. En tom kontoliste impliserer at alle aktive kontoer skal med."
 
 #: templates/reports/list_form.html:55
@@ -1231,9 +1231,8 @@ msgstr "Lagre liste"
 
 #: templates/reports/public_lists.html:5 templates/reports/public_lists.html:9
 #: templates/reports/public_lists.html:13
-#, fuzzy
 msgid "Public lists"
-msgstr "blokkeringsgrense"
+msgstr "Offentlige lister"
 
 #~ msgid "This account is inactive."
 #~ msgstr "Denne kontoen er inaktiv."

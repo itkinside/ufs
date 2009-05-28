@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-21 15:56+0100\n"
+"POT-Creation-Date: 2009-05-28 17:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -41,6 +41,36 @@ msgstr ""
 
 #: accounting/forms.py:86
 msgid "Reason"
+msgstr ""
+
+#: accounting/messages.py:3 accounting/management/commands/sendmail.py:109
+#, python-format
+msgid "Warning limit passed in %(group)s"
+msgstr ""
+
+#: accounting/messages.py:4 accounting/management/commands/sendmail.py:110
+#, python-format
+msgid ""
+"Your current account balance of %(balance).2f, is below the _warning limit_ %"
+"(limit).2f\n"
+"\n"
+"To fix this either deposit more money or contact one of the group\n"
+"administrators.\n"
+msgstr ""
+
+#: accounting/messages.py:10 accounting/management/commands/sendmail.py:116
+#, python-format
+msgid "Block limit passed in %(group)s"
+msgstr ""
+
+#: accounting/messages.py:11 accounting/management/commands/sendmail.py:117
+#, python-format
+msgid ""
+"Your current account balance of %(balance).2f, is below the _block limit_ %"
+"(limit).2f\n"
+"\n"
+"To fix this either deposit more money or contact one of the group\n"
+"administrators.\n"
 msgstr ""
 
 #: accounting/models.py:11 accounting/models.py:145 reports/models.py:35
@@ -303,36 +333,6 @@ msgstr ""
 #: accounting/models.py:629
 #, python-format
 msgid "%(account)s: debit %(debit)s, credit %(credit)s"
-msgstr ""
-
-#: accounting/management/commands/sendmail.py:102
-#, python-format
-msgid "Warning limit passed in %(group)s"
-msgstr ""
-
-#: accounting/management/commands/sendmail.py:103
-#, python-format
-msgid ""
-"Your current account balance of %(balance).2f, is below the _warning limit_ %"
-"(limit).2f\n"
-"\n"
-"To fix this either deposit more money or contact one of the group\n"
-"administrators.\n"
-msgstr ""
-
-#: accounting/management/commands/sendmail.py:109
-#, python-format
-msgid "Block limit passed in %(group)s"
-msgstr ""
-
-#: accounting/management/commands/sendmail.py:110
-#, python-format
-msgid ""
-"Your current account balance of %(balance).2f, is below the _block limit_ %"
-"(limit).2f\n"
-"\n"
-"To fix this either deposit more money or contact one of the group\n"
-"administrators.\n"
 msgstr ""
 
 #: accounting/views/display.py:59 common/decorators.py:38
