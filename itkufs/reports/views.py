@@ -135,26 +135,26 @@ def balance(request, group, is_admin=False):
     # Assets
     for account in group.account_set.filter(type=Account.ASSET_ACCOUNT):
         accounts['as'].append(account)
-        accounts['as_sum'] += account.user_balance()
+        accounts['as_sum'] += account.balance()
 
     # Liabilities
     for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
                                             group_account=True):
-        balance = account.user_balance()
-        accounts['li'].append((account.name, balance))
-        accounts['li_sum'] += balance
+        balance = account.balance()
+        accounts['li'].append((account.name, -balance))
+        accounts['li_sum'] += -balance
 
     # Accumulated member accounts liabilities
     member_balance_sum = 0
     for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
                                             group_account=False):
-        member_balance_sum += account.user_balance()
-    accounts['li'].append((_('Member accounts'), member_balance_sum))
-    accounts['li_sum'] += member_balance_sum
+        member_balance_sum += account.balance()
+    accounts['li'].append((_('Member accounts'), -member_balance_sum))
+    accounts['li_sum'] += -member_balance_sum
 
     # Equities
     for account in group.account_set.filter(type=Account.EQUITY_ACCOUNT):
-        balance = account.user_balance()
+        balance = account.balance()
         accounts['eq'].append((account.name, balance))
         accounts['eq_sum'] += balance
 
