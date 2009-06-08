@@ -135,26 +135,26 @@ def balance(request, group, is_admin=False):
     # Assets
     for account in group.account_set.filter(type=Account.ASSET_ACCOUNT):
         accounts['as'].append(account)
-        accounts['as_sum'] += account.balance()
+        accounts['as_sum'] += account.normal_balance()
 
     # Liabilities
     for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
                                             group_account=True):
-        balance = account.balance()
-        accounts['li'].append((account.name, -balance))
-        accounts['li_sum'] += -balance
+        balance = account.normal_balance()
+        accounts['li'].append((account.name, balance))
+        accounts['li_sum'] += balance
 
     # Accumulated member accounts liabilities
     member_balance_sum = 0
     for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
                                             group_account=False):
-        member_balance_sum += account.balance()
-    accounts['li'].append((_('Member accounts'), -member_balance_sum))
-    accounts['li_sum'] += -member_balance_sum
+        member_balance_sum += account.normal_balance()
+    accounts['li'].append((_('Member accounts'), member_balance_sum))
+    accounts['li_sum'] += member_balance_sum
 
     # Equities
     for account in group.account_set.filter(type=Account.EQUITY_ACCOUNT):
-        balance = account.balance()
+        balance = account.normal_balance()
         accounts['eq'].append((account.name, balance))
         accounts['eq_sum'] += balance
 
@@ -192,15 +192,15 @@ def income(request, group, is_admin=False):
     # Incomes
     for account in group.account_set.filter(type=Account.INCOME_ACCOUNT):
         accounts['in'].append(account)
-        accounts['in_sum'] += account.balance()
+        accounts['in_sum'] += account.normal_balance()
 
     # Expenses
     for account in group.account_set.filter(type=Account.EXPENSE_ACCOUNT):
         accounts['ex'].append(account)
-        accounts['ex_sum'] += account.balance()
+        accounts['ex_sum'] += account.normal_balance()
 
     # Net income
-    accounts['in_ex_diff'] = accounts['in_sum'] + accounts['ex_sum']
+    accounts['in_ex_diff'] = accounts['in_sum'] - accounts['ex_sum']
 
     return render_to_response('reports/income.html',
         {

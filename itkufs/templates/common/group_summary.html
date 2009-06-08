@@ -117,7 +117,7 @@
             </td>
             {% if account.short_name %}<td>{{ account.short_name|default:"-" }}</td>{% endif %}
             <td>{{ account.get_type_display }}</td>
-            <td class="align_right{% if account.is_blocked %} blocked{% endif %}">{{ account.balance|stringformat:"0.2f" }}</td>
+            <td class="align_right{% if account.is_blocked %} blocked{% endif %}">{{ account.normal_balance|stringformat:"0.2f" }}</td>
         </tr>
         {% endif %}
     {% endfor %}
@@ -137,7 +137,7 @@
     {% ufs_sort group_accounts %}
     {% for account in group_accounts %}
         {% if all or account.active %}
-        {% if all or account.balance %}
+        {% if all or account.normal_balance %}
         {# Django's if construct in templates is somewhat lacking, ugly work around for "complex" logic #}
         <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
             <td{% if not account.short_name %} colspan="2"{% endif %}>
@@ -149,7 +149,7 @@
             </td>
             {% if account.short_name %}<td>{{ account.short_name|default:"-" }}</td>{% endif %}
             <td>{{ account.get_type_display }}</td>
-            <td class="align_right">{{ account.balance|stringformat:"0.2f" }}</td>
+            <td class="align_right">{{ account.normal_balance|stringformat:"0.2f" }}</td>
         </tr>
         {% endif %}
         {% endif %}
