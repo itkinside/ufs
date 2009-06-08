@@ -66,11 +66,16 @@ var Transaction = {
 	  diff -= c_value;
 
         if(diff) {
-          td.update((Transaction.balance[td.id]  + diff)/100+'*');
+          if (td.previous().innerHTML == 'Asset' ||
+              td.previous().innerHTML == 'Expense') {
+            td.update((Transaction.balance[td.id]  + diff)/100+'*');
+          } else {
+            td.update((Transaction.balance[td.id]  - diff)/100+'*');
+    	  }
         } else {
           td.update(Transaction.balance[td.id]/100);
-	}
-      }
+	    }
+    }
     );
 
     $('debit_sum').update(debit / 100);
