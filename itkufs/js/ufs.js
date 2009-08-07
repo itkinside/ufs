@@ -66,8 +66,8 @@ var Transaction = {
 	  diff -= c_value;
 
         if(diff) {
-          if (td.previous().id == 'As' ||
-              td.previous().id == 'Ex') {
+          if (td.previous().className == 'As' ||
+              td.previous().className == 'Ex') {
             td.update((Transaction.balance[td.id]  + diff)/100+'*');
           } else {
             td.update((Transaction.balance[td.id]  - diff)/100+'*');

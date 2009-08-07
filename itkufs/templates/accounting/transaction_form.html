@@ -76,7 +76,7 @@
                 {% if a.short_name %}
                 <td>{{ a.short_name|default:"-" }}</td>
                 {% endif %}
-                <td id="{{a.type}}">{{ a.get_type_display }}</td>
+                <td class="{{a.type}}">{{ a.get_type_display }}</td>
                 <td id="balance-{{ a.id }}" class="balance number">{{ a.normal_balance }}</td>
                 <td{% if f.debit.errors %} class="error"{% endif %} id="{{ f.auto_id }}">{{ f.debit }}</td>
                 <td{% if f.credit.errors %} class="error"{% endif %} id="{{ f.auto_id }}">{{ f.credit }}</td>
@@ -88,7 +88,7 @@
                 {% if a.short_name %}
                 <td>{{ a.short_name|default:"-" }}</td>
                 {% endif %}
-                <td id="{{ a.type }}">{{ a.get_type_display }}</td>
+                <td class="{{ a.type }}">{{ a.get_type_display }}</td>
                 <td id="balance-{{ a.id }}" class="balance number">{{ a.normal_balance }}</td>
                 <td{% if f.debit.errors %} class="error"{% endif %} id="{{ f.auto_id }}">{{ f.debit }}</td>
                 <td{% if f.credit.errors %} class="error"{% endif %} id="{{ f.auto_id }}">{{ f.credit }}</td>
