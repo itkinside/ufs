@@ -12,6 +12,16 @@ from django.template.defaultfilters import slugify
 
 from itkufs.common.utils import callsign_sorted as ufs_sorted
 
+
+BORDER_COLOR = HexColor('#555753')
+BLACKLISTED_COLOR = HexColor('#000000')
+BLACKLISTED_TEXT_COLOR = HexColor('#A40000')
+WARN_TEXT_COLOR = HexColor('#F57900')
+FAINT_COLOR = HexColor('#BABDB6')
+
+ALTERNATE_COLORS = [HexColor('#FFFFFF'),
+                    HexColor('#F5F5F5'),]
+
 def pdf(request, group, list, is_admin=False):
     """PDF version of list"""
 
@@ -55,15 +65,6 @@ def pdf(request, group, list, is_admin=False):
     foot_height = 15 # pt
     logo_height = 25 # pt
 
-    blacklisted_color = HexColor('#000000')
-    blacklisted_text_color = HexColor('#A40000')
-    warn_text_color = HexColor('#F57900')
-    even_color = HexColor('#FFFFFF')
-    odd_color = HexColor('#FAFAFA')
-    faint_color = HexColor('#BABDB6')
-
-    alternate_colors = [even_color, odd_color]
-
     if list.orientation == list.LANDSCAPE:
         height, width = A4
     else:
@@ -103,6 +104,7 @@ def pdf(request, group, list, is_admin=False):
         blacklisted_note = _(u'Blacklisted accounts are marked with: ')
 
         p.drawRightString(width - margin - 10, margin, blacklisted_note)
+        p.setFillColor(BLACKLISTED_COLOR)
         p.rect(width - margin - 10, margin, 8, 8, fill=1, stroke=0)
 
         p.setFont(font_name, font_size)
@@ -159,7 +161,7 @@ def pdf(request, group, list, is_admin=False):
     data = [header]
 
     for i,a in enumerate(accounts):
-        color = alternate_colors[(i+1)%2]
+        color = ALTERNATE_COLORS[(i+1)%len(ALTERNATE_COLORS)]
 
         if list.double:
             i *= 2
@@ -199,7 +201,7 @@ def pdf(request, group, list, is_admin=False):
             # if needs to be moved if you want to change that
             if a.needs_warning():
                 GRID_STYLE.add('FONTNAME', (0,i), (base_x-1,i), font_name_bold)
-                GRID_STYLE.add('TEXTCOLOR', (base_x-1,i), (base_x-1,i), warn_text_color)
+                GRID_STYLE.add('TEXTCOLOR', (base_x-1,i), (base_x-1,i), WARN_TEXT_COLOR)
 
             # Check if we need to reduce col font size
             while col_width[len(row)-1] < p.stringWidth(str(row[-1]), font_name, font_size_balance) + 12 and font_size_balance > font_size_min:
@@ -207,9 +209,9 @@ def pdf(request, group, list, is_admin=False):
 
         if a.is_blocked():
             if list.balance_width:
-                GRID_STYLE.add('TEXTCOLOR', (base_x-1,i), (base_x-1,i), blacklisted_text_color)
+                GRID_STYLE.add('TEXTCOLOR', (base_x-1,i), (base_x-1,i), BLACKLISTED_TEXT_COLOR)
                 GRID_STYLE.add('FONTNAME', (0,i), (base_x-1,i), font_name_bold)
-            GRID_STYLE.add('BACKGROUND', (base_x,i), (-1,i+extra_row_height), blacklisted_color)
+            GRID_STYLE.add('BACKGROUND', (base_x,i), (-1,i+extra_row_height), BLACKLISTED_COLOR)
 
             row.extend([''] * len(header[base_x:]))
 
@@ -237,13 +239,14 @@ def pdf(request, group, list, is_admin=False):
         GRID_STYLE.add('FONTSIZE', (base_x-1,1), (base_x-1,-1), font_size_balance)
         GRID_STYLE.add('ALIGN', (base_x-1,1), (base_x-1,-1), 'RIGHT')
 
-    GRID_STYLE.add('TEXTCOLOR', (base_x,1), (-1,-1), faint_color)
+    GRID_STYLE.add('TEXTCOLOR', (base_x,1), (-1,-1), FAINT_COLOR)
 
     if list.double:
         GRID_STYLE.add('TOPPADDING', (base_x,1), (-1,-1), 2)
         GRID_STYLE.add('BOTTOMPADDING', (base_x,1), (-1,-1), 2)
 
     GRID_STYLE.add('VALIGN', (0,1), (-1,-1), 'TOP')
+    GRID_STYLE.add('GRID', (0,0), (-1, -1), 0.25, BORDER_COLOR)
 
     # Create table
     t = Table(data, colWidths=col_width, style=GRID_STYLE, repeatRows=1)
