@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-28 17:13+0200\n"
+"POT-Creation-Date: 2009-08-08 01:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Espen Molven <molven@samfundet.no>\n"
+"Last-Translator: Amund Hov <amundhov@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,44 +42,6 @@ msgstr "Til"
 #: accounting/forms.py:86
 msgid "Reason"
 msgstr "Årsak"
-
-#: accounting/messages.py:3 accounting/management/commands/sendmail.py:109
-#, python-format
-msgid "Warning limit passed in %(group)s"
-msgstr "Advarselgrensen i gruppen %(group)s er passert"
-
-#: accounting/messages.py:4 accounting/management/commands/sendmail.py:110
-#, python-format
-msgid ""
-"Your current account balance of %(balance).2f, is below the _warning limit_ %"
-"(limit).2f\n"
-"\n"
-"To fix this either deposit more money or contact one of the group\n"
-"administrators.\n"
-msgstr ""
-"Balansen din på %(balance).2f, er under _advarselgrensen_ %(limit).2f\n"
-"\n"
-"Sett inn mer penger eller ta kontakt med ansvarlig for gruppen for å fikse\n"
-"dette.\n"
-
-#: accounting/messages.py:10 accounting/management/commands/sendmail.py:116
-#, python-format
-msgid "Block limit passed in %(group)s"
-msgstr "Blokkeringgrensen i gruppen %(group)s er passert"
-
-#: accounting/messages.py:11 accounting/management/commands/sendmail.py:117
-#, python-format
-msgid ""
-"Your current account balance of %(balance).2f, is below the _block limit_ %"
-"(limit).2f\n"
-"\n"
-"To fix this either deposit more money or contact one of the group\n"
-"administrators.\n"
-msgstr ""
-"Balansen din på %(balance).2f, er under _blokkeringsgrensen_ %(limit).2f\n"
-"\n"
-"Sett inn mer penger eller ta kontakt med ansvarlig for gruppen for å fikse\n"
-"dette.\n"
 
 #: accounting/models.py:11 accounting/models.py:145 reports/models.py:35
 #: reports/models.py:85
@@ -343,6 +305,44 @@ msgstr "transaksjonsinnslag"
 msgid "%(account)s: debit %(debit)s, credit %(credit)s"
 msgstr "%(account)s: debet %(debit)s, kredit %(credit)s"
 
+#: accounting/management/commands/sendmail.py:125
+#, python-format
+msgid "Warning limit passed in %(group)s"
+msgstr "Advarselgrensen i gruppen %(group)s er passert"
+
+#: accounting/management/commands/sendmail.py:126
+#, python-format
+msgid ""
+"Your current account balance of %(balance).2f, is below the _warning limit_ %"
+"(limit).2f\n"
+"\n"
+"To fix this either deposit more money or contact one of the group\n"
+"administrators.\n"
+msgstr ""
+"Balansen din på %(balance).2f, er under _advarselgrensen_ %(limit).2f\n"
+"\n"
+"Sett inn mer penger eller ta kontakt med ansvarlig for gruppen for å fikse\n"
+"dette.\n"
+
+#: accounting/management/commands/sendmail.py:132
+#, python-format
+msgid "Block limit passed in %(group)s"
+msgstr "Blokkeringgrensen i gruppen %(group)s er passert"
+
+#: accounting/management/commands/sendmail.py:133
+#, python-format
+msgid ""
+"Your current account balance of %(balance).2f, is below the _block limit_ %"
+"(limit).2f\n"
+"\n"
+"To fix this either deposit more money or contact one of the group\n"
+"administrators.\n"
+msgstr ""
+"Balansen din på %(balance).2f, er under _blokkeringsgrensen_ %(limit).2f\n"
+"\n"
+"Sett inn mer penger eller ta kontakt med ansvarlig for gruppen for å fikse\n"
+"dette.\n"
+
 #: accounting/views/display.py:59 common/decorators.py:38
 msgid "Forbidden if not account owner or group admin."
 msgstr "Bare eieren av kontoen eller en gruppeadministrator kan gjøre dette."
@@ -548,29 +548,29 @@ msgstr "listeelement"
 msgid "list items"
 msgstr "listeelementer"
 
-#: reports/pdf.py:92
+#: reports/pdf.py:93
 msgid "Printed"
 msgstr "Skrevet ut"
 
-#: reports/pdf.py:103
+#: reports/pdf.py:104
 msgid "Blacklisted accounts are marked with: "
 msgstr "Svartelistede kontoer er merket med: "
 
-#: reports/pdf.py:111
+#: reports/pdf.py:113
 msgid "Sorry, this list is empty."
 msgstr "Listen er tom"
 
-#: reports/pdf.py:120
+#: reports/pdf.py:122
 msgid "Sorry, this list isn't set up correctly, please add some columns."
 msgstr "Beklager, listen er ikke satt opp rikig, legg til noen koloner først."
 
-#: reports/pdf.py:130 templates/common/account_summary.html:11
+#: reports/pdf.py:132 templates/common/account_summary.html:11
 #: templates/common/account_summary.html:57
 #: templates/common/group_summary.html:11 templates/reports/list_form.html:58
 msgid "Name"
 msgstr "Navn"
 
-#: reports/pdf.py:142 templates/accounting/transaction_form.html:67
+#: reports/pdf.py:144 templates/accounting/transaction_form.html:67
 #: templates/common/account_summary.html:37
 #: templates/common/group_summary.html:104
 #: templates/common/group_summary.html:134
@@ -743,15 +743,14 @@ msgstr "Oversikt"
 #: templates/accounting/base.html:59
 msgid ""
 "<em>Balance</em> is always seen from the perspective of the\n"
-"group. If the group owes people money, it is a liability, and their user\n"
-"account balance is negative. If people owe the group money, it is an asset, "
-"and\n"
-"their user account balance is positive."
+"group. If the user account balance is positive, it is a liability to the "
+"group.\n"
+"If the user account balance is negative, it is an asset and the\n"
+"user owes money to the group."
 msgstr ""
-"<em>Balansen</em> er alltid sett fra perspektivet til gruppen. Hvis gruppen "
-"skylder folk penger, så er det gjeld, og deres brukerkontobalanse er "
-"negativ. Hvis folk skylder gruppen penger, så er det en eiendel, og "
-"brukerkontobalansen er positiv."
+"<em>Balansen</em> er alltid sett fra perspektivet til gruppen. Hvis "
+"brukerkontobalansen er positiv så er det gjeld for gruppen. Hvis "
+"brukerkontobalansen er negativ så er det en og brukeren skylder penger"
 
 #: templates/accounting/reject_transactions.html:6
 #: templates/accounting/reject_transactions.html:23
