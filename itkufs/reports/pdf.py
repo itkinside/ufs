@@ -195,7 +195,7 @@ def pdf(request, group, list, is_admin=False):
                 font_size_short_name -= 1
 
         if list.balance_width:
-            row.append('%d' % a.user_balance())
+            row.append('%d' % a.normal_balance())
 
             # XXX: currently warnings are only shown if balance is shown, this
             # if needs to be moved if you want to change that

@@ -85,7 +85,7 @@ class Command(BaseCommand):
     def _send_warning_mail(self, account):
         to_email = account.owner.email
         subject = WARNING_SUBJECT % {'group': account.group}
-        message = WARNING_MESSAGE % {'balance': account.user_balance(), 'limit': account.group.warn_limit}
+        message = WARNING_MESSAGE % {'balance': account.normal_balance(), 'limit': account.group.warn_limit}
         message += SIGNATURE
 
         group_email = account.group.email
@@ -99,7 +99,7 @@ class Command(BaseCommand):
 
     def _send_blocked_mail(self, account):
         subject = BLOCK_SUBJECT % {'group': account.group}
-        message = BLOCK_MESSAGE % {'balance': account.user_balance(), 'limit': account.group.block_limit}
+        message = BLOCK_MESSAGE % {'balance': account.normal_balance(), 'limit': account.group.block_limit}
         message += SIGNATURE
 
         group_email = account.group.email

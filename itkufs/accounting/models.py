@@ -193,12 +193,12 @@ class Account(models.Model):
                 balance -= e.credit
             return balance
 
-    def user_balance(self):
-        """Returns account balance, but multiplies by -1 if the account is a
-        liability account."""
-
+    def normal_balance(self):
+        """ Returns account balance, but multiplies by -1 if the account is
+        of type liability, equity or expense."""
+        
         balance = self.balance()
-        if balance == 0 or not self.is_user_account():
+        if balance == 0 or ( self.type == 'As' or self.type == 'Ex' ):
             return balance
         else:
             return -1 * balance
@@ -217,7 +217,7 @@ class Account(models.Model):
             or self.ignore_block_limit
             or self.group_block_limit_sql is None):
             return False
-        return self.user_balance() < self.group_block_limit_sql
+        return self.normal_balance() < self.group_block_limit_sql
 
     def needs_warning(self):
         """Returns true if user account balance is below group warn limit"""
@@ -226,7 +226,7 @@ class Account(models.Model):
             or self.ignore_block_limit
             or self.group.warn_limit is None):
             return False
-        return self.user_balance() < self.group.warn_limit
+        return self.normal_balance() < self.group.warn_limit
 
 
     ### Transaction set methods
