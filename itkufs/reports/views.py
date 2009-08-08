@@ -153,9 +153,8 @@ def balance(request, group, is_admin=False):
 
     # Equities
     for account in group.account_set.filter(type=Account.EQUITY_ACCOUNT):
-        balance = account.normal_balance()
-        accounts['eq'].append((account.name, balance))
-        accounts['eq_sum'] += balance
+        accounts['eq'].append(account)
+        accounts['eq_sum'] += account.normal_balance()
 
     # Total liabilities and equities
     accounts['li_eq_sum'] = accounts['li_sum'] + accounts['eq_sum']
