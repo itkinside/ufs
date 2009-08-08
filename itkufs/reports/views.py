@@ -140,9 +140,8 @@ def balance(request, group, is_admin=False):
     # Liabilities
     for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
                                             group_account=True):
-        balance = account.normal_balance()
-        accounts['li'].append((account.name, balance))
-        accounts['li_sum'] += balance
+        accounts['li'].append(account)
+        accounts['li_sum'] += account.normal_balance()
 
     # Accumulated member accounts liabilities
     member_balance_sum = 0
