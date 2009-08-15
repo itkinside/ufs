@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-08 01:07+0200\n"
+"POT-Creation-Date: 2009-08-15 23:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Amund Hov <amundhov@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -581,11 +581,11 @@ msgstr "Balanse"
 msgid "List deleted"
 msgstr "Listen ble slettet"
 
-#: reports/views.py:152
+#: reports/views.py:151
 msgid "Member accounts"
 msgstr "Medlemskontoer"
 
-#: reports/views.py:166
+#: reports/views.py:164
 msgid "Current year's net income"
 msgstr "Nettoinntekt inneværende år"
 
@@ -1139,19 +1139,19 @@ msgstr "Egenkapital og gjeld"
 msgid "Liabilities"
 msgstr "Gjeld"
 
-#: templates/reports/balance.html:69
+#: templates/reports/balance.html:81
 msgid "Total liabilities"
 msgstr "Total gjeld"
 
-#: templates/reports/balance.html:76
+#: templates/reports/balance.html:88
 msgid "Equities"
 msgstr "Egenkapital"
 
-#: templates/reports/balance.html:85
+#: templates/reports/balance.html:109
 msgid "Total equities (Net worth)"
 msgstr "Total egenkapital (nettoverdi)"
 
-#: templates/reports/balance.html:92
+#: templates/reports/balance.html:116
 msgid "Total liabilities and equities"
 msgstr "Total egenkapital og gjeld"
 
