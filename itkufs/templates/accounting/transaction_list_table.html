@@ -34,8 +34,13 @@
                     {{ e.credit|creditformat }}
                 </td>
                 {% if forloop.first %}
-                    <td rowspan="{{ entry_list|length }}" class="{{ t.css_class }}">
-                        {{ t.get_state_display }}
+                    <td rowspan="{{ entry_list|length }}">
+                        <span class="{{ t.css_class }} state">
+                            {{ t.get_state_display }}
+                        </span>
+                        <br />
+                        {{ t.last_modified|date }}
+                        {{ t.last_modified|time }}
                     </td>
                 {% endif %}
                 </tr>
