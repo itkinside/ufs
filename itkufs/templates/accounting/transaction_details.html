@@ -29,7 +29,7 @@
     </tr>
     <tr>
         <th>{% trans "State" %}</th>
-        <td>{{ transaction.get_state_display }}</th>
+        <td class="{{ transaction.css_class }} state">{{ transaction.get_state_display }}</th>
     </tr>
     <tr>
         <th>{% trans "Last modified" %}</th>
@@ -94,8 +94,8 @@
 
     {% for l in transaction.log_set.select_related %}
     <tr class="{% cycle 'evenrow' 'oddrow' %}">
-        <td>{{ l.get_type_display }}</td>
-        <td>{{ l.timestamp|date:"Y-m-d H:i" }}</td>
+        <td style="width: 5em" class="{{ l.css_class }} state">{{ l.get_type_display }}</td>
+        <td style="width: 8em">{{ l.timestamp|date:"Y-m-d H:i" }}</td>
         <td><a href="mailto:{{ l.user.email }}">{{ l.user }}</a>{% if l.auto %} ({% trans "auto" %}){% endif %}</td>
         <td>{{ l.message|default:_("No transaction log message") }}</td>
     </tr>
