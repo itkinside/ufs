@@ -55,15 +55,17 @@ def pdf(request, group, list, is_admin=False):
 
     font_name = 'Times-Roman'
     font_name_bold = 'Times-Bold'
-    font_size = 14
-    font_size_name = font_size - 2
-    font_size_short_name = font_size - 2
-    font_size_balance = font_size_name - 2
-    font_size_min = 5
+    font_size = 12
+    font_size_small = 10
+    font_size_min = 8
 
     head_height = 30 # pt
     foot_height = 15 # pt
     logo_height = 25 # pt
+
+    font_size_name = font_size_small
+    font_size_short_name = font_size_small
+    font_size_balance = font_size_small
 
     if list.orientation == list.LANDSCAPE:
         height, width = A4
@@ -89,7 +91,7 @@ def pdf(request, group, list, is_admin=False):
         # Setup rest of header
         p.setFont(font_name, font_size)
         p.drawString(margin, height - margin - font_size, u'%s: %s' % (group, list.name))
-        p.setFont(font_name, font_size - 4)
+        p.setFont(font_name, font_size_small)
         p.drawString(margin, height - margin - font_size - font_size + 2, u'%s: %s' % (_('Printed'), str(date.today())))
 
     footer = []
@@ -228,9 +230,12 @@ def pdf(request, group, list, is_admin=False):
             if list.balance_width:
                 GRID_STYLE.add('SPAN', (1,i), (1,i+extra_row_height))
 
+    GRID_STYLE.add('FONTSIZE', (0,0), (-1,-1), font_size_small)
+
     # Set font size for names
     GRID_STYLE.add('FONTSIZE', (0,1), (0,-1), font_size_name)
     GRID_STYLE.add('ALIGN', (0,0), (-1,-1), 'LEFT')
+    GRID_STYLE.add('ALIGN', (base_x,0), (-1,-1), 'RIGHT')
 
     GRID_STYLE.add('FONTNAME', (0,0), (-1,0), font_name_bold)
 
