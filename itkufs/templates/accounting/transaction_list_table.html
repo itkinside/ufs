@@ -7,7 +7,7 @@
         <th>{% trans "Account" %}</th>
         <th>{% trans "Debit" %}</th>
         <th>{% trans "Credit" %}</th>
-        <th>{% trans "Status" %}</th>
+        <th>{% trans "State" %}</th>
     </tr>
     {% for t in transaction_list %}
         {% filter_entries t entry_list %}
@@ -35,7 +35,7 @@
                 </td>
                 {% if forloop.first %}
                     <td rowspan="{{ entry_list|length }}" class="{{ t.css_class }}">
-                        {{ t.get_status_display }}
+                        {{ t.get_state_display }}
                     </td>
                 {% endif %}
                 </tr>
