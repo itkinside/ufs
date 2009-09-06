@@ -203,6 +203,9 @@ td.error {
 .ok, .committed {
 	color: #4e9a06;
 }
+.state {
+	font-weight: bold;
+}
 
 /* Forms */
 #yui-main form {
