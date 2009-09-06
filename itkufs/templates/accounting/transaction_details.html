@@ -95,7 +95,7 @@
     {% for l in transaction.log_set.select_related %}
     <tr class="{% cycle 'evenrow' 'oddrow' %}">
         <td style="width: 5em" class="{{ l.css_class }} state">{{ l.get_type_display }}</td>
-        <td style="width: 8em">{{ l.timestamp|date:"Y-m-d H:i" }}</td>
+        <td style="width: 8em">{{ l.timestamp|date }} {{ l.timestamp|time }}</td>
         <td><a href="mailto:{{ l.user.email }}">{{ l.user }}</a>{% if l.auto %} ({% trans "auto" %}){% endif %}</td>
         <td>{{ l.message|default:_("No transaction log message") }}</td>
     </tr>
