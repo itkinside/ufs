@@ -11,6 +11,10 @@
         <th>{% trans "Name" %}</th>
         <td>{{ account.name }}</td>
     </tr>
+    <tr>
+        <th>{% trans "Short name" %}</th>
+        <td>{{ account.short_name|default:"-" }}</td>
+    </tr>
 
     <tr>
     {% if account.owner %}
@@ -31,12 +35,17 @@
 
     <tr>
         <th>{% trans "Balance" %}</th>
-        <td>{{ account.balance|floatformat:2 }}</td>
+        <td>{{ account.normal_balance|floatformat:2 }}</td>
     </tr>
 
     <tr>
         <th>{% trans "Active" %}</th>
         <td>{{ account.active|yesno:_("Yes,No") }}</td>
+    </tr>
+
+    <tr>
+        <th>{% trans "Group account" %}</th>
+        <td>{{ account.group_account|yesno:_("Yes,No") }}</td>
     </tr>
 </table>
 </div>
@@ -102,6 +111,18 @@
 </ul>
 {% endif %}
 </div>
+{% endif %}
+
+
+{% if not account.active %}
+    {% if is_owner or is_admin %}
+        <div id="activate">
+            <h3>{% trans "Activate account" %}</h3>
+            <form method="post" action="{% url activate-account group.slug,account.slug %}">
+                <button type="submit">{% trans "Activate account" %}</button>
+            </form>
+        </div>
+    {% endif %}
 {% endif %}
 
 {% endblock %}

@@ -1,16 +1,29 @@
 from django.contrib import admin
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
+from itkufs.admin import site
 from itkufs.accounting.models import Group, Account, RoleAccount, \
         Settlement, Transaction, TransactionLog, TransactionEntry
 
-class GroupAdmin(admin.ModelAdmin):
+class BaseModelAdmin(admin.ModelAdmin):
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+class GroupAdmin(BaseModelAdmin):
     filter_horizontal = ('admins',)
     prepopulated_fields = {
         'slug': ('name',),
     }
 
-class AccountAdmin(admin.ModelAdmin):
+class BasicGroupAdmin(GroupAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'slug', 'admins'),
+        }),
+    )
+
+class AccountAdmin(BaseModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('name', 'slug', 'group', 'owner'),
@@ -30,7 +43,10 @@ class AccountAdmin(admin.ModelAdmin):
     }
     search_fields = ('name',)
 
-class RoleAccountAdmin(admin.ModelAdmin):
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+class RoleAccountAdmin(BaseModelAdmin):
     list_display = ('group', 'role', 'account')
     list_display_links = ('group', 'role', 'account')
     list_filter = ('group', 'role')
@@ -46,14 +62,17 @@ class TransactionEntryInline(admin.TabularInline):
     model = TransactionEntry
     extra = 3
 
-class TransactionAdmin(admin.ModelAdmin):
+class TransactionAdmin(BaseModelAdmin):
     inlines = [
         TransactionLogInline,
         TransactionEntryInline,
     ]
 
-admin.site.register(Group, GroupAdmin)
-admin.site.register(Account, AccountAdmin)
-admin.site.register(RoleAccount, RoleAccountAdmin)
-admin.site.register(Settlement)
-admin.site.register(Transaction, TransactionAdmin)
+if getattr(settings, 'BACKOFFICE', False):
+    site.register(Group, GroupAdmin)
+    site.register(Account, AccountAdmin)
+    site.register(RoleAccount, RoleAccountAdmin)
+    site.register(Settlement)
+    site.register(Transaction, TransactionAdmin)
+else:
+    site.register(Group, BasicGroupAdmin)

@@ -26,13 +26,14 @@ How to install
 
 This is a rather rough guide on how to install µFS.
 
-1. Checkout latest source from revision control using
+1. Get all the dependencies listed above.
+2. Checkout latest source from revision control using
    ``bzr co http://itk.samfundet.no/bzr/itkufs/itkufs.mainline/``
-2. Compile translation files (.po -> .mo) using
-   ``djangoadmin.py compilemessages``
-3. Add a itkufs/settings/local.py file which sets the DATABASE_* and
+3. Compile translation files (.po -> .mo) using
+   ``django-admin.py compilemessages``
+4. Add a itkufs/settings/local.py file which sets the DATABASE_* and
    SECRET_KEY options.
-4. Setup your web server. WSGI-files for production and development are
+5. Setup your web server. WSGI-files for production and development are
    found in the apache folder.
 
 

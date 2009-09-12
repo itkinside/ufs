@@ -1,5 +1,8 @@
 from django.contrib import admin
+from django.conf import settings
+
 from itkufs.reports.models import List, ListColumn
+from itkufs.admin import site
 
 class ListColumnInline(admin.TabularInline):
     model = ListColumn
@@ -17,4 +20,5 @@ class ListAdmin(admin.ModelAdmin):
         'slug': ('name',),
     }
 
-admin.site.register(List, ListAdmin)
+if getattr(settings, 'BACKOFFICE', False):
+    site.register(List, ListAdmin)

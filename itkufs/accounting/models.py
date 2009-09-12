@@ -37,24 +37,24 @@ class Group(models.Model):
             'group': self.slug,
         })
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if not len(self.slug):
             raise ValueError('Slug cannot be empty.')
-        super(Group, self).save()
+        super(Group, self).save(*args, **kwargs)
 
         # Create default accounts
         if not self.account_set.count():
 
             # TODO change this into a magic loop?
             bank = Account(name=ugettext('Bank'), slug='bank',
-                           type=Account.ASSET_ACCOUNT, group=self)
+                group_account=True, type=Account.ASSET_ACCOUNT, group=self)
             bank.save()
             bank_role = RoleAccount(
                 group=self, role=RoleAccount.BANK_ACCOUNT, account=bank)
             bank_role.save()
 
             cash = Account(name=ugettext('Cash'), slug='cash',
-                           type=Account.ASSET_ACCOUNT, group=self)
+                group_account=True, type=Account.ASSET_ACCOUNT, group=self)
             cash.save()
             cash_role = RoleAccount(
                 group=self, role=RoleAccount.CASH_ACCOUNT, account=cash)
@@ -62,14 +62,12 @@ class Group(models.Model):
 
     def get_user_account_set(self):
         """Returns all user accounts belonging to group"""
-        return self.account_set.filter(
-            type=Account.LIABILITY_ACCOUNT, owner__isnull=False)
+        return self.account_set.exclude(group_account=True)
     user_account_set = property(get_user_account_set, None, None)
 
     def get_group_account_set(self):
         """Returns all non-user accounts belonging to group"""
-        return self.account_set.exclude(
-            type=Account.LIABILITY_ACCOUNT, owner__isnull=False)
+        return self.account_set.filter(group_account=True)
     group_account_set = property(get_group_account_set, None, None)
 
 
@@ -125,8 +123,6 @@ class AccountManager(models.Manager):
                 FROM accounting_group
                 WHERE accounting_group.id = accounting_account.group_id
                 """,
-            'is_user_account_sql':
-                """accounting_account.owner_id IS NOT NULL AND accounting_account.type = '%s'""" % Account.LIABILITY_ACCOUNT
             }
         )
 
@@ -147,6 +143,7 @@ class Account(models.Model):
     objects = AccountManager()
 
     name = models.CharField(_('name'), max_length=100)
+    short_name = models.CharField(_('short name'), max_length=100, blank=True)
     slug = models.SlugField(_('slug'),
         help_text=_('A shortname used in URLs etc.'))
     group = models.ForeignKey(Group, verbose_name=_('group'))
@@ -159,6 +156,8 @@ class Account(models.Model):
         default=False, help_text=_('Never block account automatically'))
     blocked = models.BooleanField(_('blocked'), default=False,
         help_text=_('Block account manually'))
+    group_account = models.BooleanField(_('group account'), default=False,
+        help_text=_('Does this account belong to the group?'))
 
     class Meta:
         ordering = ('group', 'name')
@@ -175,10 +174,10 @@ class Account(models.Model):
             'account': self.slug,
         })
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if not len(self.slug):
             raise ValueError('Slug cannot be empty.')
-        super(Account, self).save()
+        super(Account, self).save(*args, **kwargs)
 
     def balance(self, date=None):
         if not date and hasattr(self, 'balance_sql'):
@@ -194,21 +193,19 @@ class Account(models.Model):
                 balance -= e.credit
             return balance
 
-    def user_balance(self):
-        """Returns account balance, but multiplies by -1 if the account is a
-        liability account."""
-
+    def normal_balance(self):
+        """ Returns account balance, but multiplies by -1 if the account is
+        of type liability, equity or expense."""
+        
         balance = self.balance()
-        if balance == 0 or not self.is_user_account():
+        if balance == 0 or ( self.type == 'As' or self.type == 'Ex' ):
             return balance
         else:
             return -1 * balance
 
     def is_user_account(self):
         """Returns true if a user account"""
-        if hasattr(self, 'is_user_account_sql'):
-            return self.is_user_account_sql
-        return self.owner and self.type == self.LIABILITY_ACCOUNT
+        return not self.group_account
 
     def is_blocked(self):
         """Returns true if user account balance is below group block limit"""
@@ -220,7 +217,7 @@ class Account(models.Model):
             or self.ignore_block_limit
             or self.group_block_limit_sql is None):
             return False
-        return self.user_balance() < self.group_block_limit_sql
+        return self.normal_balance() < self.group_block_limit_sql
 
     def needs_warning(self):
         """Returns true if user account balance is below group warn limit"""
@@ -229,7 +226,7 @@ class Account(models.Model):
             or self.ignore_block_limit
             or self.group.warn_limit is None):
             return False
-        return self.user_balance() < self.group.warn_limit
+        return self.normal_balance() < self.group.warn_limit
 
 
     ### Transaction set methods
@@ -415,7 +412,7 @@ class Transaction(models.Model):
     # FIXME is this the right place to have commit on succes? Shouldn't it be
     # higher up in a view etc?
     @transaction.commit_on_success
-    def save(self):
+    def save(self, *args, **kwargs):
         debit_sum = 0
         credit_sum = 0
         debit_accounts = []
@@ -448,7 +445,7 @@ class Transaction(models.Model):
         if self.date is None:
             self.date = datetime.date.today()
         self.last_modified = datetime.datetime.now()
-        super(Transaction, self).save()
+        super(Transaction, self).save(*args, **kwargs)
 
     def set_pending(self, user, message=''):
         if self.id is None:
@@ -492,12 +489,7 @@ class Transaction(models.Model):
             self.last_modified = datetime.datetime.now()
             self.save()
 
-            users = {}
-            for entry in self.entry_set.all():
-                if entry.account.is_user_account():
-                    users[entry.account.owner] = entry.account.owner
-
-            for user in users.values():
+            for user in User.objects.filter(account__transactionentry__transaction=self):
                 user.message_set.create(
                     message=_('Transaction %(id)d regarding your account '
                         + 'has been rejected.') % {'id': self.id})
@@ -564,7 +556,7 @@ class TransactionLog(models.Model):
     user = models.ForeignKey(User, verbose_name=_('user'))
     message = models.CharField(_('message'), max_length=200, blank=True)
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.id is not None:
             raise InvalidTransactionLog(
                 'Altering transaction log entries is not allowed')
@@ -573,7 +565,7 @@ class TransactionLog(models.Model):
         if self.type != Transaction.PENDING_STATE and self.transaction.log_set.filter(type=self.type).count():
             raise InvalidTransactionLog(
                 'Only one instance of each log type is allowed.')
-        super(TransactionLog, self).save()
+        super(TransactionLog, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ('timestamp',)
@@ -609,7 +601,7 @@ class TransactionEntry(models.Model):
     credit = models.DecimalField(_('credit amount'),
         max_digits=10, decimal_places=2, default=0)
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.transaction.is_rejected():
             raise InvalidTransactionEntry(
                 'Can not add entries to rejected transactions')
@@ -625,7 +617,7 @@ class TransactionEntry(models.Model):
             raise InvalidTransactionEntry(
                 'Create or debit must be positive')
 
-        super(TransactionEntry, self).save()
+        super(TransactionEntry, self).save(*args, **kwargs)
 
     class Meta:
         unique_together = (('transaction', 'account'),)

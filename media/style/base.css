@@ -203,6 +203,9 @@ td.error {
 .ok, .committed {
 	color: #4e9a06;
 }
+.state {
+	font-weight: bold;
+}
 
 /* Forms */
 #yui-main form {
@@ -240,7 +243,7 @@ td.error {
         float: left;
         margin-right: 3em;
 }
-#transactions, #accounts, #accounts .comment, #transactions table {
+#transactions, #accounts, #accounts .comment, #transactions table, #activate {
         clear: both;
 }
 /* New list page */

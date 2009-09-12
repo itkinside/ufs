@@ -1,6 +1,6 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
-
+{% load ufs %}
 
 {% block content %}
 
@@ -99,23 +99,29 @@
 <table class="tablelist">
     <caption>{% trans "User accounts" %}</caption>
     <tr>
-        <th>{% trans "Account" %}</th>
+        <th colspan="2">{% trans "Account" %}</th>
         <th>{% trans "Type" %}</th>
         <th>{% trans "Balance" %}</th>
     </tr>
-{% for account in group.user_account_set %}
-    {% if all or account.active %}
-    <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
-        {% if is_admin %}
-        <td><a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a></td>
-        {% else %}
-        <td>{{ account.name }}</td>
+{% with group.user_account_set as user_accounts %}
+    {% ufs_sort user_accounts %}
+    {% for account in user_accounts %}
+        {% if all or account.active %}
+        <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
+            <td{% if not account.short_name %} colspan="2"{% endif %}>
+            {% if is_admin %}
+            <a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a>
+            {% else %}
+            {{ account.name }}
+            {% endif %}
+            </td>
+            {% if account.short_name %}<td>{{ account.short_name|default:"-" }}</td>{% endif %}
+            <td>{{ account.get_type_display }}</td>
+            <td class="align_right{% if account.is_blocked %} blocked{% endif %}">{{ account.normal_balance|stringformat:"0.2f" }}</td>
+        </tr>
         {% endif %}
-        <td>{{ account.get_type_display }}</td>
-        <td class="align_right{% if account.is_blocked %} blocked{% endif %}">{{ account.balance|stringformat:"0.2f" }}</td>
-    </tr>
-    {% endif %}
-{% endfor %}
+    {% endfor %}
+{% endwith %}
 </table>
 
 </div>
@@ -123,27 +129,32 @@
 <table class="tablelist">
     <caption>{% trans "Group accounts" %}</caption>
     <tr>
-        <th>{% trans "Account" %}</th>
+        <th colspan="2">{% trans "Account" %}</th>
         <th>{% trans "Type" %}</th>
         <th>{% trans "Balance" %}</th>
     </tr>
-{% for account in group.group_account_set %}
-    {% if all or account.active %}
-    {% if all or account.balance %}
-    {# Django's if construct in templates is somewhat lacking, ugly work around for "complex" logic #}
-    <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
-        {% if is_admin %}
-        <td><a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a>
-        </td>
-        {% else %}
-        <td>{{ account.name }}</td>
+{% with group.group_account_set as group_accounts %}
+    {% ufs_sort group_accounts %}
+    {% for account in group_accounts %}
+        {% if all or account.active %}
+        {% if all or account.normal_balance %}
+        {# Django's if construct in templates is somewhat lacking, ugly work around for "complex" logic #}
+        <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
+            <td{% if not account.short_name %} colspan="2"{% endif %}>
+            {% if is_admin %}
+            <a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a>
+            {% else %}
+            {{ account.name }}
+            {% endif %}
+            </td>
+            {% if account.short_name %}<td>{{ account.short_name|default:"-" }}</td>{% endif %}
+            <td>{{ account.get_type_display }}</td>
+            <td class="align_right">{{ account.normal_balance|stringformat:"0.2f" }}</td>
+        </tr>
         {% endif %}
-        <td>{{ account.get_type_display }}</td>
-        <td class="align_right">{{ account.balance|stringformat:"0.2f" }}</td>
-    </tr>
-    {% endif %}
-    {% endif %}
-{% endfor %}
+        {% endif %}
+    {% endfor %}
+{% endwith %}
 </table>
 </div>
 

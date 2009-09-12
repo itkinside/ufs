@@ -38,7 +38,7 @@
                 {{ account.name }}
             {% endif %}
         </td>
-        <td class="align_right">{{ account.balance|floatformat:2 }}</td>
+        <td class="align_right">{{ account.normal_balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
@@ -62,7 +62,7 @@
                 {{ account.name }}
             {% endif %}
         </td>
-        <td class="align_right">{{ account.balance|floatformat:2 }}</td>
+        <td class="align_right">{{ account.normal_balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>

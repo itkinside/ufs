@@ -1,8 +1,8 @@
 {% load i18n %}
 
-<p>
-    {% blocktrans %}{{ hits }} hits{% endblocktrans %}
-    {% if is_paginated %}
+{% if is_paginated %}
+    <p>
+        {% blocktrans %}{{ hits }} hits{% endblocktrans %}
         &ndash;
         {% if has_previous %}
             {% if account %}
@@ -40,5 +40,5 @@
                 {% trans "Next" %} &gt;&gt;</a>
             {% endif %}
         {% endif %}
-    {% endif %}
-</p>
+    </p>
+{% endif %}

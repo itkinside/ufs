@@ -4,17 +4,93 @@ from django.forms.forms import BoundField, Form
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
+from django.contrib import auth
 
 from itkufs.accounting.models import Group, Account, RoleAccount
 
 class AccountForm(ModelForm):
+    owner = forms.CharField(required=False)
+
     class Meta:
         model = Account
-        exclude = ('slug', 'group')
+        exclude = ('slug', 'group', 'owner')
+
+    def __init__(self, *args, **kwargs):
+        group = kwargs.pop('group', None)
+
+        if 'instance' in kwargs and kwargs['instance'].owner:
+            initial = kwargs.pop('initial', {})
+            initial['owner'] = kwargs['instance'].owner.username
+            kwargs['initial'] = initial
+
+        super(AccountForm, self).__init__(*args, **kwargs)
+
+        self.group = group
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+
+        if self.group:
+            accounts = self.group.account_set.filter(name=name)
+
+            if self.instance:
+                accounts = accounts.exclude(id=self.instance.id).count()
+            else:
+                accounts = accounts.count()
+
+            if accounts:
+                raise forms.ValidationError(
+                    _('An account with this name allready exists'))
+
+        return name
+
+    def clean_owner(self):
+        owner = self.cleaned_data['owner']
+        user = None
+
+        if owner == '':
+            return None
+
+        try:
+            user = User.objects.get(username=owner)
+        except User.DoesNotExist:
+            for auth_backend in auth.get_backends():
+                if hasattr(auth_backend, 'get_or_create_user'):
+                    user = auth_backend.get_or_create_user(owner)
+                    if user:
+                        break
+
+        if not user:
+            raise forms.ValidationError(
+                _('Username does not exist'))
+
+        if self.group:
+            accounts = self.group.account_set.filter(owner=user)
+
+            if self.instance:
+                accounts = accounts.exclude(id=self.instance.id).count()
+            else:
+                accounts = accounts.count()
+
+            if accounts:
+                raise forms.ValidationError(
+                    _('Users may only have one account per group'))
+
+        return user
+
+    def clean_group_account(self):
+        group_account = self.cleaned_data['group_account']
+
+        if self.data['owner'] and group_account:
+            raise forms.ValidationError(_("Group accounts can not have owners."))
+
+        return group_account
 
     def save(self, group=None, **kwargs):
         original_commit = kwargs.pop('commit', True)
         kwargs['commit'] = False
+
         account = super(AccountForm, self).save(**kwargs)
 
         if not account.slug:
@@ -22,6 +98,10 @@ class AccountForm(ModelForm):
                 account.slug = account.owner.username
             else:
                 account.slug = slugify(account.name)
+
+        if not account.short_name and account.owner:
+            account.short_name = account.owner.username
+
         if group:
             account.group = group
 

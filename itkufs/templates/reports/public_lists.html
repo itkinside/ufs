@@ -1,0 +1,37 @@
+{% extends "reports/base.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Public lists" %}
+{% endblock %}
+
+{% block header %}
+    {% trans "Public lists" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }} &raquo; {% trans "Public lists" %}
+{% endblock %}
+
+{% block menu %}
+    <ul>
+        <li><a href="/">Frontpage</a></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    {% for list in public_list %}
+        {% ifchanged list.group %}
+            {% if not forloop.first %}
+                </ul>
+            {% endif %}
+            <h3>{{ list.group }}</h3>
+            <ul>
+        {% endifchanged %}
+        <li>
+            <a href="{% url view-public-list list.group.slug,list.slug %}">
+                {{ list.name }}
+            </a>
+        </li>
+    {% endfor %}
+{% endblock %}

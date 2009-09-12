@@ -28,10 +28,10 @@ class GroupTestCase(unittest.TestCase):
                 owner=self.users[2], active=False),
             # Group account
             Account(name='Account 4', slug='account4', group=self.group,
-                type=Account.ASSET_ACCOUNT),
+                type=Account.ASSET_ACCOUNT, group_account=True),
             # Inactive group account
             Account(name='Account 5', slug='account5', group=self.group,
-                type=Account.ASSET_ACCOUNT, active=False),
+                type=Account.ASSET_ACCOUNT, active=False, group_account=True),
             # Bank account
             self.group.roleaccount_set.get(
                 role=RoleAccount.BANK_ACCOUNT).account,

@@ -1,231 +1,49 @@
 from datetime import date
-from reportlab.pdfgen import canvas
-from reportlab.platypus.tables import Table, GRID_STYLE
-from reportlab.platypus.flowables import Image
-from reportlab.lib.units import cm
-from reportlab.lib.colors import Color
-from reportlab.lib.pagesizes import A4
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.xheaders import populate_xheaders
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.forms.models import inlineformset_factory
+from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
-from django.template.defaultfilters import slugify
-from django.forms.models import inlineformset_factory
+from django.views.generic.list_detail import object_list
+from django.conf import settings
+from django.db import transaction as db_transaction
 
 from itkufs.common.decorators import limit_to_group, limit_to_admin
 from itkufs.accounting.models import Account
 from itkufs.reports.models import *
 from itkufs.reports.forms import *
+from itkufs.reports.pdf import pdf
+
+_list = list
+
+def public_lists(request):
+    lists = List.objects.filter(public=True).select_related('group') \
+        .order_by('group__name', 'name')
+
+    return object_list(request,
+        lists,
+        allow_empty=True,
+        template_name='reports/public_lists.html',
+        template_object_name='public')
 
 @login_required
 @limit_to_group
-def pdf(request, group, list, is_admin=False):
-    """PDF version of list"""
+def view_list(request, group, list, is_admin=False):
+    return pdf(request, group, list, is_admin=False)
 
-    # Get accounts to show
-    if list.accounts.all().count():
-        accounts = list.accounts.all()
-    else:
-        accounts = group.user_account_set.filter(active=True)
+def view_public_list(request, group, list, is_admin=False):
+    if not list.public:
+        raise Http404
 
-    if list.use_username:
-        accounts = accounts.order_by('owner__username')
-
-    # Create response
-    filename = '%s-%s-%s' % (date.today(), group, list)
-
-    response = HttpResponse(mimetype='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % slugify(filename)
-
-    margin = 0.5*cm
-
-    font_name = 'Times-Roman'
-    font_size = 14
-    font_size_name = font_size - 2
-    font_size_balance = font_size_name - 2
-    font_size_min = 5
-
-    head_height = 30 # pt
-    foot_height = 15 # pt
-    logo_height = 25 # pt
-
-    blacklisted_color = Color(0,0,0)
-    blacklisted_text_color = Color(0.63,0,0)
-    even_color = Color(1,1,1)
-    odd_color = Color(0.97,0.97,0.97)
-
-    alternate_colors = [even_color, odd_color]
-
-    if list.orientation == list.LANDSCAPE:
-        height, width = A4
-    else:
-        width, height = A4
-
-    # Create canvas for page and set fonts
-    p = canvas.Canvas(response, (width,height))
-
-    if group.logo:
-        # Find scaling ratio
-        ratio = group.logo.width / group.logo.height
-
-        # Load logo with correct scaling
-        logo = Image(group.logo.path, width=logo_height*ratio, height=logo_height)
-
-        # Draw on first page
-        logo.drawOn(p, width - margin - logo_height*ratio, height - margin - logo_height)
-
-    # Setup rest of header
-    p.setFont(font_name, font_size)
-    p.drawString(margin, height - margin - font_size, '%s: %s' % (group, list.name))
-    p.setFont(font_name, font_size - 4)
-    p.drawString(margin, height - margin - font_size - font_size + 2, '%s: %s' % (_('Printed'), str(date.today())))
-
-    footer = []
-    if group.email:
-        footer.append(group.email)
-    if list.comment.strip():
-        footer.append(list.comment)
-
-    p.drawString(margin, margin, ' - '.join(footer))
-
-    blacklisted_note = _('Blacklisted accounts are marked with: ')
-
-    p.drawString(width - margin - 10 - p.stringWidth(blacklisted_note, font_name, font_size - 4), margin, blacklisted_note)
-    p.rect(width - margin - 10, margin, 8, 8, fill=1, stroke=0)
-
-    p.setFont(font_name, font_size)
-
-    if not accounts:
-        no_accounts_message = _("Sorry, this list is empty.")
-        p.drawString(margin, height - font_size - margin - head_height, no_accounts_message)
-        p.save()
-
-        return response
-
-    # Store col widths
-    col_width = [list.account_width]
-    header = [_('Name')]
-
-    if list.balance_width:
-        header.append(_('Balance'))
-        col_width.append(list.balance_width)
-
-    for c in list.column_set.all():
-        header.append(c.name)
-        col_width.append(c.width)
-
-    # Calculate relative col widths over to absolute points
-    for i,w in enumerate(col_width):
-        col_width[i] = float(w) / float((list.listcolumn_width or 0) + list.balance_width + list.account_width) * (width-2*margin)
-
-    # Intialise table with header
-    data = [header]
-
-    for i,a in enumerate(accounts):
-        color = alternate_colors[(i+1)%2]
-
-        if list.double:
-            i *= 2
-            extra_row_height = 1
-        else:
-            extra_row_height = 0
-
-        i += 1
-
-        GRID_STYLE.add('BACKGROUND', (0,i), (-1,i+extra_row_height), color)
-
-        if a.is_blocked():
-            if list.balance_width:
-                GRID_STYLE.add('BACKGROUND', (2,i), (-1,i+extra_row_height), blacklisted_color)
-                GRID_STYLE.add('TEXTCOLOR', (1,i), (1,i), blacklisted_text_color)
-            else:
-                GRID_STYLE.add('BACKGROUND', (1,i), (-1,i+extra_row_height), blacklisted_color)
-
-        if list.use_username:
-            row = [a.owner.username]
-        else:
-            row = [a.name]
-
-        # Check if we need to reduce col font size
-        while col_width[0] < p.stringWidth(row[-1], font_name, font_size_name) + 12 and font_size_name > font_size_min:
-            font_size_name -= 1
-
-        if list.balance_width:
-            row.append('%d' % a.user_balance())
-
-            # Check if we need to reduce col font size
-            while col_width[1] < p.stringWidth(str(row[-1]), font_name, font_size_balance) + 12 and font_size_balance > font_size_min:
-                font_size_balance -= 1
-
-        row.extend([''] * list.listcolumn_count)
-
-        data.append(row)
-
-        if list.double:
-            data.append([''] * len(row))
-
-            GRID_STYLE.add('SPAN', (0,i), (0,i+extra_row_height))
-
-            if list.balance_width:
-                GRID_STYLE.add('SPAN', (1,i), (1,i+extra_row_height))
-
-    # Set font size for names
-    GRID_STYLE.add('FONTSIZE', (0,1), (0,-1), font_size_name)
-
-    # Set font size for balance
-    if list.balance_width:
-        GRID_STYLE.add('FONTSIZE', (1,1), (1,-1), font_size_balance)
-
-    if list.double:
-        if list.balance_width:
-            GRID_STYLE.add('TOPPADDING', (2,1), (-1,-1), 0)
-            GRID_STYLE.add('BOTTOMPADDING', (2,1), (-1,-1), 0)
-        else:
-            GRID_STYLE.add('TOPPADDING', (1,1), (-1,-1), 0)
-            GRID_STYLE.add('BOTTOMPADDING', (1,1), (-1,-1), 0)
-
-    GRID_STYLE.add('VALIGN', (0,1), (-1,-1), 'TOP')
-
-    # Create table
-    t = Table(data, colWidths=col_width, style=GRID_STYLE, repeatRows=1)
-
-    rest = None
-    while t:
-        # Figure out how big table will be
-        t_width, t_height = t.wrapOn(p, width-2*margin,height-margin-head_height-foot_height)
-
-        if not rest and t_height > height - 2*margin - head_height:
-            t,rest = t.split(width-2*margin, height - margin - head_height-foot_height)
-            continue
-
-        # Draw on canvas
-        t.drawOn(p, margin, height - t_height - margin - head_height)
-
-        if rest:
-            # FIXME indicate print time etc on second page (also page count)
-
-            # set t to the second table and reset rest
-            t, rest= (rest, None)
-
-            # Show new page
-            p.showPage()
-
-            # Remove header spacing
-            head_height = 0
-        else:
-            # Leave loop
-            break
-
-    p.save()
-
-    return response
+    return pdf(request, group, list, is_admin)
 
 @login_required
 @limit_to_admin
+@db_transaction.commit_on_success
 def new_edit_list(request, group, list=None, is_admin=False):
     """Create new or edit existing list"""
 
@@ -235,29 +53,37 @@ def new_edit_list(request, group, list=None, is_admin=False):
         data = None
 
     if not list:
-        ColumnFormSet = inlineformset_factory(List, ListColumn, extra=10)
+        ColumnFormSet = inlineformset_factory(List, ListColumn, extra=10, form=ColumnForm)
 
-        columnformset = ColumnFormSet(data)
         listform = ListForm(data=data, group=group)
+        columnformset = ColumnFormSet(data)
 
     else:
-        ColumnFormSet = inlineformset_factory(List, ListColumn, extra=3)
+        ColumnFormSet = inlineformset_factory(List, ListColumn, extra=3, form=ColumnForm)
         if list is None:
             raise Http404
 
         listform = ListForm(data, instance=list, group=group)
         columnformset = ColumnFormSet(data, instance=list)
 
-    if data and listform.is_valid() and columnformset.is_valid():
+    if data and listform.is_valid():
         list = listform.save(group=group)
+        columnformset = ColumnFormSet(data, instance=list)
 
-        columnformset.instance = list
-        columns = columnformset.save()
+        if columnformset.is_valid():
+            columns = columnformset.save(commit=False)
 
-        return HttpResponseRedirect(reverse('group-summary',
-            kwargs={
-                'group': group.slug,
-            }))
+            for c in columns:
+                if not c.name and not c.width:
+                    if c.id:
+                        c.delete()
+                else:
+                    c.save()
+
+            return HttpResponseRedirect(reverse('group-summary',
+                kwargs={
+                    'group': group.slug,
+                }))
 
     return render_to_response('reports/list_form.html',
         {
@@ -271,6 +97,7 @@ def new_edit_list(request, group, list=None, is_admin=False):
 
 @login_required
 @limit_to_admin
+@db_transaction.commit_on_success
 def delete_list(request, group, list, is_admin=False):
     """Delete list"""
 
@@ -308,28 +135,26 @@ def balance(request, group, is_admin=False):
     # Assets
     for account in group.account_set.filter(type=Account.ASSET_ACCOUNT):
         accounts['as'].append(account)
-        accounts['as_sum'] += account.user_balance()
+        accounts['as_sum'] += account.normal_balance()
 
     # Liabilities
     for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
-                                            owner__isnull=True):
-        balance = account.user_balance()
-        accounts['li'].append((account.name, balance))
-        accounts['li_sum'] += balance
+                                            group_account=True):
+        accounts['li'].append(account)
+        accounts['li_sum'] += account.normal_balance()
 
     # Accumulated member accounts liabilities
     member_balance_sum = 0
     for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
-                                            owner__isnull=False):
-        member_balance_sum += account.user_balance()
+                                            group_account=False):
+        member_balance_sum += account.normal_balance()
     accounts['li'].append((_('Member accounts'), member_balance_sum))
     accounts['li_sum'] += member_balance_sum
 
     # Equities
     for account in group.account_set.filter(type=Account.EQUITY_ACCOUNT):
-        balance = account.user_balance()
-        accounts['eq'].append((account.name, balance))
-        accounts['eq_sum'] += balance
+        accounts['eq'].append(account)
+        accounts['eq_sum'] += account.normal_balance()
 
     # Total liabilities and equities
     accounts['li_eq_sum'] = accounts['li_sum'] + accounts['eq_sum']
@@ -365,15 +190,15 @@ def income(request, group, is_admin=False):
     # Incomes
     for account in group.account_set.filter(type=Account.INCOME_ACCOUNT):
         accounts['in'].append(account)
-        accounts['in_sum'] += account.balance()
+        accounts['in_sum'] += account.normal_balance()
 
     # Expenses
     for account in group.account_set.filter(type=Account.EXPENSE_ACCOUNT):
         accounts['ex'].append(account)
-        accounts['ex_sum'] += account.balance()
+        accounts['ex_sum'] += account.normal_balance()
 
     # Net income
-    accounts['in_ex_diff'] = accounts['in_sum'] + accounts['ex_sum']
+    accounts['in_ex_diff'] = accounts['in_sum'] - accounts['ex_sum']
 
     return render_to_response('reports/income.html',
         {

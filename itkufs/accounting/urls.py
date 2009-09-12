@@ -4,14 +4,6 @@ from django.conf.urls.defaults import *
 from itkufs.accounting.views.edit import *
 from itkufs.accounting.views.display import *
 
-databrowse.site.register(Group)
-databrowse.site.register(Account)
-databrowse.site.register(RoleAccount)
-databrowse.site.register(Settlement)
-databrowse.site.register(Transaction)
-databrowse.site.register(TransactionLog)
-databrowse.site.register(TransactionEntry)
-
 urlpatterns = patterns('',
     ### Settlements
     url(r'^(?P<group>[0-9a-z_-]+)/settlement/(?P<settlement>\d+)/$',

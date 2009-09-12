@@ -38,7 +38,7 @@
                 {{ account.name }}
             {% endif %}
         </td>
-        <td class="align_right">{{ account.user_balance|floatformat:2 }}</td>
+        <td class="align_right">{{ account.normal_balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
@@ -59,10 +59,22 @@
     <tr>
         <th colspan="2">&nbsp;&nbsp;{% trans "Liabilities" %}</th>
     </tr>
-{% for name, balance in accounts.li %}
+{% for account in accounts.li|slice:":-1" %}
     <tr>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}</td>
-        <td class="align_right">{{ balance|floatformat:2 }}</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;
+            {% if is_admin %}
+                <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
+            {% else %}
+                {{ account.name }}
+            {% endif %}
+        </td>
+        <td class="align_right">{{ account.normal_balance|floatformat:2 }}</td>
+    </tr>
+{% endfor %}
+{% for name, balance in accounts.li|slice:"-1:" %}
+    <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ name  }}</td>
+		<td>{{ balance }}</td>
     </tr>
 {% endfor %}
     <tr>
@@ -75,7 +87,19 @@
     <tr>
         <th colspan="2">&nbsp;&nbsp;{% trans "Equities" %}</th>
     </tr>
-{% for name, balance in accounts.eq %}
+{% for account in accounts.eq|slice:":-1" %}
+    <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;
+            {% if is_admin %}
+                <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
+            {% else %}
+                {{ account.name }}
+            {% endif %}
+        </td>
+        <td class="align_right">{{ account.normal_balance|floatformat:2 }}</td>
+    </tr>
+{% endfor %}
+{% for name, balance in accounts.eq|slice:"-1:" %}
     <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}</td>
         <td class="align_right">{{ balance|floatformat:2 }}</td>

@@ -5,19 +5,32 @@ from django.contrib import databrowse
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 
-admin.autodiscover()
+from itkufs import admin
 databrowse.site.register(User)
+
+if 'itkufs.accounting' in settings.INSTALLED_APPS:
+    import itkufs.accounting.admin
+    import itkufs.accounting.data
+
+if 'itkufs.reports' in settings.INSTALLED_APPS:
+    import itkufs.reports.admin
+    import itkufs.reports.data
 
 urlpatterns = patterns('',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/(.*)', admin.site.root),
     (r'^databrowse/(.*)',
-        user_passes_test(lambda u: u.is_staff)(databrowse.site.root)),
+        user_passes_test(lambda u: u.is_superuser)(databrowse.site.root)),
 
     # View for magic i18n translation of js
     url(r'^i18n/js/$', 'django.views.i18n.javascript_catalog',
         {'packages': ['itkufs']}, name='jsi18n'),
     (r'^i18n/', include('django.conf.urls.i18n')),
+
+    # Pull in lists before so that nothing else manages to catch the url
+    url(r'^lists/$', 'itkufs.reports.views.public_lists', name="public-lists"),
+    url(r'^lists/(?P<group>[0-9a-z_-]+)/(?P<list>[0-9a-z_-]+)/$',
+        'itkufs.reports.views.view_public_list', name="view-public-list"),
 
     (r'^', include('itkufs.common.urls')),
     (r'^', include('itkufs.accounting.urls')),

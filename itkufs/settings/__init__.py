@@ -7,6 +7,9 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 TEMPLATE_STRING_IF_INVALID = ''
 
+# Disable superbackoffice
+BACKOFFICE = False
+
 ADMINS = ()
 MANAGERS = ADMINS
 
@@ -57,7 +60,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    'djangologging.middleware.LoggingMiddleware',
     'itkufs.common.middleware.UfsMiddleware',
 )
 
@@ -133,6 +135,5 @@ COVERAGE_MODULES = (
 # Development version numbering
 BZR_BRANCH_DIR = PROJECT_BASE
 
-# PROJECT_BASE, DATABASE_* and SECRET_KEY are included from a file which
-# is not committed to VCS
+# DATABASE_* and SECRET_KEY are included from a file which is not in VCS
 from itkufs.settings.local import *
