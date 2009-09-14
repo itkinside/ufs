@@ -1,4 +1,3 @@
-from django.contrib import databrowse
 from django.conf.urls.defaults import *
 
 from itkufs.accounting.views.edit import *
