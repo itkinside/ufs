@@ -1,7 +1,6 @@
 {% extends "reports/base.html" %}
 {% load i18n %}
 
-
 {% block title %}
     {% if list %}
         {% trans "Edit list" %}
@@ -10,7 +9,6 @@
     {% endif %}
     - {{ block.super }}
 {% endblock %}
-
 
 {% block breadcrumbs %}
     {{ block.super }}
@@ -24,7 +22,6 @@
             {% trans "New list" %}</a>
     {% endif %}
 {% endblock %}
-
 
 {% block header %}
     {{ block.super }}

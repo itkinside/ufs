@@ -444,6 +444,7 @@ class Transaction(models.Model):
 
         if self.date is None:
             self.date = datetime.date.today()
+
         self.last_modified = datetime.datetime.now()
         super(Transaction, self).save(*args, **kwargs)
 

@@ -1,9 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-
 {% block title %}{{ group.name }} - {{ block.super }}{% endblock %}
-
 
 {% block breadcrumbs %}
     {{ block.super }}
@@ -13,9 +11,7 @@
     {% endif %}
 {% endblock %}
 
-
 {% block header %}&laquo;{{ group.name }}&raquo;{% endblock %}
-
 
 {% block submenu %}
 
