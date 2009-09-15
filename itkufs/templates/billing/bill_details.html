@@ -26,6 +26,10 @@
     </td>
   </tr>
   <tr>
+    <th>{% trans "Status" %}</th>
+    <td class="{{ bill.css_class }}">{{ bill.status }}</td>
+  </tr>
+  <tr>
     <th>{% trans "Description" %}</th>
     <td>{{ bill.description|linebreaksbr }}</td>
   </tr>

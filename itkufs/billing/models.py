@@ -16,6 +16,19 @@ class Bill(models.Model):
     def is_editable(self):
         return self.transaction_id is None
 
+    @property
+    def status(self):
+        if self.is_editable():
+            return _('Pending')
+        else:
+            return _('Committed')
+
+    def css_class(self):
+        if self.is_editable():
+            return 'pending'
+        else:
+            return 'committed'
+
 class BillingLine(models.Model):
     bill = models.ForeignKey(Bill)
 

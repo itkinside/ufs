@@ -8,6 +8,7 @@
         <th>{% trans "Ref." %}</th>
         <th>{% trans "Date" %}</th>
         <th>{% trans "Description" %}</th>
+        <th>{% trans "Status" %}</th>
     <tr>
     {% if not bills %}
         <tr>
@@ -29,6 +30,9 @@
             </td>
             <td>
                 {{ bill.description|truncatewords:5 }}
+            </td>
+            <td class="{{ bill.css_class }}">
+                {{ bill.status }}
             </td>
         </tr>
     {% endfor %}
