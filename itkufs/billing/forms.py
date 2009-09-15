@@ -5,6 +5,27 @@ from django.utils.translation import ugettext as _
 from itkufs.accounting.models import Account, Settlement
 from itkufs.billing.models import Bill, BillingLine
 
+class PaymentForm(forms.Form):
+    settlement = forms.ModelChoiceField(Settlement, required=False)
+    charge_to = forms.ModelChoiceField(Account)
+
+    def __init__(self, bill, *args, **kwargs):
+        super(PaymentForm, self).__init__(*args, **kwargs)
+
+        self.bill = bill
+
+        settlements = bill.group.settlement_set.filter(closed=False)
+        accounts = bill.group.account_set.filter(type=Account.INCOME_ACCOUNT)
+
+        self.fields['settlement'].queryset = settlements
+        self.fields['charge_to'].queryset = accounts
+        self.fields['charge_to'].label_from_instance = lambda obj: obj.name
+
+    def clean(self):
+        if not self.bill.billingline_set.count():
+            raise forms.ValidationError(_('Invalid bill'))
+
+        return self.cleaned_data
 
 class BillForm(forms.ModelForm):
     class Meta:
