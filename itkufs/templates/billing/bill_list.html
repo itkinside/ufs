@@ -1,0 +1,47 @@
+{% extends "billing/base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<table class="tablelist">
+    <tr>
+        <th>{% trans "Ref." %}</th>
+        <th>{% trans "Date" %}</th>
+        <th>{% trans "Description" %}</th>
+        <th>{% trans "Transaction" %}</th>
+        <th>{% trans "State" %}</th>
+    <tr>
+    {% if not bills %}
+        <tr>
+            <td colspan="5">
+                {% trans "No bills found." %}
+            </td>
+        <tr>
+    {% endif %}
+    {% for bill in bills %}
+        <tr class="{% cycle evenrow,oddrow %}">
+            <td>
+                <a href="{% url bill-details group.slug,bill.id %}">
+                    #{{ bill.pk }}
+                </a>
+            </td>
+            <td>
+                {{ bill.created|date }}
+                {{ bill.created|time }}
+            </td>
+            <td>
+                {{ bill.description|truncatewords:5 }}
+            </td>
+            <td>
+                <a href="{% url transaction-details group.slug,bill.transaction.id %}">
+                    {% trans "Transaction" %}
+                </a>
+            </td>
+            <td class="{{ bill.transaction.css_class }}">
+                {{ bill.transaction.get_state_display }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

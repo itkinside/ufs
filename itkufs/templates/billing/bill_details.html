@@ -1,0 +1,48 @@
+{% extends "billing/base.html" %}
+{% load i18n %}
+{% load ufs %}
+
+{% block header %}
+    {% trans "Bill" %} #{{ bill.pk }}
+    {{ bill.created|date }}
+    {{ bill.created|time }}
+{% endblock %}
+
+{% block content %}
+
+<p>
+    {{ bill.description }}
+</p>
+
+<table class="tablelist">
+    <tr>
+        <th>{% trans "Description" %}</th>
+        <th>{% trans "Amount" %}</th>
+    </tr>
+    {% for line in bill.billingline_set.all %}
+        <tr class="{% cycle evenrow,oddrow %}">
+            <td>{{ line.description }}</td>
+            <td align="right">{{ line.amount|creditformat }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+<h2>{% trans "Linked transaction" %}</h2>
+
+<table class="tablelist">
+    <tr>
+        <th>{% trans "Account" %}</th>
+        <th>{% trans "Credit" %}</th>
+        <th>{% trans "Debit" %}</th>
+    </tr>
+    {% for entry in bill.transaction.entry_set.all %}
+        <tr class="{% cycle evenrow,oddrow %}">
+            <td>{{ entry.account.name }}</td>
+            <td align="right">{{ entry.credit|creditformat }}</td>
+            <td align="right">{{ entry.debit|creditformat }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock %}

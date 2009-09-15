@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ group.name }} - {{ block.super }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo; {% trans "Billing" %}
+    {% if group %}
+    &raquo; <a href="{{ group.get_absolute_url }}">{{ group.name }}</a>
+    {% endif %}
+{% endblock %}
+
+{% block header %}&laquo;{{ group.name }}&raquo;{% endblock %}
+
+{% block submenu %}
+
+<h3>{% trans "Billing" %}</h3>
+
+<ul class="menulist">
+    <li><a href="{{ group.get_absolute_url }}">
+        {% trans "Back to group" %}</a></li>
+    {# <li>FIXME: We could do more with this list.</li> #}
+</ul>
+
+{% endblock %}

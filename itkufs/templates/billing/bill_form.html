@@ -1,0 +1,32 @@
+{% extends "billing/base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<form method="post" action=".">
+{{ form.as_p }}
+
+{{ formset.management_form }}
+
+<label>{% trans "Billing lines" %}:</label>
+<table class="tablelist">
+    <tr>
+        <th>{% trans "Description" %}</th>
+        <th>{% trans "Amount" %}</th>
+    </tr>
+    {% for c in formset.forms %}
+        <tr class="{% cycle evenrow,oddrow %}">
+            <td{% if c.description.errors %} class="error"{% endif %}>{{ c.description }}{{ c.id }}</td>
+            <td{% if c.amount.errors %} class="error"{% endif %}>{{ c.amount }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+<p>
+    <button type="submit" name="more-lines" value="{{ lines|add:3 }}">{% trans "Extra lines" %}</button>
+    <button type="submit">{% trans "Save bill" %}</button>
+</p>
+
+</form>
+
+{% endblock %}
