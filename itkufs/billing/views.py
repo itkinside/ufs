@@ -124,5 +124,22 @@ def bill_details(request, group, bill, is_admin=False):
 
 @login_required
 @limit_to_admin
+def bill_delete(request, group, bill, is_admin=False):
+    if request.method == 'POST':
+        request.user.message_set.create(message=_('Bill #%d deleted') % bill.id)
+        bill.delete()
+
+        return HttpResponseRedirect(reverse('bill-list', args=[group.slug]))
+
+    return render_to_response('billing/bill_delete.html',
+        {
+            'is_admin': is_admin,
+            'group': group,
+            'bill': bill,
+        },
+        context_instance=RequestContext(request))
+
+@login_required
+@limit_to_admin
 def bill_pdf(request, group, bill, is_admin=False):
     return pdf(group, bill)

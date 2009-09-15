@@ -48,6 +48,9 @@
             <a href="{% url bill-pay group.slug,bill.id %}">{% trans "Create transaction" %}</a>
           </li>
         {% endif %}
+        <li class="admin">
+          <a href="{% url bill-delete group.slug,bill.id %}">{% trans "Delete bill" %}</a>
+        </li>
       </ul>
     </td>
   </tr>
