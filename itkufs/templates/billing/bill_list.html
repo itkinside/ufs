@@ -21,8 +21,8 @@
     {% for bill in bills %}
         <tr class="{% cycle evenrow,oddrow %}">
             <td>
-                <a href="{% url bill-details group.slug,bill.id %}">
-                    #{{ bill.pk }}
+                <a href="{% url bill-details group.slug,bill.transaction_id %}">
+                    #{{ bill.transaction_id }}
                 </a>
             </td>
             <td>
