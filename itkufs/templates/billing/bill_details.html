@@ -11,7 +11,7 @@
 <table class="tabledetails float_left">
   <tr>
     <th>{% trans "Created" %}</th>
-    <td>{{ bill.created|date }} {{ bill.created|time }}</td>
+    <td style="width: 15em">{{ bill.created|date }} {{ bill.created|time }}</td>
   </tr>
   <tr>
     <th>{% trans "Transaction" %}</th>
@@ -55,8 +55,8 @@
 
 <table class="tablelist float_left">
     <tr>
-        <th>{% trans "Description" %}</th>
-        <th>{% trans "Amount" %}</th>
+        <th style="width: 12em">{% trans "Description" %}</th>
+        <th style="width: 4em">{% trans "Amount" %}</th>
     </tr>
     {% for line in bill.billingline_set.all %}
         <tr class="{% cycle evenrow,oddrow %}">

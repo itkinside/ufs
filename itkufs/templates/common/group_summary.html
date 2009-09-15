@@ -87,6 +87,18 @@
 </ul>
 </div>
 
+{% if is_admin %}
+<div id="bills">
+<h3>{% trans "Bill" %}</h3>
+<ul>
+<li class="admin"><a href="{% url bill-list group.slug %}">
+     {% trans "View bills" %}</a></li>
+<li class="admin"><a href="{% url bill-new group.slug %}">
+     {% trans "New Bill" %}</a></li>
+</ul>
+</div>
+{% endif %}
+
 <div id="accounts">
 {% if not group.account_set.count %}
 <h3>{% trans "Accounts" %}</h3>
@@ -125,6 +137,7 @@
 </table>
 
 </div>
+
 <div class="float_left">
 <table class="tablelist">
     <caption>{% trans "Group accounts" %}</caption>
