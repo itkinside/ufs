@@ -21,7 +21,7 @@ urlpatterns = patterns('',
         transaction_details, name='transaction-details'),
 
     # Admin transaction actions
-    url(r'^(?P<group>[0-9a-z_-]+)/new-transaction/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/transaction/new/$',
         new_edit_transaction, name='new-transaction'),
     url(r'^(?P<group>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/edit/$',
         new_edit_transaction, name='edit-transaction'),
