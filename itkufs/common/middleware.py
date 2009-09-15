@@ -3,6 +3,7 @@ from django.utils.translation import ugettext as _
 
 from itkufs.accounting.models import Group, Account, Settlement, Transaction
 from itkufs.reports.models import List
+from itkufs.billing.models import Bill
 
 class UfsMiddleware:
     def process_view(self, request, view_func, view_args, view_kwargs):
@@ -54,6 +55,15 @@ class UfsMiddleware:
                         view_kwargs['group'].list_set.get(
                             slug=view_kwargs['list'])
                 except List.DoesNotExist:
+                    raise Http404
+
+            if 'bill' in view_kwargs:
+                # Replace list slug with list object
+                try:
+                    view_kwargs['bill'] = Bill.objects.get(
+                        id=view_kwargs['bill'],
+                        transaction__group=view_kwargs['group'])
+                except Bill.DoesNotExist:
                     raise Http404
 
             # Add group admin flag
