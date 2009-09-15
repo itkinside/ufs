@@ -9,4 +9,6 @@ urlpatterns = patterns('',
         bill_list, name='bill-list'),
     url(r'^(?P<group>[0-9a-z_-]+)/billing/(?P<bill>\d+)/$',
         bill_details, name='bill-details'),
+    url(r'^(?P<group>[0-9a-z_-]+)/billing/(?P<bill>\d+)/pdf/$',
+        bill_pdf, name='bill-pdf'),
 )
