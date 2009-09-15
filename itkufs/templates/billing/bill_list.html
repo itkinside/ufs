@@ -1,6 +1,10 @@
 {% extends "billing/base.html" %}
 {% load i18n %}
 
+{% block header %}
+    {{ block.super }} {% trans "Bills" %}
+{% endblock %}
+
 {% block content %}
 
 <table class="tablelist">
