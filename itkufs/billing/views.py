@@ -17,6 +17,10 @@ def bill_new_edit(request, group, bill=None, is_admin=False):
     if bill is None:
         bill = Bill()
 
+    if not bill.is_editable():
+        request.user.message_set.create(message=_('This bill can no longer be edited'))
+        return HttpResponseRedirect(reverse('bill-details', args=[group.slug, bill.id]))
+
     if request.method != 'POST':
         form = BillForm(instance=bill)
         formset = BillingLineFormSet(instance=bill)
