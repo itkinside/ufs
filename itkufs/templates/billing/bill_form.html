@@ -23,6 +23,7 @@
 </table>
 
 <p>
+    <input type="hidden" name="lines" value="{{ lines|add:3 }}" />
     <button type="submit" name="more-lines" value="{{ lines|add:3 }}">{% trans "Extra lines" %}</button>
     <button type="submit">{% trans "Save bill" %}</button>
 </p>
