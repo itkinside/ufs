@@ -7,24 +7,9 @@ from itkufs.billing.models import Bill, BillingLine
 
 
 class BillForm(forms.ModelForm):
-    settlement = forms.ModelChoiceField(Settlement, required=False)
-    charge_to = forms.ModelChoiceField(Account)
-
     class Meta:
         model = Bill
-        exclude = ('transaction',)
-
-    def __init__(self, group, *args, **kwargs):
-        super(BillForm, self).__init__(*args, **kwargs)
-
-        instance = kwargs.get('instance', None)
-
-        settlements = group.settlement_set.filter(closed=False)
-        accounts = group.account_set.filter(type=Account.INCOME_ACCOUNT)
-
-        self.fields['settlement'].queryset = settlements
-        self.fields['charge_to'].queryset = accounts
-        self.fields['charge_to'].label_from_instance = lambda obj: obj.name
+        exclude = ('group', 'transaction')
 
 class BillingLineForm(forms.ModelForm):
     description = forms.CharField(max_length=100, required=False)
@@ -52,7 +37,5 @@ class BillingLineForm(forms.ModelForm):
         model = BillingLine
         fields = ('description', 'amount')
 
-
-def get_billingline_formset(extra):
-    return inlineformset_factory(Bill, BillingLine, extra=extra,
-                                 can_delete=False, form=BillingLineForm)
+BillingLineFormSet = inlineformset_factory(Bill, BillingLine,
+            extra=3, can_delete=False, form=BillingLineForm)

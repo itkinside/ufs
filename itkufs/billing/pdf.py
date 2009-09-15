@@ -42,7 +42,7 @@ def pdf(group, bill):
     font_name = 'Times-Roman'
     font_size = 16
 
-    filename = '%s-%s-%s-%s' % (date.today(), group, _('bill'), bill.transaction_id)
+    filename = '%s-%s-%s-%s' % (date.today(), group, _('bill'), bill.id)
 
     response = HttpResponse(mimetype='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % slugify(filename)
@@ -58,7 +58,7 @@ def pdf(group, bill):
             logo.drawOn(canvas, width/2 - 1*margin - logo_height*ratio, height - margin - logo_height)
 
         canvas.setFont(font_name, font_size)
-        canvas.drawString(margin, height - margin - font_size, _('Bill #%d') % (bill.transaction_id))
+        canvas.drawString(margin, height - margin - font_size, _('Bill #%d') % (bill.id))
         canvas.setFont(font_name, font_size - 4)
         canvas.drawString(margin, height - margin - 2*font_size, bill.created.strftime(_('%Y-%m-%d %H:%M')))
 

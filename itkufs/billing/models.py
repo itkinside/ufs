@@ -1,16 +1,17 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from itkufs.accounting.models import Transaction
+from itkufs.accounting.models import Group, Transaction
 
 class Bill(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
-
-    transaction = models.ForeignKey(Transaction)
     description = models.TextField(_('description'))
 
+    group = models.ForeignKey(Group)
+    transaction = models.ForeignKey(Transaction, null=True, blank=True)
+
     def __unicode__(self):
-        return u'%s - %s' % (self.created, self.description)
+        return u'%s - %s' % (self.created, self.description[:30])
 
 class BillingLine(models.Model):
     bill = models.ForeignKey(Bill)
