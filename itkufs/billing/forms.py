@@ -2,11 +2,12 @@ from django import forms
 from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext as _
 
-from itkufs.accounting.models import Account
+from itkufs.accounting.models import Account, Settlement
 from itkufs.billing.models import Bill, BillingLine
 
 
 class BillForm(forms.ModelForm):
+    settlement = forms.ModelChoiceField(Settlement, required=False)
     charge_to = forms.ModelChoiceField(Account)
 
     class Meta:
@@ -18,8 +19,10 @@ class BillForm(forms.ModelForm):
 
         instance = kwargs.get('instance', None)
 
+        settlements = group.settlement_set.filter(closed=False)
         accounts = group.account_set.filter(type=Account.INCOME_ACCOUNT)
 
+        self.fields['settlement'].queryset = settlements
         self.fields['charge_to'].queryset = accounts
         self.fields['charge_to'].label_from_instance = lambda obj: obj.name
 
