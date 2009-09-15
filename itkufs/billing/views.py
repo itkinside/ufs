@@ -8,6 +8,7 @@ from django.utils.translation import ugettext as _
 from itkufs.common.decorators import limit_to_admin
 from itkufs.accounting.models import RoleAccount, Account, Transaction, TransactionEntry
 from itkufs.billing.models import Bill
+from itkufs.billing.pdf import pdf
 from itkufs.billing.forms import get_billingline_formset, BillForm
 
 @login_required
@@ -15,7 +16,7 @@ from itkufs.billing.forms import get_billingline_formset, BillForm
 def new_bill(request, group, is_admin=False):
     bill = Bill()
 
-    lines = request.POST.get('more-lines', '')
+    lines = request.POST.get('more-lines', request.POST.get('lines', ''))
 
     if lines.isdigit() and int(lines) > 0:
         lines = int(lines)
@@ -42,7 +43,9 @@ def new_bill(request, group, is_admin=False):
 
             bill = form.save(commit=False)
 
-            transaction = Transaction(group=group)
+            settlement = form.cleaned_data.get('settlement', None)
+
+            transaction = Transaction(group=group, settlement=settlement)
             transaction.save()
 
             bill.transaction = transaction
@@ -100,3 +103,8 @@ def bill_details(request, group, bill, is_admin=False):
             'bill': bill,
         },
         context_instance=RequestContext(request))
+
+@login_required
+@limit_to_admin
+def bill_pdf(request, group, bill, is_admin=False):
+    return pdf(group, bill)
