@@ -51,6 +51,20 @@ def bill_new_edit(request, group, bill=None, is_admin=False):
 
 @login_required
 @limit_to_admin
+def bill_payment(request, group, bill, is_admin=False):
+    form = PaymentForm()
+
+    return render_to_response('billing/bill_payment.html',
+        {
+            'is_admin': is_admin,
+            'group': group,
+            'bill': bill,
+            'form': form,
+        },
+        context_instance=RequestContext(request))
+
+@login_required
+@limit_to_admin
 def bill_list(request, group, is_admin=False):
     return render_to_response('billing/bill_list.html',
         {
