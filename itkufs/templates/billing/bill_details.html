@@ -4,17 +4,47 @@
 
 {% block header %}
     {% trans "Bill" %} #{{ bill.pk }}
-    {{ bill.created|date }}
-    {{ bill.created|time }}
 {% endblock %}
 
 {% block content %}
 
-<p>
-    {{ bill.description|linebreaksbr }}
-</p>
+<table class="tabledetails float_left">
+  <tr>
+    <th>{% trans "Created" %}</th>
+    <td>{{ bill.created|date }} {{ bill.created|time }}</td>
+  </tr>
+  <tr>
+    <th>{% trans "Transaction" %}</th>
+    <td>
+      {% if bill.transaction %}
+        <a href="{% url transaction-details group.slug,bill.transaction_id %}">
+          {% trans "Transaction" %} #{{ bill.transaction_id }}
+        </a>
+      {% else %}
+        &ndash;
+      {% endif %}
+    </td>
+  </tr>
+  <tr>
+    <th>{% trans "Description" %}</th>
+    <td>{{ bill.description|linebreaksbr }}</td>
+  </tr>
+  <tr>
+    <th>{% trans "Action" %}</th>
+    <td>
+      <ul>
+        <li>
+          <a href="{% url bill-pdf group.slug,bill.id %}">{% trans "Download PDF" %}</a>
+        </li>
+        <li>
+          <a href="{% url bill-edit group.slug,bill.id %}">{% trans "Edit bill" %}</a>
+        </li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-<table class="tablelist">
+<table class="tablelist float_left">
     <tr>
         <th>{% trans "Description" %}</th>
         <th>{% trans "Amount" %}</th>
@@ -23,23 +53,6 @@
         <tr class="{% cycle evenrow,oddrow %}">
             <td>{{ line.description }}</td>
             <td align="right">{{ line.amount|creditformat }}</td>
-        </tr>
-    {% endfor %}
-</table>
-
-<h2>{% trans "Linked transaction" %}</h2>
-
-<table class="tablelist">
-    <tr>
-        <th>{% trans "Account" %}</th>
-        <th>{% trans "Credit" %}</th>
-        <th>{% trans "Debit" %}</th>
-    </tr>
-    {% for entry in bill.transaction.entry_set.all %}
-        <tr class="{% cycle evenrow,oddrow %}">
-            <td>{{ entry.account.name }}</td>
-            <td align="right">{{ entry.credit|creditformat }}</td>
-            <td align="right">{{ entry.debit|creditformat }}</td>
         </tr>
     {% endfor %}
 </table>
