@@ -16,12 +16,12 @@
   <tr>
     <th>{% trans "Transaction" %}</th>
     <td>
-      {% if bill.transaction %}
+      {% if bill.transaction_id %}
         <a href="{% url transaction-details group.slug,bill.transaction_id %}">
           {% trans "Transaction" %} #{{ bill.transaction_id }}
         </a>
       {% else %}
-        &ndash;
+        &nbsp;&ndash;
       {% endif %}
     </td>
   </tr>
@@ -33,12 +33,17 @@
     <th>{% trans "Action" %}</th>
     <td>
       <ul>
-        <li>
+        <li class="admin">
           <a href="{% url bill-pdf group.slug,bill.id %}">{% trans "Download PDF" %}</a>
         </li>
-        <li>
-          <a href="{% url bill-edit group.slug,bill.id %}">{% trans "Edit bill" %}</a>
-        </li>
+        {% if bill.is_editable %}
+          <li class="admin">
+            <a href="{% url bill-edit group.slug,bill.id %}">{% trans "Edit bill" %}</a>
+          </li>
+          <li class="admin">
+            <a href="{% url bill-pay group.slug,bill.id %}">{% trans "Create transaction" %}</a>
+          </li>
+        {% endif %}
       </ul>
     </td>
   </tr>
