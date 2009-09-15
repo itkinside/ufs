@@ -61,7 +61,7 @@ class UfsMiddleware:
                 # Replace list slug with list object
                 try:
                     view_kwargs['bill'] = Bill.objects.get(
-                        id=view_kwargs['bill'],
+                        transaction__id=view_kwargs['bill'],
                         transaction__group=view_kwargs['group'])
                 except Bill.DoesNotExist:
                     raise Http404
