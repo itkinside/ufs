@@ -2,12 +2,20 @@ from django import forms
 from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext as _
 
-from itkufs.accounting.models import Account, Settlement
+from itkufs.accounting.models import Account, Settlement, RoleAccount
 from itkufs.billing.models import Bill, BillingLine
 
+ACCOUNT_ROLE_DICT = dict([(a[0], a) for a in RoleAccount.ACCOUNT_ROLE])
+
 class CreateTransactionForm(forms.Form):
+    PAY_TO_CHOICES = (
+        ACCOUNT_ROLE_DICT[RoleAccount.BANK_ACCOUNT],
+        ACCOUNT_ROLE_DICT[RoleAccount.CASH_ACCOUNT],
+    )
+
     settlement = forms.ModelChoiceField(Settlement, required=False)
     charge_to = forms.ModelChoiceField(Account)
+    pay_to = forms.ChoiceField(choices=PAY_TO_CHOICES)
 
     def __init__(self, bill, *args, **kwargs):
         super(CreateTransactionForm, self).__init__(*args, **kwargs)

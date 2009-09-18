@@ -66,10 +66,10 @@ def bill_create_transaction(request, group, bill, is_admin=False):
         form = CreateTransactionForm(bill, request.POST)
 
         if form.is_valid():
-            bank = Account.objects.get(group=group,
-                roleaccount__role=RoleAccount.BANK_ACCOUNT)
+            pay_to = Account.objects.get(group=group,
+                roleaccount__role=form.cleaned_data['pay_to'])
 
-            other = form.cleaned_data['charge_to']
+            charge_to = form.cleaned_data['charge_to']
 
             settlement = form.cleaned_data.get('settlement', None)
 
@@ -81,9 +81,9 @@ def bill_create_transaction(request, group, bill, is_admin=False):
             transaction.save()
 
             transaction.entry_set.add(
-                TransactionEntry(account=other, credit=sum))
+                TransactionEntry(account=charge_to, credit=sum))
             transaction.entry_set.add(
-                TransactionEntry(account=bank, debit=sum))
+                TransactionEntry(account=pay_to, debit=sum))
 
             transaction.set_pending(user=request.user,
                 message=_('Bill #%s: %s') % (bill.pk, bill.description))
