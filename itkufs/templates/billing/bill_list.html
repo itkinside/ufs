@@ -1,0 +1,45 @@
+{% extends "billing/base.html" %}
+{% load i18n %}
+
+{% block header %}
+    {{ block.super }} {% trans "Bills" %}
+{% endblock %}
+
+{% block content %}
+
+<table class="tablelist">
+    <tr>
+        <th>{% trans "Ref." %}</th>
+        <th>{% trans "Date" %}</th>
+        <th>{% trans "Description" %}</th>
+        <th>{% trans "Status" %}</th>
+    <tr>
+    {% if not bills %}
+        <tr>
+            <td colspan="5">
+                {% trans "No bills found." %}
+            </td>
+        <tr>
+    {% endif %}
+    {% for bill in bills %}
+        <tr class="{% cycle evenrow,oddrow %}">
+            <td>
+                <a href="{% url bill-details group.slug,bill.id %}">
+                    #{{ bill.id }}
+                </a>
+            </td>
+            <td>
+                {{ bill.created|date }}
+                {{ bill.created|time }}
+            </td>
+            <td>
+                {{ bill.description|truncatewords:5 }}
+            </td>
+            <td class="{{ bill.css_class }}">
+                {{ bill.status }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

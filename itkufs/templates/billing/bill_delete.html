@@ -1,0 +1,41 @@
+{% extends "billing/base.html" %}
+{% load i18n %}
+
+{% block header %}
+    {% trans "Delete bill" %} #{{ bill.pk }}?
+{% endblock %}
+
+{% block content %}
+  <form method="post" action=".">
+    <table class="tabledetails">
+      <tr>
+        <th>{% trans "Created" %}</th>
+        <td style="width: 15em">{{ bill.created|date }} {{ bill.created|time }}</td>
+      </tr>
+      <tr>
+        <th>{% trans "Transaction" %}</th>
+        <td>
+          {% if bill.transaction_id %}
+            <a href="{% url transaction-details group.slug,bill.transaction_id %}">
+              {% trans "Transaction" %} #{{ bill.transaction_id }}
+            </a>
+          {% else %}
+            &nbsp;&ndash;
+          {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <th>{% trans "Status" %}</th>
+        <td class="{{ bill.css_class }}">{{ bill.status }}</td>
+      </tr>
+      <tr>
+        <th>{% trans "Description" %}</th>
+        <td>{{ bill.description|linebreaksbr }}</td>
+      </tr>
+    </table>
+
+    <p>
+      <button type="submit">{% trans "Delete" %}</button>
+    </p>
+  </form>
+{% endblock %}

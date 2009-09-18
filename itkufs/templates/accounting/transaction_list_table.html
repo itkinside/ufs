@@ -36,11 +36,16 @@
                 {% if forloop.first %}
                     <td rowspan="{{ entry_list|length }}">
                         <span class="{{ t.css_class }} state">
-                            {{ t.get_state_display }}
-                        </span>
-                        <br />
+                            {{ t.get_state_display }}</span>:
                         {{ t.last_modified|date }}
                         {{ t.last_modified|time }}
+                        {% with t.log_set.select_related.0 as log %}
+                            {% if log %}
+                                <br />
+                                {{ log.user }}:
+                                {{ log.message|truncatewords:20|linebreaksbr }}
+                            {% endif %}
+                        {% endwith %}
                     </td>
                 {% endif %}
                 </tr>

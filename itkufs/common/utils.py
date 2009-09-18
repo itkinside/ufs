@@ -5,7 +5,11 @@ CALLSIGN_RE = re.compile(r'^[A-Z]+[0-9][A-Z0-9]*[A-Z]$')
 
 def callsign_sorted(objects):
     current_locale = locale.getlocale()
-    locale.setlocale(locale.LC_COLLATE, ("nb_NO", 'UTF-8'))
+
+    try:
+        locale.setlocale(locale.LC_COLLATE, ("nb_NO", 'UTF-8'))
+    except:
+        pass
 
     sorted_list = sorted(objects, callsign_cmp, callsign_key)
 
