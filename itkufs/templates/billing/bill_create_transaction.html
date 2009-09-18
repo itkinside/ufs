@@ -1,0 +1,16 @@
+{% extends "billing/base.html" %}
+{% load i18n %}
+
+{% block header %}
+    {% trans "Pay bill" %} #{{ bill.pk }}
+{% endblock %}
+
+{% block content %}
+
+<form action="." method="post">
+  {{ form.as_p }}
+
+  <button type="submit">{% trans "Create transaction" %}</button>
+</form>
+
+{% endblock %}
