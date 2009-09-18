@@ -252,10 +252,15 @@ def reject_transactions(request, group, transaction=None, is_admin=False):
             message=request.POST['reason'])
 
     if transaction is not None:
-        return HttpResponseRedirect(reverse('account-summary', kwargs={
-            'group': group.slug,
-            'account': group.account_set.get(owner=request.user).slug
-        }))
+        try:
+            return HttpResponseRedirect(reverse('account-summary', kwargs={
+                'group': group.slug,
+                'account': group.account_set.get(owner=request.user).slug
+            }))
+        except Account.DoesNotExist:
+            return HttpResponseRedirect(reverse('group-summary', kwargs={
+                'group': group.slug,
+            }))
 
     if group.pending_transaction_set.count():
         return HttpResponseRedirect(reverse('approve-transactions',
