@@ -89,7 +89,8 @@ def bill_create_transaction(request, group, bill, is_admin=False):
                 TransactionEntry(account=pay_to, debit=sum))
 
             transaction.set_pending(user=request.user,
-                message=_('Bill #%s: %s') % (bill.pk, bill.description))
+                message=_('Bill #%(id)s: %(description)s') % {
+                    'id':bill.pk, 'description': bill.description})
 
             bill.transaction = transaction
             bill.save()
