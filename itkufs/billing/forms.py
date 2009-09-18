@@ -40,19 +40,26 @@ class BillingLineForm(forms.ModelForm):
 
     def clean(self):
         amount = self.cleaned_data.get('amount', -1)
-        description  = self.cleaned_data.get('description', None)
-        errors = []
+        description  = self.cleaned_data.get('description', '')
 
         if amount > 0 and description.strip():
             return self.cleaned_data
 
-        if not description.strip():
-            errors.append(_('Description missing'))
+        return {}
 
-        if not amount > 0:
-            errors.append(_('Amount missing'))
+    def clean_description(self):
+        description = self.cleaned_data['description']
 
-        raise forms.ValidationError(errors)
+        if description is None or not description.strip():
+            raise forms.ValidationError(_('Description missing'))
+
+        return description.strip()
+
+    def clean_amount(self):
+        if self.cleaned_data['amount'] > 0:
+            return self.cleaned_data['amount']
+
+        raise forms.ValidationError(_('Amount missing'))
 
     class Meta:
         model = BillingLine
@@ -60,3 +67,6 @@ class BillingLineForm(forms.ModelForm):
 
 BillingLineFormSet = inlineformset_factory(Bill, BillingLine,
             extra=3, can_delete=False, form=BillingLineForm)
+
+NewBillingLineFormSet = inlineformset_factory(Bill, BillingLine,
+            extra=15, can_delete=False, form=BillingLineForm)
