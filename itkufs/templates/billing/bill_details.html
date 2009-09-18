@@ -10,7 +10,7 @@
 
 <table class="tabledetails float_left">
   <tr>
-    <th>{% trans "Created" %}</th>
+    <th style="width: 5em">{% trans "Created" %}</th>
     <td style="width: 15em">{{ bill.created|date }} {{ bill.created|time }}</td>
   </tr>
   <tr>
@@ -31,7 +31,7 @@
   </tr>
   <tr>
     <th>{% trans "Description" %}</th>
-    <td>{{ bill.description|linebreaksbr }}</td>
+    <td>{{ bill.description|truncatewords:200|linebreaksbr }}</td>
   </tr>
   <tr>
     <th>{% trans "Action" %}</th>
