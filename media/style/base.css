@@ -239,7 +239,7 @@ td.error {
 }
 
 /* Account/group summary */
-#accountinfo, #groupinfo, #actions, #lists, #statements {
+#accountinfo, #groupinfo, #actions, #lists, #statements, #bills {
         float: left;
         margin-right: 3em;
 }

@@ -33,13 +33,13 @@ def public_lists(request):
 @login_required
 @limit_to_group
 def view_list(request, group, list, is_admin=False):
-    return pdf(request, group, list, is_admin=False)
+    return pdf(group, list)
 
 def view_public_list(request, group, list, is_admin=False):
     if not list.public:
         raise Http404
 
-    return pdf(request, group, list, is_admin)
+    return pdf(group, list)
 
 @login_required
 @limit_to_admin

@@ -22,7 +22,7 @@ FAINT_COLOR = HexColor('#BABDB6')
 ALTERNATE_COLORS = [HexColor('#FFFFFF'),
                     HexColor('#F5F5F5'),]
 
-def pdf(request, group, list, is_admin=False):
+def pdf(group, list):
     """PDF version of list"""
 
     all_accounts = group.account_set.filter(active=True)

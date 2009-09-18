@@ -34,6 +34,7 @@ urlpatterns = patterns('',
 
     (r'^', include('itkufs.common.urls')),
     (r'^', include('itkufs.accounting.urls')),
+    (r'^', include('itkufs.billing.urls')),
     (r'^', include('itkufs.reports.urls')),
 
     # Only reached using test server, but always used
