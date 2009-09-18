@@ -9,13 +9,16 @@ from itkufs.common.decorators import limit_to_admin
 from itkufs.accounting.models import RoleAccount, Account, Transaction, TransactionEntry
 from itkufs.billing.models import Bill
 from itkufs.billing.pdf import pdf
-from itkufs.billing.forms import BillingLineFormSet, BillForm, PaymentForm
+from itkufs.billing.forms import BillingLineFormSet, NewBillingLineFormSet, BillForm, PaymentForm
 
 @login_required
 @limit_to_admin
 def bill_new_edit(request, group, bill=None, is_admin=False):
     if bill is None:
         bill = Bill()
+        LineFormSet = NewBillingLineFormSet
+    else:
+        LineFormSet = BillingLineFormSet
 
     if not bill.is_editable():
         request.user.message_set.create(message=_('This bill can no longer be edited'))
@@ -23,12 +26,12 @@ def bill_new_edit(request, group, bill=None, is_admin=False):
 
     if request.method != 'POST':
         form = BillForm(instance=bill)
-        formset = BillingLineFormSet(instance=bill)
+        formset = LineFormSet(instance=bill)
     else:
         form = BillForm(request.POST, instance=bill)
-        formset = BillingLineFormSet(request.POST, instance=bill)
+        formset = LineFormSet(request.POST, instance=bill)
 
-        if 'more-lines' not in request.POST and form.is_valid() and formset.is_valid():
+        if form.is_valid() and formset.is_valid():
             bill = form.save(commit=False)
             bill.group = group
             bill.save()
