@@ -9,7 +9,7 @@ from itkufs.common.decorators import limit_to_admin
 from itkufs.accounting.models import RoleAccount, Account, Transaction, TransactionEntry
 from itkufs.billing.models import Bill
 from itkufs.billing.pdf import pdf
-from itkufs.billing.forms import BillingLineFormSet, NewBillingLineFormSet, BillForm, PaymentForm
+from itkufs.billing.forms import BillingLineFormSet, NewBillingLineFormSet, BillForm, CreateTransactionForm
 
 @login_required
 @limit_to_admin
@@ -58,12 +58,12 @@ def bill_new_edit(request, group, bill=None, is_admin=False):
 
 @login_required
 @limit_to_admin
-def bill_payment(request, group, bill, is_admin=False):
+def bill_create_transaction(request, group, bill, is_admin=False):
 
     if request.method != 'POST':
-        form = PaymentForm(bill)
+        form = CreateTransactionForm(bill)
     else:
-        form = PaymentForm(bill, request.POST)
+        form = CreateTransactionForm(bill, request.POST)
 
         if form.is_valid():
             bank = Account.objects.get(group=group,
@@ -94,7 +94,7 @@ def bill_payment(request, group, bill, is_admin=False):
             return HttpResponseRedirect(reverse('transaction-details',
                 args=[group.slug,transaction.id]))
 
-    return render_to_response('billing/bill_payment.html',
+    return render_to_response('billing/bill_create_transaction.html',
         {
             'is_admin': is_admin,
             'group': group,

@@ -5,12 +5,12 @@ from django.utils.translation import ugettext as _
 from itkufs.accounting.models import Account, Settlement
 from itkufs.billing.models import Bill, BillingLine
 
-class PaymentForm(forms.Form):
+class CreateTransactionForm(forms.Form):
     settlement = forms.ModelChoiceField(Settlement, required=False)
     charge_to = forms.ModelChoiceField(Account)
 
     def __init__(self, bill, *args, **kwargs):
-        super(PaymentForm, self).__init__(*args, **kwargs)
+        super(CreateTransactionForm, self).__init__(*args, **kwargs)
 
         self.bill = bill
 
@@ -66,7 +66,7 @@ class BillingLineForm(forms.ModelForm):
         fields = ('description', 'amount')
 
 BillingLineFormSet = inlineformset_factory(Bill, BillingLine,
-            extra=3, can_delete=False, form=BillingLineForm)
+            extra=5, can_delete=False, form=BillingLineForm)
 
 NewBillingLineFormSet = inlineformset_factory(Bill, BillingLine,
             extra=15, can_delete=False, form=BillingLineForm)
