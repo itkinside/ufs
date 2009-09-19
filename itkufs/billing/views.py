@@ -59,6 +59,9 @@ def bill_new_edit(request, group, bill=None, is_admin=False):
 @login_required
 @limit_to_admin
 def bill_create_transaction(request, group, bill, is_admin=False):
+    if not bill.is_editable():
+        request.user.message_set.create(message=_('This bill is allready linked to a transaction'))
+        return HttpResponseRedirect(reverse('transaction-details', args=[group.slug, bill.transaction.id]))
 
     if request.method != 'POST':
         form = CreateTransactionForm(bill)
@@ -86,7 +89,8 @@ def bill_create_transaction(request, group, bill, is_admin=False):
                 TransactionEntry(account=pay_to, debit=sum))
 
             transaction.set_pending(user=request.user,
-                message=_('Bill #%s: %s') % (bill.pk, bill.description))
+                message=_('Bill #%(id)s: %(description)s') % {
+                    'id':bill.pk, 'description': bill.description})
 
             bill.transaction = transaction
             bill.save()

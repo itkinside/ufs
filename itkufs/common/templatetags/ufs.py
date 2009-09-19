@@ -4,6 +4,7 @@ from django.template.defaultfilters import stringfilter
 from django.db.models import Q
 
 from itkufs.common.utils import callsign_sorted as ufs_sorted
+from itkufs.accounting.models import Account
 
 register = Library()
 
@@ -76,8 +77,11 @@ class HideNode(Node):
             group_view = True
 
             # Figure out which account we are allowed to show
-            account = Variable('user').resolve(context).account_set. \
-                        get(group=Variable('group').resolve(context))
+            try:
+                account = Variable('user').resolve(context).account_set. \
+                            get(group=Variable('group').resolve(context))
+            except Account.DoesNotExist:
+                account = None
 
         if transaction.entry_count_sql == 2 and not group_view:
             for e in entry_list:

@@ -114,7 +114,7 @@ LOCALE_PATHS = (
 )
 
 # Test runner with code coverage
-TEST_RUNNER = 'itkufs.common.test_runner.test_runner_with_coverage'
+#TEST_RUNNER = 'itkufs.common.test_runner.test_runner_with_coverage'
 COVERAGE_MODULES = (
     'itkufs',
     'itkufs.accounting',

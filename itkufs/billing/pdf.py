@@ -60,7 +60,7 @@ def pdf(group, bill):
         canvas.setFont(font_name, font_size)
         canvas.drawString(margin, height - margin - font_size, _('Bill #%d') % (bill.id))
         canvas.setFont(font_name, font_size - 4)
-        canvas.drawString(margin, height - margin - 2*font_size, bill.created.strftime(_('%Y-%m-%d %H:%M')))
+        canvas.drawString(margin, height - margin - 2*font_size, bill.created.strftime(_('%Y-%m-%d %H:%M').encode('utf-8')))
 
     frames = [
         Frame(0, 0, width/2, height-heading,
