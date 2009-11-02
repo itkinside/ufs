@@ -75,7 +75,9 @@ class Command(BaseCommand):
         emails = []
 
         for account in accounts:
-            if account.is_blocked():
+            if not account.owner.email:
+                self.logger.warning(u'Skipping account %s as it has no email set.', account)
+            elif account.is_blocked():
                 emails.append(self._send_blocked_mail(account))
             elif account.needs_warning():
                 emails.append(self._send_warning_mail(account))
