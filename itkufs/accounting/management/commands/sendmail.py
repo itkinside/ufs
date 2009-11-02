@@ -98,6 +98,7 @@ class Command(BaseCommand):
         return EmailMessage(subject, message, FROM_EMAIL, [to_email], headers=headers)
 
     def _send_blocked_mail(self, account):
+        to_email = account.owner.email
         subject = BLOCK_SUBJECT % {'group': account.group}
         message = BLOCK_MESSAGE % {'balance': account.normal_balance(), 'limit': account.group.block_limit}
         message += SIGNATURE
