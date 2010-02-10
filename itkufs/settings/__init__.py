@@ -98,6 +98,7 @@ INSTALLED_APPS = (
 # Session
 SESSION_COOKIE_NAME = 'itkufs'
 SESSION_COOKIE_SECURE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Authentication
 MAIL_DOMAIN = 'samfundet.no'
