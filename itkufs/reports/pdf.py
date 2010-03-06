@@ -1,4 +1,6 @@
 from datetime import date
+from cStringIO import StringIO
+
 from reportlab.pdfgen import canvas
 from reportlab.platypus.tables import Table, GRID_STYLE
 from reportlab.platypus.flowables import Image
@@ -7,7 +9,6 @@ from reportlab.lib.colors import HexColor
 from reportlab.lib.pagesizes import A4
 
 from django.utils.translation import ugettext as _
-from django.http import HttpResponse
 from django.template.defaultfilters import slugify
 
 from itkufs.common.utils import callsign_sorted as ufs_sorted
@@ -22,8 +23,10 @@ FAINT_COLOR = HexColor('#BABDB6')
 ALTERNATE_COLORS = [HexColor('#FFFFFF'),
                     HexColor('#F5F5F5'),]
 
-def pdf(group, list):
+def pdf(group, list, show_header=True, show_footer=True):
     """PDF version of list"""
+
+    content = StringIO()
 
     all_accounts = group.account_set.filter(active=True)
     extra_accounts = list.extra_accounts.values_list('id', flat=True)
@@ -44,12 +47,6 @@ def pdf(group, list):
             accounts.append(a)
 
     accounts = ufs_sorted(accounts)
-
-    # Create response
-    filename = '%s-%s-%s' % (date.today(), group, list)
-
-    response = HttpResponse(mimetype='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % slugify(filename)
 
     margin = 0.5*cm
 
@@ -73,7 +70,7 @@ def pdf(group, list):
         width, height = A4
 
     # Create canvas for page and set fonts
-    p = canvas.Canvas(response, (width,height))
+    p = canvas.Canvas(content, (width,height))
 
     show_logo = bool(group.logo and group.logo.storage.exists(group.logo.path))
 
@@ -85,6 +82,9 @@ def pdf(group, list):
         logo = Image(group.logo.path, width=logo_height*ratio, height=logo_height)
 
     def draw_header():
+        if not show_header:
+            return
+
         if show_logo:
             logo.drawOn(p, width - margin - logo_height*ratio, height - margin - logo_height)
 
@@ -101,6 +101,9 @@ def pdf(group, list):
         footer.append(list.comment.replace('\n', ' ').replace('\r', ' '))
 
     def draw_footer():
+        if not show_footer:
+            return
+
         p.drawString(margin, margin, u' - '.join(footer))
 
         blacklisted_note = _(u'Blacklisted accounts are marked with: ')
@@ -118,7 +121,7 @@ def pdf(group, list):
         draw_footer()
         p.save()
 
-        return response
+        return content
 
     elif not columns:
         no_columns_message = _(u"Sorry, this list isn't set up correctly, please add some columns.")
@@ -127,7 +130,7 @@ def pdf(group, list):
         draw_footer()
         p.save()
 
-        return response
+        return content
 
     # Store col widths
     col_width = []
@@ -285,4 +288,4 @@ def pdf(group, list):
 
     p.save()
 
-    return response
+    return content
