@@ -58,6 +58,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.RemoteUserMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'itkufs.common.middleware.UfsMiddleware',
@@ -98,6 +99,7 @@ INSTALLED_APPS = (
 # Session
 SESSION_COOKIE_NAME = 'itkufs'
 SESSION_COOKIE_SECURE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Authentication
 MAIL_DOMAIN = 'samfundet.no'

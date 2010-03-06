@@ -92,6 +92,7 @@ class AccountForm(ModelForm):
         kwargs['commit'] = False
 
         account = super(AccountForm, self).save(**kwargs)
+        account.owner = self.cleaned_data['owner']
 
         if not account.slug:
             if account.owner:
