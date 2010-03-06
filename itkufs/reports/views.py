@@ -1,10 +1,11 @@
 from datetime import date
+from subprocess import Popen, PIPE
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.xheaders import populate_xheaders
 from django.forms.models import inlineformset_factory
-from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
+from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
@@ -33,7 +34,14 @@ def public_lists(request):
 @login_required
 @limit_to_group
 def view_list(request, group, list, is_admin=False):
-    return pdf(group, list)
+    content = pdf(group, list)
+
+    filename = '%s-%s-%s' % (date.today(), group, list)
+
+    response = HttpResponse(content.getvalue(), mimetype='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % slugify(filename)
+
+    return response
 
 def view_public_list(request, group, list, is_admin=False):
     if not list.public:
