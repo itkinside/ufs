@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-18 23:20+0200\n"
+"POT-Creation-Date: 2010-03-05 01:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Amund Hov <amundhov@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -305,12 +305,12 @@ msgstr "transaksjonsinnslag"
 msgid "%(account)s: debit %(debit)s, credit %(credit)s"
 msgstr "%(account)s: debet %(debit)s, kredit %(credit)s"
 
-#: accounting/management/commands/sendmail.py:125
+#: accounting/management/commands/sendmail.py:128
 #, python-format
 msgid "Warning limit passed in %(group)s"
 msgstr "Advarselgrensen i gruppen %(group)s er passert"
 
-#: accounting/management/commands/sendmail.py:126
+#: accounting/management/commands/sendmail.py:129
 #, python-format
 msgid ""
 "Your current account balance of %(balance).2f, is below the _warning limit_ %"
@@ -324,12 +324,12 @@ msgstr ""
 "Sett inn mer penger eller ta kontakt med ansvarlig for gruppen for å fikse\n"
 "dette.\n"
 
-#: accounting/management/commands/sendmail.py:132
+#: accounting/management/commands/sendmail.py:135
 #, python-format
 msgid "Block limit passed in %(group)s"
 msgstr "Blokkeringgrensen i gruppen %(group)s er passert"
 
-#: accounting/management/commands/sendmail.py:133
+#: accounting/management/commands/sendmail.py:136
 #, python-format
 msgid ""
 "Your current account balance of %(balance).2f, is below the _block limit_ %"
@@ -386,12 +386,12 @@ msgstr "La til transaksjon: %s"
 msgid "No pending transactions found."
 msgstr "Ingen ventende transaksjoner funnet."
 
-#: accounting/views/edit.py:277
+#: accounting/views/edit.py:282
 #, python-format
 msgid "Transaction %d can't be changed."
 msgstr "Transaksjon %d kan ikke endres"
 
-#: accounting/views/edit.py:353
+#: accounting/views/edit.py:358
 msgid "Your transaction has been added"
 msgstr "Transaksjonen er opprettet"
 
@@ -477,11 +477,11 @@ msgstr "Brukere kan bare ha en konto for hver gruppe"
 msgid "Group accounts can not have owners."
 msgstr "Gruppekontoer kan ikke har eiere."
 
-#: common/forms.py:129
+#: common/forms.py:130
 msgid "The group must have at least one admin"
 msgstr "Gruppen må ha minst en administrator"
 
-#: common/forms.py:132
+#: common/forms.py:133
 msgid "You are not allowed to remove your own admin privileges"
 msgstr "Det er ikke mulig å fjerne dine egne administratorrettigheter."
 
@@ -651,11 +651,11 @@ msgstr "Medlemskontoer"
 msgid "Current year's net income"
 msgstr "Nettoinntekt inneværende år"
 
-#: settings/__init__.py:109
+#: settings/__init__.py:111
 msgid "English"
 msgstr "Engelsk"
 
-#: settings/__init__.py:110
+#: settings/__init__.py:112
 msgid "Norwegian"
 msgstr "Norsk"
 

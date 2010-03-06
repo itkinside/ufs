@@ -78,7 +78,7 @@ def pdf(group, bill):
 
     data = [[_('Description'), _('Amount')]]
     total = 0
-    
+
     for line in bill.billingline_set.all():
         data.append([line.description, '%.2f' % line.amount])
         total += line.amount
