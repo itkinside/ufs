@@ -43,6 +43,22 @@ def view_list(request, group, list, is_admin=False):
 
     return response
 
+@login_required
+@limit_to_group
+def view_list_preview(request, group, list, is_admin=False):
+    content = pdf(group, list, show_header=False, show_footer=False)
+
+    p = Popen(["gs", "-q", "-dSAFER", "-dBATCH", "-dNOPAUSE", "-r25",
+        "-dGraphicsAlphaBits=4", "-dTextAlphaBits=4", "-sDEVICE=png16m",
+        "-sOutputFile=-", "-"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+
+    stdout, stderr = p.communicate(content.getvalue())
+
+    if p.returncode != 0:
+        raise Exception(stdout)
+
+    return HttpResponse(stdout, mimetype='image/png')
+
 def view_public_list(request, group, list, is_admin=False):
     if not list.public:
         raise Http404

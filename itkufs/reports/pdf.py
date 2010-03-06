@@ -23,7 +23,7 @@ FAINT_COLOR = HexColor('#BABDB6')
 ALTERNATE_COLORS = [HexColor('#FFFFFF'),
                     HexColor('#F5F5F5'),]
 
-def pdf(group, list):
+def pdf(group, list, show_header=True, show_footer=True):
     """PDF version of list"""
 
     content = StringIO()
@@ -82,6 +82,9 @@ def pdf(group, list):
         logo = Image(group.logo.path, width=logo_height*ratio, height=logo_height)
 
     def draw_header():
+        if not show_header:
+            return
+
         if show_logo:
             logo.drawOn(p, width - margin - logo_height*ratio, height - margin - logo_height)
 
@@ -98,6 +101,9 @@ def pdf(group, list):
         footer.append(list.comment.replace('\n', ' ').replace('\r', ' '))
 
     def draw_footer():
+        if not show_footer:
+            return
+
         p.drawString(margin, margin, u' - '.join(footer))
 
         blacklisted_note = _(u'Blacklisted accounts are marked with: ')

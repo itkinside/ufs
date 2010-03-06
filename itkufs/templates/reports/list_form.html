@@ -65,6 +65,10 @@ all active accounts in the group is included. {% endblocktrans %}</p>
 
 <button type="submit">{% trans "Save list" %}</button>
 
+<p>
+    <img alt="Preview" src="{% url view-list-preview group.slug,list.slug %}" />
+</p>
+
 </form>
 
 {% endblock %}
