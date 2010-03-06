@@ -22,7 +22,7 @@ var Transaction = {
 
     tbody.select('.balance').each(
       function(td) {
-        Transaction.balance[td.id] = Number(td.innerHTML) * 100;
+        Transaction.balance[td.id] = Number(td.innerHTML).toFixed(2) * 100;
       }
     );
     Transaction.update();
@@ -34,13 +34,13 @@ var Transaction = {
 
     $$('#newtransaction tbody input').each(
       function(input) {
-        var value = input.value * 100;
+        var value = input.value;
 
         if (isNaN(value) || value < 0) {
           input.up().addClassName("error");
 	  error = true;
         } else if (value != '')  {
-          value = Number(value);
+          value = Number(value).toFixed(2) * 100;
 
           if (input.id.match(/debit/)) {
             debit += value;
@@ -57,8 +57,8 @@ var Transaction = {
     $$('#newtransaction tbody .balance').each(
       function(td) {
         var diff = 0;
-	var d_value = Number(td.next().down('input').value) * 100;
-	var c_value = Number(td.next().next().down('input').value) * 100;
+	var d_value = Number(td.next().down('input').value).toFixed(2) * 100;
+	var c_value = Number(td.next().next().down('input').value).toFixed(2) * 100;
 
 	if (!isNaN(d_value) && d_value > 0)
 	  diff += d_value;
@@ -68,13 +68,13 @@ var Transaction = {
         if(diff) {
           if (td.previous().className == 'As' ||
               td.previous().className == 'Ex') {
-            td.update((Transaction.balance[td.id]  + diff)/100+'*');
+            td.update(((Transaction.balance[td.id]  + diff)/100).toFixed(2)+'*');
           } else {
-            td.update((Transaction.balance[td.id]  - diff)/100+'*');
+            td.update(((Transaction.balance[td.id]  - diff)/100).toFixed(2)+'*');
     	  }
         } else {
-          td.update(Transaction.balance[td.id]/100);
-	    }
+          td.update((Transaction.balance[td.id]/100).toFixed(2));
+        }
     }
     );
 

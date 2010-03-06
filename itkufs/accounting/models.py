@@ -196,7 +196,7 @@ class Account(models.Model):
     def normal_balance(self):
         """ Returns account balance, but multiplies by -1 if the account is
         of type liability, equity or expense."""
-        
+
         balance = self.balance()
         if balance == 0 or ( self.type == 'As' or self.type == 'Ex' ):
             return balance
