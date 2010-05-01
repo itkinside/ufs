@@ -63,7 +63,14 @@ def view_public_list(request, group, list, is_admin=False):
     if not list.public:
         raise Http404
 
-    return pdf(group, list)
+    content = pdf(group, list)
+
+    filename = '%s-%s-%s' % (date.today(), group, list)
+
+    response = HttpResponse(content.getvalue(), mimetype='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % slugify(filename)
+
+    return response
 
 @login_required
 @limit_to_admin
