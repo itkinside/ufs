@@ -1,5 +1,7 @@
 *.mo
+*.pyc
 *.sqlite
+*.swp
 djangologging/
 itkufs/settings/local.py
 media/logos/*
