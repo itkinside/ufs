@@ -23,20 +23,27 @@ How to install
 
 This is a rather rough guide on how to install µFS.
 
-1. Get all the dependencies listed above. Some/most can be installed using
+#. Checkout latest source from https://github.com/itkinside/ufs/
+
+#. Get all the dependencies listed above. Some/most can be installed using
    ``pip`` and the bundled ``requirements.txt`` file::
 
     pip install -r requirements.txt
 
-2. Checkout latest source from https://github.com/itkinside/ufs/
-3. Compile translation files (.po -> .mo) using::
+#. Compile translation files (.po -> .mo) using::
 
+    cd itkufs/
     django-admin.py compilemessages
 
-4. Add a ``itkufs/settings/local.py`` file which sets the ``DATABASE_*`` and
+#. Add a ``itkufs/settings/local.py`` file which sets the ``DATABASE_*`` and
    ``SECRET_KEY`` options.
-5. Setup your web server. WSGI-files for production and development are
-   found in the ``apache`` dir.
+
+#. Either:
+
+   - Setup your web server. WSGI-files for production and
+     development are found in the ``apache`` dir.
+
+   - Use Django's builtin development web server.
 
 
 How to setup
@@ -44,17 +51,38 @@ How to setup
 
 After the installation is completed, do the following:
 
-1. Run ./manage.py syncdb to create database tables and create a
-   superuser.
-2. Go to e.g. http://127.0.0.1:8000/admin/ and log in using the newly
+#. To create database tables and create a superuser::
+
+    cd itkufs/
+    PYTHONPATH=.. python manage.py syncdb
+
+#. If you use Django's builtin development server, start it::
+
+    PYTHONPATH=.. python manage.py runserver --settings=itkufs.settings.dev
+
+   Using the ``dev`` settings file turns off the requirement for SSL and
+   turns on ``django-debug-toolbar``.
+
+#. Go to e.g. http://127.0.0.1:8000/admin/ and log in using the newly
    created superuser.
-3. Create a group, and add the superuser as admin of the group.
-4. Go to e.g. http://127.0.0.1:8000/ and use µFS.
-5. Profit!
+
+#. Create a group, and add the superuser as admin of the group.
+
+#. Go to e.g. http://127.0.0.1:8000/ and use µFS.
+
+#. Profit!
 
 Additional groups must be added from the Django admin, just like the first
 one. All other operations should be possible to do from the µFS interface.
 
+
+How to run tests
+----------------
+
+To run the unit tests::
+
+    cd itkufs/
+    PYTHONPATH=.. python manage.py test
 
 ..
     vim: ft=rst tw=74 ai
