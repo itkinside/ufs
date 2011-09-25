@@ -41,23 +41,14 @@ at our computer club. The rest of it was created because we could ;-)
 What are the plans for µFS?
 ---------------------------
 
-Take a look at docs/roadmap.rst for our plans.
+Take a look at ``docs/roadmap.rst`` for our plans.
 
 
 How is µFS licensed?
 --------------------
 
 ITK µFS is licensed under the GNU General Public License version 2. See
-LICENSE for the full license.
-
-
-What format is this README written in?
---------------------------------------
-
-This README is written in reStructuredText. Please write all documentation
-for this project in the `rST format`_.
-
-.. _rST format: http://docutils.sourceforge.net/docs/user/rst/quickref.html
+the file ``LICENSE`` for the full license.
 
 
 ..
