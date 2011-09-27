@@ -68,7 +68,7 @@ class Command(BaseCommand):
             sys.exit(1)
 
     def _get_accounts(self, group):
-        accounts = group.account_set.filter(active=True, owner__isnull=False)
+        accounts = group.account_set.filter(owner__isnull=False)
         return accounts.select_related('group', 'owner')
 
     def _build_emails(self, accounts):
