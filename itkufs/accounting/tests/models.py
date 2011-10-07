@@ -274,10 +274,6 @@ class AccountTestCase(unittest.TestCase):
         # User account after debit of 100
         self.assertEqual(int(account2.balance()), 200)
 
-        # User account balance yesterday, i.e. before any transactions
-        self.assertEqual(int(account1.balance(
-            date=(datetime.date.today() - datetime.timedelta(1)))), 0)
-
         account1 = Account.objects.get(id=account1.id)
         account2 = Account.objects.get(id=account2.id)
 

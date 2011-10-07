@@ -186,14 +186,12 @@ class Account(models.Model):
             raise ValueError('Slug cannot be empty.')
         super(Account, self).save(*args, **kwargs)
 
-    def balance(self, date=None):
-        if not date and hasattr(self, 'confirmed_balance_sql'):
+    def balance(self):
+        if hasattr(self, 'confirmed_balance_sql'):
             return self.confirmed_balance_sql or 0
         else:
             entries = self.transactionentry_set.filter(
                 transaction__state=Transaction.COMMITTED_STATE)
-            if date is not None:
-                entries = entries.filter(transaction__date__lte=date )
             balance = 0
             for e in entries:
                 balance += e.debit
