@@ -33,7 +33,7 @@
     {% if group.account_number %}
         <tr>
             <th>{% trans "Account number" %}</th>
-            <td>{{ group.account_number }}</td>
+            <td>{{ group.get_account_number_display }}</td>
         </tr>
     {% endif %}
 </table>

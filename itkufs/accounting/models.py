@@ -39,6 +39,10 @@ class Group(models.Model):
             'group': self.slug,
         })
 
+    def get_account_number_display(self):
+        n = self.account_number
+        return '.'.join([n[:4], n[4:6], n[6:]])
+
     def save(self, *args, **kwargs):
         if not len(self.slug):
             raise ValueError('Slug cannot be empty.')

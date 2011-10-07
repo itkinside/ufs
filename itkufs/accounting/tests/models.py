@@ -86,6 +86,12 @@ class GroupTestCase(unittest.TestCase):
         self.group.slug = ''
         self.assertRaises(ValueError, self.group.save)
 
+    def testGetAccountNumberDisplay(self):
+        """Check that account numbers are formated correctly."""
+
+        self.group.account_number = '12345678901'
+        self.assertEqual('1234.56.78901', self.group.get_account_number_display())
+
     def testUserAccountSet(self):
         """Checks that get_user_account_set returns all user accounts"""
 
