@@ -110,7 +110,7 @@ class AccountManager(models.Manager):
     def get_query_set(self):
         return super(AccountManager, self).get_query_set().extra(
             select={
-            'balance_sql':
+            'confirmed_balance_sql':
                 """
                 SELECT sum(debit) - sum(credit)
                 FROM accounting_transactionentry AS te
@@ -180,8 +180,8 @@ class Account(models.Model):
         super(Account, self).save(*args, **kwargs)
 
     def balance(self, date=None):
-        if not date and hasattr(self, 'balance_sql'):
-            return self.balance_sql or 0
+        if not date and hasattr(self, 'confirmed_balance_sql'):
+            return self.confirmed_balance_sql or 0
         else:
             entries = self.transactionentry_set.filter(
                 transaction__state=Transaction.COMMITTED_STATE)

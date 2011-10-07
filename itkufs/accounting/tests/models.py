@@ -282,9 +282,9 @@ class AccountTestCase(unittest.TestCase):
         account2 = Account.objects.get(id=account2.id)
 
         # User account after credit of 100
-        self.assertEqual(int(account1.balance_sql), -200)
+        self.assertEqual(int(account1.confirmed_balance_sql), -200)
         # User account after debit of 100
-        self.assertEqual(int(account2.balance_sql), 200)
+        self.assertEqual(int(account2.confirmed_balance_sql), 200)
 
     ### Transaction set tests
     # Please keep in sync with Group's set tests
