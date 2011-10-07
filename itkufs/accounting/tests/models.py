@@ -211,12 +211,17 @@ class AccountTestCase(unittest.TestCase):
             'Com': Transaction(group=self.group),
             'Rej': Transaction(group=self.group),
         }
-        for transaction in self.transactions.values():
+        values = {
+            'Pen': 150,
+            'Com': 200,
+            'Rej': 100,
+        }
+        for state, transaction in self.transactions.items():
             transaction.save()
             transaction.entry_set.add(
-                TransactionEntry(account=self.accounts[0], credit=100))
+                TransactionEntry(account=self.accounts[0], credit=values[state]))
             transaction.entry_set.add(
-                TransactionEntry(account=self.accounts[1], debit=100))
+                TransactionEntry(account=self.accounts[1], debit=values[state]))
             transaction.set_pending(user=self.users[0])
 
         self.transactions['Undef'] = Transaction(group=self.group)
@@ -265,9 +270,9 @@ class AccountTestCase(unittest.TestCase):
         account2 = self.accounts[1]
 
         # User account after credit of 100
-        self.assertEqual(int(account1.balance()), -100)
+        self.assertEqual(int(account1.balance()), -200)
         # User account after debit of 100
-        self.assertEqual(int(account2.balance()), 100)
+        self.assertEqual(int(account2.balance()), 200)
 
         # User account balance yesterday, i.e. before any transactions
         self.assertEqual(int(account1.balance(
@@ -277,9 +282,9 @@ class AccountTestCase(unittest.TestCase):
         account2 = Account.objects.get(id=account2.id)
 
         # User account after credit of 100
-        self.assertEqual(int(account1.balance_sql), -100)
+        self.assertEqual(int(account1.balance_sql), -200)
         # User account after debit of 100
-        self.assertEqual(int(account2.balance_sql), 100)
+        self.assertEqual(int(account2.balance_sql), 200)
 
     ### Transaction set tests
     # Please keep in sync with Group's set tests
