@@ -76,6 +76,13 @@
             <td>{{ group.block_limit|default_if_none:_("None") }}</td>
         {% endif %}
     </tr>
+
+    {% if group.account_number %}
+        <tr>
+            <th>{% trans "Account number" %}</th>
+            <td>{{ group.account_number }}</td>
+        </tr>
+    {% endif %}
 </table>
 </div>
 
