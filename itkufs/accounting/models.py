@@ -117,6 +117,13 @@ class AccountManager(models.Manager):
                 JOIN accounting_transaction AS t ON (te.transaction_id = t.id)
                 WHERE account_id = accounting_account.id AND t.state = '%s'
                 """ % Transaction.COMMITTED_STATE,
+            'future_balance_sql':
+                """
+                SELECT sum(debit) - sum(credit)
+                FROM accounting_transactionentry AS te
+                JOIN accounting_transaction AS t ON (te.transaction_id = t.id)
+                WHERE account_id = accounting_account.id AND t.state != '%s'
+                """ % Transaction.REJECTED_STATE,
             'group_block_limit_sql':
                 """
                 SELECT accounting_group.block_limit
