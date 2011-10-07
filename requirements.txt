@@ -1,6 +1,9 @@
 # Web framework
 Django >= 1.2, < 1.3
 
+# Database migrations
+south
+
 # PDF generation
 reportlab
 
