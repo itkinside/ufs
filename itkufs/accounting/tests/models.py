@@ -261,16 +261,25 @@ class AccountTestCase(unittest.TestCase):
         # TODO: Add more transactions at different days and check balance
         # inbetween using date kwarg
 
-        # FIXME: self.balance_sql does not seem to be available for unit tests
+        account1 = self.accounts[0]
+        account2 = self.accounts[1]
 
         # User account after credit of 100
-        self.assertEqual(int(self.accounts[0].balance()), -100)
+        self.assertEqual(int(account1.balance()), -100)
         # User account after debit of 100
-        self.assertEqual(int(self.accounts[1].balance()), 100)
+        self.assertEqual(int(account2.balance()), 100)
+
         # User account balance yesterday, i.e. before any transactions
-        self.assertEqual(int(self.accounts[0].balance(
+        self.assertEqual(int(account1.balance(
             date=(datetime.date.today() - datetime.timedelta(1)))), 0)
 
+        account1 = Account.objects.get(id=account1.id)
+        account2 = Account.objects.get(id=account2.id)
+
+        # User account after credit of 100
+        self.assertEqual(int(account1.balance_sql), -100)
+        # User account after debit of 100
+        self.assertEqual(int(account2.balance_sql), 100)
 
     ### Transaction set tests
     # Please keep in sync with Group's set tests
