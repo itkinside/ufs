@@ -4,3 +4,4 @@
 DATABASE_ENGINE = 'sqlite3'
 DATABASE_NAME = 'itkufs.sqlite'
 SECRET_KEY = '123changemetosomethingmorerandom456789'
+SESSION_COOKIE_SECURE = False
