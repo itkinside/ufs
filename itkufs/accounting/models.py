@@ -106,30 +106,33 @@ class Group(models.Model):
         get_rejected_transaction_set, None, None)
 
 
+CONFIRMED_BALANCE_SQL = """
+SELECT sum(debit) - sum(credit)
+    FROM accounting_transactionentry AS te
+    JOIN accounting_transaction AS t ON (te.transaction_id = t.id)
+WHERE account_id = accounting_account.id AND t.state = 'Com'
+"""
+
+FUTURE_BALANCE_SQL = """
+SELECT sum(debit) - sum(credit)
+    FROM accounting_transactionentry AS te
+    JOIN accounting_transaction AS t ON (te.transaction_id = t.id)
+WHERE account_id = accounting_account.id AND t.state != 'Rej'
+"""
+
+GROUP_BLOCK_LIMIT_SQL = """
+SELECT accounting_group.block_limit
+    FROM accounting_group
+WHERE accounting_group.id = accounting_account.group_id
+"""
+
 class AccountManager(models.Manager):
     def get_query_set(self):
         return super(AccountManager, self).get_query_set().extra(
             select={
-            'confirmed_balance_sql':
-                """
-                SELECT sum(debit) - sum(credit)
-                FROM accounting_transactionentry AS te
-                JOIN accounting_transaction AS t ON (te.transaction_id = t.id)
-                WHERE account_id = accounting_account.id AND t.state = '%s'
-                """ % Transaction.COMMITTED_STATE,
-            'future_balance_sql':
-                """
-                SELECT sum(debit) - sum(credit)
-                FROM accounting_transactionentry AS te
-                JOIN accounting_transaction AS t ON (te.transaction_id = t.id)
-                WHERE account_id = accounting_account.id AND t.state != '%s'
-                """ % Transaction.REJECTED_STATE,
-            'group_block_limit_sql':
-                """
-                SELECT accounting_group.block_limit
-                FROM accounting_group
-                WHERE accounting_group.id = accounting_account.group_id
-                """,
+            'confirmed_balance_sql': CONFIRMED_BALANCE_SQL,
+            'future_balance_sql': FUTURE_BALANCE_SQL,
+            'group_block_limit_sql': GROUP_BLOCK_LIMIT_SQL,
             }
         )
 
