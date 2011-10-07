@@ -20,9 +20,11 @@ class Group(models.Model):
         help_text=_('Limit for blacklisting user, leave blank for no limit.'))
     logo = models.ImageField(upload_to='logos', blank=True, help_text=_('A small image that will be added to lists.'))
 
-    # FIXME remove? (given that comments on lists cover this use case)
     email = models.EmailField(blank=True,
         help_text=_('Contact address for group.'))
+
+    account_number = models.CharField(blank=True, max_length=11,
+        help_text=_('Bank account for group.'))
 
     class Meta:
         ordering = ('name',)
