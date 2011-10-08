@@ -275,7 +275,10 @@ def pdf(group, list, show_header=True, show_footer=True):
 
         # Draw on canvas
         draw_header()
-        t.drawOn(p, margin, height - t_height - margin - head_height)
+        try:
+            t.drawOn(p, margin, height - t_height - margin - head_height)
+        except IndexError:
+            raise Exception(data) # Attempt to get enough data about infrequent bug
         draw_footer()
 
         if rest:
