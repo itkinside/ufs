@@ -46,9 +46,9 @@ def view_list(request, group, list, is_admin=False):
 @login_required
 @limit_to_group
 def view_list_preview(request, group, list, is_admin=False):
-    content = pdf(group, list, show_header=False, show_footer=False)
+    content = pdf(group, list, show_header=True, show_footer=True)
 
-    p = Popen(["gs", "-q", "-dSAFER", "-dBATCH", "-dNOPAUSE", "-r25",
+    p = Popen(["gs", "-q", "-dSAFER", "-dBATCH", "-dNOPAUSE", "-r40",
         "-dGraphicsAlphaBits=4", "-dTextAlphaBits=4", "-sDEVICE=png16m",
         "-sOutputFile=-", "-"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
