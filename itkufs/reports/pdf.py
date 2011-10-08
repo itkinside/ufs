@@ -97,6 +97,8 @@ def pdf(group, list, show_header=True, show_footer=True):
     footer = []
     if group.email:
         footer.append(group.email)
+    if group.account_number:
+        footer.append(group.get_account_number_display())
     if list.comment.strip():
         footer.append(list.comment.replace('\n', ' ').replace('\r', ' '))
 
