@@ -11,8 +11,6 @@ from reportlab.lib.pagesizes import A4
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import slugify
 
-from itkufs.common.utils import callsign_sorted as ufs_sorted
-
 
 BORDER_COLOR = HexColor('#555753')
 BLACKLISTED_COLOR = HexColor('#000000')
@@ -28,25 +26,8 @@ def pdf(group, list, show_header=True, show_footer=True):
 
     content = StringIO()
 
-    all_accounts = group.account_set.filter(active=True)
-    extra_accounts = list.extra_accounts.values_list('id', flat=True)
-
-    if list.account_width:
-        all_accounts = all_accounts.order_by('name', 'owner__username')
-    else:
-        all_accounts = all_accounts.order_by('short_name', 'owner__username')
-
     columns = list.column_set.all()
-
-    accounts = []
-    # Get accounts to show
-    for a in all_accounts:
-        if list.add_active_accounts and a.is_user_account():
-            accounts.append(a)
-        elif a.id in extra_accounts:
-            accounts.append(a)
-
-    accounts = ufs_sorted(accounts)
+    accounts = list.accounts()
 
     margin = 0.5*cm
 

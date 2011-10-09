@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from itkufs.accounting.models import Group, Account
+from itkufs.common.utils import callsign_sorted
 
 
 class ListManager(models.Manager):
@@ -79,6 +80,19 @@ class List(models.Model):
         if self.balance_width:
             count += 1
         return int(count)
+
+    def accounts(self):
+        all_accounts = Account.objects.filter(active=True, group=self.group_id)
+        extra_accounts = self.extra_accounts.values_list('id', flat=True)
+
+        accounts = []
+        for a in all_accounts:
+            if self.add_active_accounts and a.is_user_account():
+                accounts.append(a)
+            elif a.id in extra_accounts:
+                accounts.append(a)
+
+        return callsign_sorted(accounts)
 
 
 class ListColumn(models.Model):
