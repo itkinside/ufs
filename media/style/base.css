@@ -203,6 +203,12 @@ td.error {
 .admin a:hover {
 	color: #A40000 !important;
 }
+.admin li {
+	font-size: 77%;
+}
+ul.admin {
+	margin-top: 0;
+}
 .ok, .committed {
 	color: #4e9a06;
 }

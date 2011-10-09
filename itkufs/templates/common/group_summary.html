@@ -73,10 +73,11 @@
     <li>
         <a href="{% url view-list group.slug,list.slug %}">{{ list.name }}</a>
         {% if is_admin %}
-            <span class="admin">
-            (<a class="admin" href="{% url edit-list group.slug,list.slug %}">{{ _("edit") }}</a>,
-            <a class="admin" href="{% url delete-list group.slug,list.slug %}">{{ _("delete") }}</a>)
-            </span>
+            <ul class="admin">
+                <li><a href="{% url transaction-from-list group.slug,list.slug %}">{{ _("Create transction") }}</a></li>
+                <li><a href="{% url edit-list group.slug,list.slug %}">{{ _("Edit") }}</a></li>
+                <li><a href="{% url delete-list group.slug,list.slug %}">{{ _("Delete") }}</a></li>
+            </ul>
         {% endif %}
     </li>
     {% endfor %}
