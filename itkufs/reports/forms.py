@@ -1,12 +1,11 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
-from django.forms.models import ModelForm
-from django.forms.forms import Form
 
 from itkufs.reports.models import *
 
-class ListForm(ModelForm):
+
+class ListForm(forms.ModelForm):
     class Meta:
         model = List
         exclude = ('slug', 'group')
@@ -48,7 +47,8 @@ class ListForm(ModelForm):
 
         return list
 
-class ColumnForm(ModelForm):
+
+class ColumnForm(forms.ModelForm):
     name = forms.CharField(max_length=100, required=False)
     width = forms.IntegerField(min_value=0, required=False, widget=forms.TextInput(attrs={'size': 4, 'class': 'number'}))
 
