@@ -1,0 +1,53 @@
+{% extends "reports/base.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Create transaction from list" %}
+    - {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    &raquo;  <a href="{% url view-list group.slug,list.slug %}">
+        {{ list.name }}</a>
+    &raquo; <a href="{% url edit-list group.slug,list.slug %}">
+        {% trans "Create transaction from list" %}</a>
+{% endblock %}
+
+{% block header %}
+    {{ block.super }}
+    &ndash; {% trans "Create transaction from list" %}
+{% endblock %}
+
+{% block content %}
+
+<form method="post" action="" id="neweditlist">
+
+<table class="tablelist">
+    <tr>
+        <th>{% trans "Accounts" %}</th>
+        {% for field in form.columns %}
+            <th{% if field.errors %} class="error"{% endif %}>{{ field.label }} <br /> {{ field }}</th>
+        {% endfor %}
+    </tr>
+    {% for account, fields in form.accounts %}
+        <tr class="{% cycle evenrow,oddrow %}">
+            <td>{{ account.name }}</td>
+            {% for field in fields %}
+                <td{% if field.errors %} class="error"{% endif %}>{{ field }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
+<p>
+    {% trans "Credit list to" %}: {{ form.credit_account }}
+</p>
+
+<p>
+    <button type="submit">{% trans "Create transaction" %}</button>
+</p>
+
+</form>
+
+{% endblock %}

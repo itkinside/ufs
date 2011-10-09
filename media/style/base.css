@@ -188,6 +188,9 @@ td {
 	background: transparent;
 	color: #a40000 !important;
 }
+th.error {
+	background: #F0F0F0;
+}
 td.error {
 	background: #FDD;
 }
