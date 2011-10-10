@@ -75,8 +75,8 @@
         {% if is_admin %}
             <ul class="admin">
                 <li><a href="{% url transaction-from-list group.slug,list.slug %}">{{ _("Create transction") }}</a></li>
-                <li><a href="{% url edit-list group.slug,list.slug %}">{{ _("Edit") }}</a></li>
-                <li><a href="{% url delete-list group.slug,list.slug %}">{{ _("Delete") }}</a></li>
+                <li><a href="{% url edit-list group.slug,list.slug %}">{{ _("Edit list") }}</a></li>
+                <li><a href="{% url delete-list group.slug,list.slug %}">{{ _("Delete list") }}</a></li>
             </ul>
         {% endif %}
     </li>
