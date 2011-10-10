@@ -52,6 +52,13 @@ class ListTransactionForm(forms.Form):
                 boundfields.append(BoundField(self, field, name))
             yield (account, boundfields)
 
+    def clean(self):
+        for account, fields in self.account_fields:
+            for name, field in fields:
+                if self.cleaned_data.get(name, 0) > 0:
+                    return
+        raise forms.ValidationError(_('Please fill in at least one account entry.'))
+
     def transaction_entries(self):
         if not self.is_valid():
             return None
@@ -66,9 +73,12 @@ class ListTransactionForm(forms.Form):
                 count = self.cleaned_data.get(name, 0) or 0
                 price = self.cleaned_data['-'.join(name.split('-')[:-1])]
                 amount += count * price
-            total += amount
-            entries.append(TransactionEntry(account=account, debit=amount))
-        entries.append(TransactionEntry(account=credit_account, credit=total))
+            if amount > 0:
+                total += amount
+                entries.append(TransactionEntry(account=account, debit=amount))
+
+        if total > 0:
+            entries.append(TransactionEntry(account=credit_account, credit=total))
 
         return entries
 
