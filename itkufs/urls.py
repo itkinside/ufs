@@ -18,7 +18,7 @@ if 'itkufs.reports' in settings.INSTALLED_APPS:
 
 urlpatterns = patterns('',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    (r'^admin/(.*)', admin.site.root),
+    (r'^admin/(.*)', include(admin.site.urls)),
     (r'^databrowse/(.*)',
         user_passes_test(lambda u: u.is_superuser)(databrowse.site.root)),
 
