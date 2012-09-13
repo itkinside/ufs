@@ -29,6 +29,13 @@
             <td>{{ group.block_limit|default_if_none:_("None") }}</td>
         {% endif %}
     </tr>
+
+    {% if group.account_number %}
+        <tr>
+            <th>{% trans "Account number" %}</th>
+            <td>{{ group.get_account_number_display }}</td>
+        </tr>
+    {% endif %}
 </table>
 </div>
 
@@ -66,10 +73,11 @@
     <li>
         <a href="{% url view-list group.slug,list.slug %}">{{ list.name }}</a>
         {% if is_admin %}
-            <span class="admin">
-            (<a class="admin" href="{% url edit-list group.slug,list.slug %}">{{ _("edit") }}</a>,
-            <a class="admin" href="{% url delete-list group.slug,list.slug %}">{{ _("delete") }}</a>)
-            </span>
+            <ul class="admin">
+                <li><a href="{% url transaction-from-list group.slug,list.slug %}">{{ _("Create transction") }}</a></li>
+                <li><a href="{% url edit-list group.slug,list.slug %}">{{ _("Edit list") }}</a></li>
+                <li><a href="{% url delete-list group.slug,list.slug %}">{{ _("Delete list") }}</a></li>
+            </ul>
         {% endif %}
     </li>
     {% endfor %}

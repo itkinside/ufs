@@ -86,6 +86,12 @@ class GroupTestCase(unittest.TestCase):
         self.group.slug = ''
         self.assertRaises(ValueError, self.group.save)
 
+    def testGetAccountNumberDisplay(self):
+        """Check that account numbers are formated correctly."""
+
+        self.group.account_number = '12345678901'
+        self.assertEqual('1234.56.78901', self.group.get_account_number_display())
+
     def testUserAccountSet(self):
         """Checks that get_user_account_set returns all user accounts"""
 
@@ -211,12 +217,17 @@ class AccountTestCase(unittest.TestCase):
             'Com': Transaction(group=self.group),
             'Rej': Transaction(group=self.group),
         }
-        for transaction in self.transactions.values():
+        values = {
+            'Pen': 150,
+            'Com': 200,
+            'Rej': 100,
+        }
+        for state, transaction in self.transactions.items():
             transaction.save()
             transaction.entry_set.add(
-                TransactionEntry(account=self.accounts[0], credit=100))
+                TransactionEntry(account=self.accounts[0], credit=values[state]))
             transaction.entry_set.add(
-                TransactionEntry(account=self.accounts[1], debit=100))
+                TransactionEntry(account=self.accounts[1], debit=values[state]))
             transaction.set_pending(user=self.users[0])
 
         self.transactions['Undef'] = Transaction(group=self.group)
@@ -261,16 +272,26 @@ class AccountTestCase(unittest.TestCase):
         # TODO: Add more transactions at different days and check balance
         # inbetween using date kwarg
 
-        # FIXME: self.balance_sql does not seem to be available for unit tests
+        account1 = self.accounts[0]
+        account2 = self.accounts[1]
 
         # User account after credit of 100
-        self.assertEqual(int(self.accounts[0].balance()), -100)
+        self.assertEqual(int(account1.balance()), -200)
         # User account after debit of 100
-        self.assertEqual(int(self.accounts[1].balance()), 100)
-        # User account balance yesterday, i.e. before any transactions
-        self.assertEqual(int(self.accounts[0].balance(
-            date=(datetime.date.today() - datetime.timedelta(1)))), 0)
+        self.assertEqual(int(account2.balance()), 200)
 
+        account1 = Account.objects.get(id=account1.id)
+        account2 = Account.objects.get(id=account2.id)
+
+        # User account after credit of 200
+        self.assertEqual(int(account1.confirmed_balance_sql), -200)
+        # User account after debit of 200
+        self.assertEqual(int(account2.confirmed_balance_sql), 200)
+
+        # User account after credit of 350
+        self.assertEqual(int(account1.future_balance_sql), -350)
+        # User account after debit of 350
+        self.assertEqual(int(account2.future_balance_sql), 350)
 
     ### Transaction set tests
     # Please keep in sync with Group's set tests

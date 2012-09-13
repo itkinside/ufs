@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib import auth
 
+from itkufs.common.utils import verify_account_number
 from itkufs.accounting.models import Group, Account, RoleAccount
 
 class AccountForm(ModelForm):
@@ -113,6 +114,7 @@ class AccountForm(ModelForm):
 
 class GroupForm(ModelForm):
     delete_logo = forms.BooleanField(required=False)
+    account_number = forms.CharField(required=False)
 
     class Meta:
         model = Group
@@ -136,6 +138,11 @@ class GroupForm(ModelForm):
             raise forms.ValidationError(errors)
 
         return self.cleaned_data['admins']
+
+    def clean_account_number(self):
+        if not verify_account_number(self.cleaned_data['account_number']):
+            raise forms.ValidationError(_('Incorrect account number.'))
+        return self.cleaned_data['account_number']
 
     def save(self, *args, **kwargs):
         original_commit = kwargs.pop('commit', True)

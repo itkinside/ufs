@@ -1,7 +1,7 @@
 import datetime
 
 from django.conf import settings
-from django.db import models, transaction
+from django.db import connection, models, transaction
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_unicode
@@ -20,9 +20,11 @@ class Group(models.Model):
         help_text=_('Limit for blacklisting user, leave blank for no limit.'))
     logo = models.ImageField(upload_to='logos', blank=True, help_text=_('A small image that will be added to lists.'))
 
-    # FIXME remove? (given that comments on lists cover this use case)
     email = models.EmailField(blank=True,
         help_text=_('Contact address for group.'))
+
+    account_number = models.CharField(blank=True, max_length=11,
+        help_text=_('Bank account for group.'))
 
     class Meta:
         ordering = ('name',)
@@ -36,6 +38,10 @@ class Group(models.Model):
         return reverse('group-summary', kwargs={
             'group': self.slug,
         })
+
+    def get_account_number_display(self):
+        n = self.account_number
+        return '.'.join([n[:4], n[4:6], n[6:]])
 
     def save(self, *args, **kwargs):
         if not len(self.slug):
@@ -106,23 +112,33 @@ class Group(models.Model):
         get_rejected_transaction_set, None, None)
 
 
+CONFIRMED_BALANCE_SQL = """
+SELECT sum(debit) - sum(credit)
+    FROM accounting_transactionentry AS te
+    JOIN accounting_transaction AS t ON (te.transaction_id = t.id)
+WHERE account_id = %s AND t.state = 'Com'
+"""
+
+FUTURE_BALANCE_SQL = """
+SELECT sum(debit) - sum(credit)
+    FROM accounting_transactionentry AS te
+    JOIN accounting_transaction AS t ON (te.transaction_id = t.id)
+WHERE account_id = %s AND t.state != 'Rej'
+"""
+
+GROUP_BLOCK_LIMIT_SQL = """
+SELECT accounting_group.block_limit
+    FROM accounting_group
+WHERE accounting_group.id = accounting_account.group_id
+"""
+
 class AccountManager(models.Manager):
     def get_query_set(self):
         return super(AccountManager, self).get_query_set().extra(
             select={
-            'balance_sql':
-                """
-                SELECT sum(debit) - sum(credit)
-                FROM accounting_transactionentry AS te
-                JOIN accounting_transaction AS t ON (te.transaction_id = t.id)
-                WHERE account_id = accounting_account.id AND t.state = '%s'
-                """ % Transaction.COMMITTED_STATE,
-            'group_block_limit_sql':
-                """
-                SELECT accounting_group.block_limit
-                FROM accounting_group
-                WHERE accounting_group.id = accounting_account.group_id
-                """,
+            'confirmed_balance_sql': CONFIRMED_BALANCE_SQL % 'accounting_account.id',
+            'future_balance_sql': FUTURE_BALANCE_SQL % 'accounting_account.id',
+            'group_block_limit_sql': GROUP_BLOCK_LIMIT_SQL,
             }
         )
 
@@ -179,19 +195,13 @@ class Account(models.Model):
             raise ValueError('Slug cannot be empty.')
         super(Account, self).save(*args, **kwargs)
 
-    def balance(self, date=None):
-        if not date and hasattr(self, 'balance_sql'):
-            return self.balance_sql or 0
+    def balance(self):
+        if hasattr(self, 'confirmed_balance_sql'):
+            return self.confirmed_balance_sql or 0
         else:
-            entries = self.transactionentry_set.filter(
-                transaction__state=Transaction.COMMITTED_STATE)
-            if date is not None:
-                entries = entries.filter(transaction__date__lte=date )
-            balance = 0
-            for e in entries:
-                balance += e.debit
-                balance -= e.credit
-            return balance
+            cursor = connection.cursor()
+            cursor.execute(CONFIRMED_BALANCE_SQL, [self.id])
+            return cursor.fetchone()[0]
 
     def normal_balance(self):
         """ Returns account balance, but multiplies by -1 if the account is

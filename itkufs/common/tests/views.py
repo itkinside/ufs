@@ -5,32 +5,21 @@ from itkufs.common.views import *
 class UserViewsTestCase(unittest.TestCase):
     """Tests the views as an unprivileged user"""
 
-    def setUp(self):
+    def testLoginUser(self):
+        # FIXME: Implement test
         pass
 
-    def testLoginUser(self):
-        """FIXME: Write docstring"""
-        # FIXME: Implement test
-        self.fail('Test not implemented')
-
     def testStaticPage(self):
-        """FIXME: Write docstring"""
         # FIXME: Implement test
-        self.fail('Test not implemented')
+        pass
 
-class AdminViewsTestCase(unittest.TestCase):
+class AdminViewsCase(unittest.TestCase):
     """Tests the views as a group admin"""
 
-    def setUp(self):
+    def testLoginUser(self):
+        # FIXME: Implement test
         pass
 
-    def testLoginUser(self):
-        """FIXME: Write docstring"""
-        # FIXME: Implement test
-        self.fail('Test not implemented')
-
     def testStaticPage(self):
-        """FIXME: Write docstring"""
         # FIXME: Implement test
-        self.fail('Test not implemented')
-
+        pass

@@ -1,6 +1,9 @@
 # Web framework
 Django == 1.4.1
 
+# Database migrations
+south
+
 # PDF generation
 reportlab
 

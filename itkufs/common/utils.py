@@ -3,6 +3,22 @@ import locale
 
 CALLSIGN_RE = re.compile(r'^[A-Z]+[0-9][A-Z0-9]*[A-Z]$')
 
+
+def verify_account_number(num):
+    '''Check that account is has correct check digit.
+
+       http://no.wikipedia.org/wiki/Kontonummer
+       http://no.wikipedia.org/wiki/MOD11
+    '''
+    num = re.sub('[ .-]', '', str(num))
+    if len(num) != 11:
+        return False
+
+    crosssum = 0
+    for a, b in zip(num[:10], '5432765432'):
+        crosssum += int(a) * int(b)
+    return num[10] == str(11 - crosssum % 11)
+
 def callsign_sorted(objects):
     current_locale = locale.getlocale()
 

@@ -46,9 +46,9 @@ def view_list(request, group, list, is_admin=False):
 @login_required
 @limit_to_group
 def view_list_preview(request, group, list, is_admin=False):
-    content = pdf(group, list, show_header=False, show_footer=False)
+    content = pdf(group, list, show_header=True, show_footer=True)
 
-    p = Popen(["gs", "-q", "-dSAFER", "-dBATCH", "-dNOPAUSE", "-r25",
+    p = Popen(["gs", "-q", "-dSAFER", "-dBATCH", "-dNOPAUSE", "-r40",
         "-dGraphicsAlphaBits=4", "-dTextAlphaBits=4", "-sDEVICE=png16m",
         "-sOutputFile=-", "-"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
@@ -146,6 +146,41 @@ def delete_list(request, group, list, is_admin=False):
             'is_admin': is_admin,
             'group': group,
             'list': list,
+        },
+        context_instance=RequestContext(request))
+
+
+@login_required
+@limit_to_admin
+@db_transaction.commit_on_success
+def transaction_from_list(request, group, list, is_admin=False):
+    """Enter list"""
+
+    form = ListTransactionForm(list, request.POST or None)
+
+    if form.is_valid():
+        transaction = Transaction(group=list.group)
+        transaction.save()
+
+        for entry in form.transaction_entries():
+            entry.transaction = transaction
+            entry.save()
+
+        transaction.save()
+        transaction.set_pending(user=request.user, message=_('Created from list: %s') % list.slug)
+
+        return HttpResponseRedirect(reverse('edit-transaction',
+            kwargs={
+                'group': group.slug,
+                'transaction': transaction.id,
+            }))
+
+    return render_to_response('reports/list_transaction_form.html',
+        {
+            'is_admin': is_admin,
+            'group': group,
+            'list': list,
+            'form': form,
         },
         context_instance=RequestContext(request))
 

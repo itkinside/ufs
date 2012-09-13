@@ -12,3 +12,4 @@ DATABASES = {
 }
 
 SECRET_KEY = '123changemetosomethingmorerandom456789'
+SESSION_COOKIE_SECURE = False

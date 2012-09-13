@@ -14,6 +14,8 @@ urlpatterns = patterns('',
         new_edit_list, name='edit-list'),
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<list>[0-9a-z_-]+)/delete/$',
         delete_list, name='delete-list'),
+    url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<list>[0-9a-z_-]+)/transaction/$',
+        transaction_from_list, name='transaction-from-list'),
 
     ### Statements
     url(r'^(?P<group>[0-9a-z_-]+)/balance/$',

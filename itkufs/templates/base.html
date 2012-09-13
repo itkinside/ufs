@@ -137,6 +137,12 @@
 <a href="mailto:{{ group.email }}">{{ group.email }}</a>
 {% endif %}
 
+{% if group.account_number %}
+<span>&bull;</span>
+{% trans "Account number:" %}
+{{ group.get_account_number_display }}
+{% endif %}
+
 <span>&bull;</span>
 <form action="{% url django.views.i18n.set_language %}" method="post">
 <div style="display: inline;">

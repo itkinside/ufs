@@ -188,6 +188,9 @@ td {
 	background: transparent;
 	color: #a40000 !important;
 }
+th.error {
+	background: #F0F0F0;
+}
 td.error {
 	background: #FDD;
 }
@@ -199,6 +202,12 @@ td.error {
 }
 .admin a:hover {
 	color: #A40000 !important;
+}
+.admin li {
+	font-size: 77%;
+}
+ul.admin {
+	margin-top: 0;
 }
 .ok, .committed {
 	color: #4e9a06;
