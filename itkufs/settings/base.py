@@ -61,6 +61,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.RemoteUserMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'itkufs.common.middleware.UfsMiddleware',
 )
 
