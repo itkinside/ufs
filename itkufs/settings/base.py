@@ -58,6 +58,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.RemoteUserMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'itkufs.common.middleware.UfsMiddleware',
 )
 
@@ -75,6 +76,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
 )
 
 INSTALLED_APPS = (
@@ -87,6 +89,7 @@ INSTALLED_APPS = (
     'django.contrib.databrowse',
     'django.contrib.sites',
     'django.contrib.flatpages',
+    'django.contrib.messages',
     'itkufs.common',
     'itkufs.accounting',
     'itkufs.reports',
