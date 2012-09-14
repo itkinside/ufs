@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.core.xheaders import populate_xheaders
 from django.http import HttpResponseForbidden
 from django.utils.translation import ugettext as _
@@ -31,13 +32,12 @@ def account_summary(request, group, account,
 
         # Warn owner of account about a low balance
         if account.is_blocked():
-            request.user.message_set.create(
-                message=_('The account balance is below the block limit,'
-                + ' please contact the group admin or deposit enough to'
-                + ' pass the limit.'))
+            messages.error(request, 'The account balance is below the block'
+                + ' limit, please contact the group admin or deposit enough to'
+                + ' pass the limit.')
         elif account.needs_warning():
-            request.user.message_set.create(
-                message=_('The account balance is below the warning limit.'))
+            messages.warning(request, 'The account balance is below the'
+                + ' warning limit.')
 
     response = object_detail(request, Account.objects.select_related(), account.id,
         template_name='common/account_summary.html',
