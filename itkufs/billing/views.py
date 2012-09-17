@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
+from django.contrib import messages
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -21,7 +22,7 @@ def bill_new_edit(request, group, bill=None, is_admin=False):
         LineFormSet = BillingLineFormSet
 
     if not bill.is_editable():
-        request.user.message_set.create(message=_('This bill can no longer be edited'))
+        messages.warning(request, _('This bill can no longer be edited.'))
         return HttpResponseRedirect(reverse('bill-details', args=[group.slug, bill.id]))
 
     if request.method != 'POST':
@@ -60,7 +61,7 @@ def bill_new_edit(request, group, bill=None, is_admin=False):
 @limit_to_admin
 def bill_create_transaction(request, group, bill, is_admin=False):
     if not bill.is_editable():
-        request.user.message_set.create(message=_('This bill is allready linked to a transaction'))
+        messages.info(request, _('This bill is already linked to a transaction.'))
         return HttpResponseRedirect(reverse('transaction-details', args=[group.slug, bill.transaction.id]))
 
     if request.method != 'POST':
@@ -133,7 +134,7 @@ def bill_details(request, group, bill, is_admin=False):
 @limit_to_admin
 def bill_delete(request, group, bill, is_admin=False):
     if request.method == 'POST':
-        request.user.message_set.create(message=_('Bill #%d deleted') % bill.id)
+        messages.info(request, _('Bill #%d deleted.') % bill.id)
         bill.delete()
 
         return HttpResponseRedirect(reverse('bill-list', args=[group.slug]))

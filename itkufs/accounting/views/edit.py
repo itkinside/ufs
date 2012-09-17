@@ -4,6 +4,7 @@ from django.http import HttpResponseForbidden, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
+from django.contrib import messages
 from django.db import transaction as db_transaction
 
 from itkufs.common.utils import callsign_sorted as ufs_sorted
@@ -126,17 +127,14 @@ def transfer(request, group, account=None, transfer_type=None,
             if amount <= account.normal_balance() - (group.block_limit or 0):
                 transaction.set_committed(user=request.user)
             else:
-                request.user.message_set.create(message=_(
-                      'Your transaction has been added,'
+                messages.info(request, _('Your transaction has been added, '
                     + 'but your group admin has to commit it.'))
 
 
         else:
             return HttpResponseForbidden(_('Forbidden if not group admin.'))
 
-        request.user.message_set.create(
-            # FIXME better message, also reflect the message above
-            message=_('Added transaction: %s') % transaction)
+        messages.success(request, _('Added transaction: %s') % transaction)
 
         return HttpResponseRedirect(reverse('account-summary',
             args=[account.group.slug, account.slug]))
@@ -200,7 +198,7 @@ def approve_transactions(request, group, page='1', is_admin=False):
             context_instance=RequestContext(request))
 
     if not transactions:
-        request.user.message_set.create(message=_('No pending transactions found.'))
+        messages.info(request, _('No pending transactions found.'))
         return HttpResponseRedirect(reverse('group-summary', args=[group.slug]))
 
 
@@ -278,8 +276,8 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
     if transaction is None:
         transaction = Transaction(group=group)
     elif not transaction.is_editable():
-        request.user.message_set.create(
-            message= _("Transaction %d can't be changed." % transaction.id))
+        messages.error(request, _('Transaction %d can\'t be changed.' %
+          transaction.id))
 
         db_transaction.commit()
 
@@ -354,8 +352,7 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
 
             transaction.set_pending(user=request.user, message=details)
 
-            request.user.message_set.create(
-                message= _('Your transaction has been added'))
+            messages.success(request, _('Your transaction has been added.'))
 
         except InvalidTransaction, e:
             errors.append(e)

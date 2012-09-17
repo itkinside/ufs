@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
+from django.contrib import messages
 
 from itkufs.common.decorators import limit_to_admin
 from itkufs.common.forms import GroupForm, AccountForm, RoleAccountForm
@@ -35,8 +36,7 @@ def edit_group(request, group, is_admin=False):
                 group.logo = ''
                 group.save()
 
-            request.user.message_set.create(
-                message=_('Group successfully updated'))
+            messages.success(request, _('Group successfully updated.'))
 
             return HttpResponseRedirect(reverse('group-summary',
                 args=(group.slug,)))
@@ -61,8 +61,7 @@ def activate_account(request, group, account=None,
             account.active = True
             account.save()
 
-            request.user.message_set.create(
-                message=_('Account successfully activated.'))
+            messages.success(request, _('Account successfully activated.'))
 
     return HttpResponseRedirect(reverse('account-summary',
         args=(group.slug, account.slug)))
@@ -82,12 +81,11 @@ def new_edit_account(request, group, account=None,
         if form.is_valid():
             if account is not None:
                 form.save()
-                request.user.message_set.create(
-                    message=_('Account successfully updated'))
+                messages.success(request, _('Account successfully updated.'))
             else:
                 account = form.save(group=group)
-                request.user.message_set.create(
-                    message=_('Account successfully created'))
+                messages.success(request, _('Account successfully created.'))
+
             return HttpResponseRedirect(reverse('account-summary',
                 args=(group.slug, account.slug)))
     else:

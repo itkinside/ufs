@@ -1,6 +1,7 @@
 import datetime
 
 from django.conf import settings
+from django.contrib import messages
 from django.db import connection, models, transaction
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -501,9 +502,8 @@ class Transaction(models.Model):
             self.save()
 
             for user in User.objects.filter(account__transactionentry__transaction=self):
-                user.message_set.create(
-                    message=_('Transaction %(id)d regarding your account '
-                        + 'has been rejected.') % {'id': self.id})
+                messages.error(request, _('Transaction %(id)d regarding your '
+                    + 'account has been rejected.') % {'id': self.id})
         else:
             raise InvalidTransaction(
                 'Could not set transaction as rejected')

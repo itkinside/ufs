@@ -2,6 +2,7 @@ from datetime import date
 from subprocess import Popen, PIPE
 
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.core.xheaders import populate_xheaders
 from django.forms.models import inlineformset_factory
@@ -135,7 +136,8 @@ def delete_list(request, group, list, is_admin=False):
     if request.method == 'POST':
         # FIXME maybe a bit naive here?
         list.delete()
-        request.user.message_set.create(message=_('List deleted'))
+        messages.info(request, _('List deleted.'))
+
         return HttpResponseRedirect(reverse('group-summary',
             kwargs={
                 'group': group.slug,
