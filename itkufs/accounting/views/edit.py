@@ -365,16 +365,17 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
             url = reverse('group-summary', args=(group.slug,))
             return HttpResponseRedirect(url)
 
-    db_transaction.rollback()
-    return render_to_response('accounting/transaction_form.html',
-        {
-            'is_admin': is_admin,
-            'group': group,
-            'settlement_form': settlement_form,
-            'group_forms': group_forms,
-            'user_forms': user_forms,
-            'errors': errors,
-            'transaction': transaction,
-        },
-        context_instance=RequestContext(request))
-
+    try:
+        return render_to_response('accounting/transaction_form.html',
+            {
+                'is_admin': is_admin,
+                'group': group,
+                'settlement_form': settlement_form,
+                'group_forms': group_forms,
+                'user_forms': user_forms,
+                'errors': errors,
+                'transaction': transaction,
+            },
+            context_instance=RequestContext(request))
+    finally:
+        db_transaction.rollback()
