@@ -7,6 +7,9 @@ south
 # PDF generation
 reportlab
 
+# Image handling
+Pillow
+
 # Development
 coverage
 django-debug-toolbar
