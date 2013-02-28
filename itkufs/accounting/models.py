@@ -500,10 +500,6 @@ class Transaction(models.Model):
             self.state = self.REJECTED_STATE
             self.last_modified = datetime.datetime.now()
             self.save()
-
-            for user in User.objects.filter(account__transactionentry__transaction=self):
-                messages.error(request, _('Transaction %(id)d regarding your '
-                    + 'account has been rejected.') % {'id': self.id})
         else:
             raise InvalidTransaction(
                 'Could not set transaction as rejected')
