@@ -4,18 +4,18 @@
 Dependencies for production use
 -------------------------------
 
-- Django (>= 1.2)
-- reportlab -- for PDF reports
+See the ``requirements.txt`` file for all Python dependencies, in
+addition, you may need:
+
 - gettext -- for translations
-- A database supported by Django, e.g. PostgreSQL, including Python
-  adapter, e.g. python-psycopg2
+- A database supported by Django, e.g. PostgreSQL
+- A Python database adapter, e.g. python-psycopg2
 
 
 Additional dependencies for development
 ---------------------------------------
 
-- coverage -- for checking test coverage
-- django-debug-toolbar
+See the ``requirements.txt`` file.
 
 
 How to install
@@ -32,11 +32,11 @@ This is a rather rough guide on how to install µFS.
 
 #. Compile translation files (.po -> .mo) using::
 
-    cd itkufs/
-    django-admin.py compilemessages
+    python manage.py compilemessages
 
 #. Add a ``itkufs/settings/local.py`` file which sets the ``DATABASE_*`` and
-   ``SECRET_KEY`` options.
+   ``SECRET_KEY`` options. You can find a template at
+   ``itkufs/settings/local.py.template``.
 
 #. Either:
 
@@ -53,12 +53,11 @@ After the installation is completed, do the following:
 
 #. To create database tables and create a superuser::
 
-    cd itkufs/
-    PYTHONPATH=.. python manage.py syncdb
+    python manage.py syncdb --migrate
 
 #. If you use Django's builtin development server, start it::
 
-    PYTHONPATH=.. python manage.py runserver --settings=itkufs.settings.dev
+    python manage.py runserver --settings=itkufs.settings.dev
 
    Using the ``dev`` settings file turns off the requirement for SSL and
    turns on ``django-debug-toolbar``.
@@ -81,8 +80,7 @@ How to run tests
 
 To run the unit tests::
 
-    cd itkufs/
-    PYTHONPATH=.. python manage.py test
+    python manage.py test
 
 ..
     vim: ft=rst tw=74 ai
