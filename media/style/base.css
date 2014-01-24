@@ -274,3 +274,10 @@ ul.admin {
 		padding: 0;
 	}
 }
+
+/* Google Chart API */
+#chart_div {
+    width: 850px;
+    height: 300px;
+    clear: both;
+}

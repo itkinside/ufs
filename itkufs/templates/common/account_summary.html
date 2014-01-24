@@ -132,4 +132,28 @@
     {% endif %}
 {% endif %}
 
+{% if is_owner or is_admin %}
+<div id="chart_div"></div>
+<script type="text/javascript">
+    function drawChart () {
+        var data = google.visualization.arrayToDataTable([
+            ['Tid', 'Saldo'],
+            {{ balance_data|safe }}
+        ]);
+
+        var options = {
+            legend: {
+                position: 'none'
+            }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawChart);
+</script>
+{% endif %}
+
 {% endblock %}

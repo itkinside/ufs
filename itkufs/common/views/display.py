@@ -20,6 +20,25 @@ def group_summary(request, group, is_admin=False):
     populate_xheaders(request, response, Group, group.id)
     return response
 
+
+def _generate_gchart_data(dataset):
+    # aggregate data
+    agg = 0.0
+    history = []
+    for i in range(len(dataset)):
+        saldo = float(dataset[i].saldo)
+        history.append({
+            'date': dataset[i].date,
+            'balance': saldo + agg
+        })
+        agg += saldo
+
+    # should probably use a JSON serializer...
+    items = ['[\'%s\', %.2f]' % (ds['date'], ds['balance'])
+        for ds in history]
+    return ',\n'.join(items)
+
+
 @login_required
 @limit_to_owner
 def account_summary(request, group, account,
@@ -46,6 +65,7 @@ def account_summary(request, group, account,
             'is_admin': is_admin,
             'is_owner': is_owner,
             'group': group,
+            'balance_data': _generate_gchart_data(account.get_balance_history_set())
         })
     populate_xheaders(request, response, Account, account.id)
     return response

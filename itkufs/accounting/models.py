@@ -112,6 +112,12 @@ class Group(models.Model):
     rejected_transaction_set = property(
         get_rejected_transaction_set, None, None)
 
+    def get_balance_history_set(self):
+        """Returns historical balance data for this group"""
+        raise NotImplementedError("Only supported for accounts, not groups")
+    balance_history_set = property(
+        get_balance_history_set, None, None)
+
 
 CONFIRMED_BALANCE_SQL = """
 SELECT sum(debit) - sum(credit)
@@ -131,6 +137,16 @@ GROUP_BLOCK_LIMIT_SQL = """
 SELECT accounting_group.block_limit
     FROM accounting_group
 WHERE accounting_group.id = accounting_account.group_id
+"""
+
+ACCOUNT_BALANCE_HISTORY_SQL = """
+SELECT account.id, short_name AS user, date, sum(credit)-sum(debit) AS saldo
+    FROM accounting_account account
+    JOIN accounting_transactionentry AS entry ON account.id = entry.account_id
+    JOIN accounting_transaction trans ON entry.transaction_id = trans.id
+WHERE account.id = %s AND state='Com'
+GROUP BY account.id, short_name, date
+ORDER BY date
 """
 
 class AccountManager(models.Manager):
@@ -274,6 +290,12 @@ class Account(models.Model):
             state=Transaction.REJECTED_STATE)
     rejected_transaction_set = property(
         get_rejected_transaction_set, None, None)
+
+    def get_balance_history_set(self):
+        """Returns historical balance data for this user"""
+        return list(Account.objects.raw(ACCOUNT_BALANCE_HISTORY_SQL % (self.id,)))
+    balance_history_set = property(
+        get_balance_history_set, None, None)
 
 
 class RoleAccount(models.Model):
