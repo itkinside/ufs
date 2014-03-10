@@ -140,12 +140,12 @@ WHERE accounting_group.id = accounting_account.group_id
 """
 
 ACCOUNT_BALANCE_HISTORY_SQL = """
-SELECT account.id, short_name AS user, date, sum(credit)-sum(debit) AS saldo
+SELECT account.id, short_name AS user, last_modified as date, sum(credit)-sum(debit) AS saldo
     FROM accounting_account account
     JOIN accounting_transactionentry AS entry ON account.id = entry.account_id
     JOIN accounting_transaction trans ON entry.transaction_id = trans.id
 WHERE account.id = %s AND state='Com'
-GROUP BY account.id, short_name, date
+GROUP BY account.id, short_name, last_modified 
 ORDER BY date
 """
 
