@@ -140,7 +140,7 @@ WHERE accounting_group.id = accounting_account.group_id
 """
 
 ACCOUNT_BALANCE_HISTORY_SQL = """
-SELECT account.id, short_name AS user, last_modified as date, sum(credit)-sum(debit) AS saldo
+SELECT account.id, short_name AS user, extract(epoch from last_modified)*1000 as date, sum(credit)-sum(debit) AS saldo
     FROM accounting_account account
     JOIN accounting_transactionentry AS entry ON account.id = entry.account_id
     JOIN accounting_transaction trans ON entry.transaction_id = trans.id

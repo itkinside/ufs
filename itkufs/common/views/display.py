@@ -34,7 +34,7 @@ def _generate_gchart_data(dataset):
         agg += saldo
 
     # should probably use a JSON serializer...
-    items = ['[\'%s\', %.2f]' % (ds['date'], ds['balance'])
+    items = ['[ new Date(%s), %.2f]' % (ds['date'], ds['balance'])
         for ds in history]
     return ',\n'.join(items)
 
