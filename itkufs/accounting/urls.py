@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 
 from itkufs.accounting.views.edit import *
 from itkufs.accounting.views.display import *
