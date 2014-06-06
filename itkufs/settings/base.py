@@ -118,25 +118,5 @@ LOCALE_PATHS = (
     PROJECT_BASE + 'itkufs/locale/',
 )
 
-# Test runner with code coverage
-#TEST_RUNNER = 'itkufs.common.test_runner.test_runner_with_coverage'
-COVERAGE_MODULES = (
-    'itkufs',
-    'itkufs.accounting',
-    'itkufs.accounting.admin',
-    'itkufs.accounting.forms',
-    'itkufs.accounting.models',
-    'itkufs.accounting.urls',
-    'itkufs.accounting.views',
-    'itkufs.accounting.views.display',
-    'itkufs.accounting.views.edit',
-    'itkufs.reports',
-    'itkufs.reports.admin',
-    'itkufs.reports.forms',
-    'itkufs.reports.models',
-    'itkufs.reports.urls',
-    'itkufs.reports.views',
-)
-
 # Development version numbering
 BZR_BRANCH_DIR = PROJECT_BASE
