@@ -1,26 +1,20 @@
 from django.conf.urls import *
 from django.conf import settings
 from django.contrib import admin
-from django.contrib import databrowse
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 
 from itkufs import admin
-databrowse.site.register(User)
 
 if 'itkufs.accounting' in settings.INSTALLED_APPS:
     import itkufs.accounting.admin
-    import itkufs.accounting.data
 
 if 'itkufs.reports' in settings.INSTALLED_APPS:
     import itkufs.reports.admin
-    import itkufs.reports.data
 
 urlpatterns = patterns('',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
-    (r'^databrowse/(.*)',
-        user_passes_test(lambda u: u.is_superuser)(databrowse.site.root)),
 
     # View for magic i18n translation of js
     url(r'^i18n/js/$', 'django.views.i18n.javascript_catalog',
