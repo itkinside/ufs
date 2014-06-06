@@ -117,6 +117,3 @@ LANGUAGES = (
 LOCALE_PATHS = (
     PROJECT_BASE + 'itkufs/locale/',
 )
-
-# Development version numbering
-BZR_BRANCH_DIR = PROJECT_BASE
