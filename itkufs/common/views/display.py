@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.xheaders import populate_xheaders
 from django.shortcuts import render_to_response
 
 from itkufs.common.decorators import limit_to_group, limit_to_owner
@@ -12,13 +11,11 @@ from itkufs.accounting.models import Account, Group
 def group_summary(request, group, is_admin=False):
     """Show group summary"""
 
-    response = render_to_response('common/group_summary.html', {
+    return render_to_response('common/group_summary.html', {
         'is_admin': is_admin,
         'all': 'all' in request.GET,
         'group': Group.objects.select_related().get(id=group.id),
     })
-    populate_xheaders(request, response, Group, group.id)
-    return response
 
 
 @login_required
@@ -42,7 +39,7 @@ def account_summary(request, group, account, is_admin=False, is_owner=False):
                 request,
                 'The account balance is below the warning limit.')
 
-    response = render_to_response('common/account_summary.html', {
+    return render_to_response('common/account_summary.html', {
         'is_admin': is_admin,
         'is_owner': is_owner,
         'group': group,
@@ -50,8 +47,6 @@ def account_summary(request, group, account, is_admin=False, is_owner=False):
         'balance_data': _generate_gchart_data(
             account.get_balance_history_set()),
     })
-    populate_xheaders(request, response, Account, account.id)
-    return response
 
 
 def _generate_gchart_data(dataset):

@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.core.xheaders import populate_xheaders
 from django.http import HttpResponseForbidden
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
@@ -7,7 +6,7 @@ from django.views.generic import DetailView, ListView
 
 from itkufs.common.decorators import limit_to_group
 from itkufs.accounting.models import (
-    Account, Group, Settlement, Transaction, TransactionEntry)
+    Account, Settlement, Transaction, TransactionEntry)
 
 
 class SettlementList(ListView):
@@ -20,13 +19,7 @@ class SettlementList(ListView):
     def dispatch(self, request, *args, **kwargs):
         self.is_admin = kwargs.get('is_admin', False)
         self.group = kwargs['group']
-
-        response = super(SettlementList, self).dispatch(
-            request, *args, **kwargs)
-
-        populate_xheaders(request, response, Group, self.group.id)
-
-        return response
+        return super(SettlementList, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         return self.group.settlement_set.select_related()
@@ -48,13 +41,8 @@ class SettlementDetails(DetailView):
         self.is_admin = kwargs.get('is_admin', False)
         self.group = kwargs['group']
         self.settlement = kwargs['settlement']
-
-        response = super(SettlementDetails, self).dispatch(
+        return super(SettlementDetails, self).dispatch(
             request, *args, **kwargs)
-
-        populate_xheaders(request, response, Settlement, self.settlement.id)
-
-        return response
 
     def get_object(self, queryset=None):
         return self.settlement
@@ -84,12 +72,8 @@ class TransactionList(ListView):
             return HttpResponseForbidden(
                 _('Forbidden if not account owner or group admin.'))
 
-        response = super(TransactionList, self).dispatch(
+        return super(TransactionList, self).dispatch(
             request, *args, **kwargs)
-
-        populate_xheaders(request, response, Group, self.group.id)
-
-        return response
 
     def get_queryset(self):
         if self.account:
@@ -134,12 +118,8 @@ class TransactionDetails(DetailView):
                 'The transaction may only be viewed by group admins or a '
                 'party of the transaction.'))
 
-        response = super(TransactionDetails, self).dispatch(
+        return super(TransactionDetails, self).dispatch(
             request, *args, **kwargs)
-
-        populate_xheaders(request, response, Transaction, self.transaction.id)
-
-        return response
 
     def get_object(self, queryset=None):
         return self.transaction
