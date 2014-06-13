@@ -1,12 +1,12 @@
 import datetime
 
 from django.conf import settings
-from django.contrib import messages
-from django.db import connection, models, transaction
+from django.db import connection, models, transaction as db_transaction
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _, ugettext
+
 
 class Group(models.Model):
     name = models.CharField(_('name'), max_length=100)
@@ -159,6 +159,7 @@ class AccountManager(models.Manager):
             'group_block_limit_sql': GROUP_BLOCK_LIMIT_SQL,
             }
         )
+
 
 class Account(models.Model):
     ASSET_ACCOUNT = 'As'          # Eiendeler/aktiva
@@ -443,9 +444,7 @@ class Transaction(models.Model):
             'transaction': self.id,
         })
 
-    # FIXME is this the right place to have commit on succes? Shouldn't it be
-    # higher up in a view etc?
-    @transaction.commit_on_success
+    @db_transaction.atomic
     def save(self, *args, **kwargs):
         debit_sum = 0
         credit_sum = 0
@@ -621,6 +620,7 @@ class TransactionLog(models.Model):
             return 'pending'
         else:
             return 'committed'
+
 
 class TransactionEntry(models.Model):
     transaction = models.ForeignKey(Transaction, verbose_name=_('transaction'),

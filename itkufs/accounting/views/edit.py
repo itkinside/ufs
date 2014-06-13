@@ -55,7 +55,7 @@ def new_edit_settlement(request, group, settlement=None, is_admin=False):
 
 @login_required
 @limit_to_owner
-@db_transaction.commit_on_success
+@db_transaction.atomic
 def transfer(request, group, account=None, transfer_type=None,
     is_admin=False, is_owner=False):
     """Deposit, withdraw or transfer money"""

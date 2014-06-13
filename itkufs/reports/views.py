@@ -75,7 +75,7 @@ def view_public_list(request, group, list, is_admin=False):
 
 @login_required
 @limit_to_admin
-@db_transaction.commit_on_success
+@db_transaction.atomic
 def new_edit_list(request, group, list=None, is_admin=False):
     """Create new or edit existing list"""
 
@@ -130,7 +130,7 @@ def new_edit_list(request, group, list=None, is_admin=False):
 
 @login_required
 @limit_to_admin
-@db_transaction.commit_on_success
+@db_transaction.atomic
 def delete_list(request, group, list, is_admin=False):
     """Delete list"""
 
@@ -155,7 +155,7 @@ def delete_list(request, group, list, is_admin=False):
 
 @login_required
 @limit_to_admin
-@db_transaction.commit_on_success
+@db_transaction.atomic
 def transaction_from_list(request, group, list, is_admin=False):
     """Enter list"""
 
