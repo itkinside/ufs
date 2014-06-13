@@ -56,8 +56,9 @@ class List(models.Model):
     comment = models.TextField(_('comment'), blank=True, help_text=_('Comment shown at bottom on first page'))
 
     double = models.BooleanField(
-        help_text=_('Use two rows per account'), default=False)
-    ignore_blocked = models.BooleanField(_('ignore blocked'),
+        default=False, help_text=_('Use two rows per account'))
+    ignore_blocked = models.BooleanField(
+        _('ignore blocked'), default=False,
         help_text=_("Don't exclude blocked accounts"))
 
     class Meta:
