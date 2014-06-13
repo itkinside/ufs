@@ -1,5 +1,5 @@
 # Web framework
-Django >= 1.5, < 1.6
+Django >= 1.6, < 1.7
 
 # Database migrations
 south
