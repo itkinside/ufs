@@ -1,13 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.core.xheaders import populate_xheaders
-from django.db.models import Q
 from django.http import HttpResponseForbidden
 from django.utils.translation import ugettext as _
 from django.views.generic.list_detail import object_list, object_detail
 
-from itkufs.common.decorators import limit_to_group, limit_to_admin
-from itkufs.accounting.models import *
-from itkufs.accounting.forms import *
+from itkufs.common.decorators import limit_to_group
+from itkufs.accounting.models import (
+    Account, Group, Settlement, Transaction, TransactionEntry)
+
 
 @login_required
 @limit_to_group
@@ -15,7 +15,8 @@ def settlement_list(request, group, page='1', is_admin=False):
     """Show paginated list of settlements"""
 
     # Pass on to generic view
-    response = object_list(request,
+    response = object_list(
+        request,
         group.settlement_set.select_related(),
         paginate_by=20,
         page=page,
@@ -29,13 +30,15 @@ def settlement_list(request, group, page='1', is_admin=False):
     populate_xheaders(request, response, Group, group.id)
     return response
 
+
 @login_required
 @limit_to_group
 def settlement_details(request, group, settlement, is_admin=False):
     """Show settlement summary"""
 
     # Pass on to generic view
-    response = object_detail(request,
+    response = object_detail(
+        request,
         Settlement.objects.select_related(),
         settlement.id,
         template_name='accounting/settlement_details.html',
@@ -47,13 +50,15 @@ def settlement_details(request, group, settlement, is_admin=False):
     populate_xheaders(request, response, Settlement, settlement.id)
     return response
 
+
 @login_required
 @limit_to_group
-def transaction_list(request, group, account=None, page='1',
-    is_admin=False, is_owner=False):
+def transaction_list(
+        request, group, account=None, page='1', is_admin=False,
+        is_owner=False):
     """Lists a group or an account's transactions"""
 
-    # FIXME: Incorporate into decorator. Jodal has an idea on this one.
+    # FIXME: Incorporate into decorator.
     if account and not is_owner and not is_admin:
         return HttpResponseForbidden(
             _('Forbidden if not account owner or group admin.'))
@@ -69,7 +74,8 @@ def transaction_list(request, group, account=None, page='1',
         user_account = None
 
     # Pass on to generic view
-    response = object_list(request,
+    response = object_list(
+        request,
         transaction_list,
         paginate_by=20,
         page=page,
@@ -86,6 +92,7 @@ def transaction_list(request, group, account=None, page='1',
     populate_xheaders(request, response, Group, group.id)
     return response
 
+
 @login_required
 def transaction_details(request, group, transaction, is_admin=False):
     """Shows all details about a transaction"""
@@ -93,13 +100,15 @@ def transaction_details(request, group, transaction, is_admin=False):
     # Check that user is party of transaction or admin of group
     # FIXME: Do this with a decorator. Jodal has an idea on this one.
     if not is_admin and TransactionEntry.objects.filter(
-        transaction=transaction,
-        account__owner__id=request.user.id).count() == 0:
-        return HttpResponseForbidden(_('The transaction may only be'
-            + 'viewed by group admins or a party of the transaction.'))
+            transaction=transaction,
+            account__owner__id=request.user.id).count() == 0:
+        return HttpResponseForbidden(_(
+            'The transaction may only be viewed by group admins or a party '
+            'of the transaction.'))
 
     # Pass on to generic view
-    response = object_detail(request,
+    response = object_detail(
+        request,
         Transaction.objects.all(),
         transaction.id,
         template_name='accounting/transaction_details.html',
