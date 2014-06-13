@@ -6,10 +6,10 @@
         &ndash;
         {% if has_previous %}
             {% if account %}
-                <a href="{% url transaction-list-account-page account.group.slug,account.slug,previous %}">
+                <a href="{% url "transaction-list-account-page" account.group.slug account.slug previous %}">
                 &lt;&lt; {% trans "Previous" %}</a>
             {% else %}
-                <a href="{% url transaction-list-group-page group.slug,previous %}">
+                <a href="{% url "transaction-list-group-page" group.slug previous %}">
                 &lt;&lt; {% trans "Previous" %}</a>
             {% endif %}
             &bull;
@@ -19,10 +19,10 @@
                 {{ i }}
             {% else %}
                 {% if account %}
-                    <a href="{% url transaction-list-account-page account.group.slug,account.slug,i %}">
+                    <a href="{% url "transaction-list-account-page" account.group.slug account.slug i %}">
                     {{ i }}</a>
                 {% else %}
-                    <a href="{% url transaction-list-group-page group.slug,i %}">
+                    <a href="{% url "transaction-list-group-page" group.slug i %}">
                     {{ i }}</a>
                 {% endif %}
             {% endifequal %}
@@ -33,10 +33,10 @@
         {% if has_next %}
             &bull;
             {% if account %}
-                <a href="{% url transaction-list-account-page account.group.slug,account.slug,next %}">
+                <a href="{% url "transaction-list-account-page" account.group.slug account.slug next %}">
                 {% trans "Next" %} &gt;&gt;</a>
             {% else %}
-                <a href="{% url transaction-list-group-page group.slug,next %}">
+                <a href="{% url "transaction-list-group-page" group.slug next %}">
                 {% trans "Next" %} &gt;&gt;</a>
             {% endif %}
         {% endif %}

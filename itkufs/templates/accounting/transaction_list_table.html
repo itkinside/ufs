@@ -22,7 +22,7 @@
                 {% endif %}
                 <td class="account{% if not e.account.active %} inactive{% endif %} {% cycle 'evenrow' 'oddrow' as tdclass %}">
                     {% if is_admin %}
-                        <a href="{% url account-summary group.slug,e.account.slug%}">{{ e.account.name }}</a>
+                        <a href="{% url "account-summary" group.slug e.account.slug%}">{{ e.account.name }}</a>
                     {% else %}
                         {{ e.account.name }}
                     {% endif %}

@@ -16,7 +16,7 @@
         <th>{% trans "Transaction" %}</th>
         <td>
           {% if bill.transaction_id %}
-            <a href="{% url transaction-details group.slug,bill.transaction_id %}">
+            <a href="{% url "transaction-details" group.slug bill.transaction_id %}">
               {% trans "Transaction" %} #{{ bill.transaction_id }}
             </a>
           {% else %}

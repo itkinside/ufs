@@ -14,10 +14,10 @@
 {% block breadcrumbs %}
     {{ block.super }}
     {% if settlement %}
-        &raquo; <a href="{% url edit-settlement group.slug,settlement.id %}">
+        &raquo; <a href="{% url "edit-settlement" group.slug settlement.id %}">
             {% trans "Edit settlement" %}</a>
     {% else %}
-        &raquo; <a href="{% url new-settlement group.slug %}">
+        &raquo; <a href="{% url "new-settlement" group.slug %}">
             {% trans "New settlement" %}</a>
     {% endif %}
 {% endblock %}

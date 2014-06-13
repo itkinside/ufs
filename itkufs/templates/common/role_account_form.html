@@ -10,7 +10,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo; <a href="{% url assign-role-accounts group.slug %}">
+    &raquo; <a href="{% url "assign-role-accounts" group.slug %}">
     {% trans "Assign role accounts" %}</a>
 {% endblock %}
 

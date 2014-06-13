@@ -9,7 +9,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo; <a href="{% url income group.slug %}">
+    &raquo; <a href="{% url "income" group.slug %}">
         {% trans "Income statement" %}</a>
 {% endblock %}
 

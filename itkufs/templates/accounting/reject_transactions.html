@@ -10,7 +10,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo; <a href="{% url reject-transactions group.slug %}">
+    &raquo; <a href="{% url "reject-transactions" group.slug %}">
             Reject transactions</a>
     {% if is_paginated %}
         &raquo; {% trans "Page" %} {{ page }} {% trans "of" %} {{ pages }}
@@ -26,7 +26,7 @@
 
 {% block content %}
 
-<form method="post" action="{% url reject-transactions group.slug %}">
+<form method="post" action="{% url "reject-transactions" group.slug %}">
     <label>Transaction{{ transactions|pluralize }}:</label>
     <ul id="rejectionlist">
     {% for t in transactions %}

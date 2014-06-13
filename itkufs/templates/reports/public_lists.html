@@ -29,7 +29,7 @@
             <ul>
         {% endifchanged %}
         <li>
-            <a href="{% url view-public-list list.group.slug,list.slug %}">
+            <a href="{% url "view-public-list" list.group.slug list.slug %}">
                 {{ list.name }}
             </a>
         </li>

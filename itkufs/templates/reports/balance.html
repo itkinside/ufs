@@ -10,7 +10,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo; <a href="{% url balance group.slug %}">
+    &raquo; <a href="{% url "balance" group.slug %}">
         {% trans "Balance statement" %}</a>
 {% endblock %}
 

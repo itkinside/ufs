@@ -9,10 +9,10 @@
 {% block breadcrumbs %}
     {{ block.super }}
     {% if account %}
-        &raquo; <a href="{% url transaction-list-account group.slug,account.slug %}">
+        &raquo; <a href="{% url "transaction-list-account" group.slug account.slug %}">
             {% trans "Transactions" %}</a>
     {% else %}
-        &raquo; <a href="{% url transaction-list-group group.slug %}">
+        &raquo; <a href="{% url "transaction-list-group" group.slug %}">
             {% trans "Transactions" %}</a>
     {% endif %}
     {% if is_paginated %}

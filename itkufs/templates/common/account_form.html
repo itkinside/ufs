@@ -15,10 +15,10 @@
 {% block breadcrumbs %}
     {{ block.super }}
     {% if account %}
-        &raquo; <a href="{% url edit-account group.slug,account.slug %}">
+        &raquo; <a href="{% url "edit-account" group.slug account.slug %}">
         {% trans "Edit account" %}</a>
     {% else %}
-        &raquo; <a href="{% url new-account group.slug %}">
+        &raquo; <a href="{% url "new-account" group.slug %}">
         {% trans "New account" %}</a>
     {% endif %}
 {% endblock %}

@@ -56,7 +56,7 @@
     <tr>
         <th>{% trans "Name" %}</th>
             <td>
-                <a href="{% url group-summary group.slug %}">{{ group.name }}</a>
+                <a href="{% url "group-summary" group.slug %}">{{ group.name }}</a>
             </td>
     </tr>
 
@@ -92,7 +92,7 @@
 <ul>
 {% include "common/account_action.html" %}
 {% if is_admin %}
-    <li class="admin"><a href="{% url edit-account group.slug,account.slug %}">
+    <li class="admin"><a href="{% url "edit-account" group.slug account.slug %}">
         {% trans "Edit account" %}</a></li>
 {% endif %}
 </ul>
@@ -105,12 +105,12 @@
 <ul>
 {% if group.list_set.count %}
     {% for list in group.list_set.all %}
-    <li><a href="{% url view-list group.slug,list.slug %}">
+    <li><a href="{% url "view-list" group.slug list.slug %}">
         {{ list.name }}</a></li>
     {% endfor %}
 {% else %}
     {% if is_admin %}
-        <li class="admin"><a href="{% url new-list group.slug %}">
+        <li class="admin"><a href="{% url "new-list" group.slug %}">
             {% trans "No lists found" %}</a></li>
     {% else %}
         <li>{% trans "No lists found" %}</li>
@@ -125,7 +125,7 @@
     {% if is_owner or is_admin %}
         <div id="activate">
             <h3>{% trans "Activate account" %}</h3>
-            <form method="post" action="{% url activate-account group.slug,account.slug %}">
+            <form method="post" action="{% url "activate-account" group.slug account.slug %}">
                 <button type="submit">{% trans "Activate account" %}</button>
             </form>
         </div>

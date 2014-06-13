@@ -10,7 +10,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo; <a href="{% url approve-transactions group.slug %}">
+    &raquo; <a href="{% url "approve-transactions" group.slug %}">
         Approve transactions</a>
     {% if is_paginated %}
         &raquo; {% trans "Page" %} {{ page }} {% trans "of" %} {{ pages }}
@@ -29,7 +29,7 @@
 <p>{% trans "No pending transactions found." %}</p>
 {% else %}
 
-<form action="{% url approve-transactions group.slug %}" method="post" id="accounting_approve_transactions">
+<form action="{% url "approve-transactions" group.slug %}" method="post" id="accounting_approve_transactions">
 
 <div id="transactions">
 
@@ -56,7 +56,7 @@
         </td>
         {% for e in t.entry_set.all %}
         <td>
-            <a href="{% url account-summary e.account.group.slug,e.account.slug %}">{{ e.account.name }}</a>
+            <a href="{% url "account-summary" e.account.group.slug e.account.slug %}">{{ e.account.name }}</a>
         </td>
         <td class="debit {% cycle evenrow,oddrow as class %}">
             {% if e.debit %}
@@ -82,7 +82,7 @@
         </td>
         <td rowspan="{{ t.entry_set.all.count }}">
             {{ f.as_p }}
-            <a href="{% url edit-transaction group.slug,t.id %}">
+            <a href="{% url "edit-transaction" group.slug t.id %}">
                 Edit transaction
             </a>
         </td>

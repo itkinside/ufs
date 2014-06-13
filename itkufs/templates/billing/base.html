@@ -18,12 +18,12 @@
 <h3>{% trans "Billing" %}</h3>
 
 <ul class="menulist">
-    <li class="admin"><a href="{% url bill-new group.slug %}">
+    <li class="admin"><a href="{% url "bill-new" group.slug %}">
         {% trans "New bill" %}</a></li>
-    <li class="admin"><a href="{% url bill-list group.slug %}">
+    <li class="admin"><a href="{% url "bill-list" group.slug %}">
         {% trans "View bills" %}</a></li>
     <li><a href="{{ group.get_absolute_url }}">
-        {% trans "back to group" %}</a></li>
+        {% trans "Back to group" %}</a></li>
     {# <li>FIXME: We could do more with this list.</li> #}
 </ul>
 

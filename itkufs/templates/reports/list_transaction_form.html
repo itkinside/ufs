@@ -8,9 +8,9 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo;  <a href="{% url view-list group.slug,list.slug %}">
+    &raquo;  <a href="{% url "view-list" group.slug list.slug %}">
         {{ list.name }}</a>
-    &raquo; <a href="{% url transaction-from-list group.slug,list.slug %}">
+    &raquo; <a href="{% url "transaction-from-list" group.slug list.slug %}">
         {% trans "Create transaction from list" %}</a>
 {% endblock %}
 

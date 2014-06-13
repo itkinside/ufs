@@ -10,7 +10,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    &raquo; <a href="{% url settlement-list group.slug %}">
+    &raquo; <a href="{% url "settlement-list" group.slug %}">
         {% trans "Settlements" %}</a>
     {% if is_paginated %}
         &raquo; {% trans "Page" %} {{ page }} {% trans "of" %} {{ pages }}
@@ -52,7 +52,7 @@
             <a href="{{ s.get_absolute_url }}">{% trans "Details" %}</a>
             {% if is_admin and s.is_editable %}
                 <span class="admin">
-                <a href="{% url edit-settlement group.slug,s.id %}">
+                <a href="{% url "edit-settlement" group.slug s.id %}">
                     {% trans "Edit" %}</a>
                 </span>
             {% endif %}

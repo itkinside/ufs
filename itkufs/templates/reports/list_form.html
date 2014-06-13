@@ -13,12 +13,12 @@
 {% block breadcrumbs %}
     {{ block.super }}
     {% if list %}
-        &raquo;  <a href="{% url view-list group.slug,list.slug %}">
+        &raquo;  <a href="{% url "view-list" group.slug list.slug %}">
             {{ list.name }}</a>
-        &raquo; <a href="{% url edit-list group.slug,list.slug %}">
+        &raquo; <a href="{% url "edit-list" group.slug list.slug %}">
             {% trans "Edit list" %}</a>
     {% else %}
-        &raquo; <a href="{% url new-list group.slug %}">
+        &raquo; <a href="{% url "new-list" group.slug %}">
             {% trans "New list" %}</a>
     {% endif %}
 {% endblock %}
@@ -67,7 +67,7 @@ all active accounts in the group is included. {% endblocktrans %}</p>
 
 {% if list.id %}
 <p>
-    <img alt="Preview" src="{% url view-list-preview group.slug,list.slug %}" style="border: 5px solid #EEEEEC" />
+    <img alt="Preview" src="{% url "view-list-preview" group.slug list.slug %}" style="border: 5px solid #EEEEEC" />
 </p>
 {% endif %}
 

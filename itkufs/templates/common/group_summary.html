@@ -45,13 +45,13 @@
 <ul>
 {% include "common/group_action.html" %}
 {% if is_admin %}
-<li class="admin"><a href="{% url new-settlement group.slug %}">
+<li class="admin"><a href="{% url "new-settlement" group.slug %}">
      {% trans "New settlement" %}</a></li>
-<li class="admin"><a href="{% url edit-group group.slug %}">
+<li class="admin"><a href="{% url "edit-group" group.slug %}">
     {% trans "Edit group" %}</a></li>
-<li class="admin"><a href="{% url new-account group.slug %}">
+<li class="admin"><a href="{% url "new-account" group.slug %}">
      {% trans "New account" %}</a></li>
-<li class="admin"><a href="{% url assign-role-accounts group.slug %}">
+<li class="admin"><a href="{% url "assign-role-accounts" group.slug %}">
     {% trans "Assign role accounts" %}</a></li>
 {% endif %}
 </ul>
@@ -61,8 +61,8 @@
 <div id="statements">
 <h3>{% trans "Statements" %}</h3>
 <ul>
-    <li><a href="{% url balance group.slug %}">{% trans "Balance statement" %}</a></li>
-    <li><a href="{% url income group.slug %}">{% trans "Income statement" %}</a></li>
+    <li><a href="{% url "balance" group.slug %}">{% trans "Balance statement" %}</a></li>
+    <li><a href="{% url "income" group.slug %}">{% trans "Income statement" %}</a></li>
 </ul>
 </div>
 
@@ -71,18 +71,18 @@
 <ul>
     {% for list in group.list_set.all %}
     <li>
-        <a href="{% url view-list group.slug,list.slug %}">{{ list.name }}</a>
+        <a href="{% url "view-list" group.slug list.slug %}">{{ list.name }}</a>
         {% if is_admin %}
             <ul class="admin">
-                <li><a href="{% url transaction-from-list group.slug,list.slug %}">{{ _("Create transction") }}</a></li>
-                <li><a href="{% url edit-list group.slug,list.slug %}">{{ _("Edit list") }}</a></li>
-                <li><a href="{% url delete-list group.slug,list.slug %}">{{ _("Delete list") }}</a></li>
+                <li><a href="{% url "transaction-from-list" group.slug list.slug %}">{{ _("Create transaction") }}</a></li>
+                <li><a href="{% url "edit-list" group.slug list.slug %}">{{ _("Edit list") }}</a></li>
+                <li><a href="{% url "delete-list" group.slug list.slug %}">{{ _("Delete list") }}</a></li>
             </ul>
         {% endif %}
     </li>
     {% endfor %}
     {% if is_admin %}
-        <li class="admin"><a href="{% url new-list group.slug %}">
+        <li class="admin"><a href="{% url "new-list" group.slug %}">
              {% trans "New list" %}</a></li>
     {% endif %}
 </ul>
@@ -92,9 +92,9 @@
 <div id="bills">
 <h3>{% trans "Bill" %}</h3>
 <ul>
-<li class="admin"><a href="{% url bill-list group.slug %}">
+<li class="admin"><a href="{% url "bill-list" group.slug %}">
      {% trans "View bills" %}</a></li>
-<li class="admin"><a href="{% url bill-new group.slug %}">
+<li class="admin"><a href="{% url "bill-new" group.slug %}">
      {% trans "New Bill" %}</a></li>
 </ul>
 </div>
@@ -123,7 +123,7 @@
         <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
             <td{% if not account.short_name %} colspan="2"{% endif %}>
             {% if is_admin %}
-            <a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a>
+            <a href="{% url "account-summary" group.slug account.slug %}">{{ account.name }}</a>
             {% else %}
             {{ account.name }}
             {% endif %}
@@ -156,7 +156,7 @@
         <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
             <td{% if not account.short_name %} colspan="2"{% endif %}>
             {% if is_admin %}
-            <a href="{% url account-summary group.slug,account.slug %}">{{ account.name }}</a>
+            <a href="{% url "account-summary" group.slug account.slug %}">{{ account.name }}</a>
             {% else %}
             {{ account.name }}
             {% endif %}
