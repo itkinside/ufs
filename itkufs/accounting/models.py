@@ -139,6 +139,7 @@ SELECT accounting_group.block_limit
 WHERE accounting_group.id = accounting_account.group_id
 """
 
+# FIXME This query does not work on Sqlite
 ACCOUNT_BALANCE_HISTORY_SQL = """
 SELECT account.id, short_name AS user, extract(epoch from last_modified)*1000 as date, sum(credit)-sum(debit) AS saldo
     FROM accounting_account account

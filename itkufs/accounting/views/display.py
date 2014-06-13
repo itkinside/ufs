@@ -1,121 +1,151 @@
 from django.contrib.auth.decorators import login_required
 from django.core.xheaders import populate_xheaders
 from django.http import HttpResponseForbidden
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
-from django.views.generic.list_detail import object_list, object_detail
+from django.views.generic import DetailView, ListView
 
 from itkufs.common.decorators import limit_to_group
 from itkufs.accounting.models import (
     Account, Group, Settlement, Transaction, TransactionEntry)
 
 
-@login_required
-@limit_to_group
-def settlement_list(request, group, page='1', is_admin=False):
-    """Show paginated list of settlements"""
+class SettlementList(ListView):
+    model = Settlement
+    allow_empty = True
+    paginate_by = 20
 
-    # Pass on to generic view
-    response = object_list(
-        request,
-        group.settlement_set.select_related(),
-        paginate_by=20,
-        page=page,
-        allow_empty=True,
-        template_name='accounting/settlement_list.html',
-        extra_context={
-            'is_admin': is_admin,
-            'group': group,
-        },
-        template_object_name='settlement')
-    populate_xheaders(request, response, Group, group.id)
-    return response
+    @method_decorator(login_required)
+    @method_decorator(limit_to_group)
+    def dispatch(self, request, *args, **kwargs):
+        self.is_admin = kwargs.get('is_admin', False)
+        self.group = kwargs['group']
 
+        response = super(SettlementList, self).dispatch(
+            request, *args, **kwargs)
 
-@login_required
-@limit_to_group
-def settlement_details(request, group, settlement, is_admin=False):
-    """Show settlement summary"""
+        populate_xheaders(request, response, Group, self.group.id)
 
-    # Pass on to generic view
-    response = object_detail(
-        request,
-        Settlement.objects.select_related(),
-        settlement.id,
-        template_name='accounting/settlement_details.html',
-        extra_context={
-            'is_admin': is_admin,
-            'group': group,
-        },
-        template_object_name='settlement')
-    populate_xheaders(request, response, Settlement, settlement.id)
-    return response
+        return response
+
+    def get_queryset(self):
+        return self.group.settlement_set.select_related()
+
+    def get_context_data(self, **kwargs):
+        context = super(SettlementList, self).get_context_data(**kwargs)
+        context['is_admin'] = self.is_admin
+        context['group'] = self.group
+        return context
 
 
-@login_required
-@limit_to_group
-def transaction_list(
-        request, group, account=None, page='1', is_admin=False,
-        is_owner=False):
-    """Lists a group or an account's transactions"""
+class SettlementDetails(DetailView):
+    model = Settlement
+    template_name_suffix = '_details'
 
-    # FIXME: Incorporate into decorator.
-    if account and not is_owner and not is_admin:
-        return HttpResponseForbidden(
-            _('Forbidden if not account owner or group admin.'))
+    @method_decorator(login_required)
+    @method_decorator(limit_to_group)
+    def dispatch(self, request, *args, **kwargs):
+        self.is_admin = kwargs.get('is_admin', False)
+        self.group = kwargs['group']
+        self.settlement = kwargs['settlement']
 
-    transaction_list = (account or group).transaction_set_with_rejected.all()
+        response = super(SettlementDetails, self).dispatch(
+            request, *args, **kwargs)
 
-    if account:
-        transaction_list = transaction_list.filter(entry_set__account=account)
+        populate_xheaders(request, response, Settlement, self.settlement.id)
 
-    try:
-        user_account = group.account_set.get(owner=request.user)
-    except Account.DoesNotExist:
-        user_account = None
+        return response
 
-    # Pass on to generic view
-    response = object_list(
-        request,
-        transaction_list,
-        paginate_by=20,
-        page=page,
-        allow_empty=True,
-        template_name='accounting/transaction_list.html',
-        extra_context={
-            'is_admin': is_admin,
-            'is_owner': is_owner,
-            'group': group,
-            'account': account,
-            'user_account': user_account,
-        },
-        template_object_name='transaction')
-    populate_xheaders(request, response, Group, group.id)
-    return response
+    def get_object(self, queryset=None):
+        return self.settlement
+
+    def get_context_data(self, **kwargs):
+        context = super(SettlementDetails, self).get_context_data(**kwargs)
+        context['is_admin'] = self.is_admin
+        context['group'] = self.group
+        return context
 
 
-@login_required
-def transaction_details(request, group, transaction, is_admin=False):
-    """Shows all details about a transaction"""
+class TransactionList(ListView):
+    model = Transaction
+    allow_empty = True
+    paginate_by = 20
 
-    # Check that user is party of transaction or admin of group
-    # FIXME: Do this with a decorator. Jodal has an idea on this one.
-    if not is_admin and TransactionEntry.objects.filter(
-            transaction=transaction,
-            account__owner__id=request.user.id).count() == 0:
-        return HttpResponseForbidden(_(
-            'The transaction may only be viewed by group admins or a party '
-            'of the transaction.'))
+    @method_decorator(login_required)
+    @method_decorator(limit_to_group)
+    def dispatch(self, request, *args, **kwargs):
+        self.is_admin = kwargs.get('is_admin', False)
+        self.is_owner = kwargs.get('is_owner', False)
+        self.group = kwargs['group']
+        self.account = kwargs.get('account')
 
-    # Pass on to generic view
-    response = object_detail(
-        request,
-        Transaction.objects.all(),
-        transaction.id,
-        template_name='accounting/transaction_details.html',
-        extra_context={
-            'is_admin': is_admin,
-            'group': group,
-        },
-        template_object_name='transaction')
-    populate_xheaders(request, response, Transaction, transaction.id)
-    return response
+        # FIXME: Incorporate into decorator.
+        if (self.account and not self.is_owner and not self.is_admin):
+            return HttpResponseForbidden(
+                _('Forbidden if not account owner or group admin.'))
+
+        response = super(TransactionList, self).dispatch(
+            request, *args, **kwargs)
+
+        populate_xheaders(request, response, Group, self.group.id)
+
+        return response
+
+    def get_queryset(self):
+        if self.account:
+            return self.account.transaction_set_with_rejected.filter(
+                entry_set__account=self.account)
+        else:
+            return self.group.transaction_set_with_rejected.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(TransactionList, self).get_context_data(**kwargs)
+
+        try:
+            user_account = self.group.account_set.get(owner=self.request.user)
+        except Account.DoesNotExist:
+            user_account = None
+
+        context['is_admin'] = self.is_admin
+        context['is_owner'] = self.is_owner
+        context['group'] = self.group
+        context['account'] = self.account
+        context['user_account'] = user_account
+
+        return context
+
+
+class TransactionDetails(DetailView):
+    model = Transaction
+    template_name_suffix = '_details'
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        self.is_admin = kwargs.get('is_admin', False)
+        self.group = kwargs['group']
+        self.transaction = kwargs['transaction']
+
+        # Check that user is party of transaction or admin of group
+        # FIXME: Do this with a decorator.
+        if not self.is_admin and TransactionEntry.objects.filter(
+                transaction=self.transaction,
+                account__owner__id=request.user.id).count() == 0:
+            return HttpResponseForbidden(_(
+                'The transaction may only be viewed by group admins or a '
+                'party of the transaction.'))
+
+        response = super(TransactionDetails, self).dispatch(
+            request, *args, **kwargs)
+
+        populate_xheaders(request, response, Transaction, self.transaction.id)
+
+        return response
+
+    def get_object(self, queryset=None):
+        return self.transaction
+
+    def get_context_data(self, **kwargs):
+        context = super(TransactionDetails, self).get_context_data(**kwargs)
+        context['is_admin'] = self.is_admin
+        context['group'] = self.group
+        return context

@@ -1,18 +1,15 @@
 from datetime import date
 from subprocess import Popen, PIPE
 
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.core.xheaders import populate_xheaders
+from django.db import transaction as db_transaction
 from django.forms.models import inlineformset_factory
-from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden, HttpResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
-from django.views.generic.list_detail import object_list
-from django.conf import settings
-from django.db import transaction as db_transaction
 
 from itkufs.common.decorators import limit_to_group, limit_to_admin
 from itkufs.accounting.models import Account
@@ -22,15 +19,15 @@ from itkufs.reports.pdf import pdf
 
 _list = list
 
+
 def public_lists(request):
     lists = List.objects.filter(public=True).select_related('group') \
         .order_by('group__name', 'name')
 
-    return object_list(request,
-        lists,
-        allow_empty=True,
-        template_name='reports/public_lists.html',
-        template_object_name='public')
+    return render_to_response('reports/public_lists.html', {
+        'public_list': lists,
+    })
+
 
 @login_required
 @limit_to_group
@@ -43,6 +40,7 @@ def view_list(request, group, list, is_admin=False):
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % slugify(filename)
 
     return response
+
 
 @login_required
 @limit_to_group
@@ -60,6 +58,7 @@ def view_list_preview(request, group, list, is_admin=False):
 
     return HttpResponse(stdout, mimetype='image/png')
 
+
 def view_public_list(request, group, list, is_admin=False):
     if not list.public:
         raise Http404
@@ -72,6 +71,7 @@ def view_public_list(request, group, list, is_admin=False):
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % slugify(filename)
 
     return response
+
 
 @login_required
 @limit_to_admin
@@ -126,6 +126,7 @@ def new_edit_list(request, group, list=None, is_admin=False):
             'columnformset': columnformset,
         },
         context_instance=RequestContext(request))
+
 
 @login_required
 @limit_to_admin
@@ -242,6 +243,7 @@ def balance(request, group, is_admin=False):
             'accounts': accounts,
         },
         context_instance=RequestContext(request))
+
 
 @login_required
 @limit_to_group

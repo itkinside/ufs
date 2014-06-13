@@ -6,19 +6,19 @@ from itkufs.accounting.views.display import *
 urlpatterns = patterns('',
     ### Settlements
     url(r'^(?P<group>[0-9a-z_-]+)/settlement/(?P<settlement>\d+)/$',
-        settlement_details, name='settlement-details'),
+        SettlementDetails.as_view(), name='settlement-details'),
     url(r'^(?P<group>[0-9a-z_-]+)/new-settlement/$',
         new_edit_settlement, name='new-settlement'),
     url(r'^(?P<group>[0-9a-z_-]+)/settlement/(?P<settlement>\d+)/edit/$',
         new_edit_settlement, name='edit-settlement'),
     url(r'^(?P<group>[0-9a-z_-]+)/settlement/$',
-        settlement_list, name='settlement-list'),
+        SettlementList.as_view(), name='settlement-list'),
     url(r'^(?P<group>[0-9a-z_-]+)/settlement/p(?P<page>\d+)/$',
-        settlement_list, name='settlement-list-page'),
+        SettlementList.as_view(), name='settlement-list-page'),
 
     ### Transactions
     url(r'^(?P<group>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/$',
-        transaction_details, name='transaction-details'),
+        TransactionDetails.as_view(), name='transaction-details'),
 
     # Admin transaction actions
     url(r'^(?P<group>[0-9a-z_-]+)/transaction/new/$',
@@ -42,13 +42,13 @@ urlpatterns = patterns('',
 
     # Group transaction lists
     url(r'^(?P<group>[0-9a-z_-]+)/transaction/$',
-        transaction_list, name='transaction-list-group'),
+        TransactionList.as_view(), name='transaction-list-group'),
     url(r'^(?P<group>[0-9a-z_-]+)/transaction/p(?P<page>\d+)/$',
-        transaction_list, name='transaction-list-group-page'),
+        TransactionList.as_view(), name='transaction-list-group-page'),
 
     # Account transaction lists
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/transaction/$',
-        transaction_list, name='transaction-list-account'),
+        TransactionList.as_view(), name='transaction-list-account'),
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/transaction/p(?P<page>\d+)/$',
-        transaction_list, name='transaction-list-account-page'),
+        TransactionList.as_view(), name='transaction-list-account-page'),
 )
