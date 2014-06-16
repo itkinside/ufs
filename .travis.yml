@@ -11,4 +11,5 @@ before_script:
   - "cp itkufs/settings/local.py.template itkufs/settings/local.py"
 
 script:
+  - "flake8 itkufs"
   - "python manage.py test"
