@@ -92,5 +92,15 @@ To see the code coverage reports, run::
 
     coverage report
 
+
+How to run code linting
+-----------------------
+
+To run code linting, run::
+
+    flake8 itkufs
+
+Ideally, this command should not print a single warning.
+
 ..
     vim: ft=rst tw=74 ai
