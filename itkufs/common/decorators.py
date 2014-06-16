@@ -3,6 +3,7 @@ from django.http import HttpResponseForbidden
 
 from itkufs.accounting.models import Group
 
+
 def limit_to_group(function):
     def wrapped(request, *args, **kwargs):
         # Let admin through immediately
@@ -22,6 +23,7 @@ def limit_to_group(function):
             _('Forbidden if not member of the group or group admin.'))
     return wrapped
 
+
 def limit_to_owner(function):
     def wrapped(request, *args, **kwargs):
         # Let admins through immediately
@@ -37,6 +39,7 @@ def limit_to_owner(function):
         return HttpResponseForbidden(
             _('Forbidden if not account owner or group admin.'))
     return wrapped
+
 
 def limit_to_admin(function):
     def wrapped(request, *args, **kwargs):

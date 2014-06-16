@@ -10,22 +10,27 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 
 class Group(models.Model):
     name = models.CharField(_('name'), max_length=100)
-    slug = models.SlugField(_('slug'), unique=True,
-        help_text=_('A shortname used in URLs.'))
-    admins = models.ManyToManyField(User, verbose_name=_('admins'),
-        null=True, blank=True)
-    warn_limit = models.IntegerField(_('warn limit'), null=True, blank=True,
-        help_text=_('Warn user of low balance at this limit, '
-            + 'leave blank for no limit.'))
-    block_limit = models.IntegerField(_('block limit'), null=True, blank=True,
+    slug = models.SlugField(
+        _('slug'), unique=True, help_text=_('A shortname used in URLs.'))
+    admins = models.ManyToManyField(
+        User, verbose_name=_('admins'), null=True, blank=True)
+    warn_limit = models.IntegerField(
+        _('warn limit'), null=True, blank=True,
+        help_text=_(
+            'Warn user of low balance at this limit, '
+            'leave blank for no limit.'))
+    block_limit = models.IntegerField(
+        _('block limit'), null=True, blank=True,
         help_text=_('Limit for blacklisting user, leave blank for no limit.'))
-    logo = models.ImageField(upload_to='logos', blank=True, help_text=_('A small image that will be added to lists.'))
+    logo = models.ImageField(
+        upload_to='logos', blank=True,
+        help_text=_('A small image that will be added to lists.'))
 
-    email = models.EmailField(blank=True,
-        help_text=_('Contact address for group.'))
+    email = models.EmailField(
+        blank=True, help_text=_('Contact address for group.'))
 
-    account_number = models.CharField(blank=True, max_length=11,
-        help_text=_('Bank account for group.'))
+    account_number = models.CharField(
+        blank=True, max_length=11, help_text=_('Bank account for group.'))
 
     class Meta:
         ordering = ('name',)
@@ -53,15 +58,17 @@ class Group(models.Model):
         if not self.account_set.count():
 
             # TODO change this into a magic loop?
-            bank = Account(name=ugettext('Bank'), slug='bank',
-                group_account=True, type=Account.ASSET_ACCOUNT, group=self)
+            bank = Account(
+                name=ugettext('Bank'), slug='bank', group_account=True,
+                type=Account.ASSET_ACCOUNT, group=self)
             bank.save()
             bank_role = RoleAccount(
                 group=self, role=RoleAccount.BANK_ACCOUNT, account=bank)
             bank_role.save()
 
-            cash = Account(name=ugettext('Cash'), slug='cash',
-                group_account=True, type=Account.ASSET_ACCOUNT, group=self)
+            cash = Account(
+                name=ugettext('Cash'), slug='cash', group_account=True,
+                type=Account.ASSET_ACCOUNT, group=self)
             cash.save()
             cash_role = RoleAccount(
                 group=self, role=RoleAccount.CASH_ACCOUNT, account=cash)
@@ -77,8 +84,7 @@ class Group(models.Model):
         return self.account_set.filter(group_account=True)
     group_account_set = property(get_group_account_set, None, None)
 
-
-    ### Transaction set methods
+    # --- Transaction set methods
     # Please keep in sync with Account's set methods
 
     def get_transaction_set_with_rejected(self):
@@ -141,24 +147,28 @@ WHERE accounting_group.id = accounting_account.group_id
 
 # FIXME This query does not work on Sqlite
 ACCOUNT_BALANCE_HISTORY_SQL = """
-SELECT account.id, short_name AS user, extract(epoch from last_modified)*1000 as date, sum(credit)-sum(debit) AS saldo
-    FROM accounting_account account
+SELECT
+    account.id,
+    short_name AS user,
+    extract(epoch from last_modified)*1000 as date,
+    sum(credit)-sum(debit) AS saldo
+FROM accounting_account account
     JOIN accounting_transactionentry AS entry ON account.id = entry.account_id
     JOIN accounting_transaction trans ON entry.transaction_id = trans.id
 WHERE account.id = %s AND state='Com'
-GROUP BY account.id, short_name, last_modified 
+GROUP BY account.id, short_name, last_modified
 ORDER BY date
 """
 
+
 class AccountManager(models.Manager):
     def get_query_set(self):
-        return super(AccountManager, self).get_query_set().extra(
-            select={
-            'confirmed_balance_sql': CONFIRMED_BALANCE_SQL % 'accounting_account.id',
+        return super(AccountManager, self).get_query_set().extra(select={
+            'confirmed_balance_sql': (
+                CONFIRMED_BALANCE_SQL % 'accounting_account.id'),
             'future_balance_sql': FUTURE_BALANCE_SQL % 'accounting_account.id',
             'group_block_limit_sql': GROUP_BLOCK_LIMIT_SQL,
-            }
-        )
+        })
 
 
 class Account(models.Model):
@@ -179,19 +189,22 @@ class Account(models.Model):
 
     name = models.CharField(_('name'), max_length=100)
     short_name = models.CharField(_('short name'), max_length=100, blank=True)
-    slug = models.SlugField(_('slug'),
-        help_text=_('A shortname used in URLs etc.'))
+    slug = models.SlugField(
+        _('slug'), help_text=_('A shortname used in URLs etc.'))
     group = models.ForeignKey(Group, verbose_name=_('group'))
-    type = models.CharField(_('type'), max_length=2, choices=ACCOUNT_TYPE,
+    type = models.CharField(
+        _('type'), max_length=2, choices=ACCOUNT_TYPE,
         default=LIABILITY_ACCOUNT)
-    owner = models.ForeignKey(User, verbose_name=_('owner'),
-        null=True, blank=True)
+    owner = models.ForeignKey(
+        User, verbose_name=_('owner'), null=True, blank=True)
     active = models.BooleanField(_('active'), default=True)
-    ignore_block_limit = models.BooleanField(_('ignore block limit'),
-        default=False, help_text=_('Never block account automatically'))
-    blocked = models.BooleanField(_('blocked'), default=False,
-        help_text=_('Block account manually'))
-    group_account = models.BooleanField(_('group account'), default=False,
+    ignore_block_limit = models.BooleanField(
+        _('ignore block limit'), default=False,
+        help_text=_('Never block account automatically'))
+    blocked = models.BooleanField(
+        _('blocked'), default=False, help_text=_('Block account manually'))
+    group_account = models.BooleanField(
+        _('group account'), default=False,
         help_text=_('Does this account belong to the group?'))
 
     class Meta:
@@ -227,7 +240,7 @@ class Account(models.Model):
         of type liability, equity or expense."""
 
         balance = self.balance()
-        if balance == 0 or ( self.type == 'As' or self.type == 'Ex' ):
+        if balance == 0 or self.type in ('As', 'Ex'):
             return balance
         else:
             return -1 * balance
@@ -243,8 +256,8 @@ class Account(models.Model):
             return True
 
         if (not self.is_user_account()
-            or self.ignore_block_limit
-            or self.group_block_limit_sql is None):
+                or self.ignore_block_limit
+                or self.group_block_limit_sql is None):
             return False
         return self.normal_balance() < self.group_block_limit_sql
 
@@ -252,13 +265,12 @@ class Account(models.Model):
         """Returns true if user account balance is below group warn limit"""
 
         if (not self.is_user_account()
-            or self.ignore_block_limit
-            or self.group.warn_limit is None):
+                or self.ignore_block_limit
+                or self.group.warn_limit is None):
             return False
         return self.normal_balance() < self.group.warn_limit
 
-
-    ### Transaction set methods
+    # --- Transaction set methods
     # Please keep in sync with Group's set methods
 
     def get_transaction_set_with_rejected(self):
@@ -295,7 +307,8 @@ class Account(models.Model):
 
     def get_balance_history_set(self):
         """Returns historical balance data for this user"""
-        return list(Account.objects.raw(ACCOUNT_BALANCE_HISTORY_SQL % (self.id,)))
+        return list(Account.objects.raw(
+            ACCOUNT_BALANCE_HISTORY_SQL % self.id))
     balance_history_set = property(
         get_balance_history_set, None, None)
 
@@ -317,7 +330,7 @@ class RoleAccount(models.Model):
     class Meta:
         ordering = ('group', 'role')
         # FIXME: waiting for http://code.djangoproject.com/ticket/6523
-        #unique_together = (('group', 'role'),)
+        # unique_together = (('group', 'role'),)
         verbose_name = _('role account')
         verbose_name_plural = _('role accounts')
 
@@ -329,7 +342,7 @@ class RoleAccount(models.Model):
         }
 
 
-### Transaction models
+# --- Transaction models
 
 class InvalidTransaction(Exception):
     def __init__(self, value):
@@ -353,9 +366,11 @@ class Settlement(models.Model):
     group = models.ForeignKey(Group, verbose_name=_('group'))
     date = models.DateField(_('date'))
     comment = models.CharField(_('comment'), max_length=200, blank=True)
-    closed = models.BooleanField(default=False,
-        help_text=_('Mark as closed when done adding transactions '
-            + 'to the settlement.'))
+    closed = models.BooleanField(
+        default=False,
+        help_text=_(
+            'Mark as closed when done adding transactions '
+            'to the settlement.'))
 
     class Meta:
         ordering = ('-date',)
@@ -377,20 +392,20 @@ class Settlement(models.Model):
         })
 
     def is_editable(self):
-        return self.closed == False
+        return self.closed is False
 
 
 class TransactionManager(models.Manager):
     def get_query_set(self):
-        return super(TransactionManager,self).get_query_set().extra(
+        return super(TransactionManager, self).get_query_set().extra(
             select={
-            'entry_count_sql':
-                """
-                SELECT COUNT(*)
-                FROM accounting_transactionentry
-                WHERE accounting_transactionentry.transaction_id =
-                    accounting_transaction.id
-                """
+                'entry_count_sql':
+                    """
+                    SELECT COUNT(*)
+                    FROM accounting_transactionentry
+                    WHERE accounting_transactionentry.transaction_id =
+                        accounting_transaction.id
+                    """
             }
         )
 
@@ -408,15 +423,17 @@ class Transaction(models.Model):
 
     objects = TransactionManager()
 
-    group = models.ForeignKey(Group, verbose_name=_('group'),
-        related_name='real_transaction_set')
-    settlement = models.ForeignKey(Settlement, verbose_name=_('settlement'),
-        null=True, blank=True)
-    date = models.DateField(_('date'),
+    group = models.ForeignKey(
+        Group, verbose_name=_('group'), related_name='real_transaction_set')
+    settlement = models.ForeignKey(
+        Settlement, verbose_name=_('settlement'), null=True, blank=True)
+    date = models.DateField(
+        _('date'),
         help_text=_('May be used for date of the transaction if not today.'))
-    last_modified = models.DateTimeField(_('Last modified'), auto_now_add=True)
-    state = models.CharField(_('state'), max_length=3,
-        choices=TRANSACTION_STATE, blank=True)
+    last_modified = models.DateTimeField(
+        _('Last modified'), auto_now_add=True)
+    state = models.CharField(
+        _('state'), max_length=3, choices=TRANSACTION_STATE, blank=True)
 
     class Meta:
         ordering = ('-last_modified',)
@@ -428,11 +445,11 @@ class Transaction(models.Model):
             entries = []
             for entry in self.entry_set.all():
                 if entry.debit:
-                    entries.append(u'%s debit %.2f' %
-                        (entry.account, entry.debit))
+                    entries.append(u'%s debit %.2f' % (
+                        entry.account, entry.debit))
                 else:
-                    entries.append(u'%s credit %.2f' %
-                        (entry.account, entry.credit))
+                    entries.append(u'%s credit %.2f' % (
+                        entry.account, entry.credit))
 
             return u', '.join(entries)
         else:
@@ -461,19 +478,22 @@ class Transaction(models.Model):
 
         for account in debit_accounts + credit_accounts:
             if account.group != self.group:
-                raise InvalidTransaction('Group of transaction entry account '
-                    + 'does not match group of transaction.')
+                raise InvalidTransaction(
+                    'Group of transaction entry account '
+                    'does not match group of transaction.')
 
         account_intersection = set(debit_accounts).intersection(
             set(credit_accounts))
         if len(account_intersection):
-            raise InvalidTransaction('The following accounts is both a debit '
-                    + 'and a credit account for this transaction: %s'
-                    % list(account_intersection))
+            raise InvalidTransaction(
+                'The following accounts is both a debit '
+                'and a credit account for this transaction: %s' % list(
+                    account_intersection))
 
         if debit_sum != credit_sum:
-            raise InvalidTransaction('Credit and debit do not match, '
-                + 'credit: %d, debit: %d.' % (credit_sum, debit_sum))
+            raise InvalidTransaction(
+                'Credit and debit do not match, '
+                'credit: %d, debit: %d.' % (credit_sum, debit_sum))
 
         if self.date is None:
             self.date = datetime.date.today()
@@ -526,12 +546,13 @@ class Transaction(models.Model):
             raise InvalidTransaction(
                 'Could not set transaction as rejected')
 
-
     def is_pending(self):
         return self.state == self.PENDING_STATE
+
     def has_pending(self):
         return self.state in (
             self.PENDING_STATE, self.COMMITTED_STATE, self.REJECTED_STATE)
+
     is_editable = is_pending
 
     def is_committed(self):
@@ -544,27 +565,30 @@ class Transaction(models.Model):
 
     def get_pending(self):
         if self.has_pending():
-            return self.log_set.filter(type=self.PENDING_STATE).lastest('timestamp')
+            return self.log_set.filter(
+                type=self.PENDING_STATE).lastest('timestamp')
     pending = property(get_pending, None, None)
 
     def get_committed(self):
         if self.has_committed():
-            return self.log_set.filter(type=self.COMMITTED_STATE).lastest('timestamp')
+            return self.log_set.filter(
+                type=self.COMMITTED_STATE).lastest('timestamp')
     committed = property(get_committed, None, None)
 
     def get_rejected(self):
         if self.has_rejected():
-            return self.log_set.filter(type=self.REJECTED_STATE).lastest('timestamp')
+            return self.log_set.filter(
+                type=self.REJECTED_STATE).lastest('timestamp')
     rejected = property(get_rejected, None, None)
 
     def get_valid_logtype_choices(self):
         if self.is_committed() or self.is_rejected():
-            return [('','')]
+            return [('', '')]
         else:
             states = dict(self.TRANSACTION_STATE)
             del states[self.PENDING_STATE]
             states = states.items()
-            states.insert(0, ('',''))
+            states.insert(0, ('', ''))
             return states
 
     def css_class(self):
@@ -577,11 +601,11 @@ class Transaction(models.Model):
 
 
 class TransactionLog(models.Model):
-    transaction = models.ForeignKey(Transaction,
-        verbose_name=_('transaction'), related_name='log_set')
-    type = models.CharField(_('type'), max_length=3,
-        choices=Transaction.TRANSACTION_STATE)
-    timestamp =  models.DateTimeField(_('timestamp'), auto_now_add=True)
+    transaction = models.ForeignKey(
+        Transaction, verbose_name=_('transaction'), related_name='log_set')
+    type = models.CharField(
+        _('type'), max_length=3, choices=Transaction.TRANSACTION_STATE)
+    timestamp = models.DateTimeField(_('timestamp'), auto_now_add=True)
     user = models.ForeignKey(User, verbose_name=_('user'))
     message = models.CharField(_('message'), max_length=200, blank=True)
 
@@ -591,7 +615,8 @@ class TransactionLog(models.Model):
                 'Altering transaction log entries is not allowed')
         if self.transaction.id is None:
             self.transaction.save()
-        if self.type != Transaction.PENDING_STATE and self.transaction.log_set.filter(type=self.type).count():
+        if (self.type != Transaction.PENDING_STATE
+                and self.transaction.log_set.filter(type=self.type).count()):
             raise InvalidTransactionLog(
                 'Only one instance of each log type is allowed.')
         super(TransactionLog, self).save(*args, **kwargs)
@@ -623,13 +648,13 @@ class TransactionLog(models.Model):
 
 
 class TransactionEntry(models.Model):
-    transaction = models.ForeignKey(Transaction, verbose_name=_('transaction'),
-        related_name='entry_set')
+    transaction = models.ForeignKey(
+        Transaction, verbose_name=_('transaction'), related_name='entry_set')
     account = models.ForeignKey('Account', verbose_name=_('account'))
-    debit = models.DecimalField(_('debit amount'),
-        max_digits=10, decimal_places=2, default=0)
-    credit = models.DecimalField(_('credit amount'),
-        max_digits=10, decimal_places=2, default=0)
+    debit = models.DecimalField(
+        _('debit amount'), max_digits=10, decimal_places=2, default=0)
+    credit = models.DecimalField(
+        _('credit amount'), max_digits=10, decimal_places=2, default=0)
 
     def save(self, *args, **kwargs):
         if self.transaction.is_rejected():

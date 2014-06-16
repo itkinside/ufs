@@ -8,6 +8,7 @@ from django.utils.translation import ugettext as _
 
 from itkufs.accounting.models import Group, Account
 
+
 def login_user(request):
     """Login user"""
 
@@ -40,6 +41,7 @@ def login_user(request):
     return render_to_response('common/no_account.html',
                               context_instance=RequestContext(request))
 
+
 @login_required
 def switch_group(request, is_admin=False):
     """Switch to account summary for the selected account"""
@@ -47,13 +49,15 @@ def switch_group(request, is_admin=False):
     if request.method != 'POST':
         raise Http404
     group_slug = request.POST['group']
-    account = get_object_or_404(Account, owner=request.user,
-        group__slug=group_slug)
-    return HttpResponseRedirect(reverse('account-summary',
+    account = get_object_or_404(
+        Account, owner=request.user, group__slug=group_slug)
+    return HttpResponseRedirect(reverse(
+        'account-summary',
         kwargs={
             'group': account.group.slug,
             'account': account.slug,
         }))
+
 
 @login_required
 def static_page(request, template, is_admin=False):

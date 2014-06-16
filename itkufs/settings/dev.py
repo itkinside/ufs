@@ -1,4 +1,4 @@
-from itkufs.settings import *
+from itkufs.settings import *  # noqa
 
 # Debug settings
 DEBUG = True

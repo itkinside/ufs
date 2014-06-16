@@ -1,10 +1,15 @@
-from django.conf.urls import *
+from django.conf.urls import patterns, url
 
-from itkufs.accounting.views.edit import *
-from itkufs.accounting.views.display import *
+from itkufs.accounting.views.edit import (
+    new_edit_settlement, new_edit_transaction, approve_transactions,
+    reject_transactions, transfer)
+from itkufs.accounting.views.display import (
+    SettlementDetails, SettlementList, TransactionDetails, TransactionList)
 
-urlpatterns = patterns('',
-    ### Settlements
+urlpatterns = patterns(
+    '',
+
+    # --- Settlements
     url(r'^(?P<group>[0-9a-z_-]+)/settlement/(?P<settlement>\d+)/$',
         SettlementDetails.as_view(), name='settlement-details'),
     url(r'^(?P<group>[0-9a-z_-]+)/new-settlement/$',
@@ -16,7 +21,7 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/settlement/p(?P<page>\d+)/$',
         SettlementList.as_view(), name='settlement-list-page'),
 
-    ### Transactions
+    # --- Transactions
     url(r'^(?P<group>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/$',
         TransactionDetails.as_view(), name='transaction-details'),
 
@@ -47,8 +52,10 @@ urlpatterns = patterns('',
         TransactionList.as_view(), name='transaction-list-group-page'),
 
     # Account transaction lists
-    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/transaction/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/account/'
+        r'(?P<account>[0-9a-z_-]+)/transaction/$',
         TransactionList.as_view(), name='transaction-list-account'),
-    url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/transaction/p(?P<page>\d+)/$',
+    url(r'^(?P<group>[0-9a-z_-]+)/account/'
+        r'(?P<account>[0-9a-z_-]+)/transaction/p(?P<page>\d+)/$',
         TransactionList.as_view(), name='transaction-list-account-page'),
 )

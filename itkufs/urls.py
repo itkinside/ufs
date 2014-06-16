@@ -1,18 +1,17 @@
-from django.conf.urls import *
+from django.conf.urls import include, patterns, url
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.models import User
 
-from itkufs import admin
+from itkufs import admin  # noqa: To register admin classes
 
 if 'itkufs.accounting' in settings.INSTALLED_APPS:
-    import itkufs.accounting.admin
+    import itkufs.accounting.admin  # noqa: To register admin classes
 
 if 'itkufs.reports' in settings.INSTALLED_APPS:
-    import itkufs.reports.admin
+    import itkufs.reports.admin  # noqa: To register admin classes
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
 

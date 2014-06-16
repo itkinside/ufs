@@ -1,8 +1,11 @@
-from django.conf.urls import *
+from django.conf.urls import patterns, url
 
-from itkufs.billing.views import *
+from itkufs.billing.views import (
+    bill_create_transaction, bill_delete, bill_details, bill_list,
+    bill_new_edit, bill_pdf)
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^(?P<group>[0-9a-z_-]+)/billing/new/$',
         bill_new_edit, name='bill-new'),
     url(r'^(?P<group>[0-9a-z_-]+)/billing/(?P<bill>\d+)/edit/$',

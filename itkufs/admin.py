@@ -7,6 +7,7 @@ from django.contrib.flatpages.admin import FlatPageAdmin
 
 site = AdminSite()
 
+
 class CustomUserAdmin(UserAdmin):
     # Remove group editing
     fieldsets = UserAdmin.fieldsets[:-1]
@@ -14,8 +15,10 @@ class CustomUserAdmin(UserAdmin):
     def has_delete_permission(self, request, obj=None):
         return getattr(settings, 'BACKOFFICE', False)
 
+
 class CustomFlatPageAdmin(FlatPageAdmin):
     list_filter = []
+
 
 site.register(User, CustomUserAdmin)
 site.register(FlatPage, CustomFlatPageAdmin)

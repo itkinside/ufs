@@ -9,8 +9,12 @@ from django.db import transaction as db_transaction
 
 from itkufs.common.utils import callsign_sorted as ufs_sorted
 from itkufs.common.decorators import limit_to_owner, limit_to_admin
-from itkufs.accounting.models import *
-from itkufs.accounting.forms import *
+from itkufs.accounting.models import (
+    Account, RoleAccount, InvalidTransaction, Transaction, TransactionEntry)
+from itkufs.accounting.forms import (
+    ChangeTransactionForm, DepositWithdrawForm, EntryForm,
+    RejectTransactionForm, SettlementForm, TransactionSettlementForm,
+    TransferForm)
 
 
 @login_required
@@ -43,21 +47,20 @@ def new_edit_settlement(request, group, settlement=None, is_admin=False):
         else:
             form = SettlementForm()
 
-    return render_to_response('accounting/settlement_form.html',
-        {
-            'is_admin': is_admin,
-            'group': group,
-            'settlement': settlement,
-            'form': form,
-        },
-        context_instance=RequestContext(request))
+    return render_to_response('accounting/settlement_form.html', {
+        'is_admin': is_admin,
+        'group': group,
+        'settlement': settlement,
+        'form': form,
+    }, context_instance=RequestContext(request))
 
 
 @login_required
 @limit_to_owner
 @db_transaction.atomic
-def transfer(request, group, account=None, transfer_type=None,
-    is_admin=False, is_owner=False):
+def transfer(
+        request, group, account=None, transfer_type=None, is_admin=False,
+        is_owner=False):
     """Deposit, withdraw or transfer money"""
 
     if request.method == 'POST':
@@ -127,29 +130,28 @@ def transfer(request, group, account=None, transfer_type=None,
             if amount <= account.normal_balance() - (group.block_limit or 0):
                 transaction.set_committed(user=request.user)
             else:
-                messages.info(request, _('Your transaction has been added, '
-                    + 'but your group admin has to commit it.'))
-
+                messages.info(request, _(
+                    'Your transaction has been added, '
+                    'but your group admin has to commit it.'))
 
         else:
             return HttpResponseForbidden(_('Forbidden if not group admin.'))
 
         messages.success(request, _('Added transaction: %s') % transaction)
 
-        return HttpResponseRedirect(reverse('account-summary',
-            args=[account.group.slug, account.slug]))
+        return HttpResponseRedirect(reverse(
+            'account-summary', args=[account.group.slug, account.slug]))
 
-    return render_to_response('accounting/transfer.html',
-        {
-            'is_admin': is_admin,
-            'is_owner': is_owner,
-            'account': account,
-            'type': transfer_type,
-            'title': title,
-            'form': form,
-            'group': group,
-        },
-        context_instance=RequestContext(request))
+    return render_to_response('accounting/transfer.html', {
+        'is_admin': is_admin,
+        'is_owner': is_owner,
+        'account': account,
+        'type': transfer_type,
+        'title': title,
+        'form': form,
+        'group': group,
+    }, context_instance=RequestContext(request))
+
 
 @login_required
 @limit_to_admin
@@ -163,8 +165,9 @@ def approve_transactions(request, group, page='1', is_admin=False):
         choices = t.get_valid_logtype_choices()
 
         if request.method == 'POST':
-            form = ChangeTransactionForm(request.POST,
-                prefix="transaction%d" % t.id, choices=choices, label=False)
+            form = ChangeTransactionForm(
+                request.POST, prefix="transaction%d" % t.id, choices=choices,
+                label=False)
 
             if form.is_valid():
                 change_to = form.cleaned_data['change_to']
@@ -174,42 +177,42 @@ def approve_transactions(request, group, page='1', is_admin=False):
                 elif change_to == t.REJECTED_STATE:
                     to_be_rejected.append((t))
 
-                if change_to != t.REJECTED_STATE and change_to != t.COMMITTED_STATE:
-                    transactions.append((t,
-                        ChangeTransactionForm(prefix='transaction%d' % t.id,
-                            choices=t.get_valid_logtype_choices(), label=False)))
+                if change_to not in (t.REJECTED_STATE, t.COMMITTED_STATE):
+                    transactions.append((
+                        t,
+                        ChangeTransactionForm(
+                            prefix='transaction%d' % t.id,
+                            choices=t.get_valid_logtype_choices(),
+                            label=False)))
             else:
-                transactions.append((t,form))
+                transactions.append((t, form))
 
         else:
-            form = ChangeTransactionForm(choices=choices,
-                prefix="transaction%d" % t.id, label=False)
-            transactions.append((t,form))
+            form = ChangeTransactionForm(
+                choices=choices, prefix="transaction%d" % t.id, label=False)
+            transactions.append((t, form))
 
     if to_be_rejected:
         form = RejectTransactionForm()
-        return render_to_response('accounting/reject_transactions.html',
-            {
-                'is_admin': is_admin,
-                'group': group,
-                'transactions': to_be_rejected,
-                'form': form,
-            },
-            context_instance=RequestContext(request))
+        return render_to_response('accounting/reject_transactions.html', {
+            'is_admin': is_admin,
+            'group': group,
+            'transactions': to_be_rejected,
+            'form': form,
+        }, context_instance=RequestContext(request))
 
     if not transactions:
         messages.info(request, _('No pending transactions found.'))
-        return HttpResponseRedirect(reverse('group-summary', args=[group.slug]))
+        return HttpResponseRedirect(
+            reverse('group-summary', args=[group.slug]))
 
+    return render_to_response('accounting/approve_transactions.html', {
+        'is_admin': is_admin,
+        'group': group,
+        'approve': True,
+        'transaction_list': transactions,
+    }, context_instance=RequestContext(request))
 
-    return render_to_response('accounting/approve_transactions.html',
-        {
-            'is_admin': is_admin,
-            'group': group,
-            'approve': True,
-            'transaction_list': transactions,
-        },
-        context_instance=RequestContext(request))
 
 @login_required
 @limit_to_owner
@@ -219,11 +222,13 @@ def reject_transactions(request, group, transaction=None, is_admin=False):
     if request.method == 'POST':
         data = request.POST
         to_be_rejected = request.POST.getlist('transactions')
-        to_be_rejected = group.pending_transaction_set.filter(id__in=to_be_rejected)
+        to_be_rejected = group.pending_transaction_set.filter(
+            id__in=to_be_rejected)
     elif transaction is not None:
         data = None
         try:
-            # FIXME add count == 0 check for log_set__account__owner != request.user
+            # FIXME add count == 0 check for log_set__account__owner !=
+            # request.user
             # FIXME add can_reject to transaction
             to_be_rejected = [group.pending_transaction_set.get(
                 id=transaction.id, entry_set__account__owner=request.user)]
@@ -236,18 +241,16 @@ def reject_transactions(request, group, transaction=None, is_admin=False):
     form = RejectTransactionForm(data)
 
     if not form.is_valid():
-        return render_to_response('accounting/reject_transactions.html',
-            {
-                 'is_admin': is_admin,
-                 'group': group,
-                 'transactions': to_be_rejected,
-                 'form': form,
-            },
-            context_instance=RequestContext(request))
+        return render_to_response('accounting/reject_transactions.html', {
+            'is_admin': is_admin,
+            'group': group,
+            'transactions': to_be_rejected,
+            'form': form,
+        }, context_instance=RequestContext(request))
 
     for transaction in to_be_rejected:
-        transaction.set_rejected(user=request.user,
-            message=request.POST['reason'])
+        transaction.set_rejected(
+            user=request.user, message=request.POST['reason'])
 
     if transaction is not None:
         try:
@@ -261,11 +264,12 @@ def reject_transactions(request, group, transaction=None, is_admin=False):
             }))
 
     if group.pending_transaction_set.count():
-        return HttpResponseRedirect(reverse('approve-transactions',
-            kwargs={'group': group.slug}))
+        return HttpResponseRedirect(
+            reverse('approve-transactions', kwargs={'group': group.slug}))
 
-    return HttpResponseRedirect(reverse('group-summary',
-        kwargs={'group': group.slug}))
+    return HttpResponseRedirect(
+        reverse('group-summary', kwargs={'group': group.slug}))
+
 
 @login_required
 @limit_to_admin
@@ -276,8 +280,8 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
     if transaction is None:
         transaction = Transaction(group=group)
     elif not transaction.is_editable():
-        messages.error(request, _('Transaction %d can\'t be changed.' %
-          transaction.id))
+        messages.error(
+            request, _('Transaction %d can\'t be changed.' % transaction.id))
 
         db_transaction.commit()
 
@@ -300,8 +304,8 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
         data = None
 
     # Init forms
-    settlement_form = TransactionSettlementForm(data, prefix='settlement',
-        instance=transaction)
+    settlement_form = TransactionSettlementForm(
+        data, prefix='settlement', instance=transaction)
 
     user_forms = []
     group_forms = []
@@ -329,7 +333,8 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
             for forms in [group_forms, user_forms]:
                 for account, form in forms:
                     if not form.is_valid():
-                        raise InvalidTransaction('Form was not valid, id: %d' % account.id)
+                        raise InvalidTransaction(
+                            'Form was not valid, id: %d' % account.id)
                     else:
                         credit = form.cleaned_data['credit']
                         debit = form.cleaned_data['debit']
@@ -337,7 +342,8 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
                         if account.id in entries:
                             entry = entries[account.id]
                         else:
-                            entry = TransactionEntry(account=account,transaction=transaction)
+                            entry = TransactionEntry(
+                                account=account, transaction=transaction)
 
                         if credit > 0 or debit > 0:
                             entry.credit = credit or 0
@@ -363,16 +369,14 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
             return HttpResponseRedirect(url)
 
     try:
-        return render_to_response('accounting/transaction_form.html',
-            {
-                'is_admin': is_admin,
-                'group': group,
-                'settlement_form': settlement_form,
-                'group_forms': group_forms,
-                'user_forms': user_forms,
-                'errors': errors,
-                'transaction': transaction,
-            },
-            context_instance=RequestContext(request))
+        return render_to_response('accounting/transaction_form.html', {
+            'is_admin': is_admin,
+            'group': group,
+            'settlement_form': settlement_form,
+            'group_forms': group_forms,
+            'user_forms': user_forms,
+            'errors': errors,
+            'transaction': transaction,
+        }, context_instance=RequestContext(request))
     finally:
         db_transaction.rollback()

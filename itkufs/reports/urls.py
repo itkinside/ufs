@@ -1,9 +1,13 @@
-from django.conf.urls import *
+from django.conf.urls import patterns, url
 
-from itkufs.reports.views import *
+from itkufs.reports.views import (
+    balance, delete_list, income, new_edit_list, transaction_from_list,
+    view_list, view_list_preview)
 
-urlpatterns = patterns('',
-    ### Lists
+urlpatterns = patterns(
+    '',
+
+    # --- Lists
     url(r'^(?P<group>[0-9a-z_-]+)/list/new/$',
         new_edit_list, name='new-list'),
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<list>[0-9a-z_-]+)/$',
@@ -17,7 +21,7 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/list/(?P<list>[0-9a-z_-]+)/transaction/$',
         transaction_from_list, name='transaction-from-list'),
 
-    ### Statements
+    # --- Statements
     url(r'^(?P<group>[0-9a-z_-]+)/balance/$',
         balance, name='balance'),
     url(r'^(?P<group>[0-9a-z_-]+)/income/$',

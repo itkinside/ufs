@@ -4,9 +4,11 @@ from django.conf import settings
 from itkufs.reports.models import List, ListColumn
 from itkufs.admin import site
 
+
 class ListColumnInline(admin.TabularInline):
     model = ListColumn
     extra = 3
+
 
 class ListAdmin(admin.ModelAdmin):
     inlines = [

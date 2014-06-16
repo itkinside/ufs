@@ -10,7 +10,8 @@ from django.contrib import messages
 
 from itkufs.common.decorators import limit_to_admin
 from itkufs.common.forms import GroupForm, AccountForm, RoleAccountForm
-from itkufs.accounting.models import Group, Account, RoleAccount
+from itkufs.accounting.models import RoleAccount
+
 
 @login_required
 @limit_to_admin
@@ -23,7 +24,9 @@ def edit_group(request, group, is_admin=False):
         else:
             old_logo = None
 
-        form = GroupForm(data=request.POST, files=request.FILES, instance=group, user=request.user)
+        form = GroupForm(
+            data=request.POST, files=request.FILES, instance=group,
+            user=request.user)
 
         if form.is_valid():
             form.save()
@@ -38,12 +41,13 @@ def edit_group(request, group, is_admin=False):
 
             messages.success(request, _('Group successfully updated.'))
 
-            return HttpResponseRedirect(reverse('group-summary',
-                args=(group.slug,)))
+            return HttpResponseRedirect(
+                reverse('group-summary', args=(group.slug,)))
     else:
         form = GroupForm(instance=group)
 
-    return render_to_response('common/group_form.html',
+    return render_to_response(
+        'common/group_form.html',
         {
             'is_admin': is_admin,
             'group': group,
@@ -51,9 +55,10 @@ def edit_group(request, group, is_admin=False):
         },
         context_instance=RequestContext(request))
 
+
 @login_required
-def activate_account(request, group, account=None,
-    is_admin=False, is_owner=False):
+def activate_account(
+        request, group, account=None, is_admin=False, is_owner=False):
     """Create account or edit account properties"""
 
     if request.method == 'POST':
@@ -63,18 +68,20 @@ def activate_account(request, group, account=None,
 
             messages.success(request, _('Account successfully activated.'))
 
-    return HttpResponseRedirect(reverse('account-summary',
-        args=(group.slug, account.slug)))
+    return HttpResponseRedirect(
+        reverse('account-summary', args=(group.slug, account.slug)))
+
 
 @login_required
 @limit_to_admin
-def new_edit_account(request, group, account=None,
-    is_admin=False, is_owner=False):
+def new_edit_account(
+        request, group, account=None, is_admin=False, is_owner=False):
     """Create account or edit account properties"""
 
     if request.method == 'POST':
         if account is not None:
-            form = AccountForm(instance=account, data=request.POST, group=group)
+            form = AccountForm(
+                instance=account, data=request.POST, group=group)
         else:
             form = AccountForm(data=request.POST, group=group)
 
@@ -86,15 +93,16 @@ def new_edit_account(request, group, account=None,
                 account = form.save(group=group)
                 messages.success(request, _('Account successfully created.'))
 
-            return HttpResponseRedirect(reverse('account-summary',
-                args=(group.slug, account.slug)))
+            return HttpResponseRedirect(
+                reverse('account-summary', args=(group.slug, account.slug)))
     else:
         if account is not None:
             form = AccountForm(instance=account)
         else:
             form = AccountForm()
 
-    return render_to_response('common/account_form.html',
+    return render_to_response(
+        'common/account_form.html',
         {
             'is_admin': is_admin,
             'group': group,
@@ -103,6 +111,7 @@ def new_edit_account(request, group, account=None,
             'form': form,
         },
         context_instance=RequestContext(request))
+
 
 @login_required
 @limit_to_admin
@@ -121,12 +130,15 @@ def assign_role_accounts(request, group, is_admin=False):
                         role.account = account
                         role.save()
                 except RoleAccount.DoesNotExist:
-                    role = group.roleaccount_set.create(role=type, account=account)
-            return HttpResponseRedirect(reverse('group-summary', args=(group.slug,)))
+                    role = group.roleaccount_set.create(
+                        role=type, account=account)
+            return HttpResponseRedirect(
+                reverse('group-summary', args=(group.slug,)))
     else:
         form = RoleAccountForm(group=group)
 
-    return render_to_response('common/role_account_form.html',
+    return render_to_response(
+        'common/role_account_form.html',
         {
             'is_admin': is_admin,
             'group': group,

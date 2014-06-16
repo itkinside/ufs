@@ -19,6 +19,7 @@ def verify_account_number(num):
         crosssum += int(a) * int(b)
     return num[10] == str(11 - crosssum % 11)
 
+
 def callsign_sorted(objects):
     current_locale = locale.getlocale()
 
@@ -33,6 +34,7 @@ def callsign_sorted(objects):
 
     return sorted_list
 
+
 def callsign_key(value):
     is_callsign = value.short_name and CALLSIGN_RE.match(value.short_name)
 
@@ -43,6 +45,7 @@ def callsign_key(value):
         'is_la': is_callsign and value.short_name.startswith('LA'),
         'is_lb': is_callsign and value.short_name.startswith('LB'),
     }
+
 
 def callsign_cmp(x, y):
     '''

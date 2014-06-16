@@ -3,8 +3,8 @@ from django.forms.forms import BoundField
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
-from itkufs.reports.models import *
-from itkufs.accounting.models import *
+from itkufs.reports.models import List, ListColumn
+from itkufs.accounting.models import Account, TransactionEntry
 
 
 class ListTransactionForm(forms.Form):
@@ -14,8 +14,8 @@ class ListTransactionForm(forms.Form):
         self.column_fields = []
         self.account_fields = []
 
-        credit_accounts = Account.objects.filter(active=True,
-            group_account=True, group=list_.group_id)
+        credit_accounts = Account.objects.filter(
+            active=True, group_account=True, group=list_.group_id)
         self.fields['credit_account'] = forms.ModelChoiceField(credit_accounts)
         self.fields['credit_account'].label_from_instance = lambda a: a.name
 
@@ -34,8 +34,8 @@ class ListTransactionForm(forms.Form):
             account_columns_field = []
             for c in columns:
                 name = 'entry-%d-%d' % (c.id, a.id)
-                formfield = forms.IntegerField(min_value=0,
-                    label=c.name, required=False)
+                formfield = forms.IntegerField(
+                    min_value=0, label=c.name, required=False)
                 formfield.widget.attrs['size'] = 1
                 self.fields[name] = formfield
                 account_columns_field.append((name, formfield))
@@ -57,7 +57,8 @@ class ListTransactionForm(forms.Form):
             for name, field in fields:
                 if self.cleaned_data.get(name, 0) > 0:
                     return
-        raise forms.ValidationError(_('Please fill in at least one account entry.'))
+        raise forms.ValidationError(
+            _('Please fill in at least one account entry.'))
 
     def transaction_entries(self):
         if not self.is_valid():
@@ -78,9 +79,11 @@ class ListTransactionForm(forms.Form):
                 entries.append(TransactionEntry(account=account, debit=amount))
 
         if total > 0:
-            entries.append(TransactionEntry(account=credit_account, credit=total))
+            entries.append(
+                TransactionEntry(account=credit_account, credit=total))
 
         return entries
+
 
 class ListForm(forms.ModelForm):
     class Meta:
@@ -91,7 +94,8 @@ class ListForm(forms.ModelForm):
         group = kwargs.pop('group')
         super(ListForm, self).__init__(*args, **kwargs)
 
-        self.fields['extra_accounts'].choices = [(a.id, a.name) for a in group.account_set.all()]
+        self.fields['extra_accounts'].choices = [
+            (a.id, a.name) for a in group.account_set.all()]
 
     def clean(self):
         account_width = self.cleaned_data.get('account_width', 0)
@@ -104,7 +108,8 @@ class ListForm(forms.ModelForm):
             }
 
             raise forms.ValidationError(
-                _(u'"%(field1)s" or "%(field2)s" must be greater than zero') % fields)
+                _(u'"%(field1)s" or "%(field2)s" must be greater than zero')
+                % fields)
         return self.cleaned_data
 
     def save(self, group=None, **kwargs):
@@ -127,7 +132,9 @@ class ListForm(forms.ModelForm):
 
 class ColumnForm(forms.ModelForm):
     name = forms.CharField(max_length=100, required=False)
-    width = forms.IntegerField(min_value=0, required=False, widget=forms.TextInput(attrs={'size': 4, 'class': 'number'}))
+    width = forms.IntegerField(
+        min_value=0, required=False,
+        widget=forms.TextInput(attrs={'size': 4, 'class': 'number'}))
 
     def clean(self):
         if self.cleaned_data['width'] and not self.cleaned_data['name']:

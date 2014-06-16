@@ -1,9 +1,9 @@
 from django.http import Http404
-from django.utils.translation import ugettext as _
 
 from itkufs.accounting.models import Group, Account, Settlement, Transaction
-from itkufs.reports.models import List
 from itkufs.billing.models import Bill
+from itkufs.reports.models import List
+
 
 class UfsMiddleware:
     def process_view(self, request, view_func, view_args, view_kwargs):

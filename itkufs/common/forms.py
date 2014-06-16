@@ -1,14 +1,14 @@
 from django import forms
 from django.forms.models import ModelForm
-from django.forms.forms import BoundField, Form
+from django.forms.forms import Form
 from django.template.defaultfilters import slugify
-from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib import auth
 
 from itkufs.common.utils import verify_account_number
 from itkufs.accounting.models import Group, Account, RoleAccount
+
 
 class AccountForm(ModelForm):
     owner = forms.CharField(required=False)
@@ -84,7 +84,8 @@ class AccountForm(ModelForm):
         group_account = self.cleaned_data['group_account']
 
         if self.data['owner'] and group_account:
-            raise forms.ValidationError(_("Group accounts can not have owners."))
+            raise forms.ValidationError(
+                _("Group accounts can not have owners."))
 
         return group_account
 
@@ -132,7 +133,8 @@ class GroupForm(ModelForm):
             errors.append(_('The group must have at least one admin'))
 
         if self.user and self.user not in self.cleaned_data['admins']:
-            errors.append(_('You are not allowed to remove your own admin privileges'))
+            errors.append(
+                _('You are not allowed to remove your own admin privileges'))
 
         if errors:
             raise forms.ValidationError(errors)
@@ -155,9 +157,11 @@ class GroupForm(ModelForm):
         kwargs['commit'] = original_commit
         return super(GroupForm, self).save(*args, **kwargs)
 
+
 class RoleAccountModelChoiceField(forms.models.ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.name
+
 
 class RoleAccountForm(Form):
     def __init__(self, *args, **kwargs):
@@ -167,11 +171,12 @@ class RoleAccountForm(Form):
         if group:
             for type, name in RoleAccount.ACCOUNT_ROLE:
                 try:
-                    intial = RoleAccount.objects.get(group=group, role=type).account.id
+                    intial = RoleAccount.objects.get(
+                        group=group, role=type).account.id
                 except RoleAccount.DoesNotExist:
                     intial = ''
 
-                self.fields[type] = RoleAccountModelChoiceField(group.group_account_set, initial=intial)
+                self.fields[type] = RoleAccountModelChoiceField(
+                    group.group_account_set, initial=intial)
         else:
             raise Exception('Please supply a group kwarg for RoleAccountForm')
-

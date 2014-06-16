@@ -1,9 +1,9 @@
 from datetime import date
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import Paragraph, BaseDocTemplate, PageTemplate, Frame, Spacer, KeepTogether
+from reportlab.platypus import (
+    Paragraph, BaseDocTemplate, PageTemplate, Frame, Spacer, KeepTogether)
 from reportlab.platypus.tables import Table, TableStyle
 from reportlab.platypus.flowables import Image
-from reportlab.platypus.doctemplate import FrameBreak
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import cm
 
@@ -18,17 +18,18 @@ styles = getSampleStyleSheet()
 styles['Normal'].spaceAfter = 5
 
 table_style = TableStyle([
-    ('FONT',     (0, 0), (-1,-1), 'Helvetica'),
+    ('FONT',     (0, 0), (-1, -1), 'Helvetica'),
     ('FONT',     (0, 0), (-1, 0), 'Helvetica-Bold'),
-    ('FONT',     (0,-1), (-1,-1), 'Helvetica-Bold'),
-    ('VALIGN',   (0, 0), (-1,-1), 'MIDDLE'),
-    ('ALIGN',    (0, 0), ( 0,-1), 'LEFT'),
-    ('ALIGN',    (1, 0), ( 1,-1), 'RIGHT'),
-    ('ROWBACKGROUNDS', (0,0), (-1,-2), ALTERNATE_COLORS),
-    ('LINEBELOW',  (0,0), (-1,0), 1, BORDER_COLOR),
-    ('LINEBELOW',  (0,-1), (-1,-1), 2, BORDER_COLOR),
-    ('LINEABOVE',  (0,-1),  (-1,-1),  1, BORDER_COLOR),
+    ('FONT',     (0, -1), (-1, -1), 'Helvetica-Bold'),
+    ('VALIGN',   (0, 0), (-1, -1), 'MIDDLE'),
+    ('ALIGN',    (0, 0), (0, -1), 'LEFT'),
+    ('ALIGN',    (1, 0), (1, -1), 'RIGHT'),
+    ('ROWBACKGROUNDS', (0, 0), (-1, -2), ALTERNATE_COLORS),
+    ('LINEBELOW',  (0, 0), (-1, 0), 1, BORDER_COLOR),
+    ('LINEBELOW',  (0, -1), (-1, -1), 2, BORDER_COLOR),
+    ('LINEABOVE',  (0, -1),  (-1, -1),  1, BORDER_COLOR),
 ])
+
 
 def pdf(group, bill):
     """PDF version of bill"""
@@ -45,28 +46,38 @@ def pdf(group, bill):
     filename = '%s-%s-%s-%s' % (date.today(), group, _('bill'), bill.id)
 
     response = HttpResponse(mimetype='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % slugify(filename)
+    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % (
+        slugify(filename))
 
     show_logo = bool(group.logo and group.logo.storage.exists(group.logo.path))
 
     if show_logo:
         ratio = group.logo.width / group.logo.height
-        logo = Image(group.logo.path, width=logo_height*ratio, height=logo_height)
+        logo = Image(
+            group.logo.path, width=logo_height*ratio, height=logo_height)
 
     def draw_header(canvas, doc):
         if show_logo:
-            logo.drawOn(canvas, width/2 - 1*margin - logo_height*ratio, height - margin - logo_height)
+            logo.drawOn(
+                canvas,
+                width/2 - 1*margin - logo_height*ratio,
+                height - margin - logo_height)
 
         canvas.setFont(font_name, font_size)
-        canvas.drawString(margin, height - margin - font_size, _('Bill #%d') % (bill.id))
+        canvas.drawString(
+            margin, height - margin - font_size, _('Bill #%d') % (bill.id))
         canvas.setFont(font_name, font_size - 4)
-        canvas.drawString(margin, height - margin - 2*font_size, bill.created.strftime(_('%Y-%m-%d %H:%M').encode('utf-8')))
+        canvas.drawString(
+            margin, height - margin - 2*font_size,
+            bill.created.strftime(_('%Y-%m-%d %H:%M').encode('utf-8')))
 
     frames = [
-        Frame(0, 0, width/2, height-heading,
+        Frame(
+            0, 0, width/2, height-heading,
             leftPadding=margin, bottomPadding=margin,
             rightPadding=margin/2, topPadding=margin),
-        Frame(width/2, 0, width/2, height, 
+        Frame(
+            width/2, 0, width/2, height,
             leftPadding=margin/2, bottomPadding=margin,
             rightPadding=margin, topPadding=margin),
     ]
@@ -98,4 +109,3 @@ def pdf(group, bill):
     doc.build(parts)
 
     return response
-

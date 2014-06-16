@@ -6,24 +6,28 @@ import sys
 import logging
 from optparse import make_option
 
-from django.conf import settings
-from django.utils.translation import ugettext_lazy as _, activate, get_language
+from django.utils.translation import ugettext_lazy as _, activate
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMessage, SMTPConnection
 
-from itkufs.accounting.models import Account, Group
+from itkufs.accounting.models import Group
+
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
-        make_option('-g', '--group', dest='group_slug',
+        make_option(
+            '-g', '--group', dest='group_slug',
             help='Group to send emails to'),
-        make_option('-y', '--yes',
+        make_option(
+            '-y', '--yes',
             action='store_const', const=1, dest='yes', default=0,
             help='Do not ask for confirmation'),
-        make_option('-d', '--debug',
+        make_option(
+            '-d', '--debug',
             action='store_const', const=1, dest='debug', default=0,
             help='Don\'t send any emails, just print them'),
-        make_option('-l', '--lang', dest='lang', default='en',
+        make_option(
+            '-l', '--lang', dest='lang', default='en',
             help='Language to use for emails'),
     )
 
@@ -76,7 +80,8 @@ class Command(BaseCommand):
 
         for account in accounts:
             if not account.owner.email:
-                self.logger.warning(u'Skipping account %s as it has no email set.', account)
+                self.logger.warning(
+                    u'Skipping account %s as it has no email set.', account)
             elif account.is_blocked():
                 emails.append(self._send_blocked_mail(account))
             elif account.needs_warning():
@@ -87,7 +92,10 @@ class Command(BaseCommand):
     def _send_warning_mail(self, account):
         to_email = account.owner.email
         subject = WARNING_SUBJECT % {'group': account.group}
-        message = WARNING_MESSAGE % {'balance': account.normal_balance(), 'limit': account.group.warn_limit}
+        message = WARNING_MESSAGE % {
+            'balance': account.normal_balance(),
+            'limit': account.group.warn_limit,
+        }
         message += SIGNATURE
 
         group_email = account.group.email
@@ -97,12 +105,16 @@ class Command(BaseCommand):
         else:
             headers = {}
 
-        return EmailMessage(subject, message, FROM_EMAIL, [to_email], headers=headers)
+        return EmailMessage(
+            subject, message, FROM_EMAIL, [to_email], headers=headers)
 
     def _send_blocked_mail(self, account):
         to_email = account.owner.email
         subject = BLOCK_SUBJECT % {'group': account.group}
-        message = BLOCK_MESSAGE % {'balance': account.normal_balance(), 'limit': account.group.block_limit}
+        message = BLOCK_MESSAGE % {
+            'balance': account.normal_balance(),
+            'limit': account.group.block_limit,
+        }
         message += SIGNATURE
 
         group_email = account.group.email
@@ -112,7 +124,8 @@ class Command(BaseCommand):
         else:
             headers = {}
 
-        return EmailMessage(subject, message, FROM_EMAIL, [to_email], headers=headers)
+        return EmailMessage(
+            subject, message, FROM_EMAIL, [to_email], headers=headers)
 
     def _print_debug(self, emails):
         for email in emails:
@@ -126,14 +139,18 @@ class Command(BaseCommand):
 FROM_EMAIL = 'ufs-web@samfundet.no'
 
 WARNING_SUBJECT = _('Warning limit passed in %(group)s')
-WARNING_MESSAGE = _('''Your current account balance of %(balance).2f, is below the _warning limit_ %(limit).2f
+WARNING_MESSAGE = _('''
+Your current account balance of %(balance).2f, is below the _warning limit_
+%(limit).2f.
 
 To fix this either deposit more money or contact one of the group
 administrators.
 ''')
 
 BLOCK_SUBJECT = _('Block limit passed in %(group)s')
-BLOCK_MESSAGE = _('''Your current account balance of %(balance).2f, is below the _block limit_ %(limit).2f
+BLOCK_MESSAGE = _('''
+Your current account balance of %(balance).2f, is below the _block limit_
+%(limit).2f.
 
 To fix this either deposit more money or contact one of the group
 administrators.

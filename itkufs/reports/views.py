@@ -9,12 +9,13 @@ from django.forms.models import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 
 from itkufs.common.decorators import limit_to_group, limit_to_admin
-from itkufs.accounting.models import Account
-from itkufs.reports.models import *
-from itkufs.reports.forms import *
+from itkufs.accounting.models import Account, Transaction
+from itkufs.reports.models import List, ListColumn
+from itkufs.reports.forms import ColumnForm, ListForm, ListTransactionForm
 from itkufs.reports.pdf import pdf
 
 _list = list
@@ -37,7 +38,8 @@ def view_list(request, group, list, is_admin=False):
     filename = '%s-%s-%s' % (date.today(), group, list)
 
     response = HttpResponse(content.getvalue(), mimetype='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % slugify(filename)
+    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % (
+        slugify(filename))
 
     return response
 
@@ -47,7 +49,8 @@ def view_list(request, group, list, is_admin=False):
 def view_list_preview(request, group, list, is_admin=False):
     content = pdf(group, list, show_header=True, show_footer=True)
 
-    p = Popen(["gs", "-q", "-dSAFER", "-dBATCH", "-dNOPAUSE", "-r40",
+    p = Popen([
+        "gs", "-q", "-dSAFER", "-dBATCH", "-dNOPAUSE", "-r40",
         "-dGraphicsAlphaBits=4", "-dTextAlphaBits=4", "-sDEVICE=png16m",
         "-sOutputFile=-", "-"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
@@ -68,7 +71,8 @@ def view_public_list(request, group, list, is_admin=False):
     filename = '%s-%s-%s' % (date.today(), group, list)
 
     response = HttpResponse(content.getvalue(), mimetype='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % slugify(filename)
+    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % (
+        slugify(filename))
 
     return response
 
@@ -85,13 +89,15 @@ def new_edit_list(request, group, list=None, is_admin=False):
         data = None
 
     if not list:
-        ColumnFormSet = inlineformset_factory(List, ListColumn, extra=10, form=ColumnForm)
+        ColumnFormSet = inlineformset_factory(
+            List, ListColumn, extra=10, form=ColumnForm)
 
         listform = ListForm(data=data, group=group)
         columnformset = ColumnFormSet(data)
 
     else:
-        ColumnFormSet = inlineformset_factory(List, ListColumn, extra=3, form=ColumnForm)
+        ColumnFormSet = inlineformset_factory(
+            List, ListColumn, extra=3, form=ColumnForm)
         if list is None:
             raise Http404
 
@@ -112,12 +118,14 @@ def new_edit_list(request, group, list=None, is_admin=False):
                 else:
                     c.save()
 
-            return HttpResponseRedirect(reverse('group-summary',
+            return HttpResponseRedirect(reverse(
+                'group-summary',
                 kwargs={
                     'group': group.slug,
                 }))
 
-    return render_to_response('reports/list_form.html',
+    return render_to_response(
+        'reports/list_form.html',
         {
             'is_admin': is_admin,
             'group': group,
@@ -139,12 +147,14 @@ def delete_list(request, group, list, is_admin=False):
         list.delete()
         messages.info(request, _('List deleted.'))
 
-        return HttpResponseRedirect(reverse('group-summary',
+        return HttpResponseRedirect(reverse(
+            'group-summary',
             kwargs={
                 'group': group.slug,
             }))
 
-    return render_to_response('reports/list_delete.html',
+    return render_to_response(
+        'reports/list_delete.html',
         {
             'is_admin': is_admin,
             'group': group,
@@ -170,15 +180,18 @@ def transaction_from_list(request, group, list, is_admin=False):
             entry.save()
 
         transaction.save()
-        transaction.set_pending(user=request.user, message=_('Created from list: %s') % list.slug)
+        transaction.set_pending(
+            user=request.user, message=_('Created from list: %s') % list.slug)
 
-        return HttpResponseRedirect(reverse('edit-transaction',
+        return HttpResponseRedirect(reverse(
+            'edit-transaction',
             kwargs={
                 'group': group.slug,
                 'transaction': transaction.id,
             }))
 
-    return render_to_response('reports/list_transaction_form.html',
+    return render_to_response(
+        'reports/list_transaction_form.html',
         {
             'is_admin': is_admin,
             'group': group,
@@ -235,7 +248,8 @@ def balance(request, group, is_admin=False):
     accounts['eq_sum'] += curr_year_net_income
     accounts['li_eq_sum'] += curr_year_net_income
 
-    return render_to_response('reports/balance.html',
+    return render_to_response(
+        'reports/balance.html',
         {
             'is_admin': is_admin,
             'group': group,
@@ -270,7 +284,8 @@ def income(request, group, is_admin=False):
     # Net income
     accounts['in_ex_diff'] = accounts['in_sum'] - accounts['ex_sum']
 
-    return render_to_response('reports/income.html',
+    return render_to_response(
+        'reports/income.html',
         {
             'is_admin': is_admin,
             'group': group,
@@ -278,4 +293,3 @@ def income(request, group, is_admin=False):
             'accounts': accounts,
         },
         context_instance=RequestContext(request))
-

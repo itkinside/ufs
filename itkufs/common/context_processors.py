@@ -11,8 +11,8 @@ def debug(request):
     """
 
     context_extras = {}
-    if (settings.DEBUG
-        and (request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS
+    if (settings.DEBUG and (
+            request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS
             or request.user.is_superuser)):
         context_extras['debug'] = True
         from django.db import connection

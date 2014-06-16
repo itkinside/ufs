@@ -3,6 +3,7 @@ from pwd import getpwnam
 from django.conf import settings
 from django.contrib.auth.models import User
 
+
 class KerberosBackend:
     def authenticate(self, request=None, remote_user=None):
         if remote_user:

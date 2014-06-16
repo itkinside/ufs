@@ -1,6 +1,7 @@
 import unittest
 
-from itkufs.common.utils import *
+from itkufs.common.utils import verify_account_number
+
 
 class VerifyAccountNumberTestCase(unittest.TestCase):
 

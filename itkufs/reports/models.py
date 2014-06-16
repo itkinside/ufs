@@ -7,18 +7,20 @@ from itkufs.common.utils import callsign_sorted
 
 class ListManager(models.Manager):
     def get_query_set(self):
-        return super(ListManager,self).get_query_set().extra(
+        return super(ListManager, self).get_query_set().extra(
             select={
-            'listcolumn_count':
-                """
-                SELECT COUNT(*) FROM reports_listcolumn
-                WHERE reports_listcolumn.list_id = reports_list.id
-                """,
-            'listcolumn_width':
-                """
-                    SELECT SUM(reports_listcolumn.width) FROM reports_listcolumn
+                'listcolumn_count':
+                    """
+                    SELECT COUNT(*)
+                    FROM reports_listcolumn
                     WHERE reports_listcolumn.list_id = reports_list.id
-                """
+                    """,
+                'listcolumn_width':
+                    """
+                    SELECT SUM(reports_listcolumn.width)
+                    FROM reports_listcolumn
+                    WHERE reports_listcolumn.list_id = reports_list.id
+                    """
             }
         )
 
@@ -35,25 +37,33 @@ class List(models.Model):
 
     name = models.CharField(_('name'), max_length=200)
     slug = models.SlugField(_('slug'))
-    account_width = models.PositiveSmallIntegerField(_('account name width'),
+    account_width = models.PositiveSmallIntegerField(
+        _('account name width'),
         help_text=_('Relative width of cell, 0 to hide'))
-    short_name_width = models.PositiveSmallIntegerField(_('short name width'),
+    short_name_width = models.PositiveSmallIntegerField(
+        _('short name width'),
         help_text=_('Relative width of cell, 0 to hide'))
-    balance_width = models.PositiveSmallIntegerField(_('balance width'),
+    balance_width = models.PositiveSmallIntegerField(
+        _('balance width'),
         help_text=_('Relative width of cell, 0 to hide'))
-    group = models.ForeignKey(Group,
-        verbose_name=_('group'), related_name='list_set')
+    group = models.ForeignKey(
+        Group, verbose_name=_('group'), related_name='list_set')
 
-    public = models.BooleanField(_('Public'), default=False,
+    public = models.BooleanField(
+        _('Public'), default=False,
         help_text=_('Should this list be publicly available'))
 
-    add_active_accounts = models.BooleanField(_('Add active user accounts'),
-        default=True, help_text=_('Should all active accounts be added by default'))
+    add_active_accounts = models.BooleanField(
+        _('Add active user accounts'), default=True,
+        help_text=_('Should all active accounts be added by default'))
 
     extra_accounts = models.ManyToManyField(Account, blank="true")
 
-    orientation = models.CharField(_('orientation'), max_length=1, choices=ORIENTATION_CHOICES)
-    comment = models.TextField(_('comment'), blank=True, help_text=_('Comment shown at bottom on first page'))
+    orientation = models.CharField(
+        _('orientation'), max_length=1, choices=ORIENTATION_CHOICES)
+    comment = models.TextField(
+        _('comment'), blank=True,
+        help_text=_('Comment shown at bottom on first page'))
 
     double = models.BooleanField(
         default=False, help_text=_('Use two rows per account'))
@@ -72,9 +82,8 @@ class List(models.Model):
         return u'%s: %s' % (self.group, self.name)
 
     def total_width(self):
-        return int(self.account_width
-            + self.balance_width
-            + self.listcolumn_width)
+        return int(
+            self.account_width + self.balance_width + self.listcolumn_width)
 
     def total_column_count(self):
         count = self.listcolumn_count + 1
@@ -99,12 +108,12 @@ class List(models.Model):
 class ListColumn(models.Model):
     name = models.CharField(_('name'), max_length=200)
     width = models.PositiveSmallIntegerField(_('width'))
-    list = models.ForeignKey(List, verbose_name=_('list'),
-        related_name='column_set')
+    list = models.ForeignKey(
+        List, verbose_name=_('list'), related_name='column_set')
 
     class Meta:
         ordering = ['id']
-        #unique_together = (('name', 'list'),)
+        # unique_together = (('name', 'list'),)
         verbose_name = _('list item')
         verbose_name_plural = _('list items')
 

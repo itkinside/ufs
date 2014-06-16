@@ -7,6 +7,7 @@ from itkufs.billing.models import Bill, BillingLine
 
 ACCOUNT_ROLE_DICT = dict([(a[0], a) for a in RoleAccount.ACCOUNT_ROLE])
 
+
 class CreateTransactionForm(forms.Form):
     PAY_TO_CHOICES = (
         ACCOUNT_ROLE_DICT[RoleAccount.BANK_ACCOUNT],
@@ -35,20 +36,22 @@ class CreateTransactionForm(forms.Form):
 
         return self.cleaned_data
 
+
 class BillForm(forms.ModelForm):
     class Meta:
         model = Bill
         exclude = ('group', 'transaction')
 
+
 class BillingLineForm(forms.ModelForm):
     description = forms.CharField(max_length=100, required=False)
-    amount= forms.DecimalField(min_value=0, max_digits=10, decimal_places=2,
-                               required=False,
-                               widget=forms.TextInput(attrs={'size': 4, 'class': 'number'}))
+    amount = forms.DecimalField(
+        min_value=0, max_digits=10, decimal_places=2, required=False,
+        widget=forms.TextInput(attrs={'size': 4, 'class': 'number'}))
 
     def clean(self):
         amount = self.cleaned_data.get('amount', -1)
-        description  = self.cleaned_data.get('description', '')
+        description = self.cleaned_data.get('description', '')
 
         if amount > 0 and description.strip():
             return self.cleaned_data
@@ -73,8 +76,10 @@ class BillingLineForm(forms.ModelForm):
         model = BillingLine
         fields = ('description', 'amount')
 
-BillingLineFormSet = inlineformset_factory(Bill, BillingLine,
-            extra=5, can_delete=False, form=BillingLineForm)
 
-NewBillingLineFormSet = inlineformset_factory(Bill, BillingLine,
-            extra=15, can_delete=False, form=BillingLineForm)
+BillingLineFormSet = inlineformset_factory(
+    Bill, BillingLine, extra=5, can_delete=False, form=BillingLineForm)
+
+
+NewBillingLineFormSet = inlineformset_factory(
+    Bill, BillingLine, extra=15, can_delete=False, form=BillingLineForm)

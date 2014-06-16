@@ -7,10 +7,12 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
 from itkufs.common.decorators import limit_to_admin
-from itkufs.accounting.models import RoleAccount, Account, Transaction, TransactionEntry
+from itkufs.accounting.models import Account, Transaction, TransactionEntry
 from itkufs.billing.models import Bill
 from itkufs.billing.pdf import pdf
-from itkufs.billing.forms import BillingLineFormSet, NewBillingLineFormSet, BillForm, CreateTransactionForm
+from itkufs.billing.forms import (
+    BillingLineFormSet, NewBillingLineFormSet, BillForm, CreateTransactionForm)
+
 
 @login_required
 @limit_to_admin
@@ -23,7 +25,8 @@ def bill_new_edit(request, group, bill=None, is_admin=False):
 
     if not bill.is_editable():
         messages.warning(request, _('This bill can no longer be edited.'))
-        return HttpResponseRedirect(reverse('bill-details', args=[group.slug, bill.id]))
+        return HttpResponseRedirect(
+            reverse('bill-details', args=[group.slug, bill.id]))
 
     if request.method != 'POST':
         form = BillForm(instance=bill)
@@ -46,9 +49,11 @@ def bill_new_edit(request, group, bill=None, is_admin=False):
                 elif line.id:
                     line.delete()
 
-            return HttpResponseRedirect(reverse('bill-details', args=[group.slug, bill.id]))
+            return HttpResponseRedirect(
+                reverse('bill-details', args=[group.slug, bill.id]))
 
-    return render_to_response('billing/bill_form.html',
+    return render_to_response(
+        'billing/bill_form.html',
         {
             'is_admin': is_admin,
             'group': group,
@@ -57,12 +62,15 @@ def bill_new_edit(request, group, bill=None, is_admin=False):
         },
         context_instance=RequestContext(request))
 
+
 @login_required
 @limit_to_admin
 def bill_create_transaction(request, group, bill, is_admin=False):
     if not bill.is_editable():
-        messages.info(request, _('This bill is already linked to a transaction.'))
-        return HttpResponseRedirect(reverse('transaction-details', args=[group.slug, bill.transaction.id]))
+        messages.info(
+            request, _('This bill is already linked to a transaction.'))
+        return HttpResponseRedirect(reverse(
+            'transaction-details', args=[group.slug, bill.transaction.id]))
 
     if request.method != 'POST':
         form = CreateTransactionForm(bill)
@@ -70,8 +78,8 @@ def bill_create_transaction(request, group, bill, is_admin=False):
         form = CreateTransactionForm(bill, request.POST)
 
         if form.is_valid():
-            pay_to = Account.objects.get(group=group,
-                roleaccount__role=form.cleaned_data['pay_to'])
+            pay_to = Account.objects.get(
+                group=group, roleaccount__role=form.cleaned_data['pay_to'])
 
             charge_to = form.cleaned_data['charge_to']
 
@@ -89,17 +97,19 @@ def bill_create_transaction(request, group, bill, is_admin=False):
             transaction.entry_set.add(
                 TransactionEntry(account=pay_to, debit=sum))
 
-            transaction.set_pending(user=request.user,
+            transaction.set_pending(
+                user=request.user,
                 message=_('Bill #%(id)s: %(description)s') % {
-                    'id':bill.pk, 'description': bill.description})
+                    'id': bill.pk, 'description': bill.description})
 
             bill.transaction = transaction
             bill.save()
 
-            return HttpResponseRedirect(reverse('transaction-details',
-                args=[group.slug,transaction.id]))
+            return HttpResponseRedirect(reverse(
+                'transaction-details', args=[group.slug, transaction.id]))
 
-    return render_to_response('billing/bill_create_transaction.html',
+    return render_to_response(
+        'billing/bill_create_transaction.html',
         {
             'is_admin': is_admin,
             'group': group,
@@ -108,10 +118,12 @@ def bill_create_transaction(request, group, bill, is_admin=False):
         },
         context_instance=RequestContext(request))
 
+
 @login_required
 @limit_to_admin
 def bill_list(request, group, is_admin=False):
-    return render_to_response('billing/bill_list.html',
+    return render_to_response(
+        'billing/bill_list.html',
         {
             'is_admin': is_admin,
             'group': group,
@@ -119,16 +131,19 @@ def bill_list(request, group, is_admin=False):
         },
         context_instance=RequestContext(request))
 
+
 @login_required
 @limit_to_admin
 def bill_details(request, group, bill, is_admin=False):
-    return render_to_response('billing/bill_details.html',
+    return render_to_response(
+        'billing/bill_details.html',
         {
             'is_admin': is_admin,
             'group': group,
             'bill': bill,
         },
         context_instance=RequestContext(request))
+
 
 @login_required
 @limit_to_admin
@@ -139,13 +154,15 @@ def bill_delete(request, group, bill, is_admin=False):
 
         return HttpResponseRedirect(reverse('bill-list', args=[group.slug]))
 
-    return render_to_response('billing/bill_delete.html',
+    return render_to_response(
+        'billing/bill_delete.html',
         {
             'is_admin': is_admin,
             'group': group,
             'bill': bill,
         },
         context_instance=RequestContext(request))
+
 
 @login_required
 @limit_to_admin

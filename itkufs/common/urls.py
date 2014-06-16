@@ -1,11 +1,14 @@
-from django.conf.urls import *
+from django.conf.urls import patterns, url
 
-from itkufs.common.views import *
-from itkufs.common.views.display import *
-from itkufs.common.views.edit import *
+from itkufs.common.views import login_user, switch_group
+from itkufs.common.views.display import account_summary, group_summary
+from itkufs.common.views.edit import (
+    activate_account, assign_role_accounts, edit_group, new_edit_account)
 
-urlpatterns = patterns('',
-    # Index and login
+urlpatterns = patterns(
+    '',
+
+    # --- Index and login
     url(r'^$',
         login_user, name='index'),
     url(r'login/$',
@@ -13,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^switch-group/$',
         switch_group, name='switch-group'),
 
-    ### Groups
+    # --- Groups
     url(r'^(?P<group>[0-9a-z_-]+)/$',
         group_summary, name='group-summary'),
     url(r'^(?P<group>[0-9a-z_-]+)/edit/$',
@@ -21,7 +24,7 @@ urlpatterns = patterns('',
     url(r'^(?P<group>[0-9a-z_-]+)/assign-role-accounts/$',
         assign_role_accounts, name='assign-role-accounts'),
 
-    ### Accounts
+    # --- Accounts
     url(r'^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/$',
         account_summary, name='account-summary'),
     url(r'^(?P<group>[0-9a-z_-]+)/new-account/$',

@@ -1,22 +1,22 @@
-from django.template import Library, Variable, TemplateSyntaxError, Node, \
-            VariableDoesNotExist
-from django.template.defaultfilters import stringfilter
-from django.db.models import Q
+from django.template import Library, Variable, TemplateSyntaxError, Node
 
 from itkufs.common.utils import callsign_sorted as ufs_sorted
-from itkufs.accounting.models import Account
 
 register = Library()
+
 
 @register.tag
 def ufs_sort(parser, token):
     try:
         tag_name, variable = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
+        raise TemplateSyntaxError(
+            "%r tag requires a single argument" % token.contents.split()[0])
     if (variable[0] == variable[-1] and variable[0] in ('"', "'")):
-        raise template.TemplateSyntaxError, "%r tag's argument should not be in quotes" % tag_name
+        raise TemplateSyntaxError(
+            "%r tag's argument should not be in quotes" % tag_name)
     return SortedNode(variable)
+
 
 class SortedNode(Node):
     def __init__(self, variable):
@@ -30,6 +30,7 @@ class SortedNode(Node):
 
         return ''
 
+
 @register.filter
 def creditformat(value):
     if value is None:
@@ -38,6 +39,7 @@ def creditformat(value):
         return ''
     else:
         return '%.2f' % value
+
 
 # FIXME this code should really be removed, however transaction list needs
 # to be rewritten to list entries and handle pagination before this can
@@ -48,15 +50,17 @@ def do_hide(parser, token):
         # split_contents() knows not to split quoted strings.
         tag_name, transaction, entry_list = token.split_contents()
     except ValueError:
-        raise TemplateSyntaxError, "%r tag requires exactly two arguments" \
-                    % token.contents.split()[0]
+        raise TemplateSyntaxError(
+            "%r tag requires exactly two arguments" %
+            token.contents.split()[0])
 
     if transaction[0] == transaction[-1] and transaction[0] in ('"', "'"):
-        raise TemplateSyntaxError, "%r tag only takes variables" % tag_name
+        raise TemplateSyntaxError("%r tag only takes variables" % tag_name)
     if entry_list[0] == entry_list[-1] and entry_list[0] in ('"', "'"):
-        raise TemplateSyntaxError, "%r tag only takes variables" % tag_name
+        raise TemplateSyntaxError("%r tag only takes variables" % tag_name)
 
     return HideNode(transaction, entry_list)
+
 
 class HideNode(Node):
     def __init__(self, transaction, entry_list):

@@ -25,13 +25,17 @@ from itkufs.accounting.models import Group, Account
 
 CONSOLE_LOG_FORMAT = '%(levelname)-8s %(message)s'
 
+
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
-        make_option('-g', '--group', dest='group_slug',
+        make_option(
+            '-g', '--group', dest='group_slug',
             help='Group to create new account in'),
-        make_option('-u', '--user', dest='username',
+        make_option(
+            '-u', '--user', dest='username',
             help='User to create uFS user and account for'),
-        make_option('-y', '--yes',
+        make_option(
+            '-y', '--yes',
             action='store_const', const=1, dest='yes', default=0,
             help='Do not ask for confirmation'),
     )
@@ -51,7 +55,7 @@ class Command(BaseCommand):
             sys.exit(__doc__)
         full_name = self._get_full_name(options['username'])
         if (options['yes']
-            or self._get_confirmation(options['username'], full_name)):
+                or self._get_confirmation(options['username'], full_name)):
             user = self._create_user(options['username'])
             self._create_account(options['group_slug'], user, full_name)
 
@@ -59,7 +63,8 @@ class Command(BaseCommand):
         try:
             return getpwnam(username)[4].split(',')[0].decode('utf-8')
         except (IndexError, KeyError):
-            self.logger.warning(u'Failed to extract full name for "%s"',
+            self.logger.warning(
+                u'Failed to extract full name for "%s"',
                 username, exc_info=True)
             return username
 
@@ -73,7 +78,8 @@ class Command(BaseCommand):
             return False
 
     def _create_user(self, username):
-        user, created = User.objects.get_or_create(username=username,
+        user, created = User.objects.get_or_create(
+            username=username,
             email=u'%s@%s' % (username, settings.MAIL_DOMAIN))
         if created:
             self.logger.info(u'User "%s" created', user)
@@ -92,11 +98,12 @@ class Command(BaseCommand):
                 'slug': user.username,
             })
         if created:
-            self.logger.info(u'Account "%s" of user "%s" created',
+            self.logger.info(
+                u'Account "%s" of user "%s" created',
                 account, user)
         else:
-            self.logger.info(u'Account "%s" of user "%s" already exists',
-                account, user)
+            self.logger.info(
+                u'Account "%s" of user "%s" already exists', account, user)
         return account
 
     def _get_group(self, group_slug):
