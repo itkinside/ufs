@@ -4,18 +4,18 @@
     <p>
         {% blocktrans %}{{ hits }} hits{% endblocktrans %}
         &ndash;
-        {% if has_previous %}
+        {% if page_obj.has_previous %}
             {% if account %}
-                <a href="{% url "transaction-list-account-page" account.group.slug account.slug previous %}">
+                <a href="{% url "transaction-list-account-page" account.group.slug account.slug page_obj.previous_page_number %}">
                 &lt;&lt; {% trans "Previous" %}</a>
             {% else %}
-                <a href="{% url "transaction-list-group-page" group.slug previous %}">
+                <a href="{% url "transaction-list-group-page" group.slug page_obj.previous_page_number %}">
                 &lt;&lt; {% trans "Previous" %}</a>
             {% endif %}
             &bull;
         {% endif %}
-        {% for i in page_range %}
-            {% ifequal i page %}
+        {% for i in paginator.page_range %}
+            {% ifequal i page_obj.number %}
                 {{ i }}
             {% else %}
                 {% if account %}
@@ -30,13 +30,13 @@
                 &bull;
             {% endif %}
         {% endfor %}
-        {% if has_next %}
+        {% if page_obj.has_next %}
             &bull;
             {% if account %}
-                <a href="{% url "transaction-list-account-page" account.group.slug account.slug next %}">
+                <a href="{% url "transaction-list-account-page" account.group.slug account.slug page_obj.next_page_number %}">
                 {% trans "Next" %} &gt;&gt;</a>
             {% else %}
-                <a href="{% url "transaction-list-group-page" group.slug next %}">
+                <a href="{% url "transaction-list-group-page" group.slug page_obj.next_page_number %}">
                 {% trans "Next" %} &gt;&gt;</a>
             {% endif %}
         {% endif %}
