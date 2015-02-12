@@ -4,13 +4,13 @@
     <p>
     {% blocktrans %}{{ hits }} hits{% endblocktrans %}
     &ndash;
-    {% if has_previous %}
-        <a href="{% url "settlement-list-page" group.slug previous %}">
+    {% if page_obj.has_previous %}
+        <a href="{% url "settlement-list-page" group.slug page_obj.previous_page_number %}">
         &lt;&lt; {% trans "Previous" %}</a>
         &bull;
     {% endif %}
-    {% for i in page_range %}
-        {% ifequal i page %}
+    {% for i in paginator.page_range %}
+        {% ifequal i page_obj.number %}
             {{ i }}
         {% else %}
             <a href="{% url "settlement-list-page" group.slug i %}">
@@ -20,9 +20,9 @@
             &bull;
         {% endif %}
     {% endfor %}
-    {% if has_next %}
+    {% if page_obj.has_next %}
         &bull;
-        <a href="{% url "settlement-list-page" group.slug next %}">
+        <a href="{% url "settlement-list-page" group.slug page_obj.next_page_number %}">
         {% trans "Next" %} &gt;&gt;</a>
     {% endif %}
     </p>
