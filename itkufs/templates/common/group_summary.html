@@ -100,6 +100,11 @@
 </div>
 {% endif %}
 
+<div id="graphs">
+    <h3>{% trans "Graphs" %}</h3>
+    <a href="{% url "group-balance-graph" group.slug %}">{% trans "Group balance" %}</a>
+</div>
+
 <div id="accounts">
 {% if not group.account_set.count %}
 <h3>{% trans "Accounts" %}</h3>

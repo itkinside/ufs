@@ -53,6 +53,13 @@ def account_summary(request, group, account, is_admin=False, is_owner=False):
         context_instance=RequestContext(request)
     )
 
+@login_required
+@limit_to_group
+def group_balance_graph(request, group, is_admin):
+    return render_to_response('common/group_balance_graph.html', {
+        'group': Group.objects.select_related().get(id=group.id),
+    })
+    
 
 def _generate_gchart_data(dataset):
     # aggregate data
