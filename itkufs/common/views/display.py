@@ -16,8 +16,9 @@ def group_summary(request, group, is_admin=False):
         'is_admin': is_admin,
         'all': 'all' in request.GET,
         'group': Group.objects.select_related().get(id=group.id),
-    },
-    context_instance=RequestContext(request))
+        },
+        context_instance=RequestContext(request)
+    )
 
 
 @login_required
@@ -48,8 +49,9 @@ def account_summary(request, group, account, is_admin=False, is_owner=False):
         'account': Account.objects.select_related().get(id=account.id),
         'balance_data': _generate_gchart_data(
             account.get_balance_history_set()),
-    },
-    context_instance=RequestContext(request))
+        },
+        context_instance=RequestContext(request)
+    )
 
 
 def _generate_gchart_data(dataset):
