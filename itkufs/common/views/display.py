@@ -56,7 +56,7 @@ def account_summary(request, group, account, is_admin=False, is_owner=False):
 
 @login_required
 @limit_to_group
-def group_balance_graph(request, group, is_admin):
+def group_balance_graph(request, group, is_admin=False):
     accounts = Account.objects.all().\
         filter(group_id=group.id, active=True, group_account=False).\
         order_by("name")
@@ -65,9 +65,11 @@ def group_balance_graph(request, group, is_admin):
         '[ "%s", %d ]' % (a.short_name, a.normal_balance()) for a in accounts]
 
     return render_to_response('common/group_balance_graph.html', {
-        'group': group,
+        'group': Group.objects.select_related().get(id=group.id),
         'data': ',\n'.join(data)
-    })
+        },
+        context_instance=RequestContext(request)
+    )
 
 
 def _generate_gchart_data(dataset):
