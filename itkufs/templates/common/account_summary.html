@@ -120,6 +120,12 @@
 </div>
 {% endif %}
 
+<div id="graphs">
+    <h3>{% trans "Graphs" %}</h3>
+    <a href="{% url "group-balance-graph" group.slug %}">{% trans "Group balance" %}</a>
+</div>
+
+
 
 {% if not account.active %}
     {% if is_owner or is_admin %}

@@ -4,6 +4,37 @@
 
 {% block content %}
 
-<h3>Lol</h3>
+<h3>{% trans "Balance" %}</h3>
+
+<div id="chart_div" style="height: 600px; width: 100%;"></div>
+<script type="text/javascript">
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Saldo', 'Balanse'],
+            {{ data|safe }}
+        ]);
+
+        var options = {
+            hAxis: {
+                slantedText:true,
+                slantedTextAngle:90
+            },
+            legend: {
+                position: 'none'
+            },
+            chartArea: {
+                height: 400,
+                top: 50
+            }
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawChart);
+</script>
+
 
 {% endblock %}

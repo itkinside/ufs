@@ -27,8 +27,9 @@ def public_lists(request):
 
     return render_to_response('reports/public_lists.html', {
         'public_list': lists,
-    },
-    context_instance=RequestContext(request))
+        },
+        context_instance=RequestContext(request)
+    )
 
 
 @login_required

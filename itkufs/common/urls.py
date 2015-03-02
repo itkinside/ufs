@@ -1,7 +1,8 @@
 from django.conf.urls import patterns, url
 
 from itkufs.common.views import login_user, switch_group
-from itkufs.common.views.display import account_summary, group_summary, group_balance_graph
+from itkufs.common.views.display import (
+    account_summary, group_summary, group_balance_graph)
 from itkufs.common.views.edit import (
     activate_account, assign_role_accounts, edit_group, new_edit_account)
 

@@ -248,7 +248,7 @@ ul.admin {
 }
 
 /* Account/group summary */
-#accountinfo, #groupinfo, #actions, #lists, #statements, #bills {
+#accountinfo, #groupinfo, #actions, #lists, #statements, #bills, #graphs {
         float: left;
         margin-right: 3em;
 }
