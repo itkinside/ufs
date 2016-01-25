@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 
 from django.conf import settings
@@ -6,6 +8,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _, ugettext
+from django.core.mail import send_mail
 
 
 class Group(models.Model):
@@ -257,9 +260,9 @@ class Account(models.Model):
 
         if (not self.is_user_account()
                 or self.ignore_block_limit
-                or self.group_block_limit_sql is None):
+                or self.group.block_limit is None):
             return False
-        return self.normal_balance() < self.group_block_limit_sql
+        return self.normal_balance() < self.group.block_limit
 
     def needs_warning(self):
         """Returns true if user account balance is below group warn limit"""
@@ -525,6 +528,9 @@ class Transaction(models.Model):
                 log.message = message
             log.save()
 
+            for transaction_entry in TransactionEntry.objects.filter(transaction=self):
+                transaction_entry.check_if_blacklisted()
+
             self.state = self.COMMITTED_STATE
             self.last_modified = datetime.datetime.now()
             self.save()
@@ -655,6 +661,13 @@ class TransactionEntry(models.Model):
         _('debit amount'), max_digits=10, decimal_places=2, default=0)
     credit = models.DecimalField(
         _('credit amount'), max_digits=10, decimal_places=2, default=0)
+
+    def check_if_blacklisted(self):
+        if (self.account.is_user_account and
+                self.account.ignore_block_limit is False and
+                self.account.normal_balance() > self.account.group.block_limit and
+                (self.account.normal_balance . self.debit + self.credit < self.account.group.block_limit)):
+            send_mail(u'Svartelistet i µFS', u'Dette er en automatisk melding om at du har blitt svartelistet i %s sin µFS' % self.account.group.name, u'µfs@samfundet.no', ['%s@samfundet.no' % self.account.owner], fail_silently=True)
 
     def save(self, *args, **kwargs):
         if self.transaction.is_rejected():
