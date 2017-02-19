@@ -39,7 +39,7 @@ def view_list(request, group, list, is_admin=False):
 
     filename = '%s-%s-%s' % (date.today(), group, list)
 
-    response = HttpResponse(content.getvalue(), mimetype='application/pdf')
+    response = HttpResponse(content.getvalue(), content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % (
         slugify(filename))
 
@@ -61,7 +61,7 @@ def view_list_preview(request, group, list, is_admin=False):
     if p.returncode != 0:
         raise Exception(stdout)
 
-    return HttpResponse(stdout, mimetype='image/png')
+    return HttpResponse(stdout, content_type='image/png')
 
 
 def view_public_list(request, group, list, is_admin=False):
@@ -72,7 +72,7 @@ def view_public_list(request, group, list, is_admin=False):
 
     filename = '%s-%s-%s' % (date.today(), group, list)
 
-    response = HttpResponse(content.getvalue(), mimetype='application/pdf')
+    response = HttpResponse(content.getvalue(), content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % (
         slugify(filename))
 
