@@ -39,6 +39,11 @@
     </tr>
 
     <tr>
+        <th>{% trans "Total consumption" %}</th>
+        <td>{{ account.total_used|floatformat:2 }}</td>
+    </tr>
+
+    <tr>
         <th>{% trans "Active" %}</th>
         <td>{{ account.active|yesno:_("Yes,No") }}</td>
     </tr>
@@ -139,6 +144,7 @@
 {% endif %}
 
 {% if is_owner or is_admin %}
+{% if balance_data %}
 <div id="chart_div"></div>
 <script type="text/javascript">
     function drawChart () {
@@ -160,6 +166,7 @@
     google.load("visualization", "1", {packages:["corechart"]});
     google.setOnLoadCallback(drawChart);
 </script>
+{% endif %}
 {% endif %}
 
 {% endblock %}

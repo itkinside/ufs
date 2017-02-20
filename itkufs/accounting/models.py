@@ -163,6 +163,14 @@ GROUP BY account.id, short_name, last_modified
 ORDER BY date
 """
 
+ACCOUNT_TOTAL_USED = """
+SELECT sum(debit)
+FROM accounting_transactionentry AS te
+JOIN accounting_transaction AS t ON (te.transaction_id = t.id)
+WHERE account_id = %s AND t.state = 'Com'
+"""
+
+
 
 class AccountManager(models.Manager):
     def get_query_set(self):
@@ -230,6 +238,11 @@ class Account(models.Model):
             raise ValueError('Slug cannot be empty.')
         super(Account, self).save(*args, **kwargs)
 
+    def total_used(self):
+        cursor = connection.cursor()
+        cursor.execute(ACCOUNT_TOTAL_USED, [self.id])
+        return cursor.fetchone()[0]
+
     def balance(self):
         if hasattr(self, 'confirmed_balance_sql'):
             return self.confirmed_balance_sql or 0
@@ -245,6 +258,8 @@ class Account(models.Model):
         balance = self.balance()
         if balance == 0 or self.type in ('As', 'Ex'):
             return balance
+        elif balance == None:
+            return 0
         else:
             return -1 * balance
 
