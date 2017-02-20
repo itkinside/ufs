@@ -663,11 +663,20 @@ class TransactionEntry(models.Model):
         _('credit amount'), max_digits=10, decimal_places=2, default=0)
 
     def check_if_blacklisted(self):
+        new_balance = self.account.normal_balance() - self.debit + self.credit
+
         if (self.account.is_user_account and
+                self.account is not None and
                 self.account.ignore_block_limit is False and
                 self.account.normal_balance() > self.account.group.block_limit and
-                (self.account.normal_balance . self.debit + self.credit < self.account.group.block_limit)):
-            send_mail(u'Svartelistet i µFS', u'Dette er en automatisk melding om at du har blitt svartelistet i %s sin µFS' % self.account.group.name, u'µfs@samfundet.no', ['%s@samfundet.no' % self.account.owner], fail_silently=True)
+                new_balance < self.account.group.block_limit):
+
+            subject = u'Svartelistet i µFS'
+            message = (u'Dette er en automatisk melding om at du har blitt',
+                    ' svartelistet i %s sin µFS' % self.account.group.name)
+            to_address = ['%s@samfundet.no' % self.account.owner]
+            send_mail(subject, message, u'ufs@samfundet.no', to_address,
+                    fail_silently=True)
 
     def save(self, *args, **kwargs):
         if self.transaction.is_rejected():
