@@ -45,7 +45,7 @@ def pdf(group, bill):
 
     filename = '%s-%s-%s-%s' % (date.today(), group, _('bill'), bill.id)
 
-    response = HttpResponse(mimetype='application/pdf')
+    response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % (
         slugify(filename))
 
