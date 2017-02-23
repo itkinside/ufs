@@ -687,10 +687,9 @@ class TransactionEntry(models.Model):
                 new_balance < self.account.group.block_limit):
 
             subject = u'Svartelistet i µFS'
-            message = (u'Dette er en automatisk melding om at du har blitt',
-                    ' svartelistet i %s sin µFS' % self.account.group.name)
+            msg = u'Dette er en automatisk melding om at du har blitt svartelistet i %s sin µFS' % self.account.group.name.decode('utf-8')
             to_address = ['%s@samfundet.no' % self.account.owner]
-            send_mail(subject, message, u'ufs@samfundet.no', to_address,
+            send_mail(subject, (msg), u'ufs@samfundet.no', to_address,
                     fail_silently=True)
 
     def save(self, *args, **kwargs):
