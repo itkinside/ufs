@@ -256,10 +256,10 @@ class Account(models.Model):
         of type liability, equity or expense."""
 
         balance = self.balance()
-        if balance == 0 or self.type in ('As', 'Ex'):
-            return balance
-        elif balance == None:
+        if balance == None:
             return 0
+        elif balance == 0 or self.type in ('As', 'Ex'):
+            return balance
         else:
             return -1 * balance
 
