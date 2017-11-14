@@ -228,12 +228,18 @@ def balance(request, group, is_admin=False):
         accounts['li_sum'] += account.normal_balance()
 
     # Accumulated member accounts liabilities
-    member_balance_sum = 0
+    member_negative_sum = 0
+    member_positive_sum = 0
     for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
                                             group_account=False):
-        member_balance_sum += account.normal_balance()
-    accounts['li'].append((_('Member accounts'), member_balance_sum))
-    accounts['li_sum'] += member_balance_sum
+        if account.normal_balance() > 0:
+            member_positive_sum += account.normal_balance()
+        else:
+            member_negative_sum += account.normal_balance()
+    accounts['li'].append((_('Positive member accounts'), member_positive_sum))
+    accounts['li'].append((_('Negative member accounts'), member_negative_sum))
+    accounts['li_sum'] += member_positive_sum
+    accounts['li_sum'] += member_negative_sum
 
     # Equities
     for account in group.account_set.filter(type=Account.EQUITY_ACCOUNT):

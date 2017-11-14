@@ -59,7 +59,7 @@
     <tr>
         <th colspan="2">&nbsp;&nbsp;{% trans "Liabilities" %}</th>
     </tr>
-{% for account in accounts.li|slice:":-1" %}
+{% for account in accounts.li|slice:":-2" %}
     <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;
             {% if is_admin %}
@@ -71,10 +71,10 @@
         <td class="align_right">{{ account.normal_balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
-{% for name, balance in accounts.li|slice:"-1:" %}
+{% for name, balance in accounts.li|slice:"-2:" %}
     <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ name  }}</td>
-		<td>{{ balance }}</td>
+		<td class="align_right">{{ balance }}</td>
     </tr>
 {% endfor %}
     <tr>
