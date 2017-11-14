@@ -35,7 +35,7 @@ def public_lists(request):
 @login_required
 @limit_to_group
 def view_list(request, group, list, is_admin=False):
-    content = pdf(group, list)
+    content = pdf(group, request.user.username, list)
 
     filename = '%s-%s-%s' % (date.today(), group, list)
 
@@ -49,7 +49,7 @@ def view_list(request, group, list, is_admin=False):
 @login_required
 @limit_to_group
 def view_list_preview(request, group, list, is_admin=False):
-    content = pdf(group, list, show_header=True, show_footer=True)
+    content = pdf(group, request.user.username, list, show_header=True, show_footer=True)
 
     p = Popen([
         "gs", "-q", "-dSAFER", "-dBATCH", "-dNOPAUSE", "-r40",
@@ -68,7 +68,7 @@ def view_public_list(request, group, list, is_admin=False):
     if not list.public:
         raise Http404
 
-    content = pdf(group, list)
+    content = pdf(group, request.user.username, list)
 
     filename = '%s-%s-%s' % (date.today(), group, list)
 

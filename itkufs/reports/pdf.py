@@ -20,7 +20,7 @@ FAINT_COLOR = HexColor('#BABDB6')
 ALTERNATE_COLORS = [HexColor('#FFFFFF'), HexColor('#F5F5F5')]
 
 
-def pdf(group, list, show_header=True, show_footer=True):
+def pdf(group, username, list, show_header=True, show_footer=True):
     """PDF version of list"""
 
     content = StringIO()
@@ -80,7 +80,7 @@ def pdf(group, list, show_header=True, show_footer=True):
         p.setFont(font_name, font_size_small)
         p.drawString(
             margin, height - margin - font_size - font_size + 2,
-            u'%s: %s' % (_('Printed'), str(date.today())))
+            u'%s: %s %s %s' % (_('Printed'), str(date.today()), _('by'), username))
 
     footer = []
     if group.email:
