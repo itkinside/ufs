@@ -20,6 +20,7 @@ import sys
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
+from django.core.management.color import color_style
 
 from itkufs.accounting.models import Group, Account
 
@@ -42,6 +43,7 @@ class Command(BaseCommand):
 
     def __init__(self):
         self.logger = self._setup_logging()
+        self.style = color_style()
 
     def _setup_logging(self):
         logging.basicConfig(
