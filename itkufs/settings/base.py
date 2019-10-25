@@ -42,7 +42,8 @@ MEDIA_ROOT = PROJECT_BASE + "media/"
 # Example: "http://media.lawrence.com"
 MEDIA_URL = "/media/"
 
-STATIC_URL = "/media/"
+STATIC_ROOT = PROJECT_BASE + "static/"
+STATIC_URL = "/static/"
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -85,11 +86,12 @@ INSTALLED_APPS = (
     "django.contrib.admindocs",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.webdesign",
-    "django.contrib.sites",
     "django.contrib.flatpages",
     "django.contrib.messages",
+    "django.contrib.sessions",
+    "django.contrib.sites",
+    "django.contrib.staticfiles",
+    "django.contrib.webdesign",
     "itkufs.common",
     "itkufs.accounting",
     "itkufs.reports",

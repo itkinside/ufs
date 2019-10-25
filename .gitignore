@@ -6,4 +6,5 @@
 /.python-version
 /itkufs/settings/local.py
 /media/logos/*
+/static/
 /djangologging/
