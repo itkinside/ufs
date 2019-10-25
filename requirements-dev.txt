@@ -16,3 +16,4 @@ flake8
 pytest
 pytest-cov
 pytest-django < 3  # pytest-django 3 requires Django 1.7
+tox

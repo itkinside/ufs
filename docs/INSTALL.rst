@@ -94,6 +94,10 @@ To run the unit tests while measuring code coverage, run::
 
     pytest --cov=itkufs --cov-report=term-missing
 
+Alternatively, use ``tox`` to run all tests and linters::
+
+    tox
+
 
 How to run code linting
 -----------------------

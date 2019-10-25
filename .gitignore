@@ -4,7 +4,8 @@
 *.swp
 /.coverage
 /.python-version
+/.tox/
+/djangologging/
 /itkufs/settings/local.py
 /media/logos/*
 /static/
-/djangologging/
