@@ -45,9 +45,7 @@ This is a rather rough guide on how to install µFS.
 
 #. Either:
 
-   - Setup your web server. See the dir ``itkufs/wsgi/`` for an WSGI
-     application setup which optionally supports using dependencies from a
-     virtualenv.
+   - Setup your web server to run the WSGI app at ``itkufs.wsgi:application``.
 
    - Use Django's builtin development web server, which also use the above
      WSGI application.
