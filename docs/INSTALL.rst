@@ -11,6 +11,12 @@ addition, you may need:
 - A database supported by Django, e.g. PostgreSQL
 - A Python database adapter, e.g. python-psycopg2
 
+Dependency requirements are manually encoded in ``requirements.in``. Then,
+the tool ``pip-compile`` from the ``pip-tools`` package is run to resolve all
+dependencies and lock them down in ``requirements.txt``, which is the file
+you use when installing dependencies, both in your development environment
+and in production.
+
 
 Additional dependencies for development
 ---------------------------------------
