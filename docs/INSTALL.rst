@@ -8,8 +8,7 @@ See the ``requirements.txt`` file for all Python dependencies, in
 addition, you may need:
 
 - gettext -- for translations
-- A database supported by Django, e.g. PostgreSQL
-- A Python database adapter, e.g. python-psycopg2
+- A PostgreSQL database
 
 Dependency requirements are manually encoded in ``requirements.in``. Then,
 the tool ``pip-compile`` from the ``pip-tools`` package is run to resolve all
