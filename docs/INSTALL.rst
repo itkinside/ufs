@@ -36,13 +36,13 @@ This is a rather rough guide on how to install µFS.
 
     pip install -r requirements.txt
 
-#. Compile translation files (.po -> .mo) using::
-
-    python manage.py compilemessages
-
 #. Add a ``itkufs/settings/local.py`` file which sets the ``DATABASE_*`` and
    ``SECRET_KEY`` options. You can find a template at
    ``itkufs/settings/local.py.template``.
+
+#. Compile translation files (.po -> .mo) using::
+
+    python manage.py compilemessages
 
 #. Either:
 
