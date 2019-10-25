@@ -5,4 +5,5 @@ try:
     from itkufs.settings.local import *  # noqa
 except ImportError as e:
     import warnings
-    warnings.warn('There was a problem importing local settings: %s' % e)
+
+    warnings.warn("There was a problem importing local settings: %s" % e)

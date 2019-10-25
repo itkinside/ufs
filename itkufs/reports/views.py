@@ -22,13 +22,16 @@ _list = list
 
 
 def public_lists(request):
-    lists = List.objects.filter(public=True).select_related('group') \
-        .order_by('group__name', 'name')
+    lists = (
+        List.objects.filter(public=True)
+        .select_related("group")
+        .order_by("group__name", "name")
+    )
 
-    return render_to_response('reports/public_lists.html', {
-        'public_list': lists,
-        },
-        context_instance=RequestContext(request)
+    return render_to_response(
+        "reports/public_lists.html",
+        {"public_list": lists},
+        context_instance=RequestContext(request),
     )
 
 
@@ -37,11 +40,12 @@ def public_lists(request):
 def view_list(request, group, list, is_admin=False):
     content = pdf(group, list)
 
-    filename = '%s-%s-%s' % (date.today(), group, list)
+    filename = "%s-%s-%s" % (date.today(), group, list)
 
-    response = HttpResponse(content.getvalue(), mimetype='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % (
-        slugify(filename))
+    response = HttpResponse(content.getvalue(), mimetype="application/pdf")
+    response["Content-Disposition"] = "attachment; filename=%s.pdf" % (
+        slugify(filename)
+    )
 
     return response
 
@@ -51,17 +55,31 @@ def view_list(request, group, list, is_admin=False):
 def view_list_preview(request, group, list, is_admin=False):
     content = pdf(group, list, show_header=True, show_footer=True)
 
-    p = Popen([
-        "gs", "-q", "-dSAFER", "-dBATCH", "-dNOPAUSE", "-r40",
-        "-dGraphicsAlphaBits=4", "-dTextAlphaBits=4", "-sDEVICE=png16m",
-        "-sOutputFile=-", "-"], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    p = Popen(
+        [
+            "gs",
+            "-q",
+            "-dSAFER",
+            "-dBATCH",
+            "-dNOPAUSE",
+            "-r40",
+            "-dGraphicsAlphaBits=4",
+            "-dTextAlphaBits=4",
+            "-sDEVICE=png16m",
+            "-sOutputFile=-",
+            "-",
+        ],
+        stdin=PIPE,
+        stdout=PIPE,
+        stderr=PIPE,
+    )
 
     stdout, stderr = p.communicate(content.getvalue())
 
     if p.returncode != 0:
         raise Exception(stdout)
 
-    return HttpResponse(stdout, mimetype='image/png')
+    return HttpResponse(stdout, mimetype="image/png")
 
 
 def view_public_list(request, group, list, is_admin=False):
@@ -70,11 +88,12 @@ def view_public_list(request, group, list, is_admin=False):
 
     content = pdf(group, list)
 
-    filename = '%s-%s-%s' % (date.today(), group, list)
+    filename = "%s-%s-%s" % (date.today(), group, list)
 
-    response = HttpResponse(content.getvalue(), mimetype='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=%s.pdf' % (
-        slugify(filename))
+    response = HttpResponse(content.getvalue(), mimetype="application/pdf")
+    response["Content-Disposition"] = "attachment; filename=%s.pdf" % (
+        slugify(filename)
+    )
 
     return response
 
@@ -85,21 +104,23 @@ def view_public_list(request, group, list, is_admin=False):
 def new_edit_list(request, group, list=None, is_admin=False):
     """Create new or edit existing list"""
 
-    if request.method == 'POST':
+    if request.method == "POST":
         data = request.POST
     else:
         data = None
 
     if not list:
         ColumnFormSet = inlineformset_factory(
-            List, ListColumn, extra=10, form=ColumnForm)
+            List, ListColumn, extra=10, form=ColumnForm
+        )
 
         listform = ListForm(data=data, group=group)
         columnformset = ColumnFormSet(data)
 
     else:
         ColumnFormSet = inlineformset_factory(
-            List, ListColumn, extra=3, form=ColumnForm)
+            List, ListColumn, extra=3, form=ColumnForm
+        )
         if list is None:
             raise Http404
 
@@ -120,22 +141,21 @@ def new_edit_list(request, group, list=None, is_admin=False):
                 else:
                     c.save()
 
-            return HttpResponseRedirect(reverse(
-                'group-summary',
-                kwargs={
-                    'group': group.slug,
-                }))
+            return HttpResponseRedirect(
+                reverse("group-summary", kwargs={"group": group.slug})
+            )
 
     return render_to_response(
-        'reports/list_form.html',
+        "reports/list_form.html",
         {
-            'is_admin': is_admin,
-            'group': group,
-            'list': list,
-            'listform': listform,
-            'columnformset': columnformset,
+            "is_admin": is_admin,
+            "group": group,
+            "list": list,
+            "listform": listform,
+            "columnformset": columnformset,
         },
-        context_instance=RequestContext(request))
+        context_instance=RequestContext(request),
+    )
 
 
 @login_required
@@ -144,25 +164,20 @@ def new_edit_list(request, group, list=None, is_admin=False):
 def delete_list(request, group, list, is_admin=False):
     """Delete list"""
 
-    if request.method == 'POST':
+    if request.method == "POST":
         # FIXME maybe a bit naive here?
         list.delete()
-        messages.info(request, _('List deleted.'))
+        messages.info(request, _("List deleted."))
 
-        return HttpResponseRedirect(reverse(
-            'group-summary',
-            kwargs={
-                'group': group.slug,
-            }))
+        return HttpResponseRedirect(
+            reverse("group-summary", kwargs={"group": group.slug})
+        )
 
     return render_to_response(
-        'reports/list_delete.html',
-        {
-            'is_admin': is_admin,
-            'group': group,
-            'list': list,
-        },
-        context_instance=RequestContext(request))
+        "reports/list_delete.html",
+        {"is_admin": is_admin, "group": group, "list": list},
+        context_instance=RequestContext(request),
+    )
 
 
 @login_required
@@ -183,24 +198,21 @@ def transaction_from_list(request, group, list, is_admin=False):
 
         transaction.save()
         transaction.set_pending(
-            user=request.user, message=_('Created from list: %s') % list.slug)
+            user=request.user, message=_("Created from list: %s") % list.slug
+        )
 
-        return HttpResponseRedirect(reverse(
-            'edit-transaction',
-            kwargs={
-                'group': group.slug,
-                'transaction': transaction.id,
-            }))
+        return HttpResponseRedirect(
+            reverse(
+                "edit-transaction",
+                kwargs={"group": group.slug, "transaction": transaction.id},
+            )
+        )
 
     return render_to_response(
-        'reports/list_transaction_form.html',
-        {
-            'is_admin': is_admin,
-            'group': group,
-            'list': list,
-            'form': form,
-        },
-        context_instance=RequestContext(request))
+        "reports/list_transaction_form.html",
+        {"is_admin": is_admin, "group": group, "list": list, "form": form},
+        context_instance=RequestContext(request),
+    )
 
 
 @login_required
@@ -210,55 +222,62 @@ def balance(request, group, is_admin=False):
 
     # Balance sheet data struct
     accounts = {
-        'as': [], 'as_sum': 0,
-        'li': [], 'li_sum': 0,
-        'eq': [], 'eq_sum': 0,
-        'li_eq_sum': 0,
+        "as": [],
+        "as_sum": 0,
+        "li": [],
+        "li_sum": 0,
+        "eq": [],
+        "eq_sum": 0,
+        "li_eq_sum": 0,
     }
 
     # Assets
     for account in group.account_set.filter(type=Account.ASSET_ACCOUNT):
-        accounts['as'].append(account)
-        accounts['as_sum'] += account.normal_balance()
+        accounts["as"].append(account)
+        accounts["as_sum"] += account.normal_balance()
 
     # Liabilities
-    for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
-                                            group_account=True):
-        accounts['li'].append(account)
-        accounts['li_sum'] += account.normal_balance()
+    for account in group.account_set.filter(
+        type=Account.LIABILITY_ACCOUNT, group_account=True
+    ):
+        accounts["li"].append(account)
+        accounts["li_sum"] += account.normal_balance()
 
     # Accumulated member accounts liabilities
     member_balance_sum = 0
-    for account in group.account_set.filter(type=Account.LIABILITY_ACCOUNT,
-                                            group_account=False):
+    for account in group.account_set.filter(
+        type=Account.LIABILITY_ACCOUNT, group_account=False
+    ):
         member_balance_sum += account.normal_balance()
-    accounts['li'].append((_('Member accounts'), member_balance_sum))
-    accounts['li_sum'] += member_balance_sum
+    accounts["li"].append((_("Member accounts"), member_balance_sum))
+    accounts["li_sum"] += member_balance_sum
 
     # Equities
     for account in group.account_set.filter(type=Account.EQUITY_ACCOUNT):
-        accounts['eq'].append(account)
-        accounts['eq_sum'] += account.normal_balance()
+        accounts["eq"].append(account)
+        accounts["eq_sum"] += account.normal_balance()
 
     # Total liabilities and equities
-    accounts['li_eq_sum'] = accounts['li_sum'] + accounts['eq_sum']
+    accounts["li_eq_sum"] = accounts["li_sum"] + accounts["eq_sum"]
 
     # Current year's net income
-    curr_year_net_income = accounts['as_sum'] - accounts['li_eq_sum']
-    accounts['eq'].append((_("Current year's net income"),
-                           curr_year_net_income))
-    accounts['eq_sum'] += curr_year_net_income
-    accounts['li_eq_sum'] += curr_year_net_income
+    curr_year_net_income = accounts["as_sum"] - accounts["li_eq_sum"]
+    accounts["eq"].append(
+        (_("Current year's net income"), curr_year_net_income)
+    )
+    accounts["eq_sum"] += curr_year_net_income
+    accounts["li_eq_sum"] += curr_year_net_income
 
     return render_to_response(
-        'reports/balance.html',
+        "reports/balance.html",
         {
-            'is_admin': is_admin,
-            'group': group,
-            'today': date.today(),
-            'accounts': accounts,
+            "is_admin": is_admin,
+            "group": group,
+            "today": date.today(),
+            "accounts": accounts,
         },
-        context_instance=RequestContext(request))
+        context_instance=RequestContext(request),
+    )
 
 
 @login_required
@@ -267,31 +286,28 @@ def income(request, group, is_admin=False):
     """Show income statement for group"""
 
     # Balance sheet data struct
-    accounts = {
-        'in': [], 'in_sum': 0,
-        'ex': [], 'ex_sum': 0,
-        'in_ex_diff': 0,
-    }
+    accounts = {"in": [], "in_sum": 0, "ex": [], "ex_sum": 0, "in_ex_diff": 0}
 
     # Incomes
     for account in group.account_set.filter(type=Account.INCOME_ACCOUNT):
-        accounts['in'].append(account)
-        accounts['in_sum'] += account.normal_balance()
+        accounts["in"].append(account)
+        accounts["in_sum"] += account.normal_balance()
 
     # Expenses
     for account in group.account_set.filter(type=Account.EXPENSE_ACCOUNT):
-        accounts['ex'].append(account)
-        accounts['ex_sum'] += account.normal_balance()
+        accounts["ex"].append(account)
+        accounts["ex_sum"] += account.normal_balance()
 
     # Net income
-    accounts['in_ex_diff'] = accounts['in_sum'] - accounts['ex_sum']
+    accounts["in_ex_diff"] = accounts["in_sum"] - accounts["ex_sum"]
 
     return render_to_response(
-        'reports/income.html',
+        "reports/income.html",
         {
-            'is_admin': is_admin,
-            'group': group,
-            'today': date.today(),
-            'accounts': accounts,
+            "is_admin": is_admin,
+            "group": group,
+            "today": date.today(),
+            "accounts": accounts,
         },
-        context_instance=RequestContext(request))
+        context_instance=RequestContext(request),
+    )

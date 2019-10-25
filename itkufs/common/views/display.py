@@ -12,12 +12,14 @@ from itkufs.accounting.models import Account, Group
 def group_summary(request, group, is_admin=False):
     """Show group summary"""
 
-    return render_to_response('common/group_summary.html', {
-        'is_admin': is_admin,
-        'all': 'all' in request.GET,
-        'group': Group.objects.select_related().get(id=group.id),
+    return render_to_response(
+        "common/group_summary.html",
+        {
+            "is_admin": is_admin,
+            "all": "all" in request.GET,
+            "group": Group.objects.select_related().get(id=group.id),
         },
-        context_instance=RequestContext(request)
+        context_instance=RequestContext(request),
     )
 
 
@@ -28,46 +30,53 @@ def account_summary(request, group, account, is_admin=False, is_owner=False):
 
     if is_owner:
         # Set active account in session
-        request.session['my_account'] = account
+        request.session["my_account"] = account
 
         # Warn owner of account about a low balance
         if account.is_blocked():
             messages.error(
                 request,
-                'The account balance is below the block limit, please '
-                'contact the group admin or deposit enough to pass the '
-                'limit.')
+                "The account balance is below the block limit, please "
+                "contact the group admin or deposit enough to pass the "
+                "limit.",
+            )
         elif account.needs_warning():
             messages.warning(
-                request,
-                'The account balance is below the warning limit.')
+                request, "The account balance is below the warning limit."
+            )
 
-    return render_to_response('common/account_summary.html', {
-        'is_admin': is_admin,
-        'is_owner': is_owner,
-        'group': group,
-        'account': Account.objects.select_related().get(id=account.id),
-        'balance_data': _generate_gchart_data(
-            account.get_balance_history_set()),
+    return render_to_response(
+        "common/account_summary.html",
+        {
+            "is_admin": is_admin,
+            "is_owner": is_owner,
+            "group": group,
+            "account": Account.objects.select_related().get(id=account.id),
+            "balance_data": _generate_gchart_data(
+                account.get_balance_history_set()
+            ),
         },
-        context_instance=RequestContext(request)
+        context_instance=RequestContext(request),
     )
 
 
 @login_required
 @limit_to_group
 def group_balance_graph(request, group, is_admin):
-    active_accounts = Account.objects.all().\
-        filter(group_id=group.id, active=True, group_account=False).\
-        order_by("name")
+    active_accounts = (
+        Account.objects.all()
+        .filter(group_id=group.id, active=True, group_account=False)
+        .order_by("name")
+    )
 
     data = [
-        '[ "%s", %d ]' % (a.short_name, a.balance()) for a in active_accounts]
+        '[ "%s", %d ]' % (a.short_name, a.balance()) for a in active_accounts
+    ]
 
-    return render_to_response('common/group_balance_graph.html', {
-        'group': group,
-        'data': ',\n'.join(data)
-    })
+    return render_to_response(
+        "common/group_balance_graph.html",
+        {"group": group, "data": ",\n".join(data)},
+    )
 
 
 def _generate_gchart_data(dataset):
@@ -80,5 +89,6 @@ def _generate_gchart_data(dataset):
         agg += saldo
 
     items = [
-        '[ new Date(%s), %.2f]' % (date, balance) for date, balance in history]
-    return ',\n'.join(items)
+        "[ new Date(%s), %.2f]" % (date, balance) for date, balance in history
+    ]
+    return ",\n".join(items)

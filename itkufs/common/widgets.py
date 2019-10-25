@@ -10,9 +10,9 @@ class GroupedSelect(forms.Select):
         from django.forms.util import flatatt, smart_unicode
 
         if value is None:
-            value = ''
+            value = ""
         final_attrs = self.build_attrs(attrs, name=name)
-        output = [u'<select%s>' % flatatt(final_attrs)]
+        output = [u"<select%s>" % flatatt(final_attrs)]
         str_value = smart_unicode(value)
 
         for group_label, group in self.choices:
@@ -25,24 +25,37 @@ class GroupedSelect(forms.Select):
                 if option_value == str_value:
                     selected_html = u' selected="selected"'
                 else:
-                    selected_html = ''
-                output.append(u'<option value="%s"%s>%s</option>' % (
-                    escape(option_value), selected_html, escape(option_label)))
+                    selected_html = ""
+                output.append(
+                    u'<option value="%s"%s>%s</option>'
+                    % (
+                        escape(option_value),
+                        selected_html,
+                        escape(option_label),
+                    )
+                )
             if group_label:
-                output.append(u'</optgroup>')
+                output.append(u"</optgroup>")
 
-        output.append(u'</select>')
-        return u'\n'.join(output)
+        output.append(u"</select>")
+        return u"\n".join(output)
 
 
 class GroupedChoiceField(forms.ChoiceField):
     """field for grouped choices, handles cleaning of funky choice tuple"""
 
     def __init__(
-            self, choices=(), required=True, widget=GroupedSelect, label=None,
-            initial=None, help_text=None):
+        self,
+        choices=(),
+        required=True,
+        widget=GroupedSelect,
+        label=None,
+        initial=None,
+        help_text=None,
+    ):
         super(forms.ChoiceField, self).__init__(
-            required, widget, label, initial, help_text)
+            required, widget, label, initial, help_text
+        )
         self.choices = choices
 
     def clean(self, value):
@@ -50,16 +63,19 @@ class GroupedChoiceField(forms.ChoiceField):
         Validates that the input is in self.choices.
         """
         value = super(forms.ChoiceField, self).clean(value)
-        if value in (None, ''):
-            value = u''
+        if value in (None, ""):
+            value = u""
         value = forms.util.smart_unicode(value)
-        if value == u'':
+        if value == u"":
             return value
         valid_values = []
         for group_label, group in self.choices:
             valid_values += [str(k) for k, v in group]
         if value not in valid_values:
-            raise forms.ValidationError(_(
-                u'Select a valid choice. That choice is not one of the '
-                u'available choices.'))
+            raise forms.ValidationError(
+                _(
+                    u"Select a valid choice. That choice is not one of the "
+                    u"available choices."
+                )
+            )
         return value

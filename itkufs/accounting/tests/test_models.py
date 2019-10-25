@@ -2,73 +2,104 @@ import unittest
 import datetime
 
 from itkufs.accounting.models import (
-    Account, Group, InvalidTransaction, InvalidTransactionEntry,
-    InvalidTransactionLog, RoleAccount, Transaction, TransactionEntry,
-    TransactionLog, User)
+    Account,
+    Group,
+    InvalidTransaction,
+    InvalidTransactionEntry,
+    InvalidTransactionLog,
+    RoleAccount,
+    Transaction,
+    TransactionEntry,
+    TransactionLog,
+    User,
+)
 
 
 class GroupTestCase(unittest.TestCase):
     def setUp(self):
         self.users = [
-            User(username='alice'),
-            User(username='bob'),
-            User(username='darth'),
+            User(username="alice"),
+            User(username="bob"),
+            User(username="darth"),
         ]
         for user in self.users:
             user.save()
 
-        self.group = Group(name='Group 1', slug='group1')
+        self.group = Group(name="Group 1", slug="group1")
         self.group.save()
 
         self.accounts = [
             # Normal user account
             Account(
-                name='Account 1', slug='account1', group=self.group,
-                owner=self.users[0]),
+                name="Account 1",
+                slug="account1",
+                group=self.group,
+                owner=self.users[0],
+            ),
             # Normal user account
             Account(
-                name='Account 2', slug='account2', group=self.group,
-                owner=self.users[1]),
+                name="Account 2",
+                slug="account2",
+                group=self.group,
+                owner=self.users[1],
+            ),
             # Inactive user account
             Account(
-                name='Account 3', slug='account3', group=self.group,
-                owner=self.users[2], active=False),
+                name="Account 3",
+                slug="account3",
+                group=self.group,
+                owner=self.users[2],
+                active=False,
+            ),
             # Group account
             Account(
-                name='Account 4', slug='account4', group=self.group,
-                type=Account.ASSET_ACCOUNT, group_account=True),
+                name="Account 4",
+                slug="account4",
+                group=self.group,
+                type=Account.ASSET_ACCOUNT,
+                group_account=True,
+            ),
             # Inactive group account
             Account(
-                name='Account 5', slug='account5', group=self.group,
-                type=Account.ASSET_ACCOUNT, active=False, group_account=True),
+                name="Account 5",
+                slug="account5",
+                group=self.group,
+                type=Account.ASSET_ACCOUNT,
+                active=False,
+                group_account=True,
+            ),
             # Bank account
             self.group.roleaccount_set.get(
-                role=RoleAccount.BANK_ACCOUNT).account,
+                role=RoleAccount.BANK_ACCOUNT
+            ).account,
             # Cash account
             self.group.roleaccount_set.get(
-                role=RoleAccount.CASH_ACCOUNT).account,
+                role=RoleAccount.CASH_ACCOUNT
+            ).account,
         ]
         for account in self.accounts:
             account.save()
 
         self.transactions = {
-            'Pen': Transaction(group=self.group),
-            'Com': Transaction(group=self.group),
-            'Rej': Transaction(group=self.group),
+            "Pen": Transaction(group=self.group),
+            "Com": Transaction(group=self.group),
+            "Rej": Transaction(group=self.group),
         }
         for transaction in self.transactions.values():
             transaction.save()
             transaction.entry_set.add(
-                TransactionEntry(account=self.accounts[0], credit=100))
+                TransactionEntry(account=self.accounts[0], credit=100)
+            )
             transaction.entry_set.add(
-                TransactionEntry(account=self.accounts[1], debit=100))
+                TransactionEntry(account=self.accounts[1], debit=100)
+            )
             transaction.set_pending(user=self.users[0])
 
-        self.transactions['Undef'] = Transaction(group=self.group)
-        self.transactions['Undef'].save()
+        self.transactions["Undef"] = Transaction(group=self.group)
+        self.transactions["Undef"].save()
 
-        self.transactions['Com'].set_committed(user=self.users[1])
-        self.transactions['Rej'].set_rejected(user=self.users[1])
+        self.transactions["Com"].set_committed(user=self.users[1])
+        self.transactions["Rej"].set_rejected(user=self.users[1])
 
     def tearDown(self):
         for transaction in self.transactions.values():
@@ -92,16 +123,17 @@ class GroupTestCase(unittest.TestCase):
     def testEmptySlugRaisesError(self):
         """Checks that saving a group without a slug results in a ValueError"""
 
-        self.group.slug = ''
+        self.group.slug = ""
         with self.assertRaises(ValueError):
             self.group.save()
 
     def testGetAccountNumberDisplay(self):
         """Check that account numbers are formated correctly."""
 
-        self.group.account_number = '12345678901'
+        self.group.account_number = "12345678901"
         self.assertEqual(
-            '1234.56.78901', self.group.get_account_number_display())
+            "1234.56.78901", self.group.get_account_number_display()
+        )
 
     def testUserAccountSet(self):
         """Checks that get_user_account_set returns all user accounts"""
@@ -138,9 +170,9 @@ class GroupTestCase(unittest.TestCase):
 
         set = self.group.transaction_set
         self.assertEqual(set.count(), 2)
-        self.assert_(self.transactions['Pen'] in set)
-        self.assert_(self.transactions['Com'] in set)
-        self.assert_(self.transactions['Rej'] not in set)
+        self.assert_(self.transactions["Pen"] in set)
+        self.assert_(self.transactions["Com"] in set)
+        self.assert_(self.transactions["Rej"] not in set)
 
     def testTransactionSetWithRejected(self):
         """Checks that transaction_set_with_rejected returns all
@@ -148,9 +180,9 @@ class GroupTestCase(unittest.TestCase):
 
         set = self.group.transaction_set_with_rejected
         self.assertEqual(set.count(), 3)
-        self.assert_(self.transactions['Pen'] in set)
-        self.assert_(self.transactions['Com'] in set)
-        self.assert_(self.transactions['Rej'] in set)
+        self.assert_(self.transactions["Pen"] in set)
+        self.assert_(self.transactions["Com"] in set)
+        self.assert_(self.transactions["Rej"] in set)
 
     def testPendingTransactionSet(self):
         """Checks that pending_transaction_set returns all pending
@@ -158,9 +190,9 @@ class GroupTestCase(unittest.TestCase):
 
         set = self.group.pending_transaction_set
         self.assertEqual(set.count(), 1)
-        self.assert_(self.transactions['Pen'] in set)
-        self.assert_(self.transactions['Com'] not in set)
-        self.assert_(self.transactions['Rej'] not in set)
+        self.assert_(self.transactions["Pen"] in set)
+        self.assert_(self.transactions["Com"] not in set)
+        self.assert_(self.transactions["Rej"] not in set)
 
     def testCommittedTransactionSet(self):
         """Checks that committed_transaction_set returns all committed
@@ -168,9 +200,9 @@ class GroupTestCase(unittest.TestCase):
 
         set = self.group.committed_transaction_set
         self.assertEqual(set.count(), 1)
-        self.assert_(self.transactions['Pen'] not in set)
-        self.assert_(self.transactions['Com'] in set)
-        self.assert_(self.transactions['Rej'] not in set)
+        self.assert_(self.transactions["Pen"] not in set)
+        self.assert_(self.transactions["Com"] in set)
+        self.assert_(self.transactions["Rej"] not in set)
 
     def testRejectedTransactionSet(self):
         """Checks that rejected_transaction_set returns all rejected
@@ -178,79 +210,96 @@ class GroupTestCase(unittest.TestCase):
 
         set = self.group.rejected_transaction_set
         self.assertEqual(set.count(), 1)
-        self.assert_(self.transactions['Pen'] not in set)
-        self.assert_(self.transactions['Com'] not in set)
-        self.assert_(self.transactions['Rej'] in set)
+        self.assert_(self.transactions["Pen"] not in set)
+        self.assert_(self.transactions["Com"] not in set)
+        self.assert_(self.transactions["Rej"] in set)
 
 
 class AccountTestCase(unittest.TestCase):
     def setUp(self):
         self.users = [
-            User(username='alice'),
-            User(username='bob'),
-            User(username='darth'),
+            User(username="alice"),
+            User(username="bob"),
+            User(username="darth"),
         ]
         for user in self.users:
             user.save()
 
-        self.group = Group(name='Group 1', slug='group1')
+        self.group = Group(name="Group 1", slug="group1")
         self.group.save()
 
         self.accounts = [
             # Normal user account
             Account(
-                name='Account 1', slug='account1', group=self.group,
-                owner=self.users[0]),
+                name="Account 1",
+                slug="account1",
+                group=self.group,
+                owner=self.users[0],
+            ),
             # Normal user account
             Account(
-                name='Account 2', slug='account2', group=self.group,
-                owner=self.users[1]),
+                name="Account 2",
+                slug="account2",
+                group=self.group,
+                owner=self.users[1],
+            ),
             # Inactive user account
             Account(
-                name='Account 3', slug='account3', group=self.group,
-                owner=self.users[2], active=False),
+                name="Account 3",
+                slug="account3",
+                group=self.group,
+                owner=self.users[2],
+                active=False,
+            ),
             # Group account
             Account(
-                name='Account 4', slug='account4', group=self.group,
-                type=Account.ASSET_ACCOUNT),
+                name="Account 4",
+                slug="account4",
+                group=self.group,
+                type=Account.ASSET_ACCOUNT,
+            ),
             # Inactive group account
             Account(
-                name='Account 5', slug='account5', group=self.group,
-                type=Account.ASSET_ACCOUNT, active=False),
+                name="Account 5",
+                slug="account5",
+                group=self.group,
+                type=Account.ASSET_ACCOUNT,
+                active=False,
+            ),
             # Bank account
             self.group.roleaccount_set.get(
-                role=RoleAccount.BANK_ACCOUNT).account,
+                role=RoleAccount.BANK_ACCOUNT
+            ).account,
             # Cash account
             self.group.roleaccount_set.get(
-                role=RoleAccount.CASH_ACCOUNT).account,
+                role=RoleAccount.CASH_ACCOUNT
+            ).account,
         ]
         for account in self.accounts:
             account.save()
         self.account = self.accounts[0]
 
         self.transactions = {
-            'Pen': Transaction(group=self.group),
-            'Com': Transaction(group=self.group),
-            'Rej': Transaction(group=self.group),
+            "Pen": Transaction(group=self.group),
+            "Com": Transaction(group=self.group),
+            "Rej": Transaction(group=self.group),
         }
-        values = {
-            'Pen': 150,
-            'Com': 200,
-            'Rej': 100,
-        }
+        values = {"Pen": 150, "Com": 200, "Rej": 100}
         for state, transaction in self.transactions.items():
             transaction.save()
-            transaction.entry_set.add(TransactionEntry(
-                account=self.accounts[0], credit=values[state]))
-            transaction.entry_set.add(TransactionEntry(
-                account=self.accounts[1], debit=values[state]))
+            transaction.entry_set.add(
+                TransactionEntry(account=self.accounts[0], credit=values[state])
+            )
+            transaction.entry_set.add(
+                TransactionEntry(account=self.accounts[1], debit=values[state])
+            )
             transaction.set_pending(user=self.users[0])
 
-        self.transactions['Undef'] = Transaction(group=self.group)
-        self.transactions['Undef'].save()
+        self.transactions["Undef"] = Transaction(group=self.group)
+        self.transactions["Undef"].save()
 
-        self.transactions['Com'].set_committed(user=self.users[2])
-        self.transactions['Rej'].set_rejected(user=self.users[2])
+        self.transactions["Com"].set_committed(user=self.users[2])
+        self.transactions["Rej"].set_rejected(user=self.users[2])
 
     def tearDown(self):
         for transaction in self.transactions.values():
@@ -279,7 +328,7 @@ class AccountTestCase(unittest.TestCase):
         """Checks that saving an account without a slug results in a
         ValueError"""
 
-        self.account.slug = ''
+        self.account.slug = ""
         with self.assertRaises(ValueError):
             self.account.save()
 
@@ -319,9 +368,9 @@ class AccountTestCase(unittest.TestCase):
 
         set = self.account.transaction_set
         self.assertEqual(set.count(), 2)
-        self.assert_(self.transactions['Pen'] in set)
-        self.assert_(self.transactions['Com'] in set)
-        self.assert_(self.transactions['Rej'] not in set)
+        self.assert_(self.transactions["Pen"] in set)
+        self.assert_(self.transactions["Com"] in set)
+        self.assert_(self.transactions["Rej"] not in set)
 
     def testTransactionSetWithRejected(self):
         """Checks that transaction_set_with_rejected returns all
@@ -329,9 +378,9 @@ class AccountTestCase(unittest.TestCase):
 
         set = self.account.transaction_set_with_rejected
         self.assertEqual(set.count(), 3)
-        self.assert_(self.transactions['Pen'] in set)
-        self.assert_(self.transactions['Com'] in set)
-        self.assert_(self.transactions['Rej'] in set)
+        self.assert_(self.transactions["Pen"] in set)
+        self.assert_(self.transactions["Com"] in set)
+        self.assert_(self.transactions["Rej"] in set)
 
     def testPendingTransactionSet(self):
         """Checks that pending_transaction_set returns all pending
@@ -339,9 +388,9 @@ class AccountTestCase(unittest.TestCase):
 
         set = self.account.pending_transaction_set
         self.assertEqual(set.count(), 1)
-        self.assert_(self.transactions['Pen'] in set)
-        self.assert_(self.transactions['Com'] not in set)
-        self.assert_(self.transactions['Rej'] not in set)
+        self.assert_(self.transactions["Pen"] in set)
+        self.assert_(self.transactions["Com"] not in set)
+        self.assert_(self.transactions["Rej"] not in set)
 
     def testCommittedTransactionSet(self):
         """Checks that committed_transaction_set returns all committed
@@ -349,9 +398,9 @@ class AccountTestCase(unittest.TestCase):
 
         set = self.account.committed_transaction_set
         self.assertEqual(set.count(), 1)
-        self.assert_(self.transactions['Pen'] not in set)
-        self.assert_(self.transactions['Com'] in set)
-        self.assert_(self.transactions['Rej'] not in set)
+        self.assert_(self.transactions["Pen"] not in set)
+        self.assert_(self.transactions["Com"] in set)
+        self.assert_(self.transactions["Rej"] not in set)
 
     def testRejectedTransactionSet(self):
         """Checks that rejected_transaction_set returns all rejected
@@ -359,23 +408,23 @@ class AccountTestCase(unittest.TestCase):
 
         set = self.account.rejected_transaction_set
         self.assertEqual(set.count(), 1)
-        self.assert_(self.transactions['Pen'] not in set)
-        self.assert_(self.transactions['Com'] not in set)
-        self.assert_(self.transactions['Rej'] in set)
+        self.assert_(self.transactions["Pen"] not in set)
+        self.assert_(self.transactions["Com"] not in set)
+        self.assert_(self.transactions["Rej"] in set)
 
 
 class TransactionTestCase(unittest.TestCase):
     def setUp(self):
-        self.user = User(username='alice')
+        self.user = User(username="alice")
         self.user.save()
 
-        self.group = Group(name='Group 1', slug='group1')
+        self.group = Group(name="Group 1", slug="group1")
         self.group.save()
 
         self.accounts = [
-            Account(name='Account 1', slug='account1', group=self.group),
-            Account(name='Account 2', slug='account2', group=self.group),
-            Account(name='Account 3', slug='account3', group=self.group),
+            Account(name="Account 1", slug="account1", group=self.group),
+            Account(name="Account 2", slug="account2", group=self.group),
+            Account(name="Account 3", slug="account3", group=self.group),
         ]
         for account in self.accounts:
             account.save()
@@ -384,10 +433,12 @@ class TransactionTestCase(unittest.TestCase):
 
         self.transaction = Transaction(group=self.group)
         self.transaction.save()
-        self.transaction.entry_set.add(TransactionEntry(
-            account=self.accounts[0], debit=100))
-        self.transaction.entry_set.add(TransactionEntry(
-            account=self.accounts[1], credit=100))
+        self.transaction.entry_set.add(
+            TransactionEntry(account=self.accounts[0], debit=100)
+        )
+        self.transaction.entry_set.add(
+            TransactionEntry(account=self.accounts[1], credit=100)
+        )
 
         self.transaction.set_pending(user=self.user)
 
@@ -413,10 +464,12 @@ class TransactionTestCase(unittest.TestCase):
         transaction = Transaction(group=self.group)
         transaction.save()
 
-        transaction.entry_set.add(TransactionEntry(
-            account=self.accounts[1], debit=200))
-        transaction.entry_set.add(TransactionEntry(
-            account=self.accounts[0], credit=100))
+        transaction.entry_set.add(
+            TransactionEntry(account=self.accounts[1], debit=200)
+        )
+        transaction.entry_set.add(
+            TransactionEntry(account=self.accounts[0], credit=100)
+        )
         with self.assertRaises(InvalidTransaction):
             transaction.set_pending(user=self.user)
 
@@ -428,12 +481,15 @@ class TransactionTestCase(unittest.TestCase):
         transaction = Transaction(group=self.group)
         transaction.save()
 
-        transaction.entry_set.add(TransactionEntry(
-            account=self.accounts[0], debit=200))
-        transaction.entry_set.add(TransactionEntry(
-            account=self.accounts[1], credit=100))
-        transaction.entry_set.add(TransactionEntry(
-            account=self.accounts[2], credit=100))
+        transaction.entry_set.add(
+            TransactionEntry(account=self.accounts[0], debit=200)
+        )
+        transaction.entry_set.add(
+            TransactionEntry(account=self.accounts[1], credit=100)
+        )
+        transaction.entry_set.add(
+            TransactionEntry(account=self.accounts[2], credit=100)
+        )
 
         transaction.delete()
 
@@ -446,10 +502,12 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(transaction.log_set.count(), 1)
         self.assertEqual(
             transaction.log_set.filter(type=Transaction.PENDING_STATE).count(),
-            1)
+            1,
+        )
 
-        pending = transaction.log_set.filter(
-            type=Transaction.PENDING_STATE)[0].timestamp
+        pending = transaction.log_set.filter(type=Transaction.PENDING_STATE)[
+            0
+        ].timestamp
 
         self.assert_(pending > self.before)
         self.assert_(pending < self.after)
@@ -467,11 +525,14 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(transaction.log_set.count(), 2)
         self.assertEqual(
             transaction.log_set.filter(
-                type=Transaction.COMMITTED_STATE).count(),
-            1)
+                type=Transaction.COMMITTED_STATE
+            ).count(),
+            1,
+        )
 
         committed = transaction.log_set.filter(
-            type=Transaction.COMMITTED_STATE)[0].timestamp
+            type=Transaction.COMMITTED_STATE
+        )[0].timestamp
 
         self.assert_(committed > before)
         self.assert_(committed < after)
@@ -483,17 +544,19 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(transaction.is_pending(), True)
 
         before = datetime.datetime.now()
-        transaction.set_rejected(
-            message='Reason for rejecting', user=self.user)
+        transaction.set_rejected(message="Reason for rejecting", user=self.user)
         after = datetime.datetime.now()
 
         self.assertEqual(transaction.is_rejected(), True)
         self.assertEqual(transaction.log_set.count(), 2)
-        self.assertEqual(transaction.log_set.filter(
-            type=Transaction.REJECTED_STATE).count(), 1)
+        self.assertEqual(
+            transaction.log_set.filter(type=Transaction.REJECTED_STATE).count(),
+            1,
+        )
 
-        rejected = transaction.log_set.filter(
-            type=Transaction.REJECTED_STATE)[0].timestamp
+        rejected = transaction.log_set.filter(type=Transaction.REJECTED_STATE)[
+            0
+        ].timestamp
         self.assert_(rejected > before)
         self.assert_(rejected < after)
 
@@ -505,15 +568,16 @@ class TransactionTestCase(unittest.TestCase):
 
         with self.assertRaises(InvalidTransaction):
             transaction.set_rejected(
-                message='Reason for rejecting', user=self.user)
+                message="Reason for rejecting", user=self.user
+            )
 
 
 class LogTestCase(unittest.TestCase):
     def setUp(self):
-        self.user = User(username='alice')
+        self.user = User(username="alice")
         self.user.save()
 
-        self.group = Group(name='Group 1', slug='group1')
+        self.group = Group(name="Group 1", slug="group1")
         self.group.save()
 
         self.transaction = Transaction(group=self.group)
@@ -531,9 +595,11 @@ class LogTestCase(unittest.TestCase):
 
         for key, value in Transaction.TRANSACTION_STATE:
             log1 = TransactionLog(
-                type=key, transaction=self.transaction, user=self.user)
+                type=key, transaction=self.transaction, user=self.user
+            )
             log2 = TransactionLog(
-                type=key, transaction=self.transaction, user=self.user)
+                type=key, transaction=self.transaction, user=self.user
+            )
             if key != Transaction.PENDING_STATE:
                 log1.save()
                 with self.assertRaises(InvalidTransactionLog):
@@ -543,14 +609,16 @@ class LogTestCase(unittest.TestCase):
         """Checks that modifying log entry raises error"""
 
         log_entry = self.transaction.log_set.filter(
-            type=Transaction.PENDING_STATE)[0]
+            type=Transaction.PENDING_STATE
+        )[0]
 
         with self.assertRaises(InvalidTransactionLog):
             log_entry.save()
 
         for key, value in Transaction.TRANSACTION_STATE:
-            log1 = TransactionLog(type=key, transaction=self.transaction,
-                                  user=self.user)
+            log1 = TransactionLog(
+                type=key, transaction=self.transaction, user=self.user
+            )
 
             if key != Transaction.PENDING_STATE:
                 log1.save()
@@ -560,22 +628,26 @@ class LogTestCase(unittest.TestCase):
 
 class EntryTestCase(unittest.TestCase):
     def setUp(self):
-        self.user = User(username='alice')
+        self.user = User(username="alice")
         self.user.save()
 
-        self.group = Group(name='group1', slug='group1')
+        self.group = Group(name="group1", slug="group1")
         self.group.save()
 
         self.account = Account(
-            name='account1', slug='account1', group=self.group)
+            name="account1", slug="account1", group=self.group
+        )
         self.account.save()
 
         self.transaction = Transaction(group=self.group)
         self.transaction.save()
 
         self.entry = TransactionEntry(
-            account=self.account, debit=100, credit=100,
-            transaction=self.transaction)
+            account=self.account,
+            debit=100,
+            credit=100,
+            transaction=self.transaction,
+        )
 
     def tearDown(self):
         self.transaction.delete()

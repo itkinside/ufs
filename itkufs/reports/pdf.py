@@ -11,13 +11,13 @@ from reportlab.lib.pagesizes import A4
 from django.utils.translation import ugettext as _
 
 
-BORDER_COLOR = HexColor('#555753')
-BLACKLISTED_COLOR = HexColor('#000000')
-BLACKLISTED_TEXT_COLOR = HexColor('#A40000')
-WARN_TEXT_COLOR = HexColor('#F57900')
-FAINT_COLOR = HexColor('#BABDB6')
+BORDER_COLOR = HexColor("#555753")
+BLACKLISTED_COLOR = HexColor("#000000")
+BLACKLISTED_TEXT_COLOR = HexColor("#A40000")
+WARN_TEXT_COLOR = HexColor("#F57900")
+FAINT_COLOR = HexColor("#BABDB6")
 
-ALTERNATE_COLORS = [HexColor('#FFFFFF'), HexColor('#F5F5F5')]
+ALTERNATE_COLORS = [HexColor("#FFFFFF"), HexColor("#F5F5F5")]
 
 
 def pdf(group, list, show_header=True, show_footer=True):
@@ -28,10 +28,10 @@ def pdf(group, list, show_header=True, show_footer=True):
     columns = list.column_set.all()
     accounts = list.accounts()
 
-    margin = 0.5*cm
+    margin = 0.5 * cm
 
-    font_name = 'Times-Roman'
-    font_name_bold = 'Times-Bold'
+    font_name = "Times-Roman"
+    font_name_bold = "Times-Bold"
     font_size = 12
     font_size_small = 10
     font_size_min = 8
@@ -60,7 +60,8 @@ def pdf(group, list, show_header=True, show_footer=True):
 
         # Load logo with correct scaling
         logo = Image(
-            group.logo.path, width=logo_height*ratio, height=logo_height)
+            group.logo.path, width=logo_height * ratio, height=logo_height
+        )
 
     def draw_header():
         if not show_header:
@@ -69,18 +70,21 @@ def pdf(group, list, show_header=True, show_footer=True):
         if show_logo:
             logo.drawOn(
                 p,
-                width - margin - logo_height*ratio,
-                height - margin - logo_height)
+                width - margin - logo_height * ratio,
+                height - margin - logo_height,
+            )
 
         # Setup rest of header
         p.setFont(font_name, font_size)
         p.drawString(
-            margin, height - margin - font_size,
-            u'%s: %s' % (group, list.name))
+            margin, height - margin - font_size, u"%s: %s" % (group, list.name)
+        )
         p.setFont(font_name, font_size_small)
         p.drawString(
-            margin, height - margin - font_size - font_size + 2,
-            u'%s: %s' % (_('Printed'), str(date.today())))
+            margin,
+            height - margin - font_size - font_size + 2,
+            u"%s: %s" % (_("Printed"), str(date.today())),
+        )
 
     footer = []
     if group.email:
@@ -88,15 +92,15 @@ def pdf(group, list, show_header=True, show_footer=True):
     if group.account_number:
         footer.append(group.get_account_number_display())
     if list.comment.strip():
-        footer.append(list.comment.replace('\n', ' ').replace('\r', ' '))
+        footer.append(list.comment.replace("\n", " ").replace("\r", " "))
 
     def draw_footer():
         if not show_footer:
             return
 
-        p.drawString(margin, margin, u' - '.join(footer))
+        p.drawString(margin, margin, u" - ".join(footer))
 
-        blacklisted_note = _(u'Blacklisted accounts are marked with: ')
+        blacklisted_note = _(u"Blacklisted accounts are marked with: ")
 
         p.drawRightString(width - margin - 10, margin, blacklisted_note)
         p.setFillColor(BLACKLISTED_COLOR)
@@ -108,8 +112,10 @@ def pdf(group, list, show_header=True, show_footer=True):
         no_accounts_message = _(u"Sorry, this list is empty.")
         draw_header()
         p.drawString(
-            margin, height - font_size - margin - head_height,
-            no_accounts_message)
+            margin,
+            height - font_size - margin - head_height,
+            no_accounts_message,
+        )
         draw_footer()
         p.save()
 
@@ -118,11 +124,14 @@ def pdf(group, list, show_header=True, show_footer=True):
     elif not columns:
         no_columns_message = _(
             u"Sorry, this list isn't set up correctly, "
-            u"please add some columns.")
+            u"please add some columns."
+        )
         draw_header()
         p.drawString(
-            margin, height - font_size - margin - head_height,
-            no_columns_message)
+            margin,
+            height - font_size - margin - head_height,
+            no_columns_message,
+        )
         draw_footer()
         p.save()
 
@@ -130,7 +139,7 @@ def pdf(group, list, show_header=True, show_footer=True):
 
     # Store col widths
     col_width = []
-    header = [_(u'Name')]
+    header = [_(u"Name")]
 
     if list.account_width:
         col_width.append(list.account_width)
@@ -139,14 +148,14 @@ def pdf(group, list, show_header=True, show_footer=True):
         col_width.append(list.short_name_width)
 
     if list.account_width and list.short_name_width:
-        header.append('')
+        header.append("")
 
     if list.balance_width:
-        header.append(_(u'Balance'))
+        header.append(_(u"Balance"))
         col_width.append(list.balance_width)
 
     if list.short_name_width > 0 and list.account_width > 0:
-        GRID_STYLE.add('SPAN', (0, 0), (1, 0))
+        GRID_STYLE.add("SPAN", (0, 0), (1, 0))
 
     base_x = len(header)
 
@@ -156,16 +165,22 @@ def pdf(group, list, show_header=True, show_footer=True):
 
     # Calculate relative col widths over to absolute points
     for i, w in enumerate(col_width):
-        col_width[i] = float(w) / float(
-            (list.listcolumn_width or 0) + list.balance_width +
-            (list.account_width or 0) + (list.short_name_width or 0)
-        ) * (width - 2 * margin)
+        col_width[i] = (
+            float(w)
+            / float(
+                (list.listcolumn_width or 0)
+                + list.balance_width
+                + (list.account_width or 0)
+                + (list.short_name_width or 0)
+            )
+            * (width - 2 * margin)
+        )
 
     # Intialise table with header
     data = [header]
 
     for i, a in enumerate(accounts):
-        color = ALTERNATE_COLORS[(i+1) % len(ALTERNATE_COLORS)]
+        color = ALTERNATE_COLORS[(i + 1) % len(ALTERNATE_COLORS)]
 
         if list.double:
             i *= 2
@@ -175,7 +190,7 @@ def pdf(group, list, show_header=True, show_footer=True):
 
         i += 1
 
-        GRID_STYLE.add('BACKGROUND', (0, i), (-1, i+extra_row_height), color)
+        GRID_STYLE.add("BACKGROUND", (0, i), (-1, i + extra_row_height), color)
 
         row = []
 
@@ -184,9 +199,10 @@ def pdf(group, list, show_header=True, show_footer=True):
 
             # Check if we need to reduce col font size
             while (
-                    col_width[len(row)-1] <
-                    p.stringWidth(row[-1], font_name, font_size_name) + 12
-                    and font_size_name > font_size_min):
+                col_width[len(row) - 1]
+                < p.stringWidth(row[-1], font_name, font_size_name) + 12
+                and font_size_name > font_size_min
+            ):
                 font_size_name -= 1
 
         if list.short_name_width:
@@ -199,43 +215,55 @@ def pdf(group, list, show_header=True, show_footer=True):
 
             # Check if we need to reduce col font size
             while (
-                    col_width[len(row)-1] <
-                    p.stringWidth(row[-1], font_name, font_size_name) + 12
-                    and font_size_short_name > font_size_min):
+                col_width[len(row) - 1]
+                < p.stringWidth(row[-1], font_name, font_size_name) + 12
+                and font_size_short_name > font_size_min
+            ):
                 font_size_short_name -= 1
 
         if list.balance_width:
-            row.append('%d' % a.normal_balance())
+            row.append("%d" % a.normal_balance())
 
             # XXX: currently warnings are only shown if balance is shown, this
             # if needs to be moved if you want to change that
             if a.needs_warning():
                 GRID_STYLE.add(
-                    'FONTNAME', (0, i), (base_x - 1, i), font_name_bold)
+                    "FONTNAME", (0, i), (base_x - 1, i), font_name_bold
+                )
                 GRID_STYLE.add(
-                    'TEXTCOLOR', (base_x - 1, i), (base_x - 1, i),
-                    WARN_TEXT_COLOR)
+                    "TEXTCOLOR",
+                    (base_x - 1, i),
+                    (base_x - 1, i),
+                    WARN_TEXT_COLOR,
+                )
 
             # Check if we need to reduce col font size
             while (
-                    col_width[len(row)-1] <
-                    p.stringWidth(str(row[-1]), font_name, font_size_balance) +
-                    12
-                    and font_size_balance > font_size_min):
+                col_width[len(row) - 1]
+                < p.stringWidth(str(row[-1]), font_name, font_size_balance) + 12
+                and font_size_balance > font_size_min
+            ):
                 font_size_balance -= 1
 
         if a.is_blocked():
             if list.balance_width:
                 GRID_STYLE.add(
-                    'TEXTCOLOR', (base_x - 1, i), (base_x - 1, i),
-                    BLACKLISTED_TEXT_COLOR)
+                    "TEXTCOLOR",
+                    (base_x - 1, i),
+                    (base_x - 1, i),
+                    BLACKLISTED_TEXT_COLOR,
+                )
                 GRID_STYLE.add(
-                    'FONTNAME', (0, i), (base_x - 1, i), font_name_bold)
+                    "FONTNAME", (0, i), (base_x - 1, i), font_name_bold
+                )
             GRID_STYLE.add(
-                'BACKGROUND', (base_x, i), (-1, i + extra_row_height),
-                BLACKLISTED_COLOR)
+                "BACKGROUND",
+                (base_x, i),
+                (-1, i + extra_row_height),
+                BLACKLISTED_COLOR,
+            )
 
-            row.extend([''] * len(header[base_x:]))
+            row.extend([""] * len(header[base_x:]))
 
         else:
             row.extend(header[base_x:])
@@ -243,49 +271,50 @@ def pdf(group, list, show_header=True, show_footer=True):
         data.append(row)
 
         if list.double:
-            data.append([''] * len(row))
+            data.append([""] * len(row))
 
-            GRID_STYLE.add('SPAN', (0, i), (0, i + extra_row_height))
+            GRID_STYLE.add("SPAN", (0, i), (0, i + extra_row_height))
 
             if list.balance_width:
-                GRID_STYLE.add('SPAN', (1, i), (1, i + extra_row_height))
+                GRID_STYLE.add("SPAN", (1, i), (1, i + extra_row_height))
 
-    GRID_STYLE.add('FONTSIZE', (0, 0), (-1, -1), font_size_small)
+    GRID_STYLE.add("FONTSIZE", (0, 0), (-1, -1), font_size_small)
 
     # Set font size for names
-    GRID_STYLE.add('FONTSIZE', (0, 1), (0, -1), font_size_name)
-    GRID_STYLE.add('ALIGN', (0, 0), (-1, -1), 'LEFT')
-    GRID_STYLE.add('ALIGN', (base_x, 0), (-1, -1), 'RIGHT')
+    GRID_STYLE.add("FONTSIZE", (0, 1), (0, -1), font_size_name)
+    GRID_STYLE.add("ALIGN", (0, 0), (-1, -1), "LEFT")
+    GRID_STYLE.add("ALIGN", (base_x, 0), (-1, -1), "RIGHT")
 
-    GRID_STYLE.add('FONTNAME', (0, 0), (-1, 0), font_name_bold)
+    GRID_STYLE.add("FONTNAME", (0, 0), (-1, 0), font_name_bold)
 
     # Set font size for balance
     if list.balance_width:
         GRID_STYLE.add(
-            'FONTSIZE', (base_x - 1, 1), (base_x - 1, -1), font_size_balance)
-        GRID_STYLE.add('ALIGN', (base_x - 1, 1), (base_x - 1, -1), 'RIGHT')
+            "FONTSIZE", (base_x - 1, 1), (base_x - 1, -1), font_size_balance
+        )
+        GRID_STYLE.add("ALIGN", (base_x - 1, 1), (base_x - 1, -1), "RIGHT")
 
-    GRID_STYLE.add('TEXTCOLOR', (base_x, 1), (-1, -1), FAINT_COLOR)
+    GRID_STYLE.add("TEXTCOLOR", (base_x, 1), (-1, -1), FAINT_COLOR)
 
     if list.double:
-        GRID_STYLE.add('TOPPADDING', (base_x, 1), (-1, -1), 2)
-        GRID_STYLE.add('BOTTOMPADDING', (base_x, 1), (-1, -1), 2)
+        GRID_STYLE.add("TOPPADDING", (base_x, 1), (-1, -1), 2)
+        GRID_STYLE.add("BOTTOMPADDING", (base_x, 1), (-1, -1), 2)
 
-    GRID_STYLE.add('VALIGN', (0, 1), (-1, -1), 'TOP')
-    GRID_STYLE.add('GRID', (0, 0), (-1, -1), 0.25, BORDER_COLOR)
+    GRID_STYLE.add("VALIGN", (0, 1), (-1, -1), "TOP")
+    GRID_STYLE.add("GRID", (0, 0), (-1, -1), 0.25, BORDER_COLOR)
 
     # Create table
     t = Table(data, colWidths=col_width, style=GRID_STYLE, repeatRows=1)
 
     rest = None
-    avail_w = width-2*margin
-    avail_h = height - 2*margin - head_height - foot_height
+    avail_w = width - 2 * margin
+    avail_h = height - 2 * margin - head_height - foot_height
 
     while t:
         # Figure out how big table will be
         t_width, t_height = t.wrapOn(p, avail_w, avail_h)
 
-        if not rest and t_height > height - 2*margin - head_height:
+        if not rest and t_height > height - 2 * margin - head_height:
             t, rest = t.split(avail_w, avail_h)
             continue
 

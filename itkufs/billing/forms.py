@@ -26,13 +26,13 @@ class CreateTransactionForm(forms.Form):
         settlements = bill.group.settlement_set.filter(closed=False)
         accounts = bill.group.account_set.filter(type=Account.INCOME_ACCOUNT)
 
-        self.fields['settlement'].queryset = settlements
-        self.fields['charge_to'].queryset = accounts
-        self.fields['charge_to'].label_from_instance = lambda obj: obj.name
+        self.fields["settlement"].queryset = settlements
+        self.fields["charge_to"].queryset = accounts
+        self.fields["charge_to"].label_from_instance = lambda obj: obj.name
 
     def clean(self):
         if not self.bill.billingline_set.count():
-            raise forms.ValidationError(_('Invalid bill'))
+            raise forms.ValidationError(_("Invalid bill"))
 
         return self.cleaned_data
 
@@ -40,18 +40,22 @@ class CreateTransactionForm(forms.Form):
 class BillForm(forms.ModelForm):
     class Meta:
         model = Bill
-        exclude = ('group', 'transaction')
+        exclude = ("group", "transaction")
 
 
 class BillingLineForm(forms.ModelForm):
     description = forms.CharField(max_length=100, required=False)
     amount = forms.DecimalField(
-        min_value=0, max_digits=10, decimal_places=2, required=False,
-        widget=forms.TextInput(attrs={'size': 4, 'class': 'number'}))
+        min_value=0,
+        max_digits=10,
+        decimal_places=2,
+        required=False,
+        widget=forms.TextInput(attrs={"size": 4, "class": "number"}),
+    )
 
     def clean(self):
-        amount = self.cleaned_data.get('amount', -1)
-        description = self.cleaned_data.get('description', '')
+        amount = self.cleaned_data.get("amount", -1)
+        description = self.cleaned_data.get("description", "")
 
         if amount > 0 and description.strip():
             return self.cleaned_data
@@ -59,27 +63,29 @@ class BillingLineForm(forms.ModelForm):
         return {}
 
     def clean_description(self):
-        description = self.cleaned_data['description']
+        description = self.cleaned_data["description"]
 
         if description is None or not description.strip():
-            raise forms.ValidationError(_('Description missing'))
+            raise forms.ValidationError(_("Description missing"))
 
         return description.strip()
 
     def clean_amount(self):
-        if self.cleaned_data['amount'] > 0:
-            return self.cleaned_data['amount']
+        if self.cleaned_data["amount"] > 0:
+            return self.cleaned_data["amount"]
 
-        raise forms.ValidationError(_('Amount missing'))
+        raise forms.ValidationError(_("Amount missing"))
 
     class Meta:
         model = BillingLine
-        fields = ('description', 'amount')
+        fields = ("description", "amount")
 
 
 BillingLineFormSet = inlineformset_factory(
-    Bill, BillingLine, extra=5, can_delete=False, form=BillingLineForm)
+    Bill, BillingLine, extra=5, can_delete=False, form=BillingLineForm
+)
 
 
 NewBillingLineFormSet = inlineformset_factory(
-    Bill, BillingLine, extra=15, can_delete=False, form=BillingLineForm)
+    Bill, BillingLine, extra=15, can_delete=False, form=BillingLineForm
+)

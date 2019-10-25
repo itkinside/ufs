@@ -15,22 +15,22 @@ class AccountForm(ModelForm):
 
     class Meta:
         model = Account
-        exclude = ('slug', 'group', 'owner')
+        exclude = ("slug", "group", "owner")
 
     def __init__(self, *args, **kwargs):
-        group = kwargs.pop('group', None)
+        group = kwargs.pop("group", None)
 
-        if 'instance' in kwargs and kwargs['instance'].owner:
-            initial = kwargs.pop('initial', {})
-            initial['owner'] = kwargs['instance'].owner.username
-            kwargs['initial'] = initial
+        if "instance" in kwargs and kwargs["instance"].owner:
+            initial = kwargs.pop("initial", {})
+            initial["owner"] = kwargs["instance"].owner.username
+            kwargs["initial"] = initial
 
         super(AccountForm, self).__init__(*args, **kwargs)
 
         self.group = group
 
     def clean_name(self):
-        name = self.cleaned_data['name']
+        name = self.cleaned_data["name"]
 
         if self.group:
             accounts = self.group.account_set.filter(name=name)
@@ -42,29 +42,29 @@ class AccountForm(ModelForm):
 
             if accounts:
                 raise forms.ValidationError(
-                    _('An account with this name allready exists'))
+                    _("An account with this name allready exists")
+                )
 
         return name
 
     def clean_owner(self):
-        owner = self.cleaned_data['owner']
+        owner = self.cleaned_data["owner"]
         user = None
 
-        if owner == '':
+        if owner == "":
             return None
 
         try:
             user = User.objects.get(username=owner)
         except User.DoesNotExist:
             for auth_backend in auth.get_backends():
-                if hasattr(auth_backend, 'get_or_create_user'):
+                if hasattr(auth_backend, "get_or_create_user"):
                     user = auth_backend.get_or_create_user(owner)
                     if user:
                         break
 
         if not user:
-            raise forms.ValidationError(
-                _('Username does not exist'))
+            raise forms.ValidationError(_("Username does not exist"))
 
         if self.group:
             accounts = self.group.account_set.filter(owner=user)
@@ -76,25 +76,27 @@ class AccountForm(ModelForm):
 
             if accounts:
                 raise forms.ValidationError(
-                    _('Users may only have one account per group'))
+                    _("Users may only have one account per group")
+                )
 
         return user
 
     def clean_group_account(self):
-        group_account = self.cleaned_data['group_account']
+        group_account = self.cleaned_data["group_account"]
 
-        if self.data['owner'] and group_account:
+        if self.data["owner"] and group_account:
             raise forms.ValidationError(
-                _("Group accounts can not have owners."))
+                _("Group accounts can not have owners.")
+            )
 
         return group_account
 
     def save(self, group=None, **kwargs):
-        original_commit = kwargs.pop('commit', True)
-        kwargs['commit'] = False
+        original_commit = kwargs.pop("commit", True)
+        kwargs["commit"] = False
 
         account = super(AccountForm, self).save(**kwargs)
-        account.owner = self.cleaned_data['owner']
+        account.owner = self.cleaned_data["owner"]
 
         if not account.slug:
             if account.owner:
@@ -119,42 +121,43 @@ class GroupForm(ModelForm):
 
     class Meta:
         model = Group
-        exclude = ('slug',)
+        exclude = ("slug",)
 
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
+        self.user = kwargs.pop("user", None)
         super(GroupForm, self).__init__(*args, **kwargs)
-        if 'instance' not in kwargs or kwargs['instance'].logo == '':
-            del self.fields['delete_logo']
+        if "instance" not in kwargs or kwargs["instance"].logo == "":
+            del self.fields["delete_logo"]
 
     def clean_admins(self):
         errors = []
-        if len(self.cleaned_data['admins']) == 0:
-            errors.append(_('The group must have at least one admin'))
+        if len(self.cleaned_data["admins"]) == 0:
+            errors.append(_("The group must have at least one admin"))
 
-        if self.user and self.user not in self.cleaned_data['admins']:
+        if self.user and self.user not in self.cleaned_data["admins"]:
             errors.append(
-                _('You are not allowed to remove your own admin privileges'))
+                _("You are not allowed to remove your own admin privileges")
+            )
 
         if errors:
             raise forms.ValidationError(errors)
 
-        return self.cleaned_data['admins']
+        return self.cleaned_data["admins"]
 
     def clean_account_number(self):
-        if not verify_account_number(self.cleaned_data['account_number']):
-            raise forms.ValidationError(_('Incorrect account number.'))
-        return self.cleaned_data['account_number']
+        if not verify_account_number(self.cleaned_data["account_number"]):
+            raise forms.ValidationError(_("Incorrect account number."))
+        return self.cleaned_data["account_number"]
 
     def save(self, *args, **kwargs):
-        original_commit = kwargs.pop('commit', True)
-        kwargs['commit'] = False
+        original_commit = kwargs.pop("commit", True)
+        kwargs["commit"] = False
         group = super(GroupForm, self).save(*args, **kwargs)
 
         if not group.slug:
             group.slug = slugify(group.name)
 
-        kwargs['commit'] = original_commit
+        kwargs["commit"] = original_commit
         return super(GroupForm, self).save(*args, **kwargs)
 
 
@@ -165,18 +168,20 @@ class RoleAccountModelChoiceField(forms.models.ModelChoiceField):
 
 class RoleAccountForm(Form):
     def __init__(self, *args, **kwargs):
-        group = kwargs.pop('group', None)
+        group = kwargs.pop("group", None)
         super(RoleAccountForm, self).__init__(*args, **kwargs)
 
         if group:
             for type, name in RoleAccount.ACCOUNT_ROLE:
                 try:
                     intial = RoleAccount.objects.get(
-                        group=group, role=type).account.id
+                        group=group, role=type
+                    ).account.id
                 except RoleAccount.DoesNotExist:
-                    intial = ''
+                    intial = ""
 
                 self.fields[type] = RoleAccountModelChoiceField(
-                    group.group_account_set, initial=intial)
+                    group.group_account_set, initial=intial
+                )
         else:
-            raise Exception('Please supply a group kwarg for RoleAccountForm')
+            raise Exception("Please supply a group kwarg for RoleAccountForm")

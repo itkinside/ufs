@@ -13,7 +13,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets[:-1]
 
     def has_delete_permission(self, request, obj=None):
-        return getattr(settings, 'BACKOFFICE', False)
+        return getattr(settings, "BACKOFFICE", False)
 
 
 class CustomFlatPageAdmin(FlatPageAdmin):
