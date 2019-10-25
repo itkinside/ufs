@@ -21,7 +21,7 @@ and in production.
 Additional dependencies for development
 ---------------------------------------
 
-See the ``requirements.txt`` file.
+See the ``requirements-dev.txt`` file.
 
 
 How to install

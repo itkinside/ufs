@@ -1,0 +1,15 @@
+### Runtime dependencies
+
+-r requirements.txt
+
+
+### Development dependencies
+
+# Code coverage
+coverage
+
+# Debug toolbar
+django-debug-toolbar >= 1.3, < 1.4
+
+# Code linting
+flake8
