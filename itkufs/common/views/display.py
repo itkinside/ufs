@@ -1,3 +1,5 @@
+from operator import itemgetter
+
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render_to_response
@@ -62,20 +64,43 @@ def account_summary(request, group, account, is_admin=False, is_owner=False):
 
 @login_required
 @limit_to_group
-def group_balance_graph(request, group, is_admin):
-    active_accounts = (
+def group_balance_graph(request, group, is_admin=False):
+    accounts = (
         Account.objects.all()
         .filter(group_id=group.id, active=True, group_account=False)
         .order_by("name")
     )
 
-    data = [
-        '[ "%s", %d ]' % (a.short_name, a.balance()) for a in active_accounts
-    ]
+    data = []
+
+    for a in accounts:
+        data.append([a.short_name, a.normal_balance()])
+
+    graph_data = ['[ "%s", %d ]' % (a[0], a[1]) for a in data]
+
+    data = sorted(data, key=itemgetter(1), reverse=True)
+
+    graph_data_sorted = ['[ "%s", %d ]' % (a[0], a[1]) for a in data]
+
+    graph_data_positive = []
+    graph_data_negative = []
+
+    for a in data:
+        if a[1] >= 0:
+            graph_data_positive.append('[ "%s", %d ]' % (a[0], a[1]))
+        else:
+            graph_data_negative.append('[ "%s", %d ]' % (a[0], -a[1]))
 
     return render_to_response(
         "common/group_balance_graph.html",
-        {"group": group, "data": ",\n".join(data)},
+        {
+            "group": Group.objects.select_related().get(id=group.id),
+            "graph_data": ",\n".join(graph_data),
+            "graph_data_sorted": ",\n".join(graph_data_sorted),
+            "graph_data_positive": ",\n".join(graph_data_positive),
+            "graph_data_negative": ",\n".join(graph_data_negative),
+        },
+        context_instance=RequestContext(request),
     )
 
 

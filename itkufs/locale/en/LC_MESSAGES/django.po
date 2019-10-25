@@ -8,646 +8,664 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-05 01:40+0100\n"
+"POT-Creation-Date: 2017-11-14 18:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: accounting/admin.py:31
+#: accounting/admin.py:36
 msgid "Advanced options"
 msgstr ""
 
-#: accounting/forms.py:21 accounting/forms.py:60
+#: accounting/forms.py:22 accounting/forms.py:67
 #: templates/accounting/approve_transactions.html:48
 #: templates/accounting/settlement_list.html:52
 msgid "Details"
 msgstr ""
 
-#: accounting/forms.py:58 billing/pdf.py:79
+#: accounting/forms.py:64 billing/pdf.py:90
 #: templates/billing/bill_details.html:62 templates/billing/bill_form.html:15
 msgid "Amount"
 msgstr ""
 
-#: accounting/forms.py:67
+#: accounting/forms.py:74
 msgid "Amount must be greater than zero"
 msgstr ""
 
-#: accounting/forms.py:72
+#: accounting/forms.py:80
 msgid "To"
 msgstr ""
 
-#: accounting/forms.py:86
+#: accounting/forms.py:95
 msgid "Reason"
 msgstr ""
 
-#: accounting/models.py:11 accounting/models.py:145 reports/models.py:35
-#: reports/models.py:85
+#: accounting/models.py:15 accounting/models.py:201 reports/models.py:38
+#: reports/models.py:109
 msgid "name"
 msgstr ""
 
-#: accounting/models.py:12 accounting/models.py:147 reports/models.py:36
+#: accounting/models.py:17 accounting/models.py:204 reports/models.py:39
 msgid "slug"
 msgstr ""
 
-#: accounting/models.py:13
+#: accounting/models.py:17
 msgid "A shortname used in URLs."
 msgstr ""
 
-#: accounting/models.py:14
+#: accounting/models.py:19
 msgid "admins"
 msgstr ""
 
-#: accounting/models.py:16
+#: accounting/models.py:21
 msgid "warn limit"
 msgstr ""
 
-#: accounting/models.py:17
-msgid "Warn user of low balance at this limit, "
+#: accounting/models.py:23
+msgid "Warn user of low balance at this limit, leave blank for no limit."
 msgstr ""
 
-#: accounting/models.py:19
+#: accounting/models.py:26
 msgid "block limit"
 msgstr ""
 
-#: accounting/models.py:20
+#: accounting/models.py:27
 msgid "Limit for blacklisting user, leave blank for no limit."
 msgstr ""
 
-#: accounting/models.py:21
+#: accounting/models.py:30
 msgid "A small image that will be added to lists."
 msgstr ""
 
-#: accounting/models.py:25
+#: accounting/models.py:33
 msgid "Contact address for group."
 msgstr ""
 
-#: accounting/models.py:29 accounting/models.py:149 accounting/models.py:278
-#: accounting/models.py:318 accounting/models.py:376 reports/models.py:44
+#: accounting/models.py:36
+msgid "Bank account for group."
+msgstr ""
+
+#: accounting/models.py:40 accounting/models.py:205 accounting/models.py:344
+#: accounting/models.py:384 accounting/models.py:445 reports/models.py:50
 msgid "group"
 msgstr ""
 
-#: accounting/models.py:30
+#: accounting/models.py:41
 msgid "groups"
 msgstr ""
 
-#: accounting/models.py:49
+#: accounting/models.py:65
 msgid "Bank"
 msgstr ""
 
-#: accounting/models.py:56
+#: accounting/models.py:73
 msgid "Cash"
 msgstr ""
 
-#: accounting/models.py:136
+#: accounting/models.py:192
 msgid "Asset"
 msgstr ""
 
-#: accounting/models.py:137
+#: accounting/models.py:193
 msgid "Liability"
 msgstr ""
 
-#: accounting/models.py:138
+#: accounting/models.py:194
 msgid "Equity"
 msgstr ""
 
-#: accounting/models.py:139
+#: accounting/models.py:195
 msgid "Income"
 msgstr ""
 
-#: accounting/models.py:140
+#: accounting/models.py:196
 msgid "Expense"
 msgstr ""
 
-#: accounting/models.py:146
+#: accounting/models.py:202
 msgid "short name"
 msgstr ""
 
-#: accounting/models.py:148
+#: accounting/models.py:204
 msgid "A shortname used in URLs etc."
 msgstr ""
 
-#: accounting/models.py:150 accounting/models.py:554
+#: accounting/models.py:207 accounting/models.py:628
 msgid "type"
 msgstr ""
 
-#: accounting/models.py:152
+#: accounting/models.py:210
 msgid "owner"
 msgstr ""
 
-#: accounting/models.py:154
+#: accounting/models.py:211
 msgid "active"
 msgstr ""
 
-#: accounting/models.py:155
+#: accounting/models.py:213
 msgid "ignore block limit"
 msgstr ""
 
-#: accounting/models.py:156
+#: accounting/models.py:214
 msgid "Never block account automatically"
 msgstr ""
 
-#: accounting/models.py:157
+#: accounting/models.py:216
 msgid "blocked"
 msgstr ""
 
-#: accounting/models.py:158
+#: accounting/models.py:216
 msgid "Block account manually"
 msgstr ""
 
-#: accounting/models.py:159
+#: accounting/models.py:218
 msgid "group account"
 msgstr ""
 
-#: accounting/models.py:160
+#: accounting/models.py:219
 msgid "Does this account belong to the group?"
 msgstr ""
 
-#: accounting/models.py:165 accounting/models.py:280 accounting/models.py:599
+#: accounting/models.py:224 accounting/models.py:346 accounting/models.py:674
 msgid "account"
 msgstr ""
 
-#: accounting/models.py:166
+#: accounting/models.py:225
 msgid "accounts"
 msgstr ""
 
-#: accounting/models.py:273
+#: accounting/models.py:339
 msgid "Bank account"
 msgstr ""
 
-#: accounting/models.py:274
+#: accounting/models.py:340
 msgid "Cash account"
 msgstr ""
 
-#: accounting/models.py:275
+#: accounting/models.py:341
 msgid "Sale account"
 msgstr ""
 
-#: accounting/models.py:279
+#: accounting/models.py:345
 msgid "role"
 msgstr ""
 
-#: accounting/models.py:286
+#: accounting/models.py:352
 msgid "role account"
 msgstr ""
 
-#: accounting/models.py:287
+#: accounting/models.py:353
 msgid "role accounts"
 msgstr ""
 
-#: accounting/models.py:290
+#: accounting/models.py:356
 #, python-format
 msgid "%(account)s is %(role)s for %(group)s"
 msgstr ""
 
-#: accounting/models.py:319 accounting/models.py:380
+#: accounting/models.py:385 accounting/models.py:449
 msgid "date"
 msgstr ""
 
-#: accounting/models.py:320 reports/models.py:55
+#: accounting/models.py:386 reports/models.py:65
 msgid "comment"
 msgstr ""
 
-#: accounting/models.py:322
-msgid "Mark as closed when done adding transactions "
+#: accounting/models.py:390
+msgid "Mark as closed when done adding transactions to the settlement."
 msgstr ""
 
-#: accounting/models.py:327 accounting/models.py:378
+#: accounting/models.py:395 accounting/models.py:447
 msgid "settlement"
 msgstr ""
 
-#: accounting/models.py:328
+#: accounting/models.py:396
 msgid "settlements"
 msgstr ""
 
-#: accounting/models.py:369 billing/models.py:22
+#: accounting/models.py:437 billing/models.py:23
 msgid "Pending"
 msgstr ""
 
-#: accounting/models.py:370 billing/models.py:24
+#: accounting/models.py:438 billing/models.py:25
 msgid "Committed"
 msgstr ""
 
-#: accounting/models.py:371
+#: accounting/models.py:439
 msgid "Rejected"
 msgstr ""
 
-#: accounting/models.py:381
+#: accounting/models.py:450
 msgid "May be used for date of the transaction if not today."
 msgstr ""
 
-#: accounting/models.py:382 templates/accounting/transaction_details.html:35
+#: accounting/models.py:452 templates/accounting/transaction_details.html:35
 msgid "Last modified"
 msgstr ""
 
-#: accounting/models.py:383
+#: accounting/models.py:454
 msgid "state"
 msgstr ""
 
-#: accounting/models.py:388 accounting/models.py:553 accounting/models.py:597
+#: accounting/models.py:458 accounting/models.py:626 accounting/models.py:673
 msgid "transaction"
 msgstr ""
 
-#: accounting/models.py:389
+#: accounting/models.py:459
 msgid "transactions"
 msgstr ""
 
-#: accounting/models.py:495
-#, python-format
-msgid "Transaction %(id)d regarding your account "
-msgstr ""
-
-#: accounting/models.py:556
+#: accounting/models.py:629
 msgid "timestamp"
 msgstr ""
 
-#: accounting/models.py:557
+#: accounting/models.py:630
 msgid "user"
 msgstr ""
 
-#: accounting/models.py:558
+#: accounting/models.py:631
 msgid "message"
 msgstr ""
 
-#: accounting/models.py:573
+#: accounting/models.py:647
 msgid "transaction log entry"
 msgstr ""
 
-#: accounting/models.py:574
+#: accounting/models.py:648
 msgid "transaction log entries"
 msgstr ""
 
-#: accounting/models.py:586
+#: accounting/models.py:660
 #, python-format
 msgid "%(type)s at %(timestamp)s by %(user)s: %(message)s"
 msgstr ""
 
-#: accounting/models.py:600
+#: accounting/models.py:676
 msgid "debit amount"
 msgstr ""
 
-#: accounting/models.py:602
+#: accounting/models.py:678
 msgid "credit amount"
 msgstr ""
 
-#: accounting/models.py:625
+#: accounting/models.py:715
 msgid "transaction entry"
 msgstr ""
 
-#: accounting/models.py:626
+#: accounting/models.py:716
 msgid "transaction entries"
 msgstr ""
 
-#: accounting/models.py:630
+#: accounting/models.py:720
 #, python-format
 msgid "%(account)s: debit %(debit)s, credit %(credit)s"
 msgstr ""
 
-#: accounting/management/commands/sendmail.py:128
+#: accounting/management/commands/sendmail.py:141
 #, python-format
 msgid "Warning limit passed in %(group)s"
 msgstr ""
 
-#: accounting/management/commands/sendmail.py:129
+#: accounting/management/commands/sendmail.py:142
 #, python-format
 msgid ""
-"Your current account balance of %(balance).2f, is below the _warning limit_ %"
-"(limit).2f\n"
+"\n"
+"Your current account balance of %(balance).2f, is below the _warning limit_\n"
+"%(limit).2f.\n"
 "\n"
 "To fix this either deposit more money or contact one of the group\n"
 "administrators.\n"
 msgstr ""
 
-#: accounting/management/commands/sendmail.py:135
+#: accounting/management/commands/sendmail.py:150
 #, python-format
 msgid "Block limit passed in %(group)s"
 msgstr ""
 
-#: accounting/management/commands/sendmail.py:136
+#: accounting/management/commands/sendmail.py:151
 #, python-format
 msgid ""
-"Your current account balance of %(balance).2f, is below the _block limit_ %"
-"(limit).2f\n"
+"\n"
+"Your current account balance of %(balance).2f, is below the _block limit_\n"
+"%(limit).2f.\n"
 "\n"
 "To fix this either deposit more money or contact one of the group\n"
 "administrators.\n"
 msgstr ""
 
-#: accounting/views/display.py:59 common/decorators.py:38
+#: accounting/views/display.py:73 common/decorators.py:40
 msgid "Forbidden if not account owner or group admin."
 msgstr ""
 
-#: accounting/views/display.py:98
-msgid "The transaction may only be"
+#: accounting/views/display.py:118
+msgid ""
+"The transaction may only be viewed by group admins or a party of the "
+"transaction."
 msgstr ""
 
-#: accounting/views/edit.py:22
+#: accounting/views/edit.py:27
 msgid "Settlement is closed and cannot be edited."
 msgstr ""
 
-#: accounting/views/edit.py:68
+#: accounting/views/edit.py:72
 msgid "Transfer from account"
 msgstr ""
 
-#: accounting/views/edit.py:71
+#: accounting/views/edit.py:75
 msgid "Deposit to account"
 msgstr ""
 
-#: accounting/views/edit.py:74
+#: accounting/views/edit.py:78
 msgid "Withdrawal from account"
 msgstr ""
 
-#: accounting/views/edit.py:77 accounting/views/edit.py:135
-#: common/decorators.py:50
+#: accounting/views/edit.py:81 accounting/views/edit.py:138
+#: common/decorators.py:53
 msgid "Forbidden if not group admin."
 msgstr ""
 
-#: accounting/views/edit.py:130
-msgid "Your transaction has been added,"
+#: accounting/views/edit.py:134
+msgid "Your transaction has been added, but your group admin has to commit it."
 msgstr ""
 
-#: accounting/views/edit.py:139
+#: accounting/views/edit.py:140
 #, python-format
 msgid "Added transaction: %s"
 msgstr ""
 
-#: accounting/views/edit.py:203
+#: accounting/views/edit.py:205
 #: templates/accounting/approve_transactions.html:29
 msgid "No pending transactions found."
 msgstr ""
 
-#: accounting/views/edit.py:282
+#: accounting/views/edit.py:284
 #, python-format
 msgid "Transaction %d can't be changed."
 msgstr ""
 
-#: accounting/views/edit.py:358
-msgid "Your transaction has been added"
+#: accounting/views/edit.py:361
+msgid "Your transaction has been added."
 msgstr ""
 
-#: billing/forms.py:34
+#: billing/forms.py:35
 msgid "Invalid bill"
 msgstr ""
 
-#: billing/forms.py:62
+#: billing/forms.py:65
 msgid "Description missing"
 msgstr ""
 
-#: billing/forms.py:70
+#: billing/forms.py:73
 msgid "Amount missing"
 msgstr ""
 
-#: billing/models.py:7
+#: billing/models.py:8
 msgid "created"
 msgstr ""
 
-#: billing/models.py:8 billing/models.py:35
+#: billing/models.py:9 billing/models.py:37
 msgid "description"
 msgstr ""
 
-#: billing/models.py:36
+#: billing/models.py:39
 msgid "amount"
 msgstr ""
 
-#: billing/pdf.py:45
+#: billing/pdf.py:46
 msgid "bill"
 msgstr ""
 
-#: billing/pdf.py:61
+#: billing/pdf.py:68
 #, python-format
 msgid "Bill #%d"
 msgstr ""
 
-#: billing/pdf.py:63
+#: billing/pdf.py:72
 msgid "%Y-%m-%d %H:%M"
 msgstr ""
 
-#: billing/pdf.py:79 templates/billing/bill_delete.html:32
+#: billing/pdf.py:90 templates/billing/bill_delete.html:32
 #: templates/billing/bill_details.html:33
 #: templates/billing/bill_details.html:61 templates/billing/bill_form.html:14
 #: templates/billing/bill_list.html:14
 msgid "Description"
 msgstr ""
 
-#: billing/views.py:24
-msgid "This bill can no longer be edited"
+#: billing/views.py:27
+msgid "This bill can no longer be edited."
 msgstr ""
 
-#: billing/views.py:63
-msgid "This bill is allready linked to a transaction"
+#: billing/views.py:71
+msgid "This bill is already linked to a transaction."
 msgstr ""
 
-#: billing/views.py:92
+#: billing/views.py:102
 #, python-format
 msgid "Bill #%(id)s: %(description)s"
 msgstr ""
 
-#: billing/views.py:136
+#: billing/views.py:152
 #, python-format
-msgid "Bill #%d deleted"
+msgid "Bill #%d deleted."
 msgstr ""
 
-#: common/decorators.py:22
+#: common/decorators.py:23
 msgid "Forbidden if not member of the group or group admin."
 msgstr ""
 
-#: common/forms.py:44
+#: common/forms.py:45
 msgid "An account with this name allready exists"
 msgstr ""
 
-#: common/forms.py:66
+#: common/forms.py:67
 msgid "Username does not exist"
 msgstr ""
 
-#: common/forms.py:78
+#: common/forms.py:79
 msgid "Users may only have one account per group"
 msgstr ""
 
-#: common/forms.py:86
+#: common/forms.py:88
 msgid "Group accounts can not have owners."
 msgstr ""
 
-#: common/forms.py:130
+#: common/forms.py:133
 msgid "The group must have at least one admin"
 msgstr ""
 
-#: common/forms.py:133
+#: common/forms.py:137
 msgid "You are not allowed to remove your own admin privileges"
 msgstr ""
 
-#: common/widgets.py:46
+#: common/forms.py:146
+msgid "Incorrect account number."
+msgstr ""
+
+#: common/widgets.py:63
 msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 
-#: common/views/__init__.py:19
+#: common/views/__init__.py:20
 msgid "Login failed"
 msgstr ""
 
-#: common/views/display.py:35
-msgid "The account balance is below the block limit,"
+#: common/views/edit.py:42
+msgid "Group successfully updated."
 msgstr ""
 
-#: common/views/display.py:40
-msgid "The account balance is below the warning limit."
-msgstr ""
-
-#: common/views/edit.py:39
-msgid "Group successfully updated"
-msgstr ""
-
-#: common/views/edit.py:65
+#: common/views/edit.py:69
 msgid "Account successfully activated."
 msgstr ""
 
-#: common/views/edit.py:86
-msgid "Account successfully updated"
+#: common/views/edit.py:91
+msgid "Account successfully updated."
 msgstr ""
 
-#: common/views/edit.py:90
-msgid "Account successfully created"
+#: common/views/edit.py:94
+msgid "Account successfully created."
 msgstr ""
 
-#: reports/forms.py:31
+#: reports/forms.py:61
+msgid "Please fill in at least one account entry."
+msgstr ""
+
+#: reports/forms.py:111
 #, python-format
 msgid "\"%(field1)s\" or \"%(field2)s\" must be greater than zero"
 msgstr ""
 
-#: reports/forms.py:57
+#: reports/forms.py:141
 msgid "Name missing"
 msgstr ""
 
-#: reports/forms.py:59
+#: reports/forms.py:143
 msgid "Width missing"
 msgstr ""
 
-#: reports/models.py:31
+#: reports/models.py:34
 msgid "Landscape"
 msgstr ""
 
-#: reports/models.py:32
+#: reports/models.py:35
 msgid "Portrait"
 msgstr ""
 
-#: reports/models.py:37
+#: reports/models.py:41
 msgid "account name width"
 msgstr ""
 
-#: reports/models.py:38 reports/models.py:40 reports/models.py:42
+#: reports/models.py:42 reports/models.py:45 reports/models.py:48
 msgid "Relative width of cell, 0 to hide"
 msgstr ""
 
-#: reports/models.py:39
+#: reports/models.py:44
 msgid "short name width"
 msgstr ""
 
-#: reports/models.py:41
+#: reports/models.py:47
 msgid "balance width"
 msgstr ""
 
-#: reports/models.py:46
+#: reports/models.py:53
 msgid "Public"
 msgstr ""
 
-#: reports/models.py:47
+#: reports/models.py:54
 msgid "Should this list be publicly available"
 msgstr ""
 
-#: reports/models.py:49
+#: reports/models.py:57
 msgid "Add active user accounts"
 msgstr ""
 
-#: reports/models.py:50
+#: reports/models.py:58
 msgid "Should all active accounts be added by default"
 msgstr ""
 
-#: reports/models.py:54
+#: reports/models.py:63
 msgid "orientation"
 msgstr ""
 
-#: reports/models.py:55
+#: reports/models.py:66
 msgid "Comment shown at bottom on first page"
 msgstr ""
 
-#: reports/models.py:58
+#: reports/models.py:69
 msgid "Use two rows per account"
 msgstr ""
 
-#: reports/models.py:59
+#: reports/models.py:71
 msgid "ignore blocked"
 msgstr ""
 
-#: reports/models.py:60
+#: reports/models.py:72
 msgid "Don't exclude blocked accounts"
 msgstr ""
 
-#: reports/models.py:64 reports/models.py:87
+#: reports/models.py:76 reports/models.py:112
 msgid "list"
 msgstr ""
 
-#: reports/models.py:65
+#: reports/models.py:77
 msgid "lists"
 msgstr ""
 
-#: reports/models.py:86
+#: reports/models.py:110
 msgid "width"
 msgstr ""
 
-#: reports/models.py:93
+#: reports/models.py:117
 msgid "list item"
 msgstr ""
 
-#: reports/models.py:94
+#: reports/models.py:118
 msgid "list items"
 msgstr ""
 
-#: reports/pdf.py:95
+#: reports/pdf.py:83
 msgid "Printed"
 msgstr ""
 
-#: reports/pdf.py:106
+#: reports/pdf.py:83
+msgid "by"
+msgstr ""
+
+#: reports/pdf.py:99
 msgid "Blacklisted accounts are marked with: "
 msgstr ""
 
-#: reports/pdf.py:115
+#: reports/pdf.py:108
 msgid "Sorry, this list is empty."
 msgstr ""
 
-#: reports/pdf.py:124
+#: reports/pdf.py:120
 msgid "Sorry, this list isn't set up correctly, please add some columns."
 msgstr ""
 
-#: reports/pdf.py:134 templates/common/account_summary.html:11
-#: templates/common/account_summary.html:57
+#: reports/pdf.py:133 templates/common/account_summary.html:11
+#: templates/common/account_summary.html:62
 #: templates/common/group_summary.html:11 templates/reports/list_form.html:55
 msgid "Name"
 msgstr ""
 
-#: reports/pdf.py:146 templates/accounting/transaction_form.html:67
+#: reports/pdf.py:145 templates/accounting/transaction_form.html:67
 #: templates/common/account_summary.html:37
-#: templates/common/group_summary.html:109
-#: templates/common/group_summary.html:140
+#: templates/common/group_balance_graph.html:7
+#: templates/common/group_summary.html:122
+#: templates/common/group_summary.html:153
 msgid "Balance"
 msgstr ""
 
-#: reports/views.py:107
-msgid "List deleted"
+#: reports/views.py:150
+msgid "List deleted."
 msgstr ""
 
-#: reports/views.py:151
-msgid "Member accounts"
+#: reports/views.py:186
+#, python-format
+msgid "Created from list: %s"
 msgstr ""
 
-#: reports/views.py:164
+#: reports/views.py:239
+msgid "Positive member accounts"
+msgstr ""
+
+#: reports/views.py:240
+msgid "Negative member accounts"
+msgstr ""
+
+#: reports/views.py:254
 msgid "Current year's net income"
 msgstr ""
 
-#: settings/__init__.py:111
+#: settings/base.py:114
 msgid "English"
 msgstr ""
 
-#: settings/__init__.py:112
+#: settings/base.py:115
 msgid "Norwegian"
 msgstr ""
 
@@ -670,41 +688,45 @@ msgid ""
 "and what you expected to happen instead of the error."
 msgstr ""
 
-#: templates/base.html:26
+#: templates/base.html:28
 msgid "&micro;FS Microfinance System"
 msgstr ""
 
-#: templates/base.html:72 templates/base.html.py:74
+#: templates/base.html:74 templates/base.html.py:76
 msgid "My account"
 msgstr ""
 
-#: templates/base.html:81 templates/base.html.py:83
+#: templates/base.html:83 templates/base.html.py:85
 msgid "My group"
 msgstr ""
 
-#: templates/base.html:89 templates/accounting/base.html:56
+#: templates/base.html:91 templates/accounting/base.html:56
 #: templates/flatpages/help.html:7 templates/flatpages/help.html.py:14
 #: templates/reports/list_form.html:37
 msgid "Help"
 msgstr ""
 
-#: templates/base.html:113
+#: templates/base.html:115
 msgid "User:"
 msgstr ""
 
-#: templates/base.html:120
+#: templates/base.html:122
 msgid "Group:"
 msgstr ""
 
-#: templates/base.html:128 templates/base.html.py:150
+#: templates/base.html:130 templates/base.html.py:158
 msgid "Go"
 msgstr ""
 
-#: templates/base.html:136
+#: templates/base.html:138
 msgid "Contact:"
 msgstr ""
 
-#: templates/base.html:143
+#: templates/base.html:144
+msgid "Account number:"
+msgstr ""
+
+#: templates/base.html:151
 msgid "Language:"
 msgstr ""
 
@@ -744,8 +766,8 @@ msgstr ""
 #: templates/accounting/transaction_details.html:65
 #: templates/accounting/transaction_form.html:65
 #: templates/accounting/transaction_list_table.html:7
-#: templates/common/group_summary.html:107
-#: templates/common/group_summary.html:138
+#: templates/common/group_summary.html:120
+#: templates/common/group_summary.html:151
 msgid "Account"
 msgstr ""
 
@@ -835,16 +857,16 @@ msgstr ""
 
 #: templates/accounting/settlement_details.html:28
 #: templates/accounting/settlement_list.html:50
-#: templates/common/account_summary.html:43
 #: templates/common/account_summary.html:48
+#: templates/common/account_summary.html:53
 msgid "Yes,No"
 msgstr ""
 
 #: templates/accounting/settlement_details.html:32
 #: templates/accounting/settlement_list.html:44
 #: templates/accounting/transaction_details.html:40
-#: templates/common/account_summary.html:84
-#: templates/common/group_summary.html:37
+#: templates/common/account_summary.html:96
+#: templates/common/group_summary.html:44
 msgid "Actions"
 msgstr ""
 
@@ -866,7 +888,7 @@ msgstr ""
 #: templates/accounting/settlement_form.html:8
 #: templates/accounting/settlement_form.html:21
 #: templates/accounting/settlement_form.html:31
-#: templates/common/group_summary.html:42
+#: templates/common/group_summary.html:49
 msgid "New settlement"
 msgstr ""
 
@@ -918,8 +940,8 @@ msgid "Transaction ID"
 msgstr ""
 
 #: templates/accounting/transaction_details.html:26
-#: templates/common/account_summary.html:68
-#: templates/common/account_summary.html:76
+#: templates/common/account_summary.html:73
+#: templates/common/account_summary.html:81
 #: templates/common/group_summary.html:20
 #: templates/common/group_summary.html:29
 msgid "None"
@@ -982,8 +1004,8 @@ msgstr ""
 
 #: templates/accounting/transaction_form.html:66
 #: templates/common/account_summary.html:31
-#: templates/common/group_summary.html:108
-#: templates/common/group_summary.html:139
+#: templates/common/group_summary.html:121
+#: templates/common/group_summary.html:152
 msgid "Type"
 msgstr ""
 
@@ -1007,12 +1029,12 @@ msgstr ""
 msgid "New bill"
 msgstr ""
 
-#: templates/billing/base.html:24 templates/common/group_summary.html:88
+#: templates/billing/base.html:24 templates/common/group_summary.html:96
 msgid "View bills"
 msgstr ""
 
-#: templates/billing/base.html:26
-msgid "back to group"
+#: templates/billing/base.html:26 templates/reports/base.html:22
+msgid "Back to group"
 msgstr ""
 
 #: templates/billing/bill_create_transaction.html:5
@@ -1021,6 +1043,8 @@ msgstr ""
 
 #: templates/billing/bill_create_transaction.html:13
 #: templates/billing/bill_details.html:48
+#: templates/common/group_summary.html:77
+#: templates/reports/list_transaction_form.html:50
 msgid "Create transaction"
 msgstr ""
 
@@ -1028,13 +1052,12 @@ msgstr ""
 msgid "Delete bill"
 msgstr ""
 
-#: templates/billing/bill_delete.html:12
-#: templates/billing/bill_details.html:13
+#: templates/billing/bill_delete.html:12 templates/billing/bill_details.html:13
 msgid "Created"
 msgstr ""
 
-#: templates/billing/bill_delete.html:28
-#: templates/billing/bill_details.html:29 templates/billing/bill_list.html:15
+#: templates/billing/bill_delete.html:28 templates/billing/bill_details.html:29
+#: templates/billing/bill_list.html:15
 msgid "Status"
 msgstr ""
 
@@ -1042,8 +1065,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: templates/billing/bill_details.html:6
-#: templates/common/group_summary.html:85
+#: templates/billing/bill_details.html:6 templates/common/group_summary.html:93
 msgid "Bill"
 msgstr ""
 
@@ -1097,13 +1119,12 @@ msgstr ""
 
 #: templates/common/account_form.html:7 templates/common/account_form.html:19
 #: templates/common/account_form.html:30
-#: templates/common/account_summary.html:89
+#: templates/common/account_summary.html:101
 msgid "Edit account"
 msgstr ""
 
 #: templates/common/account_form.html:9 templates/common/account_form.html:22
-#: templates/common/account_form.html:32
-#: templates/common/group_summary.html:46
+#: templates/common/account_form.html:32 templates/common/group_summary.html:53
 msgid "New account"
 msgstr ""
 
@@ -1124,40 +1145,59 @@ msgid "Owner"
 msgstr ""
 
 #: templates/common/account_summary.html:42
-msgid "Active"
+msgid "Total consumption"
 msgstr ""
 
 #: templates/common/account_summary.html:47
+msgid "Active"
+msgstr ""
+
+#: templates/common/account_summary.html:52
 msgid "Group account"
 msgstr ""
 
-#: templates/common/account_summary.html:54
+#: templates/common/account_summary.html:59
 #: templates/common/group_summary.html:8
 msgid "Group info"
 msgstr ""
 
-#: templates/common/account_summary.html:64
+#: templates/common/account_summary.html:69
 #: templates/common/group_summary.html:16
 msgid "Warning limit"
 msgstr ""
 
-#: templates/common/account_summary.html:72
+#: templates/common/account_summary.html:77
 #: templates/common/group_summary.html:25
 msgid "Blocking limit"
 msgstr ""
 
-#: templates/common/account_summary.html:97
-#: templates/common/group_summary.html:63
+#: templates/common/account_summary.html:87
+#: templates/common/group_summary.html:35
+msgid "Account number"
+msgstr ""
+
+#: templates/common/account_summary.html:109
+#: templates/common/group_summary.html:70
 msgid "Lists"
 msgstr ""
 
-#: templates/common/account_summary.html:107
-#: templates/common/account_summary.html:109
+#: templates/common/account_summary.html:119
+#: templates/common/account_summary.html:121
 msgid "No lists found"
 msgstr ""
 
-#: templates/common/account_summary.html:120
-#: templates/common/account_summary.html:122
+#: templates/common/account_summary.html:129
+#: templates/common/group_summary.html:104
+msgid "Graphs"
+msgstr ""
+
+#: templates/common/account_summary.html:130
+#: templates/common/group_summary.html:105
+msgid "Group balance"
+msgstr ""
+
+#: templates/common/account_summary.html:138
+#: templates/common/account_summary.html:140
 msgid "Activate account"
 msgstr ""
 
@@ -1165,8 +1205,16 @@ msgstr ""
 msgid "View settlements"
 msgstr ""
 
-#: templates/common/group_form.html:6 templates/common/group_form.html:14
-#: templates/common/group_form.html:20 templates/common/group_summary.html:44
+#: templates/common/group_balance_graph.html:11
+msgid "Balance, sorted"
+msgstr ""
+
+#: templates/common/group_balance_graph.html:15
+msgid "Most positive/negative"
+msgstr ""
+
+#: templates/common/group_form.html:6 templates/common/group_form.html.py:14
+#: templates/common/group_form.html:20 templates/common/group_summary.html:51
 msgid "Edit group"
 msgstr ""
 
@@ -1174,66 +1222,73 @@ msgstr ""
 msgid "Save group"
 msgstr ""
 
-#: templates/common/group_summary.html:48
+#: templates/common/group_summary.html:55
 #: templates/common/role_account_form.html:6
 #: templates/common/role_account_form.html:14
 #: templates/common/role_account_form.html:20
 msgid "Assign role accounts"
 msgstr ""
 
-#: templates/common/group_summary.html:55
+#: templates/common/group_summary.html:62
 msgid "Statements"
 msgstr ""
 
-#: templates/common/group_summary.html:57 templates/reports/balance.html:6
+#: templates/common/group_summary.html:64 templates/reports/balance.html:6
 #: templates/reports/balance.html.py:14 templates/reports/balance.html:20
 msgid "Balance statement"
 msgstr ""
 
-#: templates/common/group_summary.html:58 templates/reports/income.html:5
+#: templates/common/group_summary.html:65 templates/reports/income.html:5
 #: templates/reports/income.html.py:13 templates/reports/income.html:19
 msgid "Income statement"
 msgstr ""
 
-#: templates/common/group_summary.html:70
-msgid "edit"
+#: templates/common/group_summary.html:78 templates/reports/list_delete.html:14
+#: templates/reports/list_form.html:6 templates/reports/list_form.html.py:19
+#: templates/reports/list_form.html:29
+msgid "Edit list"
 msgstr ""
 
-#: templates/common/group_summary.html:71
-msgid "delete"
+#: templates/common/group_summary.html:79
+#: templates/reports/list_confirm_delete.html:6
+#: templates/reports/list_confirm_delete.html:14
+#: templates/reports/list_confirm_delete.html:20
+#: templates/reports/list_delete.html:6 templates/reports/list_delete.html:20
+msgid "Delete list"
 msgstr ""
 
-#: templates/common/group_summary.html:78 templates/reports/list_form.html:8
-#: templates/reports/list_form.html:22 templates/reports/list_form.html:31
+#: templates/common/group_summary.html:86 templates/reports/list_form.html:8
+#: templates/reports/list_form.html.py:22 templates/reports/list_form.html:31
 msgid "New list"
 msgstr ""
 
-#: templates/common/group_summary.html:90
+#: templates/common/group_summary.html:98
 msgid "New Bill"
 msgstr ""
 
-#: templates/common/group_summary.html:97
-#: templates/common/group_summary.html:101
+#: templates/common/group_summary.html:110
+#: templates/common/group_summary.html:114
+#: templates/reports/list_transaction_form.html:30
 msgid "Accounts"
 msgstr ""
 
-#: templates/common/group_summary.html:98
+#: templates/common/group_summary.html:111
 msgid "No accounts found."
 msgstr ""
 
-#: templates/common/group_summary.html:105
+#: templates/common/group_summary.html:118
 msgid "User accounts"
 msgstr ""
 
-#: templates/common/group_summary.html:136
+#: templates/common/group_summary.html:149
 msgid "Group accounts"
 msgstr ""
 
-#: templates/common/group_summary.html:169
+#: templates/common/group_summary.html:182
 msgid "Hide inactive/empty accounts"
 msgstr ""
 
-#: templates/common/group_summary.html:171
+#: templates/common/group_summary.html:184
 msgid "Show all accounts"
 msgstr ""
 
@@ -1293,10 +1348,6 @@ msgstr ""
 msgid "Reports"
 msgstr ""
 
-#: templates/reports/base.html:22
-msgid "Back to group"
-msgstr ""
-
 #: templates/reports/income.html:20
 msgid "up to"
 msgstr ""
@@ -1321,18 +1372,6 @@ msgstr ""
 msgid "Net income"
 msgstr ""
 
-#: templates/reports/list_confirm_delete.html:6
-#: templates/reports/list_confirm_delete.html:14
-#: templates/reports/list_confirm_delete.html:20
-#: templates/reports/list_delete.html:6 templates/reports/list_delete.html:20
-msgid "Delete list"
-msgstr ""
-
-#: templates/reports/list_delete.html:14 templates/reports/list_form.html:6
-#: templates/reports/list_form.html:19 templates/reports/list_form.html:29
-msgid "Edit list"
-msgstr ""
-
 #: templates/reports/list_delete.html:29
 msgid "Are you sure you want to delete"
 msgstr ""
@@ -1354,6 +1393,16 @@ msgstr ""
 
 #: templates/reports/list_form.html:66
 msgid "Save list"
+msgstr ""
+
+#: templates/reports/list_transaction_form.html:5
+#: templates/reports/list_transaction_form.html:14
+#: templates/reports/list_transaction_form.html:19
+msgid "Create transaction from list"
+msgstr ""
+
+#: templates/reports/list_transaction_form.html:46
+msgid "Credit list to"
 msgstr ""
 
 #: templates/reports/public_lists.html:5 templates/reports/public_lists.html:9

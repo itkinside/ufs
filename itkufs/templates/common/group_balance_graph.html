@@ -7,17 +7,27 @@
 <h3>{% trans "Balance" %}</h3>
 
 <div id="chart_div" style="height: 600px; width: 100%;"></div>
+
+<h3>{% trans "Balance, sorted" %}</h3>
+
+<div id="chart_sorted_div" style="height: 600px; width: 100%;"></div>
+
+<h3>{% trans "Most positive/negative" %}</h3>
+
+<div id="chart_pie_positive_div" style="height: 600px; width: 50%; float:left;"></div>
+<div id="chart_pie_negative_div" style="height: 600px; width: 50%; float:right;"></div>
 <script type="text/javascript">
     function drawChart() {
         var data = google.visualization.arrayToDataTable([
             ['Saldo', 'Balanse'],
-            {{ data|safe }}
+            {{ graph_data|safe }}
         ]);
 
         var options = {
             hAxis: {
                 slantedText:true,
-                slantedTextAngle:90
+                slantedTextAngle:90,
+                showTextEvery:1
             },
             legend: {
                 position: 'none'
@@ -30,6 +40,79 @@
 
         var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
         chart.draw(data, options);
+
+	//Sorted
+        var data = google.visualization.arrayToDataTable([
+            ['Saldo', 'Balanse'],
+            {{ graph_data_sorted|safe }}
+        ]);
+
+        var options = {
+            hAxis: {
+                slantedText:true,
+                slantedTextAngle:90,
+                showTextEvery:1
+            },
+            legend: {
+                position: 'none'
+            },
+            chartArea: {
+                height: 400,
+                top: 50
+            }
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_sorted_div'));
+        chart.draw(data, options);
+
+	//Pie positive
+        var data = google.visualization.arrayToDataTable([
+            ['Saldo', 'Balanse'],
+            {{ graph_data_positive|safe }}
+        ]);
+
+        var options = {
+            hAxis: {
+                slantedText:true,
+                slantedTextAngle:90,
+                showTextEvery:1
+            },
+            legend: {
+                position: 'none'
+            },
+            chartArea: {
+                height: 400,
+                top: 50
+            }
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('chart_pie_positive_div'));
+        chart.draw(data, options);
+
+	//Pie negative
+        var data = google.visualization.arrayToDataTable([
+            ['Saldo', 'Balanse'],
+            {{ graph_data_negative|safe }}
+        ]);
+
+        var options = {
+            hAxis: {
+                slantedText:true,
+                slantedTextAngle:90,
+                showTextEvery:1
+            },
+            legend: {
+                position: 'none'
+            },
+            chartArea: {
+                height: 400,
+                top: 50
+            }
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('chart_pie_negative_div'));
+        chart.draw(data, options);
+
     }
 
     google.load("visualization", "1", {packages:["corechart"]});

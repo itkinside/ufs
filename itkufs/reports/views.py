@@ -38,11 +38,11 @@ def public_lists(request):
 @login_required
 @limit_to_group
 def view_list(request, group, list, is_admin=False):
-    content = pdf(group, list)
+    content = pdf(group, request.user.username, list)
 
     filename = "%s-%s-%s" % (date.today(), group, list)
 
-    response = HttpResponse(content.getvalue(), mimetype="application/pdf")
+    response = HttpResponse(content.getvalue(), content_type="application/pdf")
     response["Content-Disposition"] = "attachment; filename=%s.pdf" % (
         slugify(filename)
     )
@@ -53,7 +53,9 @@ def view_list(request, group, list, is_admin=False):
 @login_required
 @limit_to_group
 def view_list_preview(request, group, list, is_admin=False):
-    content = pdf(group, list, show_header=True, show_footer=True)
+    content = pdf(
+        group, request.user.username, list, show_header=True, show_footer=True
+    )
 
     p = Popen(
         [
@@ -79,18 +81,18 @@ def view_list_preview(request, group, list, is_admin=False):
     if p.returncode != 0:
         raise Exception(stdout)
 
-    return HttpResponse(stdout, mimetype="image/png")
+    return HttpResponse(stdout, content_type="image/png")
 
 
 def view_public_list(request, group, list, is_admin=False):
     if not list.public:
         raise Http404
 
-    content = pdf(group, list)
+    content = pdf(group, request.user.username, list)
 
     filename = "%s-%s-%s" % (date.today(), group, list)
 
-    response = HttpResponse(content.getvalue(), mimetype="application/pdf")
+    response = HttpResponse(content.getvalue(), content_type="application/pdf")
     response["Content-Disposition"] = "attachment; filename=%s.pdf" % (
         slugify(filename)
     )
@@ -244,13 +246,19 @@ def balance(request, group, is_admin=False):
         accounts["li_sum"] += account.normal_balance()
 
     # Accumulated member accounts liabilities
-    member_balance_sum = 0
+    member_negative_sum = 0
+    member_positive_sum = 0
     for account in group.account_set.filter(
         type=Account.LIABILITY_ACCOUNT, group_account=False
     ):
-        member_balance_sum += account.normal_balance()
-    accounts["li"].append((_("Member accounts"), member_balance_sum))
-    accounts["li_sum"] += member_balance_sum
+        if account.normal_balance() > 0:
+            member_positive_sum += account.normal_balance()
+        else:
+            member_negative_sum += account.normal_balance()
+    accounts["li"].append((_("Positive member accounts"), member_positive_sum))
+    accounts["li"].append((_("Negative member accounts"), member_negative_sum))
+    accounts["li_sum"] += member_positive_sum
+    accounts["li_sum"] += member_negative_sum
 
     # Equities
     for account in group.account_set.filter(type=Account.EQUITY_ACCOUNT):

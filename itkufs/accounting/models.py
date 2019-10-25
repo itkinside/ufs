@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 
 from django.conf import settings
@@ -6,6 +8,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _, ugettext
+from django.core.mail import send_mail
 
 
 class Group(models.Model):
@@ -194,6 +197,13 @@ GROUP BY account.id, short_name, last_modified
 ORDER BY date
 """
 
+ACCOUNT_TOTAL_USED = """
+SELECT sum(debit)
+FROM accounting_transactionentry AS te
+JOIN accounting_transaction AS t ON (te.transaction_id = t.id)
+WHERE account_id = %s AND t.state = 'Com'
+"""
+
 
 class AccountManager(models.Manager):
     def get_query_set(self):
@@ -276,6 +286,11 @@ class Account(models.Model):
             raise ValueError("Slug cannot be empty.")
         super(Account, self).save(*args, **kwargs)
 
+    def total_used(self):
+        cursor = connection.cursor()
+        cursor.execute(ACCOUNT_TOTAL_USED, [self.id])
+        return cursor.fetchone()[0]
+
     def balance(self):
         if hasattr(self, "confirmed_balance_sql"):
             return self.confirmed_balance_sql or 0
@@ -289,7 +304,9 @@ class Account(models.Model):
         of type liability, equity or expense."""
 
         balance = self.balance()
-        if balance == 0 or self.type in ("As", "Ex"):
+        if balance is None:
+            return 0
+        elif balance == 0 or self.type in ("As", "Ex"):
             return balance
         else:
             return -1 * balance
@@ -307,10 +324,10 @@ class Account(models.Model):
         if (
             not self.is_user_account()
             or self.ignore_block_limit
-            or self.group_block_limit_sql is None
+            or self.group.block_limit is None
         ):
             return False
-        return self.normal_balance() < self.group_block_limit_sql
+        return self.normal_balance() < self.group.block_limit
 
     def needs_warning(self):
         """Returns true if user account balance is below group warn limit"""
@@ -603,6 +620,11 @@ class Transaction(models.Model):
                 log.message = message
             log.save()
 
+            for transaction_entry in TransactionEntry.objects.filter(
+                transaction=self
+            ):
+                transaction_entry.check_if_blacklisted()
+
             self.state = self.COMMITTED_STATE
             self.last_modified = datetime.datetime.now()
             self.save()
@@ -752,6 +774,31 @@ class TransactionEntry(models.Model):
     credit = models.DecimalField(
         _("credit amount"), max_digits=10, decimal_places=2, default=0
     )
+
+    def check_if_blacklisted(self):
+        new_balance = self.account.normal_balance() - self.debit + self.credit
+
+        if (
+            self.account.is_user_account
+            and self.account is not None
+            and self.account.ignore_block_limit is False
+            and self.account.normal_balance() > self.account.group.block_limit
+            and new_balance < self.account.group.block_limit
+        ):
+
+            subject = u"Svartelistet i µFS"
+            msg = (
+                u"Dette er en automatisk melding om at du har blitt "
+                u"svartelistet i %s sin µFS"
+            ) % self.account.group.name.decode("utf-8")
+            to_address = ["%s@samfundet.no" % self.account.owner]
+            send_mail(
+                subject,
+                (msg),
+                u"ufs@samfundet.no",
+                to_address,
+                fail_silently=True,
+            )
 
     def save(self, *args, **kwargs):
         if self.transaction.is_rejected():

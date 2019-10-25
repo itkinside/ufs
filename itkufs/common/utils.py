@@ -17,7 +17,9 @@ def verify_account_number(num):
     crosssum = 0
     for a, b in zip(num[:10], "5432765432"):
         crosssum += int(a) * int(b)
-    return num[10] == str(11 - crosssum % 11)
+    return num[10] == str(11 - crosssum % 11) or (
+        crosssum % 11 == 0 and num[10] == "0"
+    )
 
 
 def callsign_sorted(objects):
