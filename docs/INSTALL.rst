@@ -104,7 +104,7 @@ How to run code linting
 
 To run code linting, run::
 
-    flake8 itkufs
+    flake8
 
 Ideally, this command should not print a single warning.
 
