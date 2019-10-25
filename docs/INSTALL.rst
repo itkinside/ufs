@@ -88,15 +88,11 @@ How to run tests
 
 To run the unit tests::
 
-    python manage.py test
+    pytest
 
 To run the unit tests while measuring code coverage, run::
 
-    coverage run --source=itkufs manage.py test
-
-To see the code coverage reports, run::
-
-    coverage report
+    pytest --cov=itkufs --cov-report=term-missing
 
 
 How to run code linting
