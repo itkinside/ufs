@@ -112,7 +112,11 @@ WSGI_APPLICATION = "itkufs.wsgi.application"
 MAIL_DOMAIN = "samfundet.no"
 LOGIN_URL = "/login/"
 
+
 # Languages
-ugettext = lambda s: s
+def ugettext(s):
+    return s
+
+
 LANGUAGES = (("en", ugettext("English")), ("no", ugettext("Norwegian")))
 LOCALE_PATHS = (PROJECT_BASE + "itkufs/locale/",)

@@ -25,7 +25,7 @@ def callsign_sorted(objects):
 
     try:
         locale.setlocale(locale.LC_COLLATE, ("nb_NO", "UTF-8"))
-    except:
+    except Exception:
         pass
 
     sorted_list = sorted(objects, callsign_cmp, callsign_key)
