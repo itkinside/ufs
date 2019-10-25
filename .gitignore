@@ -2,7 +2,8 @@
 *.pyc
 *.sqlite
 *.swp
-.coverage
-djangologging/
-itkufs/settings/local.py
-media/logos/*
+/.coverage
+/.python-version
+/itkufs/settings/local.py
+/media/logos/*
+/djangologging/
