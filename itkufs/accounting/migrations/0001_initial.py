@@ -1,815 +1,454 @@
-# encoding: utf-8
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+from django.conf import settings
 
 
-class Migration(SchemaMigration):
-    def forwards(self, orm):
+class Migration(migrations.Migration):
 
-        # Adding model 'Group'
-        db.create_table(
-            "accounting_group",
-            (
-                (
-                    "id",
-                    self.gf("django.db.models.fields.AutoField")(
-                        primary_key=True
-                    ),
-                ),
-                (
-                    "name",
-                    self.gf("django.db.models.fields.CharField")(
-                        max_length=100
-                    ),
-                ),
-                (
-                    "slug",
-                    self.gf("django.db.models.fields.SlugField")(
-                        unique=True, max_length=50, db_index=True
-                    ),
-                ),
-                (
-                    "warn_limit",
-                    self.gf("django.db.models.fields.IntegerField")(
-                        null=True, blank=True
-                    ),
-                ),
-                (
-                    "block_limit",
-                    self.gf("django.db.models.fields.IntegerField")(
-                        null=True, blank=True
-                    ),
-                ),
-                (
-                    "logo",
-                    self.gf("django.db.models.fields.files.ImageField")(
-                        max_length=100, blank=True
-                    ),
-                ),
-                (
-                    "email",
-                    self.gf("django.db.models.fields.EmailField")(
-                        max_length=75, blank=True
-                    ),
-                ),
-            ),
-        )
-        db.send_create_signal("accounting", ["Group"])
+    dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL)]
 
-        # Adding M2M table for field admins on 'Group'
-        db.create_table(
-            "accounting_group_admins",
-            (
+    operations = [
+        migrations.CreateModel(
+            name="Account",
+            fields=[
                 (
                     "id",
                     models.AutoField(
-                        verbose_name="ID", primary_key=True, auto_created=True
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
                     ),
                 ),
-                (
-                    "group",
-                    models.ForeignKey(orm["accounting.group"], null=False),
-                ),
-                ("user", models.ForeignKey(orm["auth.user"], null=False)),
-            ),
-        )
-        db.create_unique("accounting_group_admins", ["group_id", "user_id"])
-
-        # Adding model 'Account'
-        db.create_table(
-            "accounting_account",
-            (
-                (
-                    "id",
-                    self.gf("django.db.models.fields.AutoField")(
-                        primary_key=True
-                    ),
-                ),
-                (
-                    "name",
-                    self.gf("django.db.models.fields.CharField")(
-                        max_length=100
-                    ),
-                ),
+                ("name", models.CharField(max_length=100, verbose_name="name")),
                 (
                     "short_name",
-                    self.gf("django.db.models.fields.CharField")(
-                        max_length=100, blank=True
+                    models.CharField(
+                        max_length=100, verbose_name="short name", blank=True
                     ),
                 ),
                 (
                     "slug",
-                    self.gf("django.db.models.fields.SlugField")(
-                        max_length=50, db_index=True
-                    ),
-                ),
-                (
-                    "group",
-                    self.gf("django.db.models.fields.related.ForeignKey")(
-                        to=orm["accounting.Group"]
+                    models.SlugField(
+                        help_text="A shortname used in URLs etc.",
+                        verbose_name="slug",
                     ),
                 ),
                 (
                     "type",
-                    self.gf("django.db.models.fields.CharField")(
-                        default="Li", max_length=2
-                    ),
-                ),
-                (
-                    "owner",
-                    self.gf("django.db.models.fields.related.ForeignKey")(
-                        to=orm["auth.User"], null=True, blank=True
+                    models.CharField(
+                        default=b"Li",
+                        max_length=2,
+                        verbose_name="type",
+                        choices=[
+                            (b"As", "Asset"),
+                            (b"Li", "Liability"),
+                            (b"Eq", "Equity"),
+                            (b"In", "Income"),
+                            (b"Ex", "Expense"),
+                        ],
                     ),
                 ),
                 (
                     "active",
-                    self.gf("django.db.models.fields.BooleanField")(
-                        default=True
-                    ),
+                    models.BooleanField(default=True, verbose_name="active"),
                 ),
                 (
                     "ignore_block_limit",
-                    self.gf("django.db.models.fields.BooleanField")(
-                        default=False
+                    models.BooleanField(
+                        default=False,
+                        help_text="Never block account automatically",
+                        verbose_name="ignore block limit",
                     ),
                 ),
                 (
                     "blocked",
-                    self.gf("django.db.models.fields.BooleanField")(
-                        default=False
+                    models.BooleanField(
+                        default=False,
+                        help_text="Block account manually",
+                        verbose_name="blocked",
                     ),
                 ),
                 (
                     "group_account",
-                    self.gf("django.db.models.fields.BooleanField")(
-                        default=False
+                    models.BooleanField(
+                        default=False,
+                        help_text="Does this account belong to the group?",
+                        verbose_name="group account",
                     ),
                 ),
-            ),
-        )
-        db.send_create_signal("accounting", ["Account"])
-
-        # Adding unique constraint on 'Account', fields ['slug', 'group']
-        db.create_unique("accounting_account", ["slug", "group_id"])
-
-        # Adding unique constraint on 'Account', fields ['owner', 'group']
-        db.create_unique("accounting_account", ["owner_id", "group_id"])
-
-        # Adding model 'RoleAccount'
-        db.create_table(
-            "accounting_roleaccount",
-            (
+            ],
+            options={
+                "ordering": ("group", "name"),
+                "verbose_name": "account",
+                "verbose_name_plural": "accounts",
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name="Group",
+            fields=[
                 (
                     "id",
-                    self.gf("django.db.models.fields.AutoField")(
-                        primary_key=True
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, verbose_name="name")),
+                (
+                    "slug",
+                    models.SlugField(
+                        help_text="A shortname used in URLs.",
+                        unique=True,
+                        verbose_name="slug",
                     ),
                 ),
                 (
-                    "group",
-                    self.gf("django.db.models.fields.related.ForeignKey")(
-                        to=orm["accounting.Group"]
+                    "warn_limit",
+                    models.IntegerField(
+                        help_text="Warn user of low balance at this limit, leave blank for no limit.",
+                        null=True,
+                        verbose_name="warn limit",
+                        blank=True,
+                    ),
+                ),
+                (
+                    "block_limit",
+                    models.IntegerField(
+                        help_text="Limit for blacklisting user, leave blank for no limit.",
+                        null=True,
+                        verbose_name="block limit",
+                        blank=True,
+                    ),
+                ),
+                (
+                    "logo",
+                    models.ImageField(
+                        help_text="A small image that will be added to lists.",
+                        upload_to=b"logos",
+                        blank=True,
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        help_text="Contact address for group.",
+                        max_length=75,
+                        blank=True,
+                    ),
+                ),
+                (
+                    "account_number",
+                    models.CharField(
+                        help_text="Bank account for group.",
+                        max_length=11,
+                        blank=True,
+                    ),
+                ),
+                (
+                    "admins",
+                    models.ManyToManyField(
+                        to=settings.AUTH_USER_MODEL,
+                        null=True,
+                        verbose_name="admins",
+                        blank=True,
+                    ),
+                ),
+            ],
+            options={
+                "ordering": ("name",),
+                "verbose_name": "group",
+                "verbose_name_plural": "groups",
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name="RoleAccount",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
                     ),
                 ),
                 (
                     "role",
-                    self.gf("django.db.models.fields.CharField")(max_length=4),
+                    models.CharField(
+                        max_length=4,
+                        verbose_name="role",
+                        choices=[
+                            (b"Bank", "Bank account"),
+                            (b"Cash", "Cash account"),
+                            (b"Sale", "Sale account"),
+                        ],
+                    ),
                 ),
                 (
                     "account",
-                    self.gf("django.db.models.fields.related.ForeignKey")(
-                        to=orm["accounting.Account"]
-                    ),
-                ),
-            ),
-        )
-        db.send_create_signal("accounting", ["RoleAccount"])
-
-        # Adding model 'Settlement'
-        db.create_table(
-            "accounting_settlement",
-            (
-                (
-                    "id",
-                    self.gf("django.db.models.fields.AutoField")(
-                        primary_key=True
+                    models.ForeignKey(
+                        verbose_name="account", to="accounting.Account"
                     ),
                 ),
                 (
                     "group",
-                    self.gf("django.db.models.fields.related.ForeignKey")(
-                        to=orm["accounting.Group"]
+                    models.ForeignKey(
+                        verbose_name="group", to="accounting.Group"
                     ),
                 ),
-                ("date", self.gf("django.db.models.fields.DateField")()),
+            ],
+            options={
+                "ordering": ("group", "role"),
+                "verbose_name": "role account",
+                "verbose_name_plural": "role accounts",
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name="Settlement",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                ("date", models.DateField(verbose_name="date")),
                 (
                     "comment",
-                    self.gf("django.db.models.fields.CharField")(
-                        max_length=200, blank=True
+                    models.CharField(
+                        max_length=200, verbose_name="comment", blank=True
                     ),
                 ),
                 (
                     "closed",
-                    self.gf("django.db.models.fields.BooleanField")(
-                        default=False
-                    ),
-                ),
-            ),
-        )
-        db.send_create_signal("accounting", ["Settlement"])
-
-        # Adding model 'Transaction'
-        db.create_table(
-            "accounting_transaction",
-            (
-                (
-                    "id",
-                    self.gf("django.db.models.fields.AutoField")(
-                        primary_key=True
+                    models.BooleanField(
+                        default=False,
+                        help_text="Mark as closed when done adding transactions to the settlement.",
                     ),
                 ),
                 (
                     "group",
-                    self.gf("django.db.models.fields.related.ForeignKey")(
-                        related_name="real_transaction_set",
-                        to=orm["accounting.Group"],
+                    models.ForeignKey(
+                        verbose_name="group", to="accounting.Group"
+                    ),
+                ),
+            ],
+            options={
+                "ordering": ("-date",),
+                "verbose_name": "settlement",
+                "verbose_name_plural": "settlements",
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name="Transaction",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
                     ),
                 ),
                 (
-                    "settlement",
-                    self.gf("django.db.models.fields.related.ForeignKey")(
-                        to=orm["accounting.Settlement"], null=True, blank=True
+                    "date",
+                    models.DateField(
+                        help_text="May be used for date of the transaction if not today.",
+                        verbose_name="date",
                     ),
                 ),
-                ("date", self.gf("django.db.models.fields.DateField")()),
                 (
                     "last_modified",
-                    self.gf("django.db.models.fields.DateTimeField")(
-                        auto_now_add=True, blank=True
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Last modified"
                     ),
                 ),
                 (
                     "state",
-                    self.gf("django.db.models.fields.CharField")(
-                        max_length=3, blank=True
+                    models.CharField(
+                        blank=True,
+                        max_length=3,
+                        verbose_name="state",
+                        choices=[
+                            (b"Pen", "Pending"),
+                            (b"Com", "Committed"),
+                            (b"Rej", "Rejected"),
+                        ],
                     ),
                 ),
-            ),
-        )
-        db.send_create_signal("accounting", ["Transaction"])
-
-        # Adding model 'TransactionLog'
-        db.create_table(
-            "accounting_transactionlog",
-            (
+                (
+                    "group",
+                    models.ForeignKey(
+                        related_name="real_transaction_set",
+                        verbose_name="group",
+                        to="accounting.Group",
+                    ),
+                ),
+                (
+                    "settlement",
+                    models.ForeignKey(
+                        verbose_name="settlement",
+                        blank=True,
+                        to="accounting.Settlement",
+                        null=True,
+                    ),
+                ),
+            ],
+            options={
+                "ordering": ("-last_modified",),
+                "verbose_name": "transaction",
+                "verbose_name_plural": "transactions",
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name="TransactionEntry",
+            fields=[
                 (
                     "id",
-                    self.gf("django.db.models.fields.AutoField")(
-                        primary_key=True
-                    ),
-                ),
-                (
-                    "transaction",
-                    self.gf("django.db.models.fields.related.ForeignKey")(
-                        related_name="log_set", to=orm["accounting.Transaction"]
-                    ),
-                ),
-                (
-                    "type",
-                    self.gf("django.db.models.fields.CharField")(max_length=3),
-                ),
-                (
-                    "timestamp",
-                    self.gf("django.db.models.fields.DateTimeField")(
-                        auto_now_add=True, blank=True
-                    ),
-                ),
-                (
-                    "user",
-                    self.gf("django.db.models.fields.related.ForeignKey")(
-                        to=orm["auth.User"]
-                    ),
-                ),
-                (
-                    "message",
-                    self.gf("django.db.models.fields.CharField")(
-                        max_length=200, blank=True
-                    ),
-                ),
-            ),
-        )
-        db.send_create_signal("accounting", ["TransactionLog"])
-
-        # Adding model 'TransactionEntry'
-        db.create_table(
-            "accounting_transactionentry",
-            (
-                (
-                    "id",
-                    self.gf("django.db.models.fields.AutoField")(
-                        primary_key=True
-                    ),
-                ),
-                (
-                    "transaction",
-                    self.gf("django.db.models.fields.related.ForeignKey")(
-                        related_name="entry_set",
-                        to=orm["accounting.Transaction"],
-                    ),
-                ),
-                (
-                    "account",
-                    self.gf("django.db.models.fields.related.ForeignKey")(
-                        to=orm["accounting.Account"]
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
                     ),
                 ),
                 (
                     "debit",
-                    self.gf("django.db.models.fields.DecimalField")(
-                        default=0, max_digits=10, decimal_places=2
+                    models.DecimalField(
+                        default=0,
+                        verbose_name="debit amount",
+                        max_digits=10,
+                        decimal_places=2,
                     ),
                 ),
                 (
                     "credit",
-                    self.gf("django.db.models.fields.DecimalField")(
-                        default=0, max_digits=10, decimal_places=2
+                    models.DecimalField(
+                        default=0,
+                        verbose_name="credit amount",
+                        max_digits=10,
+                        decimal_places=2,
                     ),
                 ),
-            ),
-        )
-        db.send_create_signal("accounting", ["TransactionEntry"])
-
-        # Adding unique constraint on 'TransactionEntry', fields ['transaction', 'account']
-        db.create_unique(
-            "accounting_transactionentry", ["transaction_id", "account_id"]
-        )
-
-    def backwards(self, orm):
-
-        # Removing unique constraint on 'TransactionEntry', fields ['transaction', 'account']
-        db.delete_unique(
-            "accounting_transactionentry", ["transaction_id", "account_id"]
-        )
-
-        # Removing unique constraint on 'Account', fields ['owner', 'group']
-        db.delete_unique("accounting_account", ["owner_id", "group_id"])
-
-        # Removing unique constraint on 'Account', fields ['slug', 'group']
-        db.delete_unique("accounting_account", ["slug", "group_id"])
-
-        # Deleting model 'Group'
-        db.delete_table("accounting_group")
-
-        # Removing M2M table for field admins on 'Group'
-        db.delete_table("accounting_group_admins")
-
-        # Deleting model 'Account'
-        db.delete_table("accounting_account")
-
-        # Deleting model 'RoleAccount'
-        db.delete_table("accounting_roleaccount")
-
-        # Deleting model 'Settlement'
-        db.delete_table("accounting_settlement")
-
-        # Deleting model 'Transaction'
-        db.delete_table("accounting_transaction")
-
-        # Deleting model 'TransactionLog'
-        db.delete_table("accounting_transactionlog")
-
-        # Deleting model 'TransactionEntry'
-        db.delete_table("accounting_transactionentry")
-
-    models = {
-        "accounting.account": {
-            "Meta": {
-                "ordering": "('group', 'name')",
-                "unique_together": "(('slug', 'group'), ('owner', 'group'))",
-                "object_name": "Account",
+                (
+                    "account",
+                    models.ForeignKey(
+                        verbose_name="account", to="accounting.Account"
+                    ),
+                ),
+                (
+                    "transaction",
+                    models.ForeignKey(
+                        related_name="entry_set",
+                        verbose_name="transaction",
+                        to="accounting.Transaction",
+                    ),
+                ),
+            ],
+            options={
+                "ordering": ("credit", "debit"),
+                "verbose_name": "transaction entry",
+                "verbose_name_plural": "transaction entries",
             },
-            "active": (
-                "django.db.models.fields.BooleanField",
-                [],
-                {"default": "True"},
-            ),
-            "blocked": (
-                "django.db.models.fields.BooleanField",
-                [],
-                {"default": "False"},
-            ),
-            "group": (
-                "django.db.models.fields.related.ForeignKey",
-                [],
-                {"to": "orm['accounting.Group']"},
-            ),
-            "group_account": (
-                "django.db.models.fields.BooleanField",
-                [],
-                {"default": "False"},
-            ),
-            "id": (
-                "django.db.models.fields.AutoField",
-                [],
-                {"primary_key": "True"},
-            ),
-            "ignore_block_limit": (
-                "django.db.models.fields.BooleanField",
-                [],
-                {"default": "False"},
-            ),
-            "name": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "100"},
-            ),
-            "owner": (
-                "django.db.models.fields.related.ForeignKey",
-                [],
-                {"to": "orm['auth.User']", "null": "True", "blank": "True"},
-            ),
-            "short_name": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "100", "blank": "True"},
-            ),
-            "slug": (
-                "django.db.models.fields.SlugField",
-                [],
-                {"max_length": "50", "db_index": "True"},
-            ),
-            "type": (
-                "django.db.models.fields.CharField",
-                [],
-                {"default": "'Li'", "max_length": "2"},
-            ),
-        },
-        "accounting.group": {
-            "Meta": {"ordering": "('name',)", "object_name": "Group"},
-            "admins": (
-                "django.db.models.fields.related.ManyToManyField",
-                [],
-                {
-                    "symmetrical": "False",
-                    "to": "orm['auth.User']",
-                    "null": "True",
-                    "blank": "True",
-                },
-            ),
-            "block_limit": (
-                "django.db.models.fields.IntegerField",
-                [],
-                {"null": "True", "blank": "True"},
-            ),
-            "email": (
-                "django.db.models.fields.EmailField",
-                [],
-                {"max_length": "75", "blank": "True"},
-            ),
-            "id": (
-                "django.db.models.fields.AutoField",
-                [],
-                {"primary_key": "True"},
-            ),
-            "logo": (
-                "django.db.models.fields.files.ImageField",
-                [],
-                {"max_length": "100", "blank": "True"},
-            ),
-            "name": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "100"},
-            ),
-            "slug": (
-                "django.db.models.fields.SlugField",
-                [],
-                {"unique": "True", "max_length": "50", "db_index": "True"},
-            ),
-            "warn_limit": (
-                "django.db.models.fields.IntegerField",
-                [],
-                {"null": "True", "blank": "True"},
-            ),
-        },
-        "accounting.roleaccount": {
-            "Meta": {
-                "ordering": "('group', 'role')",
-                "object_name": "RoleAccount",
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name="TransactionLog",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        verbose_name="ID",
+                        serialize=False,
+                        auto_created=True,
+                        primary_key=True,
+                    ),
+                ),
+                (
+                    "type",
+                    models.CharField(
+                        max_length=3,
+                        verbose_name="type",
+                        choices=[
+                            (b"Pen", "Pending"),
+                            (b"Com", "Committed"),
+                            (b"Rej", "Rejected"),
+                        ],
+                    ),
+                ),
+                (
+                    "timestamp",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="timestamp"
+                    ),
+                ),
+                (
+                    "message",
+                    models.CharField(
+                        max_length=200, verbose_name="message", blank=True
+                    ),
+                ),
+                (
+                    "transaction",
+                    models.ForeignKey(
+                        related_name="log_set",
+                        verbose_name="transaction",
+                        to="accounting.Transaction",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        verbose_name="user", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+            ],
+            options={
+                "ordering": ("timestamp",),
+                "verbose_name": "transaction log entry",
+                "verbose_name_plural": "transaction log entries",
             },
-            "account": (
-                "django.db.models.fields.related.ForeignKey",
-                [],
-                {"to": "orm['accounting.Account']"},
+            bases=(models.Model,),
+        ),
+        migrations.AlterUniqueTogether(
+            name="transactionentry",
+            unique_together=set([("transaction", "account")]),
+        ),
+        migrations.AddField(
+            model_name="account",
+            name="group",
+            field=models.ForeignKey(
+                verbose_name="group", to="accounting.Group"
             ),
-            "group": (
-                "django.db.models.fields.related.ForeignKey",
-                [],
-                {"to": "orm['accounting.Group']"},
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name="account",
+            name="owner",
+            field=models.ForeignKey(
+                verbose_name="owner",
+                blank=True,
+                to=settings.AUTH_USER_MODEL,
+                null=True,
             ),
-            "id": (
-                "django.db.models.fields.AutoField",
-                [],
-                {"primary_key": "True"},
-            ),
-            "role": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "4"},
-            ),
-        },
-        "accounting.settlement": {
-            "Meta": {"ordering": "('-date',)", "object_name": "Settlement"},
-            "closed": (
-                "django.db.models.fields.BooleanField",
-                [],
-                {"default": "False"},
-            ),
-            "comment": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "200", "blank": "True"},
-            ),
-            "date": ("django.db.models.fields.DateField", [], {}),
-            "group": (
-                "django.db.models.fields.related.ForeignKey",
-                [],
-                {"to": "orm['accounting.Group']"},
-            ),
-            "id": (
-                "django.db.models.fields.AutoField",
-                [],
-                {"primary_key": "True"},
-            ),
-        },
-        "accounting.transaction": {
-            "Meta": {
-                "ordering": "('-last_modified',)",
-                "object_name": "Transaction",
-            },
-            "date": ("django.db.models.fields.DateField", [], {}),
-            "group": (
-                "django.db.models.fields.related.ForeignKey",
-                [],
-                {
-                    "related_name": "'real_transaction_set'",
-                    "to": "orm['accounting.Group']",
-                },
-            ),
-            "id": (
-                "django.db.models.fields.AutoField",
-                [],
-                {"primary_key": "True"},
-            ),
-            "last_modified": (
-                "django.db.models.fields.DateTimeField",
-                [],
-                {"auto_now_add": "True", "blank": "True"},
-            ),
-            "settlement": (
-                "django.db.models.fields.related.ForeignKey",
-                [],
-                {
-                    "to": "orm['accounting.Settlement']",
-                    "null": "True",
-                    "blank": "True",
-                },
-            ),
-            "state": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "3", "blank": "True"},
-            ),
-        },
-        "accounting.transactionentry": {
-            "Meta": {
-                "ordering": "('credit', 'debit')",
-                "unique_together": "(('transaction', 'account'),)",
-                "object_name": "TransactionEntry",
-            },
-            "account": (
-                "django.db.models.fields.related.ForeignKey",
-                [],
-                {"to": "orm['accounting.Account']"},
-            ),
-            "credit": (
-                "django.db.models.fields.DecimalField",
-                [],
-                {"default": "0", "max_digits": "10", "decimal_places": "2"},
-            ),
-            "debit": (
-                "django.db.models.fields.DecimalField",
-                [],
-                {"default": "0", "max_digits": "10", "decimal_places": "2"},
-            ),
-            "id": (
-                "django.db.models.fields.AutoField",
-                [],
-                {"primary_key": "True"},
-            ),
-            "transaction": (
-                "django.db.models.fields.related.ForeignKey",
-                [],
-                {
-                    "related_name": "'entry_set'",
-                    "to": "orm['accounting.Transaction']",
-                },
-            ),
-        },
-        "accounting.transactionlog": {
-            "Meta": {
-                "ordering": "('timestamp',)",
-                "object_name": "TransactionLog",
-            },
-            "id": (
-                "django.db.models.fields.AutoField",
-                [],
-                {"primary_key": "True"},
-            ),
-            "message": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "200", "blank": "True"},
-            ),
-            "timestamp": (
-                "django.db.models.fields.DateTimeField",
-                [],
-                {"auto_now_add": "True", "blank": "True"},
-            ),
-            "transaction": (
-                "django.db.models.fields.related.ForeignKey",
-                [],
-                {
-                    "related_name": "'log_set'",
-                    "to": "orm['accounting.Transaction']",
-                },
-            ),
-            "type": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "3"},
-            ),
-            "user": (
-                "django.db.models.fields.related.ForeignKey",
-                [],
-                {"to": "orm['auth.User']"},
-            ),
-        },
-        "auth.group": {
-            "Meta": {"object_name": "Group"},
-            "id": (
-                "django.db.models.fields.AutoField",
-                [],
-                {"primary_key": "True"},
-            ),
-            "name": (
-                "django.db.models.fields.CharField",
-                [],
-                {"unique": "True", "max_length": "80"},
-            ),
-            "permissions": (
-                "django.db.models.fields.related.ManyToManyField",
-                [],
-                {
-                    "to": "orm['auth.Permission']",
-                    "symmetrical": "False",
-                    "blank": "True",
-                },
-            ),
-        },
-        "auth.permission": {
-            "Meta": {
-                "ordering": "('content_type__app_label', 'content_type__model', 'codename')",
-                "unique_together": "(('content_type', 'codename'),)",
-                "object_name": "Permission",
-            },
-            "codename": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "100"},
-            ),
-            "content_type": (
-                "django.db.models.fields.related.ForeignKey",
-                [],
-                {"to": "orm['contenttypes.ContentType']"},
-            ),
-            "id": (
-                "django.db.models.fields.AutoField",
-                [],
-                {"primary_key": "True"},
-            ),
-            "name": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "50"},
-            ),
-        },
-        "auth.user": {
-            "Meta": {"object_name": "User"},
-            "date_joined": (
-                "django.db.models.fields.DateTimeField",
-                [],
-                {"default": "datetime.datetime.now"},
-            ),
-            "email": (
-                "django.db.models.fields.EmailField",
-                [],
-                {"max_length": "75", "blank": "True"},
-            ),
-            "first_name": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "30", "blank": "True"},
-            ),
-            "groups": (
-                "django.db.models.fields.related.ManyToManyField",
-                [],
-                {
-                    "to": "orm['auth.Group']",
-                    "symmetrical": "False",
-                    "blank": "True",
-                },
-            ),
-            "id": (
-                "django.db.models.fields.AutoField",
-                [],
-                {"primary_key": "True"},
-            ),
-            "is_active": (
-                "django.db.models.fields.BooleanField",
-                [],
-                {"default": "True"},
-            ),
-            "is_staff": (
-                "django.db.models.fields.BooleanField",
-                [],
-                {"default": "False"},
-            ),
-            "is_superuser": (
-                "django.db.models.fields.BooleanField",
-                [],
-                {"default": "False"},
-            ),
-            "last_login": (
-                "django.db.models.fields.DateTimeField",
-                [],
-                {"default": "datetime.datetime.now"},
-            ),
-            "last_name": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "30", "blank": "True"},
-            ),
-            "password": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "128"},
-            ),
-            "user_permissions": (
-                "django.db.models.fields.related.ManyToManyField",
-                [],
-                {
-                    "to": "orm['auth.Permission']",
-                    "symmetrical": "False",
-                    "blank": "True",
-                },
-            ),
-            "username": (
-                "django.db.models.fields.CharField",
-                [],
-                {"unique": "True", "max_length": "30"},
-            ),
-        },
-        "contenttypes.contenttype": {
-            "Meta": {
-                "ordering": "('name',)",
-                "unique_together": "(('app_label', 'model'),)",
-                "object_name": "ContentType",
-                "db_table": "'django_content_type'",
-            },
-            "app_label": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "100"},
-            ),
-            "id": (
-                "django.db.models.fields.AutoField",
-                [],
-                {"primary_key": "True"},
-            ),
-            "model": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "100"},
-            ),
-            "name": (
-                "django.db.models.fields.CharField",
-                [],
-                {"max_length": "100"},
-            ),
-        },
-    }
-
-    complete_apps = ["accounting"]
+            preserve_default=True,
+        ),
+        migrations.AlterUniqueTogether(
+            name="account",
+            unique_together=set([("slug", "group"), ("owner", "group")]),
+        ),
+    ]

@@ -58,7 +58,7 @@ After the installation is completed, do the following:
 
 #. To create database tables and create a superuser::
 
-    python manage.py syncdb --migrate
+    python manage.py migrate
 
 #. If you use Django's builtin development server, start it::
 

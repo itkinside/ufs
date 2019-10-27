@@ -96,7 +96,6 @@ INSTALLED_APPS = (
     "itkufs.accounting",
     "itkufs.reports",
     "itkufs.billing",
-    "south",
 )
 
 # Session
