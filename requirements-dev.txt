@@ -15,5 +15,5 @@ flake8
 # Test runner
 pytest
 pytest-cov
-pytest-django < 3  # pytest-django 3 requires Django 1.7
+pytest-django
 tox
