@@ -87,12 +87,8 @@ class GroupTestCase(unittest.TestCase):
         }
         for transaction in self.transactions.values():
             transaction.save()
-            transaction.entry_set.add(
-                TransactionEntry(account=self.accounts[0], credit=100)
-            )
-            transaction.entry_set.add(
-                TransactionEntry(account=self.accounts[1], debit=100)
-            )
+            transaction.entry_set.create(account=self.accounts[0], credit=100)
+            transaction.entry_set.create(account=self.accounts[1], debit=100)
             transaction.set_pending(user=self.users[0])
 
         self.transactions["Undef"] = Transaction(group=self.group)
@@ -287,11 +283,11 @@ class AccountTestCase(unittest.TestCase):
         values = {"Pen": 150, "Com": 200, "Rej": 100}
         for state, transaction in self.transactions.items():
             transaction.save()
-            transaction.entry_set.add(
-                TransactionEntry(account=self.accounts[0], credit=values[state])
+            transaction.entry_set.create(
+                account=self.accounts[0], credit=values[state]
             )
-            transaction.entry_set.add(
-                TransactionEntry(account=self.accounts[1], debit=values[state])
+            transaction.entry_set.create(
+                account=self.accounts[1], debit=values[state]
             )
             transaction.set_pending(user=self.users[0])
 
@@ -433,12 +429,8 @@ class TransactionTestCase(unittest.TestCase):
 
         self.transaction = Transaction(group=self.group)
         self.transaction.save()
-        self.transaction.entry_set.add(
-            TransactionEntry(account=self.accounts[0], debit=100)
-        )
-        self.transaction.entry_set.add(
-            TransactionEntry(account=self.accounts[1], credit=100)
-        )
+        self.transaction.entry_set.create(account=self.accounts[0], debit=100)
+        self.transaction.entry_set.create(account=self.accounts[1], credit=100)
 
         self.transaction.set_pending(user=self.user)
 
@@ -464,12 +456,9 @@ class TransactionTestCase(unittest.TestCase):
         transaction = Transaction(group=self.group)
         transaction.save()
 
-        transaction.entry_set.add(
-            TransactionEntry(account=self.accounts[1], debit=200)
-        )
-        transaction.entry_set.add(
-            TransactionEntry(account=self.accounts[0], credit=100)
-        )
+        transaction.entry_set.create(account=self.accounts[1], debit=200)
+        transaction.entry_set.create(account=self.accounts[0], credit=100)
+
         with self.assertRaises(InvalidTransaction):
             transaction.set_pending(user=self.user)
 
@@ -481,14 +470,14 @@ class TransactionTestCase(unittest.TestCase):
         transaction = Transaction(group=self.group)
         transaction.save()
 
-        transaction.entry_set.add(
-            TransactionEntry(account=self.accounts[0], debit=200)
+        TransactionEntry.objects.create(
+            account=self.accounts[0], debit=200, transaction=transaction
         )
-        transaction.entry_set.add(
-            TransactionEntry(account=self.accounts[1], credit=100)
+        TransactionEntry.objects.create(
+            account=self.accounts[1], credit=100, transaction=transaction
         )
-        transaction.entry_set.add(
-            TransactionEntry(account=self.accounts[2], credit=100)
+        TransactionEntry.objects.create(
+            account=self.accounts[2], credit=100, transaction=transaction
         )
 
         transaction.delete()
@@ -642,11 +631,8 @@ class EntryTestCase(unittest.TestCase):
         self.transaction = Transaction(group=self.group)
         self.transaction.save()
 
-        self.entry = TransactionEntry(
-            account=self.account,
-            debit=100,
-            credit=100,
-            transaction=self.transaction,
+        self.entry = self.transaction.entry_set.create(
+            account=self.account, debit=100, credit=100
         )
 
     def tearDown(self):
