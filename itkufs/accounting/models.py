@@ -287,17 +287,17 @@ class Account(models.Model):
         super(Account, self).save(*args, **kwargs)
 
     def total_used(self):
-        cursor = connection.cursor()
-        cursor.execute(ACCOUNT_TOTAL_USED, [self.id])
-        return cursor.fetchone()[0]
+        with connection.cursor() as cursor:
+            cursor.execute(ACCOUNT_TOTAL_USED, [self.id])
+            return cursor.fetchone()[0]
 
     def balance(self):
         if hasattr(self, "confirmed_balance_sql"):
             return self.confirmed_balance_sql or 0
         else:
-            cursor = connection.cursor()
-            cursor.execute(CONFIRMED_BALANCE_SQL, [self.id])
-            return cursor.fetchone()[0]
+            with connection.cursor() as cursor:
+                cursor.execute(CONFIRMED_BALANCE_SQL, [self.id])
+                return cursor.fetchone()[0]
 
     def normal_balance(self):
         """ Returns account balance, but multiplies by -1 if the account is
