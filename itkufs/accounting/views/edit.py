@@ -344,10 +344,11 @@ def reject_transactions(request, group, transaction=None, is_admin=False):
 
 @login_required
 @limit_to_admin
-@db_transaction.commit_manually
+@db_transaction.atomic
 def new_edit_transaction(request, group, transaction=None, is_admin=False):
     """Admin view for creating transactions"""
 
+    savepoint_id = db_transaction.savepoint()
     if transaction is None:
         transaction = Transaction(group=group)
     elif not transaction.is_editable():
@@ -355,7 +356,7 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
             request, _("Transaction %d can't be changed." % transaction.id)
         )
 
-        db_transaction.commit()
+        db_transaction.savepoint_rollback(savepoint_id)
 
         url = reverse("group-summary", args=(group.slug,))
         return HttpResponseRedirect(url)
@@ -437,25 +438,24 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
 
         except InvalidTransaction as e:
             errors.append(e)
-            db_transaction.rollback()
+            db_transaction.savepoint_rollback(savepoint_id)
         else:
-            db_transaction.commit()
+            db_transaction.savepoint_commit(savepoint_id)
             url = reverse("group-summary", args=(group.slug,))
             return HttpResponseRedirect(url)
 
-    try:
-        return render_to_response(
-            "accounting/transaction_form.html",
-            {
-                "is_admin": is_admin,
-                "group": group,
-                "settlement_form": settlement_form,
-                "group_forms": group_forms,
-                "user_forms": user_forms,
-                "errors": errors,
-                "transaction": transaction,
-            },
-            context_instance=RequestContext(request),
-        )
-    finally:
-        db_transaction.rollback()
+    db_transaction.savepoint_rollback(savepoint_id)
+
+    return render_to_response(
+        "accounting/transaction_form.html",
+        {
+            "is_admin": is_admin,
+            "group": group,
+            "settlement_form": settlement_form,
+            "group_forms": group_forms,
+            "user_forms": user_forms,
+            "errors": errors,
+            "transaction": transaction,
+        },
+        context_instance=RequestContext(request),
+    )
