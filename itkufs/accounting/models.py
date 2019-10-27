@@ -16,9 +16,7 @@ class Group(models.Model):
     slug = models.SlugField(
         _("slug"), unique=True, help_text=_("A shortname used in URLs.")
     )
-    admins = models.ManyToManyField(
-        User, verbose_name=_("admins"), null=True, blank=True
-    )
+    admins = models.ManyToManyField(User, verbose_name=_("admins"), blank=True)
     warn_limit = models.IntegerField(
         _("warn limit"),
         null=True,
