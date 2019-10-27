@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from itkufs.reports.views import (
     balance,
@@ -10,8 +10,7 @@ from itkufs.reports.views import (
     view_list_preview,
 )
 
-urlpatterns = patterns(
-    "",
+urlpatterns = [
     # --- Lists
     url(r"^(?P<group>[0-9a-z_-]+)/list/new/$", new_edit_list, name="new-list"),
     url(
@@ -42,4 +41,4 @@ urlpatterns = patterns(
     # --- Statements
     url(r"^(?P<group>[0-9a-z_-]+)/balance/$", balance, name="balance"),
     url(r"^(?P<group>[0-9a-z_-]+)/income/$", income, name="income"),
-)
+]

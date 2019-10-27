@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from itkufs.billing.views import (
     bill_create_transaction,
@@ -9,8 +9,7 @@ from itkufs.billing.views import (
     bill_pdf,
 )
 
-urlpatterns = patterns(
-    "",
+urlpatterns = [
     url(
         r"^(?P<group>[0-9a-z_-]+)/billing/new/$", bill_new_edit, name="bill-new"
     ),
@@ -40,4 +39,4 @@ urlpatterns = patterns(
         bill_delete,
         name="bill-delete",
     ),
-)
+]

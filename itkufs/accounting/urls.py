@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from itkufs.accounting.views.edit import (
     new_edit_settlement,
@@ -14,8 +14,7 @@ from itkufs.accounting.views.display import (
     TransactionList,
 )
 
-urlpatterns = patterns(
-    "",
+urlpatterns = [
     # --- Settlements
     url(
         r"^(?P<group>[0-9a-z_-]+)/settlement/(?P<settlement>\d+)/$",
@@ -117,4 +116,4 @@ urlpatterns = patterns(
         TransactionList.as_view(),
         name="transaction-list-account-page",
     ),
-)
+]

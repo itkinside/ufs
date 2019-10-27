@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from itkufs.common.views import login_user, switch_group
 from itkufs.common.views.display import (
@@ -13,8 +13,7 @@ from itkufs.common.views.edit import (
     new_edit_account,
 )
 
-urlpatterns = patterns(
-    "",
+urlpatterns = [
     # --- Index and login
     url(r"^$", login_user, name="index"),
     url(r"login/$", login_user, name="login"),
@@ -54,4 +53,4 @@ urlpatterns = patterns(
         group_balance_graph,
         name="group-balance-graph",
     ),
-)
+]
