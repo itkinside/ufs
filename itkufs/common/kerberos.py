@@ -6,6 +6,10 @@ from django.contrib.auth.models import User
 
 class KerberosBackend:
     def authenticate(self, request=None, remote_user=None):
+        if not remote_user:
+            if 'HTTP_REMOTE_USER' in request.META:
+                remote_user = request.META['HTTP_REMOTE_USER']
+
         if remote_user:
             username = self.clean_username(remote_user)
             return self.get_or_create_user(username)
