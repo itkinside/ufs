@@ -206,10 +206,10 @@ WHERE account_id = %s AND t.state = 'Com'
 
 
 class AccountManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return (
             super(AccountManager, self)
-            .get_query_set()
+            .get_queryset()
             .extra(
                 select={
                     "confirmed_balance_sql": (
@@ -479,10 +479,10 @@ class Settlement(models.Model):
 
 
 class TransactionManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return (
             super(TransactionManager, self)
-            .get_query_set()
+            .get_queryset()
             .extra(
                 select={
                     "entry_count_sql": """

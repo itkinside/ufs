@@ -6,10 +6,10 @@ from itkufs.common.utils import callsign_sorted
 
 
 class ListManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return (
             super(ListManager, self)
-            .get_query_set()
+            .get_queryset()
             .extra(
                 select={
                     "listcolumn_count": """

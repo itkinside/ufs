@@ -57,7 +57,7 @@ MIDDLEWARE_CLASSES = (
     "django.middleware.locale.LocaleMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.auth.middleware.RemoteUserMiddleware",
-    "django.middleware.doc.XViewMiddleware",
+    "django.contrib.admindocs.middleware.XViewMiddleware",
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "itkufs.common.middleware.UfsMiddleware",
@@ -111,6 +111,7 @@ WSGI_APPLICATION = "itkufs.wsgi.application"
 MAIL_DOMAIN = "samfundet.no"
 LOGIN_URL = "/login/"
 
+TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
 # Languages
 def ugettext(s):
