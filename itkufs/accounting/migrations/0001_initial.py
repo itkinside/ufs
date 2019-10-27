@@ -194,13 +194,17 @@ class Migration(migrations.Migration):
                 (
                     "account",
                     models.ForeignKey(
-                        verbose_name="account", to="accounting.Account"
+                        verbose_name="account",
+                        to="accounting.Account",
+                        on_delete=models.CASCADE,
                     ),
                 ),
                 (
                     "group",
                     models.ForeignKey(
-                        verbose_name="group", to="accounting.Group"
+                        verbose_name="group",
+                        to="accounting.Group",
+                        on_delete=models.CASCADE,
                     ),
                 ),
             ],
@@ -240,7 +244,9 @@ class Migration(migrations.Migration):
                 (
                     "group",
                     models.ForeignKey(
-                        verbose_name="group", to="accounting.Group"
+                        verbose_name="group",
+                        to="accounting.Group",
+                        on_delete=models.CASCADE,
                     ),
                 ),
             ],
@@ -295,6 +301,7 @@ class Migration(migrations.Migration):
                         related_name="real_transaction_set",
                         verbose_name="group",
                         to="accounting.Group",
+                        on_delete=models.CASCADE,
                     ),
                 ),
                 (
@@ -304,6 +311,7 @@ class Migration(migrations.Migration):
                         blank=True,
                         to="accounting.Settlement",
                         null=True,
+                        on_delete=models.CASCADE,
                     ),
                 ),
             ],
@@ -347,7 +355,9 @@ class Migration(migrations.Migration):
                 (
                     "account",
                     models.ForeignKey(
-                        verbose_name="account", to="accounting.Account"
+                        verbose_name="account",
+                        to="accounting.Account",
+                        on_delete=models.CASCADE,
                     ),
                 ),
                 (
@@ -356,6 +366,7 @@ class Migration(migrations.Migration):
                         related_name="entry_set",
                         verbose_name="transaction",
                         to="accounting.Transaction",
+                        on_delete=models.CASCADE,
                     ),
                 ),
             ],
@@ -408,12 +419,15 @@ class Migration(migrations.Migration):
                         related_name="log_set",
                         verbose_name="transaction",
                         to="accounting.Transaction",
+                        on_delete=models.CASCADE,
                     ),
                 ),
                 (
                     "user",
                     models.ForeignKey(
-                        verbose_name="user", to=settings.AUTH_USER_MODEL
+                        verbose_name="user",
+                        to=settings.AUTH_USER_MODEL,
+                        on_delete=models.CASCADE,
                     ),
                 ),
             ],
@@ -432,7 +446,9 @@ class Migration(migrations.Migration):
             model_name="account",
             name="group",
             field=models.ForeignKey(
-                verbose_name="group", to="accounting.Group"
+                verbose_name="group",
+                to="accounting.Group",
+                on_delete=models.CASCADE,
             ),
             preserve_default=True,
         ),
@@ -444,6 +460,7 @@ class Migration(migrations.Migration):
                 blank=True,
                 to=settings.AUTH_USER_MODEL,
                 null=True,
+                on_delete=models.CASCADE,
             ),
             preserve_default=True,
         ),

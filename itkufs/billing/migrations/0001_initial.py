@@ -28,11 +28,19 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("description", models.TextField(verbose_name="description")),
-                ("group", models.ForeignKey(to="accounting.Group")),
+                (
+                    "group",
+                    models.ForeignKey(
+                        to="accounting.Group", on_delete=models.CASCADE
+                    ),
+                ),
                 (
                     "transaction",
                     models.ForeignKey(
-                        blank=True, to="accounting.Transaction", null=True
+                        blank=True,
+                        to="accounting.Transaction",
+                        null=True,
+                        on_delete=models.CASCADE,
                     ),
                 ),
             ],
@@ -66,7 +74,12 @@ class Migration(migrations.Migration):
                         decimal_places=2,
                     ),
                 ),
-                ("bill", models.ForeignKey(to="billing.Bill")),
+                (
+                    "bill",
+                    models.ForeignKey(
+                        to="billing.Bill", on_delete=models.CASCADE
+                    ),
+                ),
             ],
             options={},
             bases=(models.Model,),

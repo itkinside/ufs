@@ -47,7 +47,10 @@ class List(models.Model):
         _("balance width"), help_text=_("Relative width of cell, 0 to hide")
     )
     group = models.ForeignKey(
-        Group, verbose_name=_("group"), related_name="list_set"
+        Group,
+        on_delete=models.CASCADE,
+        verbose_name=_("group"),
+        related_name="list_set",
     )
 
     public = models.BooleanField(
@@ -121,7 +124,10 @@ class ListColumn(models.Model):
     name = models.CharField(_("name"), max_length=200)
     width = models.PositiveSmallIntegerField(_("width"))
     list = models.ForeignKey(
-        List, verbose_name=_("list"), related_name="column_set"
+        List,
+        on_delete=models.CASCADE,
+        verbose_name=_("list"),
+        related_name="column_set",
     )
 
     class Meta:

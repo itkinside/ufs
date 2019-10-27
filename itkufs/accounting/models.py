@@ -242,12 +242,18 @@ class Account(models.Model):
     slug = models.SlugField(
         _("slug"), help_text=_("A shortname used in URLs etc.")
     )
-    group = models.ForeignKey(Group, verbose_name=_("group"))
+    group = models.ForeignKey(
+        Group, on_delete=models.CASCADE, verbose_name=_("group")
+    )
     type = models.CharField(
         _("type"), max_length=2, choices=ACCOUNT_TYPE, default=LIABILITY_ACCOUNT
     )
     owner = models.ForeignKey(
-        User, verbose_name=_("owner"), null=True, blank=True
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        verbose_name=_("owner"),
     )
     active = models.BooleanField(_("active"), default=True)
     ignore_block_limit = models.BooleanField(
@@ -402,9 +408,13 @@ class RoleAccount(models.Model):
         (SALE_ACCOUNT, _("Sale account")),
     )
 
-    group = models.ForeignKey(Group, verbose_name=_("group"))
+    group = models.ForeignKey(
+        Group, on_delete=models.CASCADE, verbose_name=_("group")
+    )
     role = models.CharField(_("role"), max_length=4, choices=ACCOUNT_ROLE)
-    account = models.ForeignKey(Account, verbose_name=_("account"))
+    account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, verbose_name=_("account")
+    )
 
     class Meta:
         ordering = ("group", "role")
@@ -443,7 +453,9 @@ class InvalidTransactionLog(InvalidTransaction):
 
 
 class Settlement(models.Model):
-    group = models.ForeignKey(Group, verbose_name=_("group"))
+    group = models.ForeignKey(
+        Group, on_delete=models.CASCADE, verbose_name=_("group")
+    )
     date = models.DateField(_("date"))
     comment = models.CharField(_("comment"), max_length=200, blank=True)
     closed = models.BooleanField(
@@ -508,10 +520,17 @@ class Transaction(models.Model):
     objects = TransactionManager()
 
     group = models.ForeignKey(
-        Group, verbose_name=_("group"), related_name="real_transaction_set"
+        Group,
+        on_delete=models.CASCADE,
+        verbose_name=_("group"),
+        related_name="real_transaction_set",
     )
     settlement = models.ForeignKey(
-        Settlement, verbose_name=_("settlement"), null=True, blank=True
+        Settlement,
+        on_delete=models.CASCADE,
+        verbose_name=_("settlement"),
+        null=True,
+        blank=True,
     )
     date = models.DateField(
         _("date"),
@@ -710,13 +729,18 @@ class Transaction(models.Model):
 
 class TransactionLog(models.Model):
     transaction = models.ForeignKey(
-        Transaction, verbose_name=_("transaction"), related_name="log_set"
+        Transaction,
+        on_delete=models.CASCADE,
+        verbose_name=_("transaction"),
+        related_name="log_set",
     )
     type = models.CharField(
         _("type"), max_length=3, choices=Transaction.TRANSACTION_STATE
     )
     timestamp = models.DateTimeField(_("timestamp"), auto_now_add=True)
-    user = models.ForeignKey(User, verbose_name=_("user"))
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name=_("user")
+    )
     message = models.CharField(_("message"), max_length=200, blank=True)
 
     def save(self, *args, **kwargs):
@@ -763,9 +787,14 @@ class TransactionLog(models.Model):
 
 class TransactionEntry(models.Model):
     transaction = models.ForeignKey(
-        Transaction, verbose_name=_("transaction"), related_name="entry_set"
+        Transaction,
+        on_delete=models.CASCADE,
+        verbose_name=_("transaction"),
+        related_name="entry_set",
     )
-    account = models.ForeignKey("Account", verbose_name=_("account"))
+    account = models.ForeignKey(
+        "Account", on_delete=models.CASCADE, verbose_name=_("account")
+    )
     debit = models.DecimalField(
         _("debit amount"), max_digits=10, decimal_places=2, default=0
     )

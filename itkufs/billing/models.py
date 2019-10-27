@@ -8,8 +8,10 @@ class Bill(models.Model):
     created = models.DateTimeField(_("created"), auto_now_add=True)
     description = models.TextField(_("description"))
 
-    group = models.ForeignKey(Group)
-    transaction = models.ForeignKey(Transaction, null=True, blank=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    transaction = models.ForeignKey(
+        Transaction, on_delete=models.CASCADE, null=True, blank=True
+    )
 
     def __unicode__(self):
         return u"%s - %s" % (self.created, self.description[:30])
@@ -32,7 +34,7 @@ class Bill(models.Model):
 
 
 class BillingLine(models.Model):
-    bill = models.ForeignKey(Bill)
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE)
 
     description = models.CharField(_("description"), max_length=100)
     amount = models.DecimalField(
