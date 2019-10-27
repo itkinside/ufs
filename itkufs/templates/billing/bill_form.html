@@ -15,7 +15,7 @@
         <th>{% trans "Amount" %}</th>
     </tr>
     {% for c in formset.forms %}
-        <tr class="{% cycle evenrow,oddrow %}">
+        <tr class="{% cycle "evenrow" "oddrow" %}">
             <td{% if c.description.errors %} class="error"{% endif %}>{{ c.description }}{{ c.id }}</td>
             <td{% if c.amount.errors %} class="error"{% endif %}>{{ c.amount }}</td>
         </tr>

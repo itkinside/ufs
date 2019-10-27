@@ -71,7 +71,7 @@
         </thead>
         <tbody>
         {% for a,f in group_forms %}
-            <tr class="{% cycle evenrow,oddrow as rowcolors %}">
+            <tr class="{% cycle "evenrow" "oddrow" as rowcolors %}">
                 <td{% if not a.short_name %} colspan="2"{% endif %}><a href="{% url "account-summary" group.slug a.slug %}">{{ a.name }}</a></td>
                 {% if a.short_name %}
                 <td>{{ a.short_name|default:"-" }}</td>

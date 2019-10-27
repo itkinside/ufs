@@ -125,7 +125,7 @@
     {% ufs_sort user_accounts %}
     {% for account in user_accounts %}
         {% if all or account.active %}
-        <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
+        <tr class="{% cycle "evenrow" "oddrow" %}{% if not account.active %} inactive{% endif %}">
             <td{% if not account.short_name %} colspan="2"{% endif %}>
             {% if is_admin %}
             <a href="{% url "account-summary" group.slug account.slug %}">{{ account.name }}</a>
@@ -158,7 +158,7 @@
         {% if all or account.active %}
         {% if all or account.normal_balance %}
         {# Django's if construct in templates is somewhat lacking, ugly work around for "complex" logic #}
-        <tr class="{% cycle evenrow,oddrow %}{% if not account.active %} inactive{% endif %}">
+        <tr class="{% cycle "evenrow" "oddrow" %}{% if not account.active %} inactive{% endif %}">
             <td{% if not account.short_name %} colspan="2"{% endif %}>
             {% if is_admin %}
             <a href="{% url "account-summary" group.slug account.slug %}">{{ account.name }}</a>

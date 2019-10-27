@@ -22,7 +22,7 @@
         <tr>
     {% endif %}
     {% for bill in bills %}
-        <tr class="{% cycle evenrow,oddrow %}">
+        <tr class="{% cycle "evenrow" "oddrow" %}">
             <td>
                 <a href="{% url "bill-details" group.slug bill.id %}">
                     #{{ bill.id }}

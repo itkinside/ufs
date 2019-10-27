@@ -62,7 +62,7 @@
         <th style="width: 4em">{% trans "Amount" %}</th>
     </tr>
     {% for line in bill.billingline_set.all %}
-        <tr class="{% cycle evenrow,oddrow %}">
+        <tr class="{% cycle "evenrow" "oddrow" %}">
             <td>{{ line.description }}</td>
             <td align="right">{{ line.amount|creditformat }}</td>
         </tr>

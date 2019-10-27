@@ -33,7 +33,7 @@
         {% endfor %}
     </tr>
     {% for account, fields in form.accounts %}
-        <tr class="{% cycle evenrow,oddrow %}">
+        <tr class="{% cycle "evenrow" "oddrow" %}">
             <td>{{ account.name }}</td>
             {% for field in fields %}
                 <td{% if field.errors %} class="error"{% endif %}>{{ field }}</td>

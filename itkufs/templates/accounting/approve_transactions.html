@@ -58,7 +58,7 @@
         <td>
             <a href="{% url "account-summary" e.account.group.slug e.account.slug %}">{{ e.account.name }}</a>
         </td>
-        <td class="debit {% cycle evenrow,oddrow as class %}">
+        <td class="debit {% cycle 'evenrow' 'oddrow' as class %}">
             {% if e.debit %}
                 {{e.debit|stringformat:"0.2f"}}
             {% endif %}
