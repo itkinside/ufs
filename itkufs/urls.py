@@ -1,8 +1,11 @@
 from django.conf.urls import include, url
 from django.conf import settings
 from django.contrib import admin
+from django.views.i18n import javascript_catalog
+from django.views.static import serve
 
 from itkufs import admin  # noqa: To register admin classes
+from itkufs.reports.views import public_lists, view_public_list
 
 if "itkufs.accounting" in settings.INSTALLED_APPS:
     import itkufs.accounting.admin  # noqa: To register admin classes
@@ -16,16 +19,16 @@ urlpatterns = [
     # View for magic i18n translation of js
     url(
         r"^i18n/js/$",
-        "django.views.i18n.javascript_catalog",
+        javascript_catalog,
         {"packages": ["itkufs"]},
         name="jsi18n",
     ),
     url(r"^i18n/", include("django.conf.urls.i18n")),
     # Pull in lists before so that nothing else manages to catch the url
-    url(r"^lists/$", "itkufs.reports.views.public_lists", name="public-lists"),
+    url(r"^lists/$", public_lists, name="public-lists"),
     url(
         r"^lists/(?P<group>[0-9a-z_-]+)/(?P<list>[0-9a-z_-]+)/$",
-        "itkufs.reports.views.view_public_list",
+        view_public_list,
         name="view-public-list",
     ),
     url(r"^", include("itkufs.common.urls")),
@@ -36,7 +39,7 @@ urlpatterns = [
     # for reverse lookup of URLs from views and templates
     url(
         r"^media/(?P<path>.*)$",
-        "django.views.static.serve",
+        serve,
         {"document_root": settings.MEDIA_ROOT},
         name="media",
     ),
