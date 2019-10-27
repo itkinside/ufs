@@ -29,10 +29,10 @@ LANGUAGE_CODE = "en-us"
 
 SITE_ID = 1
 
-AUTHENTICATION_BACKENDS = (
+AUTHENTICATION_BACKENDS = [
     "itkufs.common.kerberos.KerberosBackend",
     "django.contrib.auth.backends.ModelBackend",
-)
+]
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
@@ -46,12 +46,12 @@ STATIC_ROOT = PROJECT_BASE + "static/"
 STATIC_URL = "/static/"
 
 # List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
+TEMPLATE_LOADERS = [
     "django.template.loaders.filesystem.Loader",
     "django.template.loaders.app_directories.Loader",
-)
+]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -61,7 +61,7 @@ MIDDLEWARE_CLASSES = (
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "itkufs.common.middleware.UfsMiddleware",
-)
+]
 
 ROOT_URLCONF = "itkufs.urls"
 
@@ -72,16 +72,16 @@ TEMPLATE_DIRS = (
     + "itkufs/templates/",
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
+TEMPLATE_CONTEXT_PROCESSORS = [
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.core.context_processors.request",
     "django.contrib.messages.context_processors.messages",
-)
+]
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.admindocs",
     "django.contrib.auth",
@@ -95,7 +95,7 @@ INSTALLED_APPS = (
     "itkufs.accounting",
     "itkufs.reports",
     "itkufs.billing",
-)
+]
 
 # Session
 SESSION_COOKIE_NAME = "itkufs"
