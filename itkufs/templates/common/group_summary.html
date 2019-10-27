@@ -90,12 +90,12 @@
 
 {% if is_admin %}
 <div id="bills">
-<h3>{% trans "Bill" %}</h3>
+<h3>{% trans "Bills" %}</h3>
 <ul>
 <li class="admin"><a href="{% url "bill-list" group.slug %}">
      {% trans "View bills" %}</a></li>
 <li class="admin"><a href="{% url "bill-new" group.slug %}">
-     {% trans "New Bill" %}</a></li>
+     {% trans "New bill" %}</a></li>
 </ul>
 </div>
 {% endif %}
