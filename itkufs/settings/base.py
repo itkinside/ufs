@@ -45,12 +45,6 @@ MEDIA_URL = "/media/"
 STATIC_ROOT = PROJECT_BASE + "static/"
 STATIC_URL = "/static/"
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = [
-    "django.template.loaders.filesystem.Loader",
-    "django.template.loaders.app_directories.Loader",
-]
-
 MIDDLEWARE_CLASSES = [
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -65,20 +59,24 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = "itkufs.urls"
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates".
-    # Always use forward slashes, even on Windows.
-    PROJECT_BASE
-    + "itkufs/templates/",
-)
-
-TEMPLATE_CONTEXT_PROCESSORS = [
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.request",
-    "django.contrib.messages.context_processors.messages",
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [PROJECT_BASE + "itkufs/templates/"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
+            ],
+            "debug": False,
+        },
+    }
 ]
 
 INSTALLED_APPS = [

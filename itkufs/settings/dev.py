@@ -3,7 +3,7 @@ from itkufs.settings import *  # noqa
 
 # Debug settings
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+TEMPLATES[0]["OPTIONS"]["debug"] = True
 
 # django-debug-toolbar
 INSTALLED_APPS += ["debug_toolbar"]
