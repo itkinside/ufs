@@ -15,7 +15,7 @@ if "itkufs.reports" in settings.INSTALLED_APPS:
 
 urlpatterns = [
     url(r"^admin/doc/", include("django.contrib.admindocs.urls")),
-    url(r"^admin/", include(admin.site.urls)),
+    url(r"^admin/", admin.site.urls),
     # View for magic i18n translation of js
     url(
         r"^i18n/js/$",
