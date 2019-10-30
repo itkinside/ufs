@@ -30,10 +30,18 @@ This is a rather rough guide on how to install µFS.
 
 #. Checkout latest source from https://github.com/itkinside/ufs/
 
+#. Install PostgreSQL development headers. On Debian::
+
+    sudo apt install libpq-dev
+
 #. Get all the dependencies listed above. Some/most can be installed using
-   ``pip`` and the bundled ``requirements.txt`` file::
+   ``pip`` and the bundled requirement files. In production::
 
     pip install -r requirements.txt
+
+   Or in development::
+
+    pip install -r requirements-dev.txt
 
 #. Add a ``itkufs/settings/local.py`` file which sets the ``DATABASE_*`` and
    ``SECRET_KEY`` options. You can find a template at
@@ -45,10 +53,11 @@ This is a rather rough guide on how to install µFS.
 
 #. Either:
 
-   - Setup your web server to run the WSGI app at ``itkufs.wsgi:application``.
+   - In production, setup your web server to run the WSGI app at
+     ``itkufs.wsgi:application``.
 
-   - Use Django's builtin development web server, which also use the above
-     WSGI application.
+   - Or, in development, use Django's builtin development web server,
+     which also use the above WSGI application.
 
 
 How to setup
