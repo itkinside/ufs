@@ -99,7 +99,7 @@ INSTALLED_APPS = [
 SESSION_COOKIE_NAME = "itkufs"
 SESSION_COOKIE_SECURE = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"
+SESSION_SERIALIZER = "django.contrib.sessions.serializers.JSONSerializer"
 
 # WSGI application used by manage.py runserver
 WSGI_APPLICATION = "itkufs.wsgi.application"

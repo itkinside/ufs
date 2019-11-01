@@ -32,7 +32,10 @@ def account_summary(request, group, account, is_admin=False, is_owner=False):
 
     if is_owner:
         # Set active account in session
-        request.session["my_account"] = account
+        request.session["my_account"] = {
+            "group_slug": account.group.slug,
+            "account_slug": account.slug,
+        }
 
         # Warn owner of account about a low balance
         if account.is_blocked():

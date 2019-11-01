@@ -70,8 +70,8 @@
 <ul class="menulist" id="mainmenu">
     <li>
         {% if request.session.my_account %}
-            <a href="{% url "account-summary" request.session.my_account.group.slug request.session.my_account.slug %}">
-        {% trans "My account" %}</a>
+            <a href="{% url "account-summary" request.session.my_account.group_slug request.session.my_account.account_slug %}">
+            {% trans "My account" %}</a>
         {% else %}
             {% trans "My account" %}
         {% endif %}
@@ -79,7 +79,7 @@
 
     <li>
         {% if request.session.my_account %}
-            <a href="{% url "group-summary" request.session.my_account.group.slug %}">
+            <a href="{% url "group-summary" request.session.my_account.group_slug %}">
             {% trans "My group" %}{% if is_admin and group.not_payed_transaction_set.count %}*{% endif %}</a>
         {% else %}
             {% trans "My group" %}
