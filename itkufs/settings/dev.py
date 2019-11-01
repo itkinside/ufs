@@ -1,4 +1,4 @@
-from itkufs.settings import INSTALLED_APPS, MIDDLEWARE_CLASSES
+from itkufs.settings import INSTALLED_APPS, MIDDLEWARE_CLASSES, TEMPLATES
 from itkufs.settings import *  # noqa
 
 # Debug settings

@@ -111,6 +111,7 @@ LOGIN_URL = "/login/"
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
+
 # Languages
 def ugettext(s):
     return s

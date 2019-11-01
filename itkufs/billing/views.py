@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
 from itkufs.common.decorators import limit_to_admin
-from itkufs.accounting.models import Account, Transaction, TransactionEntry
+from itkufs.accounting.models import Account, Transaction
 from itkufs.billing.models import Bill
 from itkufs.billing.pdf import pdf
 from itkufs.billing.forms import (
