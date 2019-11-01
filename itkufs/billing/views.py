@@ -104,13 +104,8 @@ def bill_create_transaction(request, group, bill, is_admin=False):
             transaction = Transaction(group=group, settlement=settlement)
             transaction.save()
 
-            transaction.entry_set.add(
-                TransactionEntry(account=charge_to, credit=sum)
-            )
-            transaction.entry_set.add(
-                TransactionEntry(account=pay_to, debit=sum)
-            )
-
+            transaction.entry_set.create(account=charge_to, credit=sum)
+            transaction.entry_set.create(account=pay_to, debit=sum)
             transaction.set_pending(
                 user=request.user,
                 message=_("Bill #%(id)s: %(description)s")

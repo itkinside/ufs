@@ -117,42 +117,23 @@ def transfer(
 
         if transfer_type == "deposit":
             # Deposit to user account
-
-            transaction.entry_set.add(
-                TransactionEntry(account=account, credit=amount)
-            )
-            transaction.entry_set.add(
-                TransactionEntry(account=bank_account, debit=amount)
-            )
-
+            transaction.entry_set.create(account=account, credit=amount)
+            transaction.entry_set.create(account=bank_account, debit=amount)
             transaction.set_pending(user=request.user, message=details)
 
         elif transfer_type == "withdraw":
             # Withdraw from user account
-
-            transaction.entry_set.add(
-                TransactionEntry(account=account, debit=amount)
-            )
-            transaction.entry_set.add(
-                TransactionEntry(account=bank_account, credit=amount)
-            )
-
+            transaction.entry_set.create(account=account, debit=amount)
+            transaction.entry_set.create(account=bank_account, credit=amount)
             transaction.set_pending(user=request.user, message=details)
 
         elif transfer_type == "transfer":
             # Transfer from user account to other user account
-
             credit_account = Account.objects.get(
                 id=form.cleaned_data["credit_account"]
             )
-
-            transaction.entry_set.add(
-                TransactionEntry(account=account, debit=amount)
-            )
-            transaction.entry_set.add(
-                TransactionEntry(account=credit_account, credit=amount)
-            )
-
+            transaction.entry_set.create(account=account, debit=amount)
+            transaction.entry_set.create(account=credit_account, credit=amount)
             transaction.set_pending(user=request.user, message=details)
 
             if amount <= account.normal_balance() - (group.block_limit or 0):
