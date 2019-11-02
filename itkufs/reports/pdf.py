@@ -23,6 +23,11 @@ ALTERNATE_COLORS = [HexColor("#FFFFFF"), HexColor("#F5F5F5")]
 def pdf(group, username, list, show_header=True, show_footer=True):
     """PDF version of list"""
 
+    # FIXME: reportlab 3.5.32 often crashes with IndexError in
+    # reportlab.platypus.tables at lines 1496 and 1498. Disabling the support
+    # for double-lined accounts seems to work around it.
+    list.double = False
+
     content = StringIO()
 
     columns = list.column_set.all()
