@@ -34,12 +34,7 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-# Absolute path to the directory that holds media.
-# Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = PROJECT_BASE + "media/"
-
-# URL that handles the media served from MEDIA_ROOT.
-# Example: "http://media.lawrence.com"
 MEDIA_URL = "/media/"
 
 STATIC_ROOT = PROJECT_BASE + "static/"

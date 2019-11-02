@@ -1,4 +1,4 @@
-{% load i18n %}<?xml version="1.0" encoding="UTF-8"?>
+{% load i18n static %}<?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
 "http://www.w3.org/TR/xhtml11/DTD/xhtml11-strict.dtd">
@@ -8,12 +8,12 @@
 <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>{% block title %}µFS{% endblock %}</title>
-        <link rel="stylesheet" type="text/css" href="{% url "media" "style/reset-fonts-grids.css" %}" />
-        <link rel="stylesheet" type="text/css" href="{% url "media" "style/base.css" %}" />
-        <link rel="shortcut icon" type="image/png" href="{% url "media" "images/favicon.png" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "common/reset-fonts-grids.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "common/base.css" %}" />
+        <link rel="shortcut icon" type="image/png" href="{% static "common/favicon.png" %}" />
         <script type="text/javascript" src="{% url "jsi18n" %}"></script>
-        <script type="text/javascript" src="{% url "media" "js/prototype.js" %}"></script>
-        <script type="text/javascript" src="{% url "media" "js/ufs.js" %}"></script>
+        <script type="text/javascript" src="{% static "common/prototype.js" %}"></script>
+        <script type="text/javascript" src="{% static "common/ufs.js" %}"></script>
 
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         {% block extrahead %}{% endblock %}
@@ -24,7 +24,7 @@
 <div id="doc3" class="yui-t2">
     <div id="hd">
 
-<h1 style="background: url({% url "media" "images/logo.png" %}) top left no-repeat;">
+<h1 style="background: url({% static "common/logo.png" %}) top left no-repeat;">
 {% trans "&micro;FS Microfinance System" %}
 </h1>
 

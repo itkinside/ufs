@@ -1,10 +1,10 @@
 {% extends "admin/base.html" %}
-{% load i18n %}
+{% load i18n static %}
 
 {% block title %}{{ title|escape }} | µFS{% endblock %}
 
 {% block extrahead %}
-    <link rel="shortcut icon" type="image/png" href="{% url "media" "images/favicon.png" %}" />
+    <link rel="shortcut icon" type="image/png" href="{% static "common/favicon.png" %}" />
 {% endblock %}
 
 {% block branding %}

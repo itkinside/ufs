@@ -7,5 +7,5 @@
 /.tox/
 /djangologging/
 /itkufs/settings/local.py
-/media/logos/*
+/media/
 /static/
