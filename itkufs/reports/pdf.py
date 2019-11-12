@@ -2,7 +2,7 @@ from datetime import date
 from cStringIO import StringIO
 
 from reportlab.pdfgen import canvas
-from reportlab.platypus.tables import Table, GRID_STYLE
+from reportlab.platypus.tables import Table, TableStyle, GRID_STYLE
 from reportlab.platypus.flowables import Image
 from reportlab.lib.units import cm
 from reportlab.lib.colors import HexColor
@@ -22,11 +22,6 @@ ALTERNATE_COLORS = [HexColor("#FFFFFF"), HexColor("#F5F5F5")]
 
 def pdf(group, username, list, show_header=True, show_footer=True):
     """PDF version of list"""
-
-    # FIXME: reportlab 3.5.32 often crashes with IndexError in
-    # reportlab.platypus.tables at lines 1496 and 1498. Disabling the support
-    # for double-lined accounts seems to work around it.
-    list.double = False
 
     content = StringIO()
 
@@ -53,6 +48,8 @@ def pdf(group, username, list, show_header=True, show_footer=True):
         height, width = A4
     else:
         width, height = A4
+
+    grid_style = TableStyle(parent=GRID_STYLE)
 
     # Create canvas for page and set fonts
     p = canvas.Canvas(content, (width, height))
@@ -161,7 +158,7 @@ def pdf(group, username, list, show_header=True, show_footer=True):
         col_width.append(list.balance_width)
 
     if list.short_name_width > 0 and list.account_width > 0:
-        GRID_STYLE.add("SPAN", (0, 0), (1, 0))
+        grid_style.add("SPAN", (0, 0), (1, 0))
 
     base_x = len(header)
 
@@ -196,7 +193,7 @@ def pdf(group, username, list, show_header=True, show_footer=True):
 
         i += 1
 
-        GRID_STYLE.add("BACKGROUND", (0, i), (-1, i + extra_row_height), color)
+        grid_style.add("BACKGROUND", (0, i), (-1, i + extra_row_height), color)
 
         row = []
 
@@ -233,10 +230,10 @@ def pdf(group, username, list, show_header=True, show_footer=True):
             # XXX: currently warnings are only shown if balance is shown, this
             # if needs to be moved if you want to change that
             if a.needs_warning():
-                GRID_STYLE.add(
+                grid_style.add(
                     "FONTNAME", (0, i), (base_x - 1, i), font_name_bold
                 )
-                GRID_STYLE.add(
+                grid_style.add(
                     "TEXTCOLOR",
                     (base_x - 1, i),
                     (base_x - 1, i),
@@ -253,16 +250,16 @@ def pdf(group, username, list, show_header=True, show_footer=True):
 
         if a.is_blocked():
             if list.balance_width:
-                GRID_STYLE.add(
+                grid_style.add(
                     "TEXTCOLOR",
                     (base_x - 1, i),
                     (base_x - 1, i),
                     BLACKLISTED_TEXT_COLOR,
                 )
-                GRID_STYLE.add(
+                grid_style.add(
                     "FONTNAME", (0, i), (base_x - 1, i), font_name_bold
                 )
-            GRID_STYLE.add(
+            grid_style.add(
                 "BACKGROUND",
                 (base_x, i),
                 (-1, i + extra_row_height),
@@ -279,38 +276,38 @@ def pdf(group, username, list, show_header=True, show_footer=True):
         if list.double:
             data.append([""] * len(row))
 
-            GRID_STYLE.add("SPAN", (0, i), (0, i + extra_row_height))
+            grid_style.add("SPAN", (0, i), (0, i + extra_row_height))
 
             if list.balance_width:
-                GRID_STYLE.add("SPAN", (1, i), (1, i + extra_row_height))
+                grid_style.add("SPAN", (1, i), (1, i + extra_row_height))
 
-    GRID_STYLE.add("FONTSIZE", (0, 0), (-1, -1), font_size_small)
+    grid_style.add("FONTSIZE", (0, 0), (-1, -1), font_size_small)
 
     # Set font size for names
-    GRID_STYLE.add("FONTSIZE", (0, 1), (0, -1), font_size_name)
-    GRID_STYLE.add("ALIGN", (0, 0), (-1, -1), "LEFT")
-    GRID_STYLE.add("ALIGN", (base_x, 0), (-1, -1), "RIGHT")
+    grid_style.add("FONTSIZE", (0, 1), (0, -1), font_size_name)
+    grid_style.add("ALIGN", (0, 0), (-1, -1), "LEFT")
+    grid_style.add("ALIGN", (base_x, 0), (-1, -1), "RIGHT")
 
-    GRID_STYLE.add("FONTNAME", (0, 0), (-1, 0), font_name_bold)
+    grid_style.add("FONTNAME", (0, 0), (-1, 0), font_name_bold)
 
     # Set font size for balance
     if list.balance_width:
-        GRID_STYLE.add(
+        grid_style.add(
             "FONTSIZE", (base_x - 1, 1), (base_x - 1, -1), font_size_balance
         )
-        GRID_STYLE.add("ALIGN", (base_x - 1, 1), (base_x - 1, -1), "RIGHT")
+        grid_style.add("ALIGN", (base_x - 1, 1), (base_x - 1, -1), "RIGHT")
 
-    GRID_STYLE.add("TEXTCOLOR", (base_x, 1), (-1, -1), FAINT_COLOR)
+    grid_style.add("TEXTCOLOR", (base_x, 1), (-1, -1), FAINT_COLOR)
 
     if list.double:
-        GRID_STYLE.add("TOPPADDING", (base_x, 1), (-1, -1), 2)
-        GRID_STYLE.add("BOTTOMPADDING", (base_x, 1), (-1, -1), 2)
+        grid_style.add("TOPPADDING", (base_x, 1), (-1, -1), 2)
+        grid_style.add("BOTTOMPADDING", (base_x, 1), (-1, -1), 2)
 
-    GRID_STYLE.add("VALIGN", (0, 1), (-1, -1), "TOP")
-    GRID_STYLE.add("GRID", (0, 0), (-1, -1), 0.25, BORDER_COLOR)
+    grid_style.add("VALIGN", (0, 1), (-1, -1), "TOP")
+    grid_style.add("GRID", (0, 0), (-1, -1), 0.25, BORDER_COLOR)
 
     # Create table
-    t = Table(data, colWidths=col_width, style=GRID_STYLE, repeatRows=1)
+    t = Table(data, colWidths=col_width, style=grid_style, repeatRows=1)
 
     rest = None
     avail_w = width - 2 * margin
