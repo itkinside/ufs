@@ -1,11 +1,11 @@
 import os
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils.translation import ugettext as _
-from django.contrib import messages
 
 from itkufs.common.decorators import limit_to_admin
 from itkufs.common.forms import GroupForm, AccountForm, RoleAccountForm

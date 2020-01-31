@@ -3,12 +3,12 @@
 import datetime
 
 from django.conf import settings
+from django.core.mail import send_mail
 from django.db import connection, models, transaction as db_transaction
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _, ugettext
-from django.core.mail import send_mail
 
 
 class Group(models.Model):

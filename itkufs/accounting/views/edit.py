@@ -1,10 +1,10 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
+from django.db import transaction as db_transaction
 from django.http import HttpResponseForbidden, HttpResponseRedirect, Http404
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils.translation import ugettext as _
-from django.contrib import messages
-from django.db import transaction as db_transaction
 
 from itkufs.common.utils import callsign_sorted as ufs_sorted
 from itkufs.common.decorators import limit_to_owner, limit_to_admin
