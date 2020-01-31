@@ -16,3 +16,6 @@ pytest
 pytest-cov
 pytest-django
 tox
+
+# Dependency management tools
+pip-tools
