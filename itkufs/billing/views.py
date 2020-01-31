@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.contrib import messages
-from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
@@ -58,7 +57,8 @@ def bill_new_edit(request, group, bill=None, is_admin=False):
                 reverse("bill-details", args=[group.slug, bill.id])
             )
 
-    return render_to_response(
+    return render(
+        request,
         "billing/bill_form.html",
         {
             "is_admin": is_admin,
@@ -66,7 +66,6 @@ def bill_new_edit(request, group, bill=None, is_admin=False):
             "form": form,
             "formset": formset,
         },
-        context_instance=RequestContext(request),
     )
 
 
@@ -121,30 +120,30 @@ def bill_create_transaction(request, group, bill, is_admin=False):
                 )
             )
 
-    return render_to_response(
+    return render(
+        request,
         "billing/bill_create_transaction.html",
         {"is_admin": is_admin, "group": group, "bill": bill, "form": form},
-        context_instance=RequestContext(request),
     )
 
 
 @login_required
 @limit_to_admin
 def bill_list(request, group, is_admin=False):
-    return render_to_response(
+    return render(
+        request,
         "billing/bill_list.html",
         {"is_admin": is_admin, "group": group, "bills": group.bill_set.all()},
-        context_instance=RequestContext(request),
     )
 
 
 @login_required
 @limit_to_admin
 def bill_details(request, group, bill, is_admin=False):
-    return render_to_response(
+    return render(
+        request,
         "billing/bill_details.html",
         {"is_admin": is_admin, "group": group, "bill": bill},
-        context_instance=RequestContext(request),
     )
 
 
@@ -157,10 +156,10 @@ def bill_delete(request, group, bill, is_admin=False):
 
         return HttpResponseRedirect(reverse("bill-list", args=[group.slug]))
 
-    return render_to_response(
+    return render(
+        request,
         "billing/bill_delete.html",
         {"is_admin": is_admin, "group": group, "bill": bill},
-        context_instance=RequestContext(request),
     )
 
 

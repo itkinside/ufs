@@ -3,8 +3,7 @@ import os
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from django.contrib import messages
 
@@ -50,10 +49,10 @@ def edit_group(request, group, is_admin=False):
     else:
         form = GroupForm(instance=group)
 
-    return render_to_response(
+    return render(
+        request,
         "common/group_form.html",
         {"is_admin": is_admin, "group": group, "form": form},
-        context_instance=RequestContext(request),
     )
 
 
@@ -105,7 +104,8 @@ def new_edit_account(
         else:
             form = AccountForm()
 
-    return render_to_response(
+    return render(
+        request,
         "common/account_form.html",
         {
             "is_admin": is_admin,
@@ -114,7 +114,6 @@ def new_edit_account(
             "account": account,
             "form": form,
         },
-        context_instance=RequestContext(request),
     )
 
 
@@ -144,8 +143,8 @@ def assign_role_accounts(request, group, is_admin=False):
     else:
         form = RoleAccountForm(group=group)
 
-    return render_to_response(
+    return render(
+        request,
         "common/role_account_form.html",
         {"is_admin": is_admin, "group": group, "form": form},
-        context_instance=RequestContext(request),
     )

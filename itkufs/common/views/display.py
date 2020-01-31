@@ -2,8 +2,7 @@ from operator import itemgetter
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 
 from itkufs.common.decorators import limit_to_group, limit_to_owner
 from itkufs.accounting.models import Account, Group
@@ -14,14 +13,14 @@ from itkufs.accounting.models import Account, Group
 def group_summary(request, group, is_admin=False):
     """Show group summary"""
 
-    return render_to_response(
+    return render(
+        request,
         "common/group_summary.html",
         {
             "is_admin": is_admin,
             "all": "all" in request.GET,
             "group": Group.objects.select_related().get(id=group.id),
         },
-        context_instance=RequestContext(request),
     )
 
 
@@ -50,7 +49,8 @@ def account_summary(request, group, account, is_admin=False, is_owner=False):
                 request, "The account balance is below the warning limit."
             )
 
-    return render_to_response(
+    return render(
+        request,
         "common/account_summary.html",
         {
             "is_admin": is_admin,
@@ -61,7 +61,6 @@ def account_summary(request, group, account, is_admin=False, is_owner=False):
                 account.get_balance_history_set()
             ),
         },
-        context_instance=RequestContext(request),
     )
 
 
@@ -94,7 +93,8 @@ def group_balance_graph(request, group, is_admin=False):
         else:
             graph_data_negative.append('[ "%s", %d ]' % (a[0], -a[1]))
 
-    return render_to_response(
+    return render(
+        request,
         "common/group_balance_graph.html",
         {
             "group": Group.objects.select_related().get(id=group.id),
@@ -103,7 +103,6 @@ def group_balance_graph(request, group, is_admin=False):
             "graph_data_positive": ",\n".join(graph_data_positive),
             "graph_data_negative": ",\n".join(graph_data_negative),
         },
-        context_instance=RequestContext(request),
     )
 
 

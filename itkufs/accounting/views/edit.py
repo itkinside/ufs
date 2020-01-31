@@ -1,8 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden, HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from django.contrib import messages
 from django.db import transaction as db_transaction
@@ -58,7 +57,8 @@ def new_edit_settlement(request, group, settlement=None, is_admin=False):
         else:
             form = SettlementForm()
 
-    return render_to_response(
+    return render(
+        request,
         "accounting/settlement_form.html",
         {
             "is_admin": is_admin,
@@ -66,7 +66,6 @@ def new_edit_settlement(request, group, settlement=None, is_admin=False):
             "settlement": settlement,
             "form": form,
         },
-        context_instance=RequestContext(request),
     )
 
 
@@ -156,7 +155,8 @@ def transfer(
             reverse("account-summary", args=[account.group.slug, account.slug])
         )
 
-    return render_to_response(
+    return render(
+        request,
         "accounting/transfer.html",
         {
             "is_admin": is_admin,
@@ -167,7 +167,6 @@ def transfer(
             "form": form,
             "group": group,
         },
-        context_instance=RequestContext(request),
     )
 
 
@@ -220,7 +219,8 @@ def approve_transactions(request, group, page="1", is_admin=False):
 
     if to_be_rejected:
         form = RejectTransactionForm()
-        return render_to_response(
+        return render(
+            request,
             "accounting/reject_transactions.html",
             {
                 "is_admin": is_admin,
@@ -228,14 +228,14 @@ def approve_transactions(request, group, page="1", is_admin=False):
                 "transactions": to_be_rejected,
                 "form": form,
             },
-            context_instance=RequestContext(request),
         )
 
     if not transactions:
         messages.info(request, _("No pending transactions found."))
         return HttpResponseRedirect(reverse("group-summary", args=[group.slug]))
 
-    return render_to_response(
+    return render(
+        request,
         "accounting/approve_transactions.html",
         {
             "is_admin": is_admin,
@@ -243,7 +243,6 @@ def approve_transactions(request, group, page="1", is_admin=False):
             "approve": True,
             "transaction_list": transactions,
         },
-        context_instance=RequestContext(request),
     )
 
 
@@ -279,7 +278,8 @@ def reject_transactions(request, group, transaction=None, is_admin=False):
     form = RejectTransactionForm(data)
 
     if not form.is_valid():
-        return render_to_response(
+        return render(
+            request,
             "accounting/reject_transactions.html",
             {
                 "is_admin": is_admin,
@@ -287,7 +287,6 @@ def reject_transactions(request, group, transaction=None, is_admin=False):
                 "transactions": to_be_rejected,
                 "form": form,
             },
-            context_instance=RequestContext(request),
         )
 
     for transaction in to_be_rejected:
@@ -427,7 +426,8 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
 
     db_transaction.savepoint_rollback(savepoint_id)
 
-    return render_to_response(
+    return render(
+        request,
         "accounting/transaction_form.html",
         {
             "is_admin": is_admin,
@@ -438,5 +438,4 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
             "errors": errors,
             "transaction": transaction,
         },
-        context_instance=RequestContext(request),
     )
