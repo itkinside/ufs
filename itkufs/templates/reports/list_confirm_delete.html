@@ -24,6 +24,7 @@
 {% block content %}
 
 <form method="post" action="." class="plainform">
+{% csrf_token %}
 <input type="hidden" name="group" value="{{ group.id }}" />
 
 <p>Are you sure you want to delete &ldquo;{{ group.name }}&rdquo;s list

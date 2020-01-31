@@ -24,6 +24,7 @@
 {% block content %}
 
 <form method="post" action="">
+{% csrf_token %}
 
 <p>
 <label>{% trans "Are you sure you want to delete" %} &laquo;{{ list.name }}&raquo;</label>
