@@ -40,15 +40,18 @@ MEDIA_URL = "/media/"
 STATIC_ROOT = PROJECT_BASE + "static/"
 STATIC_URL = "/static/"
 
-MIDDLEWARE_CLASSES = [
-    "django.middleware.common.CommonMiddleware",
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.admindocs.middleware.XViewMiddleware",
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "itkufs.common.middleware.UfsMiddleware",
 ]
 
