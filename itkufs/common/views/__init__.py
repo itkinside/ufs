@@ -11,7 +11,7 @@ from itkufs.accounting.models import Group, Account
 def login_user(request):
     """Login user"""
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         user = authenticate(request=request)
         if user is not None:
             login(request, user)
