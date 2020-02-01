@@ -1,0 +1,66 @@
+version: 2.1
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - py27
+      - flake8
+      - black
+
+jobs:
+  py27:
+    docker:
+      - image: circleci/python:2.7-buster
+    # To switch from SQLite ot PostgreSQL for testing, we need the following setup.
+    # In addtion, settings must be updated to use PostgreSQL and read the
+    # config from the environment.
+    #
+    #     environment:
+    #       DATABASE_URL: postgres://postgres@localhost:5432/ufs
+    #   - image: circleci/postgres:12-alpine-ram
+    steps:
+      - checkout
+      - run:
+          name: Prepare settings for test run
+          command: cp itkufs/settings/local.py.template itkufs/settings/local.py
+      - tox:
+          args: --junit-xml=test-results/pytest/results.xml
+      - store_test_results:
+          path: test-results
+
+  flake8: &tox-template
+    docker:
+      - image: circleci/python:2.7-buster
+    steps:
+      - checkout
+      - tox
+
+  black:
+    <<: *tox-template
+    docker:
+      - image: circleci/python:3.8-buster
+
+commands:
+  tox:
+    parameters:
+      args:
+        type: string
+        default: ""
+    steps:
+      - run:
+          name: Install tox
+          command: sudo pip install tox
+      - restore_cache:
+          name: Restore tox cache
+          keys:
+            - tox-v1-{{ .Environment.CIRCLE_JOB }}-{{ checksum "requirements.txt" }}-{{ checksum "requirements-dev.txt" }}
+      - run:
+          name: Run tox
+          command: tox -e $CIRCLE_JOB -- << parameters.args >>
+      - save_cache:
+          name: Save tox cache
+          key: tox-v1-{{ .Environment.CIRCLE_JOB }}-{{ checksum "requirements.txt" }}-{{ checksum "requirements-dev.txt" }}
+          paths:
+            - ./.tox
+            - ~/.cache/pip
