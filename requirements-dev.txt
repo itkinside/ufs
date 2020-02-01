@@ -6,7 +6,7 @@
 ### Development dependencies
 
 # Debug toolbar
-django-debug-toolbar < 1.10  # 1.10 requires Django 1.11
+django-debug-toolbar
 
 # Code linting
 flake8
