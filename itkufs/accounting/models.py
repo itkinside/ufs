@@ -803,13 +803,14 @@ class TransactionEntry(models.Model):
     )
 
     def check_if_blacklisted(self):
-        new_balance = self.account.normal_balance() - self.debit + self.credit
+        old_balance = self.account.normal_balance()
+        new_balance = old_balance - self.debit + self.credit
 
         if (
             self.account.is_user_account
-            and self.account is not None
             and self.account.ignore_block_limit is False
-            and self.account.normal_balance() > self.account.group.block_limit
+            and self.account.group.block_limit is not None
+            and old_balance > self.account.group.block_limit
             and new_balance < self.account.group.block_limit
         ):
 
