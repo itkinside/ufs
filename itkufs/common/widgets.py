@@ -1,4 +1,7 @@
 from django import forms
+from django.forms.util import flatatt
+from django.utils.encoding import smart_text
+from django.utils.html import escape
 from django.utils.translation import ugettext as _
 
 
@@ -6,22 +9,20 @@ class GroupedSelect(forms.Select):
     """From http://www.djangosnippets.org/snippets/200/"""
 
     def render(self, name, value, attrs=None, choices=()):
-        from django.utils.html import escape
-        from django.forms.util import flatatt, smart_unicode
 
         if value is None:
             value = ""
         final_attrs = self.build_attrs(attrs, name=name)
         output = [u"<select%s>" % flatatt(final_attrs)]
-        str_value = smart_unicode(value)
+        str_value = smart_text(value)
 
         for group_label, group in self.choices:
             if group_label:  # should belong to an optgroup
-                group_label = smart_unicode(group_label)
+                group_label = smart_text(group_label)
                 output.append(u'<optgroup label="%s">' % escape(group_label))
             for k, v in group:
-                option_value = smart_unicode(k)
-                option_label = smart_unicode(v)
+                option_value = smart_text(k)
+                option_label = smart_text(v)
                 if option_value == str_value:
                     selected_html = u' selected="selected"'
                 else:
@@ -65,7 +66,7 @@ class GroupedChoiceField(forms.ChoiceField):
         value = super(forms.ChoiceField, self).clean(value)
         if value in (None, ""):
             value = u""
-        value = forms.util.smart_unicode(value)
+        value = smart_text(value)
         if value == u"":
             return value
         valid_values = []

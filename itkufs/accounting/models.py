@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.db import connection, models, transaction as db_transaction
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _, ugettext
 
 
@@ -476,7 +476,7 @@ class Settlement(models.Model):
         if self.comment is not None:
             return u"%s: %s" % (self.date, self.comment)
         else:
-            return smart_unicode(self.date)
+            return smart_text(self.date)
 
     def get_absolute_url(self):
         return reverse(
