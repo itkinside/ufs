@@ -1,11 +1,12 @@
 from django.http import Http404
+from django.utils.deprecation import MiddlewareMixin
 
 from itkufs.accounting.models import Group, Account, Settlement, Transaction
 from itkufs.billing.models import Bill
 from itkufs.reports.models import List
 
 
-class UfsMiddleware:
+class UfsMiddleware(MiddlewareMixin):
     def process_view(self, request, view_func, view_args, view_kwargs):
         """Replaces group and account kwargs for the view with objects, and
         adds is_admin flag"""

@@ -35,6 +35,8 @@
 {% block content %}
 
 <form action="." method="post" id="newtransaction">
+    {% csrf_token %}
+
     {% if errors %}
         <ul class="error">
             {% for e in errors %}

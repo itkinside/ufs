@@ -28,6 +28,7 @@
 {% block content %}
 
 <form method="post" action=".">
+    {% csrf_token %}
     <input type="hidden" name="type" value="{{type}}" />
     {{ form.as_p }}
     <p><button>{{ type|capfirst}}</button></p>

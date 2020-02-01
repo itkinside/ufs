@@ -45,6 +45,7 @@ all active accounts in the group is included. {% endblocktrans %}</p>
 {% block content %}
 
 <form method="post" action="" id="neweditlist">
+{% csrf_token %}
 {{ listform.as_p }}
 
 {{ columnformset.management_form }}

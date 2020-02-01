@@ -3,13 +3,12 @@ from subprocess import Popen, PIPE
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.db import transaction as db_transaction
 from django.forms.models import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect, HttpResponse
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.template.defaultfilters import slugify
+from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from itkufs.common.decorators import limit_to_group, limit_to_admin
@@ -28,11 +27,7 @@ def public_lists(request):
         .order_by("group__name", "name")
     )
 
-    return render_to_response(
-        "reports/public_lists.html",
-        {"public_list": lists},
-        context_instance=RequestContext(request),
-    )
+    return render(request, "reports/public_lists.html", {"public_list": lists},)
 
 
 @login_required
@@ -147,7 +142,8 @@ def new_edit_list(request, group, list=None, is_admin=False):
                 reverse("group-summary", kwargs={"group": group.slug})
             )
 
-    return render_to_response(
+    return render(
+        request,
         "reports/list_form.html",
         {
             "is_admin": is_admin,
@@ -156,7 +152,6 @@ def new_edit_list(request, group, list=None, is_admin=False):
             "listform": listform,
             "columnformset": columnformset,
         },
-        context_instance=RequestContext(request),
     )
 
 
@@ -175,10 +170,10 @@ def delete_list(request, group, list, is_admin=False):
             reverse("group-summary", kwargs={"group": group.slug})
         )
 
-    return render_to_response(
+    return render(
+        request,
         "reports/list_delete.html",
         {"is_admin": is_admin, "group": group, "list": list},
-        context_instance=RequestContext(request),
     )
 
 
@@ -210,10 +205,10 @@ def transaction_from_list(request, group, list, is_admin=False):
             )
         )
 
-    return render_to_response(
+    return render(
+        request,
         "reports/list_transaction_form.html",
         {"is_admin": is_admin, "group": group, "list": list, "form": form},
-        context_instance=RequestContext(request),
     )
 
 
@@ -276,7 +271,8 @@ def balance(request, group, is_admin=False):
     accounts["eq_sum"] += curr_year_net_income
     accounts["li_eq_sum"] += curr_year_net_income
 
-    return render_to_response(
+    return render(
+        request,
         "reports/balance.html",
         {
             "is_admin": is_admin,
@@ -284,7 +280,6 @@ def balance(request, group, is_admin=False):
             "today": date.today(),
             "accounts": accounts,
         },
-        context_instance=RequestContext(request),
     )
 
 
@@ -309,7 +304,8 @@ def income(request, group, is_admin=False):
     # Net income
     accounts["in_ex_diff"] = accounts["in_sum"] - accounts["ex_sum"]
 
-    return render_to_response(
+    return render(
+        request,
         "reports/income.html",
         {
             "is_admin": is_admin,
@@ -317,5 +313,4 @@ def income(request, group, is_admin=False):
             "today": date.today(),
             "accounts": accounts,
         },
-        context_instance=RequestContext(request),
     )

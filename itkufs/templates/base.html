@@ -118,6 +118,7 @@
 {% ifnotequal request.user.account_set.count 1 %}
 <span>&bull;</span>
 <form action="{% url "switch-group" %}" method="post">
+{% csrf_token %}
 <div style="display: inline;">
 {% trans "Group:" %}
 <select name="group">
@@ -146,7 +147,8 @@
 {% endif %}
 
 <span>&bull;</span>
-<form action="{% url "django.views.i18n.set_language" %}" method="post">
+<form action="{% url "set_language" %}" method="post">
+{% csrf_token %}
 <div style="display: inline;">
 {% trans "Language:" %}
 <select name="language">

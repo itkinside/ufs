@@ -137,6 +137,7 @@
         <div id="activate">
             <h3>{% trans "Activate account" %}</h3>
             <form method="post" action="{% url "activate-account" group.slug account.slug %}">
+                {% csrf_token %}
                 <button type="submit">{% trans "Activate account" %}</button>
             </form>
         </div>
