@@ -1,5 +1,5 @@
 from datetime import date
-from cStringIO import StringIO
+from io import BytesIO
 
 from reportlab.pdfgen import canvas
 from reportlab.platypus.tables import Table, TableStyle, GRID_STYLE
@@ -23,7 +23,7 @@ ALTERNATE_COLORS = [HexColor("#FFFFFF"), HexColor("#F5F5F5")]
 def pdf(group, username, list, show_header=True, show_footer=True):
     """PDF version of list"""
 
-    content = StringIO()
+    content = BytesIO()
 
     columns = list.column_set.all()
     accounts = list.accounts()
