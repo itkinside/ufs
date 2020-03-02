@@ -49,7 +49,7 @@ class Group(models.Model):
         verbose_name = _("group")
         verbose_name_plural = _("groups")
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
@@ -274,7 +274,7 @@ class Account(models.Model):
         verbose_name = _("account")
         verbose_name_plural = _("accounts")
 
-    def __unicode__(self):
+    def __str__(self):
         return f"{self.group}: {self.name}"
 
     def get_absolute_url(self):
@@ -421,7 +421,7 @@ class RoleAccount(models.Model):
         verbose_name = _("role account")
         verbose_name_plural = _("role accounts")
 
-    def __unicode__(self):
+    def __str__(self):
         return _("%(account)s is %(role)s for %(group)s") % {
             "account": self.account.name,
             "role": self.get_role_display().lower(),
@@ -436,17 +436,17 @@ class InvalidTransaction(Exception):
     def __init__(self, value):
         self.value = value
 
-    def __unicode__(self):
+    def __str__(self):
         return "Invalid transaction: %s" % self.value
 
 
 class InvalidTransactionEntry(InvalidTransaction):
-    def __unicode__(self):
+    def __str__(self):
         return "Invalid transaction entry: %s" % self.value
 
 
 class InvalidTransactionLog(InvalidTransaction):
-    def __unicode__(self):
+    def __str__(self):
         return "Invalid transaction log: %s" % self.value
 
 
@@ -470,7 +470,7 @@ class Settlement(models.Model):
         # FIXME: waiting for http://code.djangoproject.com/ticket/6523
         # unique_together = (('date', 'comment', 'group'),)
 
-    def __unicode__(self):
+    def __str__(self):
         if self.comment is not None:
             return f"{self.date}: {self.comment}"
         else:
@@ -544,7 +544,7 @@ class Transaction(models.Model):
         verbose_name = _("transaction")
         verbose_name_plural = _("transactions")
 
-    def __unicode__(self):
+    def __str__(self):
         if self.entry_set.all().count():
             entries = []
             for entry in self.entry_set.all():
@@ -758,7 +758,7 @@ class TransactionLog(models.Model):
         verbose_name = _("transaction log entry")
         verbose_name_plural = _("transaction log entries")
 
-    def __unicode__(self):
+    def __str__(self):
         d = {
             "type": self.get_type_display(),
             "user": self.user,
@@ -848,7 +848,7 @@ class TransactionEntry(models.Model):
         verbose_name_plural = _("transaction entries")
         ordering = ("credit", "debit")
 
-    def __unicode__(self):
+    def __str__(self):
         return _("%(account)s: debit %(debit)s, credit %(credit)s") % {
             "account": self.account.name,
             "debit": self.debit,

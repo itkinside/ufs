@@ -92,7 +92,7 @@ class List(models.Model):
 
         ordering = ("name",)
 
-    def __unicode__(self):
+    def __str__(self):
         return f"{self.group}: {self.name}"
 
     def total_width(self):
@@ -136,5 +136,5 @@ class ListColumn(models.Model):
         verbose_name = _("list item")
         verbose_name_plural = _("list items")
 
-    def __unicode__(self):
+    def __str__(self):
         return f"{self.list.group}: {self.list}, {self.name}"
