@@ -63,7 +63,7 @@ class Command(BaseCommand):
         emails = self._build_emails(accounts)
 
         if not options["yes"] and not options["debug"]:
-            answer = raw_input(b"Send emails y/N ")
+            answer = input("Send emails y/N ")
 
             if answer.lower() != "y":
                 print("Canceled sending")

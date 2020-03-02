@@ -81,7 +81,7 @@ class Command(BaseCommand):
 
     def _get_confirmation(self, username, full_name):
         question = f"Add {username} ({full_name})? y/N "
-        answer = raw_input(question.encode("utf-8"))
+        answer = input(question)
         if answer.lower() == "y":
             return True
         else:
