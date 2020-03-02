@@ -1,3 +1,4 @@
+import pytest
 import unittest
 import datetime
 
@@ -109,53 +110,51 @@ class GroupTestCase(unittest.TestCase):
     def testUnicode(self):
         """Checks that __unicode__() returns group name"""
 
-        self.assertEquals(self.group.name, self.group.__unicode__())
+        assert self.group.name == self.group.__unicode__()
 
     def testAbsoluteUrl(self):
         """Checks that get_absolute_url() contains group slug"""
 
-        self.assert_(self.group.slug in self.group.get_absolute_url())
+        assert self.group.slug in self.group.get_absolute_url()
 
     def testEmptySlugRaisesError(self):
         """Checks that saving a group without a slug results in a ValueError"""
 
         self.group.slug = ""
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             self.group.save()
 
     def testGetAccountNumberDisplay(self):
         """Check that account numbers are formated correctly."""
 
         self.group.account_number = "12345678901"
-        self.assertEqual(
-            "1234.56.78901", self.group.get_account_number_display()
-        )
+        assert "1234.56.78901" == self.group.get_account_number_display()
 
     def testUserAccountSet(self):
         """Checks that get_user_account_set returns all user accounts"""
 
         set = self.group.get_user_account_set()
-        self.assertEqual(set.count(), 3)
-        self.assert_(self.accounts[0] in set)
-        self.assert_(self.accounts[1] in set)
-        self.assert_(self.accounts[2] in set)
-        self.assert_(self.accounts[3] not in set)
-        self.assert_(self.accounts[4] not in set)
-        self.assert_(self.accounts[5] not in set)
-        self.assert_(self.accounts[6] not in set)
+        assert set.count() == 3
+        assert self.accounts[0] in set
+        assert self.accounts[1] in set
+        assert self.accounts[2] in set
+        assert self.accounts[3] not in set
+        assert self.accounts[4] not in set
+        assert self.accounts[5] not in set
+        assert self.accounts[6] not in set
 
     def testGroupAccountSet(self):
         """Checks that get_group_account_set returns all group accounts"""
 
         set = self.group.get_group_account_set()
-        self.assertEqual(set.count(), 4)
-        self.assert_(self.accounts[0] not in set)
-        self.assert_(self.accounts[1] not in set)
-        self.assert_(self.accounts[2] not in set)
-        self.assert_(self.accounts[3] in set)
-        self.assert_(self.accounts[4] in set)
-        self.assert_(self.accounts[5] in set)
-        self.assert_(self.accounts[6] in set)
+        assert set.count() == 4
+        assert self.accounts[0] not in set
+        assert self.accounts[1] not in set
+        assert self.accounts[2] not in set
+        assert self.accounts[3] in set
+        assert self.accounts[4] in set
+        assert self.accounts[5] in set
+        assert self.accounts[6] in set
 
     # --- Transaction set tests
     # Please keep in sync with Account's set tests
@@ -165,50 +164,50 @@ class GroupTestCase(unittest.TestCase):
         rejected"""
 
         set = self.group.transaction_set
-        self.assertEqual(set.count(), 2)
-        self.assert_(self.transactions["Pen"] in set)
-        self.assert_(self.transactions["Com"] in set)
-        self.assert_(self.transactions["Rej"] not in set)
+        assert set.count() == 2
+        assert self.transactions["Pen"] in set
+        assert self.transactions["Com"] in set
+        assert self.transactions["Rej"] not in set
 
     def testTransactionSetWithRejected(self):
         """Checks that transaction_set_with_rejected returns all
         transactions"""
 
         set = self.group.transaction_set_with_rejected
-        self.assertEqual(set.count(), 3)
-        self.assert_(self.transactions["Pen"] in set)
-        self.assert_(self.transactions["Com"] in set)
-        self.assert_(self.transactions["Rej"] in set)
+        assert set.count() == 3
+        assert self.transactions["Pen"] in set
+        assert self.transactions["Com"] in set
+        assert self.transactions["Rej"] in set
 
     def testPendingTransactionSet(self):
         """Checks that pending_transaction_set returns all pending
         transactions"""
 
         set = self.group.pending_transaction_set
-        self.assertEqual(set.count(), 1)
-        self.assert_(self.transactions["Pen"] in set)
-        self.assert_(self.transactions["Com"] not in set)
-        self.assert_(self.transactions["Rej"] not in set)
+        assert set.count() == 1
+        assert self.transactions["Pen"] in set
+        assert self.transactions["Com"] not in set
+        assert self.transactions["Rej"] not in set
 
     def testCommittedTransactionSet(self):
         """Checks that committed_transaction_set returns all committed
         transactions that are not rejected"""
 
         set = self.group.committed_transaction_set
-        self.assertEqual(set.count(), 1)
-        self.assert_(self.transactions["Pen"] not in set)
-        self.assert_(self.transactions["Com"] in set)
-        self.assert_(self.transactions["Rej"] not in set)
+        assert set.count() == 1
+        assert self.transactions["Pen"] not in set
+        assert self.transactions["Com"] in set
+        assert self.transactions["Rej"] not in set
 
     def testRejectedTransactionSet(self):
         """Checks that rejected_transaction_set returns all rejected
         transactions"""
 
         set = self.group.rejected_transaction_set
-        self.assertEqual(set.count(), 1)
-        self.assert_(self.transactions["Pen"] not in set)
-        self.assert_(self.transactions["Com"] not in set)
-        self.assert_(self.transactions["Rej"] in set)
+        assert set.count() == 1
+        assert self.transactions["Pen"] not in set
+        assert self.transactions["Com"] not in set
+        assert self.transactions["Rej"] in set
 
 
 class AccountTestCase(unittest.TestCase):
@@ -310,22 +309,22 @@ class AccountTestCase(unittest.TestCase):
         """Checks that __unicode__() contains account and group name"""
 
         result = self.account.__unicode__()
-        self.assert_(self.account.group.name in result)
-        self.assert_(self.account.name in result)
+        assert self.account.group.name in result
+        assert self.account.name in result
 
     def testAbsoluteUrl(self):
         """Checks that get_absolute_url() contains account and group slug"""
 
         result = self.account.get_absolute_url()
-        self.assert_(self.account.group.slug in result)
-        self.assert_(self.account.slug in result)
+        assert self.account.group.slug in result
+        assert self.account.slug in result
 
     def testEmptySlugRaisesError(self):
         """Checks that saving an account without a slug results in a
         ValueError"""
 
         self.account.slug = ""
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             self.account.save()
 
     def testBalance(self):
@@ -338,22 +337,22 @@ class AccountTestCase(unittest.TestCase):
         account2 = self.accounts[1]
 
         # User account after credit of 100
-        self.assertEqual(int(account1.balance()), -200)
+        assert int(account1.balance()) == (-200)
         # User account after debit of 100
-        self.assertEqual(int(account2.balance()), 200)
+        assert int(account2.balance()) == 200
 
         account1 = Account.objects.get(id=account1.id)
         account2 = Account.objects.get(id=account2.id)
 
         # User account after credit of 200
-        self.assertEqual(int(account1.confirmed_balance_sql), -200)
+        assert int(account1.confirmed_balance_sql) == (-200)
         # User account after debit of 200
-        self.assertEqual(int(account2.confirmed_balance_sql), 200)
+        assert int(account2.confirmed_balance_sql) == 200
 
         # User account after credit of 350
-        self.assertEqual(int(account1.future_balance_sql), -350)
+        assert int(account1.future_balance_sql) == (-350)
         # User account after debit of 350
-        self.assertEqual(int(account2.future_balance_sql), 350)
+        assert int(account2.future_balance_sql) == 350
 
     # --- Transaction set tests
     # Please keep in sync with Group's set tests
@@ -363,50 +362,50 @@ class AccountTestCase(unittest.TestCase):
         rejected"""
 
         set = self.account.transaction_set
-        self.assertEqual(set.count(), 2)
-        self.assert_(self.transactions["Pen"] in set)
-        self.assert_(self.transactions["Com"] in set)
-        self.assert_(self.transactions["Rej"] not in set)
+        assert set.count() == 2
+        assert self.transactions["Pen"] in set
+        assert self.transactions["Com"] in set
+        assert self.transactions["Rej"] not in set
 
     def testTransactionSetWithRejected(self):
         """Checks that transaction_set_with_rejected returns all
         transactions"""
 
         set = self.account.transaction_set_with_rejected
-        self.assertEqual(set.count(), 3)
-        self.assert_(self.transactions["Pen"] in set)
-        self.assert_(self.transactions["Com"] in set)
-        self.assert_(self.transactions["Rej"] in set)
+        assert set.count() == 3
+        assert self.transactions["Pen"] in set
+        assert self.transactions["Com"] in set
+        assert self.transactions["Rej"] in set
 
     def testPendingTransactionSet(self):
         """Checks that pending_transaction_set returns all pending
         transactions"""
 
         set = self.account.pending_transaction_set
-        self.assertEqual(set.count(), 1)
-        self.assert_(self.transactions["Pen"] in set)
-        self.assert_(self.transactions["Com"] not in set)
-        self.assert_(self.transactions["Rej"] not in set)
+        assert set.count() == 1
+        assert self.transactions["Pen"] in set
+        assert self.transactions["Com"] not in set
+        assert self.transactions["Rej"] not in set
 
     def testCommittedTransactionSet(self):
         """Checks that committed_transaction_set returns all committed
         transactions that are not rejected"""
 
         set = self.account.committed_transaction_set
-        self.assertEqual(set.count(), 1)
-        self.assert_(self.transactions["Pen"] not in set)
-        self.assert_(self.transactions["Com"] in set)
-        self.assert_(self.transactions["Rej"] not in set)
+        assert set.count() == 1
+        assert self.transactions["Pen"] not in set
+        assert self.transactions["Com"] in set
+        assert self.transactions["Rej"] not in set
 
     def testRejectedTransactionSet(self):
         """Checks that rejected_transaction_set returns all rejected
         transactions"""
 
         set = self.account.rejected_transaction_set
-        self.assertEqual(set.count(), 1)
-        self.assert_(self.transactions["Pen"] not in set)
-        self.assert_(self.transactions["Com"] not in set)
-        self.assert_(self.transactions["Rej"] in set)
+        assert set.count() == 1
+        assert self.transactions["Pen"] not in set
+        assert self.transactions["Com"] not in set
+        assert self.transactions["Rej"] in set
 
 
 class TransactionTestCase(unittest.TestCase):
@@ -459,7 +458,7 @@ class TransactionTestCase(unittest.TestCase):
         transaction.entry_set.create(account=self.accounts[1], debit=200)
         transaction.entry_set.create(account=self.accounts[0], credit=100)
 
-        with self.assertRaises(InvalidTransaction):
+        with pytest.raises(InvalidTransaction):
             transaction.set_pending(user=self.user)
 
         transaction.delete()
@@ -487,19 +486,19 @@ class TransactionTestCase(unittest.TestCase):
 
         transaction = self.transaction
 
-        self.assertEqual(transaction.is_pending(), True)
-        self.assertEqual(transaction.log_set.count(), 1)
-        self.assertEqual(
-            transaction.log_set.filter(type=Transaction.PENDING_STATE).count(),
-            1,
+        assert transaction.is_pending() is True
+        assert transaction.log_set.count() == 1
+        assert (
+            transaction.log_set.filter(type=Transaction.PENDING_STATE).count()
+            == 1
         )
 
         pending = transaction.log_set.filter(type=Transaction.PENDING_STATE)[
             0
         ].timestamp
 
-        self.assert_(pending > self.before)
-        self.assert_(pending < self.after)
+        assert pending > self.before
+        assert pending < self.after
 
     def testCommittedLogEntry(self):
         """Checks that a committed log entry is created"""
@@ -510,44 +509,42 @@ class TransactionTestCase(unittest.TestCase):
         transaction.set_committed(user=self.user)
         after = datetime.datetime.now()
 
-        self.assertEqual(transaction.is_committed(), True)
-        self.assertEqual(transaction.log_set.count(), 2)
-        self.assertEqual(
-            transaction.log_set.filter(
-                type=Transaction.COMMITTED_STATE
-            ).count(),
-            1,
+        assert transaction.is_committed() is True
+        assert transaction.log_set.count() == 2
+        assert (
+            transaction.log_set.filter(type=Transaction.COMMITTED_STATE).count()
+            == 1
         )
 
         committed = transaction.log_set.filter(
             type=Transaction.COMMITTED_STATE
         )[0].timestamp
 
-        self.assert_(committed > before)
-        self.assert_(committed < after)
+        assert committed > before
+        assert committed < after
 
     def testRejectLogEntry(self):
         """Checks that pending transaction can be rejected"""
 
         transaction = self.transaction
-        self.assertEqual(transaction.is_pending(), True)
+        assert transaction.is_pending() is True
 
         before = datetime.datetime.now()
         transaction.set_rejected(message="Reason for rejecting", user=self.user)
         after = datetime.datetime.now()
 
-        self.assertEqual(transaction.is_rejected(), True)
-        self.assertEqual(transaction.log_set.count(), 2)
-        self.assertEqual(
-            transaction.log_set.filter(type=Transaction.REJECTED_STATE).count(),
-            1,
+        assert transaction.is_rejected() is True
+        assert transaction.log_set.count() == 2
+        assert (
+            transaction.log_set.filter(type=Transaction.REJECTED_STATE).count()
+            == 1
         )
 
         rejected = transaction.log_set.filter(type=Transaction.REJECTED_STATE)[
             0
         ].timestamp
-        self.assert_(rejected > before)
-        self.assert_(rejected < after)
+        assert rejected > before
+        assert rejected < after
 
     def testRejectCommitedTransaction(self):
         """Tests that rejecting committed transaction fails"""
@@ -555,7 +552,7 @@ class TransactionTestCase(unittest.TestCase):
         transaction = self.transaction
         transaction.set_committed(user=self.user)
 
-        with self.assertRaises(InvalidTransaction):
+        with pytest.raises(InvalidTransaction):
             transaction.set_rejected(
                 message="Reason for rejecting", user=self.user
             )
@@ -591,7 +588,7 @@ class LogTestCase(unittest.TestCase):
             )
             if key != Transaction.PENDING_STATE:
                 log1.save()
-                with self.assertRaises(InvalidTransactionLog):
+                with pytest.raises(InvalidTransactionLog):
                     log2.save()
 
     def testLogEntryModify(self):
@@ -601,7 +598,7 @@ class LogTestCase(unittest.TestCase):
             type=Transaction.PENDING_STATE
         )[0]
 
-        with self.assertRaises(InvalidTransactionLog):
+        with pytest.raises(InvalidTransactionLog):
             log_entry.save()
 
         for key, value in Transaction.TRANSACTION_STATE:
@@ -611,7 +608,7 @@ class LogTestCase(unittest.TestCase):
 
             if key != Transaction.PENDING_STATE:
                 log1.save()
-                with self.assertRaises(InvalidTransactionLog):
+                with pytest.raises(InvalidTransactionLog):
                     log1.save()
 
 
@@ -652,14 +649,14 @@ class EntryTestCase(unittest.TestCase):
         """Checks that inputing av negative credit raises an error"""
 
         self.entry.credit = -100
-        with self.assertRaises(InvalidTransactionEntry):
+        with pytest.raises(InvalidTransactionEntry):
             self.entry.save()
 
     def testNegativeDebit(self):
         """Checks that inputing av negative debit  raises an error"""
 
         self.entry.debit = -100
-        with self.assertRaises(InvalidTransactionEntry):
+        with pytest.raises(InvalidTransactionEntry):
             self.entry.save()
 
     def testDebitAndCreditSetToZero(self):
@@ -667,7 +664,7 @@ class EntryTestCase(unittest.TestCase):
 
         self.entry.debit = 0
         self.entry.credit = 0
-        with self.assertRaises(InvalidTransactionEntry):
+        with pytest.raises(InvalidTransactionEntry):
             self.entry.save()
 
 
