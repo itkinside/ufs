@@ -2,7 +2,6 @@
 Usage: ./manage.py sendmail -g GROUP
 """
 
-from __future__ import print_function
 
 import sys
 import logging
@@ -48,7 +47,7 @@ class Command(BaseCommand):
     )
 
     def __init__(self, *args, **kwargs):
-        super(Command, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         logging.basicConfig()
         self.logger = logging.getLogger("itkufs.accounting.sendmail")
@@ -64,7 +63,7 @@ class Command(BaseCommand):
         emails = self._build_emails(accounts)
 
         if not options["yes"] and not options["debug"]:
-            answer = raw_input(u"Send emails y/N ".encode("utf-8"))
+            answer = raw_input(b"Send emails y/N ")
 
             if answer.lower() != "y":
                 print("Canceled sending")
@@ -84,7 +83,7 @@ class Command(BaseCommand):
         try:
             return Group.objects.get(slug=group_slug)
         except Group.DoesNotExist:
-            self.logger.error(u'Group "%s" does not exist', group_slug)
+            self.logger.error('Group "%s" does not exist', group_slug)
             sys.exit(1)
 
     def _get_accounts(self, group):
@@ -97,7 +96,7 @@ class Command(BaseCommand):
         for account in accounts:
             if not account.owner.email:
                 self.logger.warning(
-                    u"Skipping account %s as it has no email set.", account
+                    "Skipping account %s as it has no email set.", account
                 )
             elif account.is_blocked():
                 emails.append(self._send_blocked_mail(account))

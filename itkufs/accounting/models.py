@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import datetime
 
 from django.conf import settings
@@ -64,7 +62,7 @@ class Group(models.Model):
     def save(self, *args, **kwargs):
         if not len(self.slug):
             raise ValueError("Slug cannot be empty.")
-        super(Group, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         # Create default accounts
         if not self.account_set.count():
@@ -206,7 +204,7 @@ WHERE account_id = %s AND t.state = 'Com'
 class AccountManager(models.Manager):
     def get_queryset(self):
         return (
-            super(AccountManager, self)
+            super()
             .get_queryset()
             .extra(
                 select={
@@ -277,7 +275,7 @@ class Account(models.Model):
         verbose_name_plural = _("accounts")
 
     def __unicode__(self):
-        return u"%s: %s" % (self.group, self.name)
+        return f"{self.group}: {self.name}"
 
     def get_absolute_url(self):
         return reverse(
@@ -288,7 +286,7 @@ class Account(models.Model):
     def save(self, *args, **kwargs):
         if not len(self.slug):
             raise ValueError("Slug cannot be empty.")
-        super(Account, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def total_used(self):
         with connection.cursor() as cursor:
@@ -424,7 +422,7 @@ class RoleAccount(models.Model):
         verbose_name_plural = _("role accounts")
 
     def __unicode__(self):
-        return _(u"%(account)s is %(role)s for %(group)s") % {
+        return _("%(account)s is %(role)s for %(group)s") % {
             "account": self.account.name,
             "role": self.get_role_display().lower(),
             "group": self.group,
@@ -439,17 +437,17 @@ class InvalidTransaction(Exception):
         self.value = value
 
     def __unicode__(self):
-        return u"Invalid transaction: %s" % self.value
+        return "Invalid transaction: %s" % self.value
 
 
 class InvalidTransactionEntry(InvalidTransaction):
     def __unicode__(self):
-        return u"Invalid transaction entry: %s" % self.value
+        return "Invalid transaction entry: %s" % self.value
 
 
 class InvalidTransactionLog(InvalidTransaction):
     def __unicode__(self):
-        return u"Invalid transaction log: %s" % self.value
+        return "Invalid transaction log: %s" % self.value
 
 
 class Settlement(models.Model):
@@ -474,7 +472,7 @@ class Settlement(models.Model):
 
     def __unicode__(self):
         if self.comment is not None:
-            return u"%s: %s" % (self.date, self.comment)
+            return f"{self.date}: {self.comment}"
         else:
             return smart_text(self.date)
 
@@ -491,7 +489,7 @@ class Settlement(models.Model):
 class TransactionManager(models.Manager):
     def get_queryset(self):
         return (
-            super(TransactionManager, self)
+            super()
             .get_queryset()
             .extra(
                 select={
@@ -551,17 +549,13 @@ class Transaction(models.Model):
             entries = []
             for entry in self.entry_set.all():
                 if entry.debit:
-                    entries.append(
-                        u"%s debit %.2f" % (entry.account, entry.debit)
-                    )
+                    entries.append(f"{entry.account} debit {entry.debit:.2f}")
                 else:
-                    entries.append(
-                        u"%s credit %.2f" % (entry.account, entry.credit)
-                    )
+                    entries.append(f"{entry.account} credit {entry.credit:.2f}")
 
-            return u", ".join(entries)
+            return ", ".join(entries)
         else:
-            return u"Empty transaction"
+            return "Empty transaction"
 
     def get_absolute_url(self):
         return reverse(
@@ -611,7 +605,7 @@ class Transaction(models.Model):
             self.date = datetime.date.today()
 
         self.last_modified = datetime.datetime.now()
-        super(Transaction, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def set_pending(self, user, message=""):
         if self.id is None:
@@ -757,7 +751,7 @@ class TransactionLog(models.Model):
             raise InvalidTransactionLog(
                 "Only one instance of each log type is allowed."
             )
-        super(TransactionLog, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ("timestamp",)
@@ -771,10 +765,10 @@ class TransactionLog(models.Model):
             "message": self.message,
         }
         if self.timestamp is None:
-            d["timestamp"] = u"(not saved)"
+            d["timestamp"] = "(not saved)"
         else:
             d["timestamp"] = self.timestamp.strftime(settings.DATETIME_FORMAT)
-        return _(u"%(type)s at %(timestamp)s by %(user)s: %(message)s") % d
+        return _("%(type)s at %(timestamp)s by %(user)s: %(message)s") % d
 
     def css_class(self):
         if self.type == Transaction.REJECTED_STATE:
@@ -814,16 +808,16 @@ class TransactionEntry(models.Model):
             and new_balance < self.account.group.block_limit
         ):
 
-            subject = u"Svartelistet i µFS"
+            subject = "Svartelistet i µFS"
             msg = (
-                u"Dette er en automatisk melding om at du har blitt "
-                u"svartelistet i %s sin µFS"
+                "Dette er en automatisk melding om at du har blitt "
+                "svartelistet i %s sin µFS"
             ) % self.account.group.name.decode("utf-8")
             to_address = ["%s@samfundet.no" % self.account.owner]
             send_mail(
                 subject,
                 (msg),
-                u"ufs@samfundet.no",
+                "ufs@samfundet.no",
                 to_address,
                 fail_silently=True,
             )
@@ -846,7 +840,7 @@ class TransactionEntry(models.Model):
         if self.debit == 0 and self.credit == 0:
             raise InvalidTransactionEntry("Create or debit must be positive")
 
-        super(TransactionEntry, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         unique_together = (("transaction", "account"),)
@@ -855,7 +849,7 @@ class TransactionEntry(models.Model):
         ordering = ("credit", "debit")
 
     def __unicode__(self):
-        return _(u"%(account)s: debit %(debit)s, credit %(credit)s") % {
+        return _("%(account)s: debit %(debit)s, credit %(credit)s") % {
             "account": self.account.name,
             "debit": self.debit,
             "credit": self.credit,

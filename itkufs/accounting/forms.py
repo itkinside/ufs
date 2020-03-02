@@ -12,7 +12,7 @@ class SettlementForm(ModelForm):
         exclude = ["group"]
 
     def __init__(self, *args, **kwargs):
-        super(SettlementForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if "instance" not in kwargs:
             del self.fields["closed"]
 
@@ -25,7 +25,7 @@ class TransactionSettlementForm(ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-        super(TransactionSettlementForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if "instance" in kwargs:
             self.fields["settlement"].choices = [("", "")] + [

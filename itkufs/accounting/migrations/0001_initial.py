@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.db import models, migrations
 from django.conf import settings
 
@@ -440,7 +437,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name="transactionentry",
-            unique_together=set([("transaction", "account")]),
+            unique_together={("transaction", "account")},
         ),
         migrations.AddField(
             model_name="account",
@@ -466,6 +463,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name="account",
-            unique_together=set([("slug", "group"), ("owner", "group")]),
+            unique_together={("slug", "group"), ("owner", "group")},
         ),
     ]

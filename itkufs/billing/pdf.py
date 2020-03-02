@@ -51,7 +51,7 @@ def pdf(group, bill):
     font_name = "Times-Roman"
     font_size = 16
 
-    filename = "%s-%s-%s-%s" % (date.today(), group, _("bill"), bill.id)
+    filename = "{}-{}-{}-{}".format(date.today(), group, _("bill"), bill.id)
 
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = "attachment; filename=%s.pdf" % (

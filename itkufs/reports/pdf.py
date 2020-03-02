@@ -79,13 +79,13 @@ def pdf(group, username, list, show_header=True, show_footer=True):
         # Setup rest of header
         p.setFont(font_name, font_size)
         p.drawString(
-            margin, height - margin - font_size, u"%s: %s" % (group, list.name)
+            margin, height - margin - font_size, f"{group}: {list.name}"
         )
         p.setFont(font_name, font_size_small)
         p.drawString(
             margin,
             height - margin - font_size - font_size + 2,
-            u"%s: %s %s %s"
+            "%s: %s %s %s"
             % (_("Printed"), str(date.today()), _("by"), username),
         )
 
@@ -101,9 +101,9 @@ def pdf(group, username, list, show_header=True, show_footer=True):
         if not show_footer:
             return
 
-        p.drawString(margin, margin, u" - ".join(footer))
+        p.drawString(margin, margin, " - ".join(footer))
 
-        blacklisted_note = _(u"Blacklisted accounts are marked with: ")
+        blacklisted_note = _("Blacklisted accounts are marked with: ")
 
         p.drawRightString(width - margin - 10, margin, blacklisted_note)
         p.setFillColor(BLACKLISTED_COLOR)
@@ -112,7 +112,7 @@ def pdf(group, username, list, show_header=True, show_footer=True):
         p.setFont(font_name, font_size)
 
     if not accounts:
-        no_accounts_message = _(u"Sorry, this list is empty.")
+        no_accounts_message = _("Sorry, this list is empty.")
         draw_header()
         p.drawString(
             margin,
@@ -126,8 +126,8 @@ def pdf(group, username, list, show_header=True, show_footer=True):
 
     elif not columns:
         no_columns_message = _(
-            u"Sorry, this list isn't set up correctly, "
-            u"please add some columns."
+            "Sorry, this list isn't set up correctly, "
+            "please add some columns."
         )
         draw_header()
         p.drawString(
@@ -142,7 +142,7 @@ def pdf(group, username, list, show_header=True, show_footer=True):
 
     # Store col widths
     col_width = []
-    header = [_(u"Name")]
+    header = [_("Name")]
 
     if list.account_width:
         col_width.append(list.account_width)
@@ -154,7 +154,7 @@ def pdf(group, username, list, show_header=True, show_footer=True):
         header.append("")
 
     if list.balance_width:
-        header.append(_(u"Balance"))
+        header.append(_("Balance"))
         col_width.append(list.balance_width)
 
     if list.short_name_width > 0 and list.account_width > 0:

@@ -14,7 +14,7 @@ class Bill(models.Model):
     )
 
     def __unicode__(self):
-        return u"%s - %s" % (self.created, self.description[:30])
+        return "{} - {}".format(self.created, self.description[:30])
 
     def is_editable(self):
         return self.transaction_id is None
@@ -42,4 +42,4 @@ class BillingLine(models.Model):
     )
 
     def __unicode__(self):
-        return u"%s - %s" % (self.description, self.amount)
+        return f"{self.description} - {self.amount}"

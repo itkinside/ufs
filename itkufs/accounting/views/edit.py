@@ -195,7 +195,7 @@ def approve_transactions(request, group, page="1", is_admin=False):
                 if change_to == t.COMMITTED_STATE:
                     t.set_committed(user=request.user)
                 elif change_to == t.REJECTED_STATE:
-                    to_be_rejected.append((t))
+                    to_be_rejected.append(t)
 
                 if change_to not in (t.REJECTED_STATE, t.COMMITTED_STATE):
                     transactions.append(

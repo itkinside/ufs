@@ -35,7 +35,7 @@ def public_lists(request):
 def view_list(request, group, list, is_admin=False):
     content = pdf(group, request.user.username, list)
 
-    filename = "%s-%s-%s" % (date.today(), group, list)
+    filename = "{}-{}-{}".format(date.today(), group, list)
 
     response = HttpResponse(content.getvalue(), content_type="application/pdf")
     response["Content-Disposition"] = "attachment; filename=%s.pdf" % (
@@ -85,7 +85,7 @@ def view_public_list(request, group, list, is_admin=False):
 
     content = pdf(group, request.user.username, list)
 
-    filename = "%s-%s-%s" % (date.today(), group, list)
+    filename = "{}-{}-{}".format(date.today(), group, list)
 
     response = HttpResponse(content.getvalue(), content_type="application/pdf")
     response["Content-Disposition"] = "attachment; filename=%s.pdf" % (

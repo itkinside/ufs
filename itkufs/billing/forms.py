@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 from itkufs.accounting.models import Account, Settlement, RoleAccount
 from itkufs.billing.models import Bill, BillingLine
 
-ACCOUNT_ROLE_DICT = dict([(a[0], a) for a in RoleAccount.ACCOUNT_ROLE])
+ACCOUNT_ROLE_DICT = {a[0]: a for a in RoleAccount.ACCOUNT_ROLE}
 
 
 class CreateTransactionForm(forms.Form):
@@ -19,7 +19,7 @@ class CreateTransactionForm(forms.Form):
     pay_to = forms.ChoiceField(choices=PAY_TO_CHOICES)
 
     def __init__(self, bill, *args, **kwargs):
-        super(CreateTransactionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.bill = bill
 

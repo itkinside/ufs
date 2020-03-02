@@ -25,7 +25,7 @@ class AccountForm(ModelForm):
             initial["owner"] = kwargs["instance"].owner.username
             kwargs["initial"] = initial
 
-        super(AccountForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.group = group
 
@@ -95,7 +95,7 @@ class AccountForm(ModelForm):
         original_commit = kwargs.pop("commit", True)
         kwargs["commit"] = False
 
-        account = super(AccountForm, self).save(**kwargs)
+        account = super().save(**kwargs)
         account.owner = self.cleaned_data["owner"]
 
         if not account.slug:
@@ -125,7 +125,7 @@ class GroupForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user", None)
-        super(GroupForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if "instance" not in kwargs or kwargs["instance"].logo == "":
             del self.fields["delete_logo"]
 
@@ -152,13 +152,13 @@ class GroupForm(ModelForm):
     def save(self, *args, **kwargs):
         original_commit = kwargs.pop("commit", True)
         kwargs["commit"] = False
-        group = super(GroupForm, self).save(*args, **kwargs)
+        group = super().save(*args, **kwargs)
 
         if not group.slug:
             group.slug = slugify(group.name)
 
         kwargs["commit"] = original_commit
-        return super(GroupForm, self).save(*args, **kwargs)
+        return super().save(*args, **kwargs)
 
 
 class RoleAccountModelChoiceField(forms.models.ModelChoiceField):
@@ -169,7 +169,7 @@ class RoleAccountModelChoiceField(forms.models.ModelChoiceField):
 class RoleAccountForm(Form):
     def __init__(self, *args, **kwargs):
         group = kwargs.pop("group", None)
-        super(RoleAccountForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if group:
             for type, name in RoleAccount.ACCOUNT_ROLE:

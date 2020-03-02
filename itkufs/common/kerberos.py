@@ -34,6 +34,6 @@ class KerberosBackend:
             except KeyError:
                 return None
             user = User(username=username, password="In Kerberos")
-            user.email = "%s@%s" % (username, settings.MAIL_DOMAIN)
+            user.email = f"{username}@{settings.MAIL_DOMAIN}"
             user.save()
         return user
