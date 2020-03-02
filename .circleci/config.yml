@@ -4,21 +4,34 @@ workflows:
   version: 2
   test:
     jobs:
-      - py27
-      - flake8
       - black
+      - flake8
+      - py37
 
 jobs:
-  py27:
+  black: &tox-template
     docker:
-      - image: circleci/python:2.7-buster
-    # To switch from SQLite ot PostgreSQL for testing, we need the following setup.
-    # In addtion, settings must be updated to use PostgreSQL and read the
-    # config from the environment.
+      - image: circleci/python:3.7-buster
+    steps:
+      - checkout
+      - tox
+
+  flake8: *tox-template
+
+  py37:
+    <<: *tox-template
     #
+    # To switch from SQLite ot PostgreSQL for testing, we need the following setup.
+    #
+    #   docker:
+    #   - image: circleci/python:3.7-buster
     #     environment:
     #       DATABASE_URL: postgres://postgres@localhost:5432/ufs
     #   - image: circleci/postgres:12-alpine-ram
+    #
+    # In addtion, settings must be updated to use PostgreSQL and read the
+    # config from the environment.
+    #
     steps:
       - checkout
       - run:
@@ -28,18 +41,6 @@ jobs:
           args: --junit-xml=test-results/pytest/results.xml
       - store_test_results:
           path: test-results
-
-  flake8: &tox-template
-    docker:
-      - image: circleci/python:2.7-buster
-    steps:
-      - checkout
-      - tox
-
-  black:
-    <<: *tox-template
-    docker:
-      - image: circleci/python:3.8-buster
 
 commands:
   tox:
