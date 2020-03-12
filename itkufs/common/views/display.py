@@ -115,7 +115,5 @@ def _generate_gchart_data(dataset):
         history.append((dataset[i].date, saldo + agg))
         agg += saldo
 
-    items = [
-        "[ new Date(%s), %.2f]" % (date, balance) for date, balance in history
-    ]
+    items = [f"[ new Date({date}), {balance:.2f}]" for date, balance in history]
     return ",\n".join(items)

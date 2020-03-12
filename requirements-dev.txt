@@ -8,6 +8,9 @@
 # Debug toolbar
 django-debug-toolbar
 
+# Code formatting
+black
+
 # Code linting
 flake8
 

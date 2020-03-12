@@ -75,27 +75,27 @@ class Command(BaseCommand):
             return getpwnam(username)[4].split(",")[0].decode("utf-8")
         except (IndexError, KeyError):
             self.logger.warning(
-                u'Failed to extract full name for "%s"', username, exc_info=True
+                'Failed to extract full name for "%s"', username, exc_info=True
             )
             return username
 
     def _get_confirmation(self, username, full_name):
-        question = u"Add %s (%s)? y/N " % (username, full_name)
-        answer = raw_input(question.encode("utf-8"))
+        question = f"Add {username} ({full_name})? y/N "
+        answer = input(question)
         if answer.lower() == "y":
             return True
         else:
-            self.logger.info(u'Skipping "%s"', username)
+            self.logger.info('Skipping "%s"', username)
             return False
 
     def _create_user(self, username):
         user, created = User.objects.get_or_create(
-            username=username, email=u"%s@%s" % (username, settings.MAIL_DOMAIN)
+            username=username, email=f"{username}@{settings.MAIL_DOMAIN}"
         )
         if created:
-            self.logger.info(u'User "%s" created', user)
+            self.logger.info('User "%s" created', user)
         else:
-            self.logger.info(u'User "%s" already exists', user)
+            self.logger.info('User "%s" already exists', user)
         return user
 
     def _create_account(self, group_slug, user, full_name):
@@ -111,12 +111,10 @@ class Command(BaseCommand):
             },
         )
         if created:
-            self.logger.info(
-                u'Account "%s" of user "%s" created', account, user
-            )
+            self.logger.info('Account "%s" of user "%s" created', account, user)
         else:
             self.logger.info(
-                u'Account "%s" of user "%s" already exists', account, user
+                'Account "%s" of user "%s" already exists', account, user
             )
         return account
 
@@ -124,5 +122,5 @@ class Command(BaseCommand):
         try:
             return Group.objects.get(slug=group_slug)
         except Group.DoesNotExist:
-            self.logger.error(u'Group "%s" does not exist', group_slug)
+            self.logger.error('Group "%s" does not exist', group_slug)
             sys.exit(1)

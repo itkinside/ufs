@@ -8,7 +8,7 @@ from itkufs.common.utils import callsign_sorted
 class ListManager(models.Manager):
     def get_queryset(self):
         return (
-            super(ListManager, self)
+            super()
             .get_queryset()
             .extra(
                 select={
@@ -92,8 +92,8 @@ class List(models.Model):
 
         ordering = ("name",)
 
-    def __unicode__(self):
-        return u"%s: %s" % (self.group, self.name)
+    def __str__(self):
+        return f"{self.group}: {self.name}"
 
     def total_width(self):
         return int(
@@ -136,5 +136,5 @@ class ListColumn(models.Model):
         verbose_name = _("list item")
         verbose_name_plural = _("list items")
 
-    def __unicode__(self):
-        return u"%s: %s, %s" % (self.list.group, self.list, self.name)
+    def __str__(self):
+        return f"{self.list.group}: {self.list}, {self.name}"

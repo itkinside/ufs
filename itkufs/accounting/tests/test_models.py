@@ -108,9 +108,9 @@ class GroupTestCase(unittest.TestCase):
             user.delete()
 
     def testUnicode(self):
-        """Checks that __unicode__() returns group name"""
+        """Checks that __str__() returns group name"""
 
-        assert self.group.name == self.group.__unicode__()
+        assert str(self.group) == self.group.name
 
     def testAbsoluteUrl(self):
         """Checks that get_absolute_url() contains group slug"""
@@ -306,9 +306,9 @@ class AccountTestCase(unittest.TestCase):
             user.delete()
 
     def testUnicode(self):
-        """Checks that __unicode__() contains account and group name"""
+        """Checks that __str__() contains account and group name"""
 
-        result = self.account.__unicode__()
+        result = str(self.account)
         assert self.account.group.name in result
         assert self.account.name in result
 

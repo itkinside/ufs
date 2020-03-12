@@ -13,8 +13,8 @@ class Bill(models.Model):
         Transaction, on_delete=models.CASCADE, null=True, blank=True
     )
 
-    def __unicode__(self):
-        return u"%s - %s" % (self.created, self.description[:30])
+    def __str__(self):
+        return "{} - {}".format(self.created, self.description[:30])
 
     def is_editable(self):
         return self.transaction_id is None
@@ -41,5 +41,5 @@ class BillingLine(models.Model):
         _("amount"), max_digits=10, decimal_places=2, default=0
     )
 
-    def __unicode__(self):
-        return u"%s - %s" % (self.description, self.amount)
+    def __str__(self):
+        return f"{self.description} - {self.amount}"

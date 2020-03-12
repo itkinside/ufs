@@ -9,7 +9,7 @@ from itkufs.accounting.models import Account, TransactionEntry
 
 class ListTransactionForm(forms.Form):
     def __init__(self, list_, *args, **kwargs):
-        super(ListTransactionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.column_fields = []
         self.account_fields = []
@@ -96,7 +96,7 @@ class ListForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         group = kwargs.pop("group")
-        super(ListForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields["extra_accounts"].choices = [
             (a.id, a.name) for a in group.account_set.all()
@@ -113,7 +113,7 @@ class ListForm(forms.ModelForm):
             }
 
             raise forms.ValidationError(
-                _(u'"%(field1)s" or "%(field2)s" must be greater than zero')
+                _('"%(field1)s" or "%(field2)s" must be greater than zero')
                 % fields
             )
         return self.cleaned_data
@@ -122,7 +122,7 @@ class ListForm(forms.ModelForm):
         original_commit = kwargs.pop("commit", True)
 
         kwargs["commit"] = False
-        list = super(ListForm, self).save(**kwargs)
+        list = super().save(**kwargs)
 
         if not list.slug:
             list.slug = slugify(list.name)

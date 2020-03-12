@@ -23,13 +23,13 @@ class SettlementList(ListView):
     def dispatch(self, request, *args, **kwargs):
         self.is_admin = kwargs.get("is_admin", False)
         self.group = kwargs["group"]
-        return super(SettlementList, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         return self.group.settlement_set.select_related()
 
     def get_context_data(self, **kwargs):
-        context = super(SettlementList, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["is_admin"] = self.is_admin
         context["group"] = self.group
         return context
@@ -45,13 +45,13 @@ class SettlementDetails(DetailView):
         self.is_admin = kwargs.get("is_admin", False)
         self.group = kwargs["group"]
         self.settlement = kwargs["settlement"]
-        return super(SettlementDetails, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         return self.settlement
 
     def get_context_data(self, **kwargs):
-        context = super(SettlementDetails, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["is_admin"] = self.is_admin
         context["group"] = self.group
         return context
@@ -76,7 +76,7 @@ class TransactionList(ListView):
                 _("Forbidden if not account owner or group admin.")
             )
 
-        return super(TransactionList, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         if self.account:
@@ -87,7 +87,7 @@ class TransactionList(ListView):
             return self.group.transaction_set_with_rejected.all()
 
     def get_context_data(self, **kwargs):
-        context = super(TransactionList, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         try:
             user_account = self.group.account_set.get(owner=self.request.user)
@@ -129,15 +129,13 @@ class TransactionDetails(DetailView):
                 )
             )
 
-        return super(TransactionDetails, self).dispatch(
-            request, *args, **kwargs
-        )
+        return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         return self.transaction
 
     def get_context_data(self, **kwargs):
-        context = super(TransactionDetails, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["is_admin"] = self.is_admin
         context["group"] = self.group
         return context

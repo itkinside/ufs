@@ -37,11 +37,11 @@ This is a rather rough guide on how to install µFS.
 #. Get all the dependencies listed above. Some/most can be installed using
    ``pip`` and the bundled requirement files. In production::
 
-    pip install -r requirements.txt
+    python3 -m pip install -r requirements.txt
 
    Or in development::
 
-    pip install -r requirements-dev.txt
+    python3 -m pip install -r requirements-dev.txt
 
 #. Add a ``itkufs/settings/local.py`` file which sets the ``DATABASE_*`` and
    ``SECRET_KEY`` options. You can find a template at
@@ -49,7 +49,7 @@ This is a rather rough guide on how to install µFS.
 
 #. Compile translation files (.po -> .mo) using::
 
-    python manage.py compilemessages
+    python3 manage.py compilemessages
 
 #. Either:
 
@@ -67,11 +67,11 @@ After the installation is completed, do the following:
 
 #. To create database tables and create a superuser::
 
-    python manage.py migrate
+    python3 manage.py migrate
 
 #. If you use Django's builtin development server, start it::
 
-    python manage.py runserver --settings=itkufs.settings.dev
+    python3 manage.py runserver --settings=itkufs.settings.dev
 
    Using the ``dev`` settings file turns off the requirement for SSL and
    turns on ``django-debug-toolbar``.
@@ -94,11 +94,11 @@ How to run tests
 
 To run the unit tests::
 
-    pytest
+    python3 -m pytest
 
 To run the unit tests while measuring code coverage, run::
 
-    pytest --cov=itkufs --cov-report=term-missing
+    python3 -m pytest --cov=itkufs --cov-report=term-missing
 
 Alternatively, use ``tox`` to run all tests and linters::
 
@@ -110,7 +110,7 @@ How to run code linting
 
 To run code linting, run::
 
-    flake8
+    python3 -m flake8
 
 Ideally, this command should not print a single warning.
 
