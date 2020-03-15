@@ -391,8 +391,8 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
                             "Form was not valid, id: %d" % account.id
                         )
                     else:
-                        credit = form.cleaned_data["credit"]
-                        debit = form.cleaned_data["debit"]
+                        credit = form.cleaned_data["credit"] or 0
+                        debit = form.cleaned_data["debit"] or 0
 
                         if account.id in entries:
                             entry = entries[account.id]
