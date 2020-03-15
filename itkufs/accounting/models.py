@@ -708,7 +708,7 @@ class Transaction(models.Model):
         else:
             states = dict(self.TRANSACTION_STATE)
             del states[self.PENDING_STATE]
-            states = states.items()
+            states = list(states.items())
             states.insert(0, ("", ""))
             return states
 
