@@ -810,9 +810,9 @@ class TransactionEntry(models.Model):
 
             subject = "Svartelistet i µFS"
             msg = (
-                "Dette er en automatisk melding om at du har blitt "
-                "svartelistet i %s sin µFS"
-            ) % self.account.group.name.decode("utf-8")
+                f"Dette er en automatisk melding om at du har blitt "
+                f"svartelistet i {self.account.group.name} sin µFS"
+            )
             to_address = ["%s@samfundet.no" % self.account.owner]
             send_mail(
                 subject,
