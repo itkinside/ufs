@@ -47,4 +47,4 @@ def callsign_key(account):
     else:
         index = 4
 
-    return (index, account.name)
+    return (index, account.short_name if is_callsign else account.name)
