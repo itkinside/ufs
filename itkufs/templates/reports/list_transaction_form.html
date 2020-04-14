@@ -28,7 +28,7 @@
 
 <table class="tablelist">
     <tr>
-        <th>{% trans "Accounts" %}</th>
+        <th colspan="2">{% trans "Accounts" %}</th>
         {% for field in form.columns %}
             <th{% if field.errors %} class="error"{% endif %}>{{ field.label }} <br /> {{ field }}</th>
         {% endfor %}
@@ -36,6 +36,7 @@
     {% for account, fields in form.accounts %}
         <tr class="{% cycle "evenrow" "oddrow" %}">
             <td>{{ account.name }}</td>
+            <td>{{ account.short_name }}</td>
             {% for field in fields %}
                 <td{% if field.errors %} class="error"{% endif %}>{{ field }}</td>
             {% endfor %}
