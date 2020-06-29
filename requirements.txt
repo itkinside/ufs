@@ -8,4 +8,4 @@ django==1.11.29           # via -r requirements.in
 pillow==6.2.2             # via -r requirements.in, reportlab
 psycopg2==2.8.5           # via -r requirements.in
 pytz==2019.3              # via django
-reportlab==3.5.42         # via -r requirements.in
+reportlab==3.5.44         # via -r requirements.in
