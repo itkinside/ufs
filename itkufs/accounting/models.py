@@ -302,7 +302,7 @@ class Account(models.Model):
                 return cursor.fetchone()[0]
 
     def normal_balance(self):
-        """ Returns account balance, but multiplies by -1 if the account is
+        """Returns account balance, but multiplies by -1 if the account is
         of type liability, equity or expense."""
 
         balance = self.balance()

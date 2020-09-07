@@ -37,7 +37,10 @@ def login_user(request):
         pass
 
     # Tell the user he has a user, but not an account
-    return render(request, "common/no_account.html",)
+    return render(
+        request,
+        "common/no_account.html",
+    )
 
 
 @login_required
@@ -60,4 +63,8 @@ def switch_group(request, is_admin=False):
 
 @login_required
 def static_page(request, template, is_admin=False):
-    return render(request, template, {"is_admin": is_admin},)
+    return render(
+        request,
+        template,
+        {"is_admin": is_admin},
+    )

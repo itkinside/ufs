@@ -27,7 +27,11 @@ def public_lists(request):
         .order_by("group__name", "name")
     )
 
-    return render(request, "reports/public_lists.html", {"public_list": lists},)
+    return render(
+        request,
+        "reports/public_lists.html",
+        {"public_list": lists},
+    )
 
 
 @login_required

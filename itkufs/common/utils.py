@@ -6,8 +6,8 @@ CALLSIGN_RE = re.compile(r"^[A-Z]+[0-9][A-Z0-9]*[A-Z]$")
 def verify_account_number(num):
     """Check that account is has correct check digit.
 
-       http://no.wikipedia.org/wiki/Kontonummer
-       http://no.wikipedia.org/wiki/MOD11
+    http://no.wikipedia.org/wiki/Kontonummer
+    http://no.wikipedia.org/wiki/MOD11
     """
     num = re.sub("[ .-]", "", str(num))
     if len(num) != 11:
