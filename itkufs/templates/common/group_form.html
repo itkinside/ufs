@@ -24,6 +24,7 @@
 {% block content %}
 
 <form action="." method="post" enctype="multipart/form-data">
+    {% csrf_token %}
     {{ form.as_p }}
     <p class="clear"><button type="submit">{% trans "Save group" %}</button></p>
 </form>
