@@ -99,7 +99,7 @@ class ListForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields["extra_accounts"].choices = [
-            (a.id, a.name) for a in group.account_set.all()
+            (a.id, a.name) for a in group.account_set.all() if a.active
         ]
 
     def clean(self):
