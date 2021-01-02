@@ -4,19 +4,16 @@ workflows:
   version: 2
   test:
     jobs:
-      - black
       - flake8
       - py37
 
 jobs:
-  black: &tox-template
+  flake8: *tox-template
     docker:
       - image: circleci/python:3.7-buster
     steps:
       - checkout
       - tox
-
-  flake8: *tox-template
 
   py37:
     <<: *tox-template
