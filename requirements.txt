@@ -5,7 +5,7 @@
 #    pip-compile
 #
 django==1.11.29           # via -r requirements.in
-pillow==8.0.0             # via -r requirements.in, reportlab
+pillow==8.1.0             # via -r requirements.in, reportlab
 psycopg2==2.8.6           # via -r requirements.in
 pytz==2019.3              # via django
 reportlab==3.5.58         # via -r requirements.in
