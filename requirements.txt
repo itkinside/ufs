@@ -4,7 +4,7 @@
 #
 #    pip-compile
 #
-django==1.11.29
+django==2.2.17
     # via -r requirements.in
 pillow==8.1.0
     # via
@@ -16,3 +16,5 @@ pytz==2019.3
     # via django
 reportlab==3.5.60
     # via -r requirements.in
+sqlparse==0.4.1
+    # via django
