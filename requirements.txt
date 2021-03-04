@@ -6,7 +6,7 @@
 #
 django==1.11.29
     # via -r requirements.in
-pillow==8.1.0
+pillow==8.1.1
     # via
     #   -r requirements.in
     #   reportlab
