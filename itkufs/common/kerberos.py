@@ -17,7 +17,7 @@ class KerberosBackend:
             return None
 
     def clean_username(self, username):
-        return username.split("@")[0]
+        return username.lower().split("@")[0]
 
     def get_user(self, user_id):
         try:
