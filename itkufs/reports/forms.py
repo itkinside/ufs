@@ -57,7 +57,8 @@ class ListTransactionForm(forms.Form):
     def clean(self):
         for account, fields in self.account_fields:
             for name, field in fields:
-                if self.cleaned_data.get(name, 0) > 0:
+                value = self.cleaned_data.get(name)
+                if value is not None and value > 0:
                     return self.cleaned_data
         raise forms.ValidationError(
             _("Please fill in at least one account entry.")
