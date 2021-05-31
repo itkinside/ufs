@@ -291,7 +291,11 @@ class Account(models.Model):
     def total_used(self):
         with connection.cursor() as cursor:
             cursor.execute(ACCOUNT_TOTAL_USED, [self.id])
-            return cursor.fetchone()[0]
+            total_usage = cursor.fetchone()[0]
+            if total_usage is None:
+                return 0
+            else:
+                return total_usage
 
     def balance(self):
         if hasattr(self, "confirmed_balance_sql"):
