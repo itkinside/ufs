@@ -44,7 +44,7 @@ class List(models.Model):
         (ALPHABETICAL_SORT_ORDER, _("Alphabetical")),
         (CALLSIGN_SORT_ORDER, _("Callsign")),
         (CONSUMPTION_SORT_ORDER, _("Total consumption")),
-        (RANDOM_SORT_ORDER, _("Random"))
+        (RANDOM_SORT_ORDER, _("Random")),
     )
 
     name = models.CharField(_("name"), max_length=200)
@@ -84,7 +84,7 @@ class List(models.Model):
         _("account sort order"),
         default=ALPHABETICAL_SORT_ORDER,
         max_length=2,
-        choices=SORT_ORDER_CHOICES
+        choices=SORT_ORDER_CHOICES,
     )
 
     orientation = models.CharField(
