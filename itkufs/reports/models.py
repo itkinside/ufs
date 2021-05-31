@@ -1,3 +1,5 @@
+import random
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -34,6 +36,17 @@ class List(models.Model):
     PORTRAIT = "P"
     ORIENTATION_CHOICES = (("L", _("Landscape")), ("P", _("Portrait")))
 
+    ALPHABETICAL_SORT_ORDER = "Al"
+    CALLSIGN_SORT_ORDER = "Ca"
+    CONSUMPTION_SORT_ORDER = "Co"
+    RANDOM_SORT_ORDER = "Ra"
+    SORT_ORDER_CHOICES = (
+        (ALPHABETICAL_SORT_ORDER, _("Alphabetical")),
+        (CALLSIGN_SORT_ORDER, _("Callsign")),
+        (CONSUMPTION_SORT_ORDER, _("Total consumption")),
+        (RANDOM_SORT_ORDER, _("Random"))
+    )
+
     name = models.CharField(_("name"), max_length=200)
     slug = models.SlugField(_("slug"))
     account_width = models.PositiveSmallIntegerField(
@@ -66,6 +79,13 @@ class List(models.Model):
     )
 
     extra_accounts = models.ManyToManyField(Account, blank="true")
+
+    sort_order = models.CharField(
+        _("account sort order"),
+        default=ALPHABETICAL_SORT_ORDER,
+        max_length=2,
+        choices=SORT_ORDER_CHOICES
+    )
 
     orientation = models.CharField(
         _("orientation"), max_length=1, choices=ORIENTATION_CHOICES
@@ -117,7 +137,15 @@ class List(models.Model):
             elif a.id in extra_accounts:
                 accounts.append(a)
 
-        return callsign_sorted(accounts)
+        if self.sort_order == self.CALLSIGN_SORT_ORDER:
+            return callsign_sorted(accounts)
+        elif self.sort_order == self.RANDOM_SORT_ORDER:
+            random.shuffle(accounts)
+            return accounts
+        elif self.sort_order == self.CONSUMPTION_SORT_ORDER:
+            return sorted(accounts, key=lambda a: a.total_used(), reverse=True)
+        else:
+            return sorted(accounts, key=lambda a: a.short_name)
 
 
 class ListColumn(models.Model):
