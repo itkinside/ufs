@@ -297,6 +297,17 @@ class Account(models.Model):
             else:
                 return total_usage
 
+    def last_30_days_usage(self):
+        from_date = datetime.datetime.now() - datetime.timedelta(days=30)
+        usage = (
+            TransactionEntry.objects.filter(
+                account_id=self.id, transaction__date__gte=from_date
+            )
+            .aggregate(usage=models.Sum("debit"))
+            .get("usage")
+        )
+        return usage if usage is not None else 0
+
     def balance(self):
         if hasattr(self, "confirmed_balance_sql"):
             return self.confirmed_balance_sql or 0

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 18:48+0200\n"
+"POT-Creation-Date: 2021-06-15 14:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -88,12 +88,12 @@ msgstr ""
 "dette.\n"
 
 #: itkufs/accounting/models.py:13 itkufs/accounting/models.py:238
-#: itkufs/reports/models.py:50 itkufs/reports/models.py:152
+#: itkufs/reports/models.py:52 itkufs/reports/models.py:158
 msgid "name"
 msgstr "navn"
 
 #: itkufs/accounting/models.py:15 itkufs/accounting/models.py:241
-#: itkufs/reports/models.py:51
+#: itkufs/reports/models.py:53
 msgid "slug"
 msgstr "slug"
 
@@ -134,8 +134,8 @@ msgid "Bank account for group."
 msgstr "Bankkonto for gruppen."
 
 #: itkufs/accounting/models.py:49 itkufs/accounting/models.py:244
-#: itkufs/accounting/models.py:414 itkufs/accounting/models.py:459
-#: itkufs/accounting/models.py:527 itkufs/reports/models.py:65
+#: itkufs/accounting/models.py:425 itkufs/accounting/models.py:470
+#: itkufs/accounting/models.py:538 itkufs/reports/models.py:67
 msgid "group"
 msgstr "gruppe"
 
@@ -179,7 +179,7 @@ msgstr "Kortnavn"
 msgid "A shortname used in URLs etc."
 msgstr "Et kortnavn brukt i URL-er o.l."
 
-#: itkufs/accounting/models.py:247 itkufs/accounting/models.py:736
+#: itkufs/accounting/models.py:247 itkufs/accounting/models.py:747
 msgid "type"
 msgstr "type"
 
@@ -215,8 +215,8 @@ msgstr "Gruppekonto"
 msgid "Does this account belong to the group?"
 msgstr "Hører denne kontoen til gruppen?"
 
-#: itkufs/accounting/models.py:274 itkufs/accounting/models.py:418
-#: itkufs/accounting/models.py:794
+#: itkufs/accounting/models.py:274 itkufs/accounting/models.py:429
+#: itkufs/accounting/models.py:805
 msgid "account"
 msgstr "konto"
 
@@ -224,131 +224,131 @@ msgstr "konto"
 msgid "accounts"
 msgstr "kontoer"
 
-#: itkufs/accounting/models.py:408
+#: itkufs/accounting/models.py:419
 msgid "Bank account"
 msgstr "Bankkonto"
 
-#: itkufs/accounting/models.py:409
+#: itkufs/accounting/models.py:420
 msgid "Cash account"
 msgstr "Kontantkonto"
 
-#: itkufs/accounting/models.py:410
+#: itkufs/accounting/models.py:421
 msgid "Sale account"
 msgstr "Salgskonto"
 
-#: itkufs/accounting/models.py:416
+#: itkufs/accounting/models.py:427
 msgid "role"
 msgstr "rolle"
 
-#: itkufs/accounting/models.py:425
+#: itkufs/accounting/models.py:436
 msgid "role account"
 msgstr "rollekonto"
 
-#: itkufs/accounting/models.py:426
+#: itkufs/accounting/models.py:437
 msgid "role accounts"
 msgstr "rollekontoer"
 
-#: itkufs/accounting/models.py:429
+#: itkufs/accounting/models.py:440
 #, python-format
 msgid "%(account)s is %(role)s for %(group)s"
 msgstr "%(account)s er %(role)s for %(group)s"
 
-#: itkufs/accounting/models.py:461 itkufs/accounting/models.py:538
+#: itkufs/accounting/models.py:472 itkufs/accounting/models.py:549
 msgid "date"
 msgstr "dato"
 
-#: itkufs/accounting/models.py:462 itkufs/reports/models.py:94
+#: itkufs/accounting/models.py:473 itkufs/reports/models.py:96
 msgid "comment"
 msgstr "kommentar"
 
-#: itkufs/accounting/models.py:466
+#: itkufs/accounting/models.py:477
 msgid "Mark as closed when done adding transactions to the settlement."
 msgstr "Sett som avsluttet når du er ferdig med å legge til transaksjoner."
 
-#: itkufs/accounting/models.py:472 itkufs/accounting/models.py:533
+#: itkufs/accounting/models.py:483 itkufs/accounting/models.py:544
 msgid "settlement"
 msgstr "oppgjør"
 
-#: itkufs/accounting/models.py:473
+#: itkufs/accounting/models.py:484
 msgid "settlements"
 msgstr "oppgjør"
 
-#: itkufs/accounting/models.py:517 itkufs/billing/models.py:25
+#: itkufs/accounting/models.py:528 itkufs/billing/models.py:25
 msgid "Pending"
 msgstr "Avventer"
 
-#: itkufs/accounting/models.py:518 itkufs/billing/models.py:27
+#: itkufs/accounting/models.py:529 itkufs/billing/models.py:27
 msgid "Committed"
 msgstr "Godkjent"
 
-#: itkufs/accounting/models.py:519
+#: itkufs/accounting/models.py:530
 msgid "Rejected"
 msgstr "Avvist"
 
-#: itkufs/accounting/models.py:539
+#: itkufs/accounting/models.py:550
 msgid "May be used for date of the transaction if not today."
 msgstr "Kan brukes for transaksjonsdato, hvis ikke i dag."
 
-#: itkufs/accounting/models.py:541
+#: itkufs/accounting/models.py:552
 #: itkufs/templates/accounting/transaction_details.html:35
 msgid "Last modified"
 msgstr "Sist endret"
 
-#: itkufs/accounting/models.py:543
+#: itkufs/accounting/models.py:554
 msgid "state"
 msgstr "tilstand"
 
-#: itkufs/accounting/models.py:548 itkufs/accounting/models.py:732
-#: itkufs/accounting/models.py:790
+#: itkufs/accounting/models.py:559 itkufs/accounting/models.py:743
+#: itkufs/accounting/models.py:801
 msgid "transaction"
 msgstr "transaksjon"
 
-#: itkufs/accounting/models.py:549
+#: itkufs/accounting/models.py:560
 msgid "transactions"
 msgstr "transaksjoner"
 
-#: itkufs/accounting/models.py:738
+#: itkufs/accounting/models.py:749
 msgid "timestamp"
 msgstr "tidsstempel"
 
-#: itkufs/accounting/models.py:740
+#: itkufs/accounting/models.py:751
 msgid "user"
 msgstr "bruker"
 
-#: itkufs/accounting/models.py:742
+#: itkufs/accounting/models.py:753
 msgid "message"
 msgstr "melding"
 
-#: itkufs/accounting/models.py:762
+#: itkufs/accounting/models.py:773
 msgid "transaction log entry"
 msgstr "transaksjonslogginnslag"
 
-#: itkufs/accounting/models.py:763
+#: itkufs/accounting/models.py:774
 msgid "transaction log entries"
 msgstr "transaksjonlogginnslag"
 
-#: itkufs/accounting/models.py:775
+#: itkufs/accounting/models.py:786
 #, python-format
 msgid "%(type)s at %(timestamp)s by %(user)s: %(message)s"
 msgstr "%(type)s ved %(timestamp)s av %(user)s: %(message)s"
 
-#: itkufs/accounting/models.py:797
+#: itkufs/accounting/models.py:808
 msgid "debit amount"
 msgstr "debetbeløp"
 
-#: itkufs/accounting/models.py:800
+#: itkufs/accounting/models.py:811
 msgid "credit amount"
 msgstr "kreditbeløp"
 
-#: itkufs/accounting/models.py:851
+#: itkufs/accounting/models.py:862
 msgid "transaction entry"
 msgstr "transaksjonsinnslag"
 
-#: itkufs/accounting/models.py:852
+#: itkufs/accounting/models.py:863
 msgid "transaction entries"
 msgstr "transaksjonsinnslag"
 
-#: itkufs/accounting/models.py:856
+#: itkufs/accounting/models.py:867
 #, python-format
 msgid "%(account)s: debit %(debit)s, credit %(credit)s"
 msgstr "%(account)s: debet %(debit)s, kredit %(credit)s"
@@ -554,96 +554,100 @@ msgstr "Landskap"
 msgid "Portrait"
 msgstr "Portrett"
 
-#: itkufs/reports/models.py:44
+#: itkufs/reports/models.py:45
 msgid "Alphabetical"
 msgstr "Alfabetisk"
 
-#: itkufs/reports/models.py:45
+#: itkufs/reports/models.py:46
 msgid "Callsign"
 msgstr "Kallesignal"
 
-#: itkufs/reports/models.py:46 itkufs/templates/common/account_summary.html:42
+#: itkufs/reports/models.py:47 itkufs/templates/common/account_summary.html:42
 msgid "Total consumption"
 msgstr "Totalt forbruk"
 
-#: itkufs/reports/models.py:47
+#: itkufs/reports/models.py:48
 msgid "Random"
 msgstr "Tilfeldig"
 
-#: itkufs/reports/models.py:53
+#: itkufs/reports/models.py:49
+msgid "Last 30 days usage"
+msgstr "Forbruk siste 30 dager"
+
+#: itkufs/reports/models.py:55
 msgid "account name width"
 msgstr "bredde på kontonavn"
 
-#: itkufs/reports/models.py:54 itkufs/reports/models.py:57
-#: itkufs/reports/models.py:60
+#: itkufs/reports/models.py:56 itkufs/reports/models.py:59
+#: itkufs/reports/models.py:62
 msgid "Relative width of cell, 0 to hide"
 msgstr "Relativ cellebredde, 0 for å skjule"
 
-#: itkufs/reports/models.py:57
+#: itkufs/reports/models.py:59
 msgid "short name width"
 msgstr "kolonnebredde for kallenavn"
 
-#: itkufs/reports/models.py:60
+#: itkufs/reports/models.py:62
 msgid "balance width"
 msgstr "Kolonnebredde for balanse"
 
-#: itkufs/reports/models.py:70
+#: itkufs/reports/models.py:72
 msgid "Public"
 msgstr "Offentlig"
 
-#: itkufs/reports/models.py:72
+#: itkufs/reports/models.py:74
 msgid "Should this list be publicly available"
 msgstr "Skal listen være offentlig tilgjengelig"
 
-#: itkufs/reports/models.py:76
+#: itkufs/reports/models.py:78
 msgid "Add active user accounts"
 msgstr "Legg til alle aktive brukerkontoer"
 
-#: itkufs/reports/models.py:78
+#: itkufs/reports/models.py:80
 msgid "Should all active accounts be added by default"
 msgstr "Legg til aktive kontoer automagisk"
 
-#: itkufs/reports/models.py:84
+#: itkufs/reports/models.py:86
 msgid "account sort order"
 msgstr "kontorekkefølge"
 
-#: itkufs/reports/models.py:91
+#: itkufs/reports/models.py:93
 msgid "orientation"
 msgstr "orientering"
 
-#: itkufs/reports/models.py:96
+#: itkufs/reports/models.py:98
 msgid "Comment shown at bottom on first page"
 msgstr "Kommentar som vises nederst på siden"
 
-#: itkufs/reports/models.py:100
+#: itkufs/reports/models.py:102
 msgid "Use two rows per account"
 msgstr "Vis to krysserader per konto"
 
-#: itkufs/reports/models.py:103
+#: itkufs/reports/models.py:105
 msgid "ignore blocked"
 msgstr "ignorer blokkeringsgrense"
 
-#: itkufs/reports/models.py:105
+#: itkufs/reports/models.py:107
 msgid "Don't exclude blocked accounts"
 msgstr "Ta med svartelistede kontoer"
 
-#: itkufs/reports/models.py:110 itkufs/reports/models.py:157
+#: itkufs/reports/models.py:112 itkufs/reports/models.py:163
 msgid "list"
 msgstr "liste"
 
-#: itkufs/reports/models.py:111
+#: itkufs/reports/models.py:113
 msgid "lists"
 msgstr "lister"
 
-#: itkufs/reports/models.py:153
+#: itkufs/reports/models.py:159
 msgid "width"
 msgstr "bredde"
 
-#: itkufs/reports/models.py:164
+#: itkufs/reports/models.py:170
 msgid "list item"
 msgstr "listeelement"
 
-#: itkufs/reports/models.py:165
+#: itkufs/reports/models.py:171
 msgid "list items"
 msgstr "listeelementer"
 

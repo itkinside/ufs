@@ -40,11 +40,13 @@ class List(models.Model):
     CALLSIGN_SORT_ORDER = "Ca"
     CONSUMPTION_SORT_ORDER = "Co"
     RANDOM_SORT_ORDER = "Ra"
+    LAST_30_DAYS_USAGE_SORT_ORDER = "Lt"
     SORT_ORDER_CHOICES = (
         (ALPHABETICAL_SORT_ORDER, _("Alphabetical")),
         (CALLSIGN_SORT_ORDER, _("Callsign")),
         (CONSUMPTION_SORT_ORDER, _("Total consumption")),
         (RANDOM_SORT_ORDER, _("Random")),
+        (LAST_30_DAYS_USAGE_SORT_ORDER, _("Last 30 days usage")),
     )
 
     name = models.CharField(_("name"), max_length=200)
@@ -144,6 +146,10 @@ class List(models.Model):
             return accounts
         elif self.sort_order == self.CONSUMPTION_SORT_ORDER:
             return sorted(accounts, key=lambda a: a.total_used(), reverse=True)
+        elif self.sort_order == self.LAST_30_DAYS_USAGE_SORT_ORDER:
+            return sorted(
+                accounts, key=lambda a: a.last_30_days_usage(), reverse=True
+            )
         else:
             return sorted(accounts, key=lambda a: a.short_name)
 
