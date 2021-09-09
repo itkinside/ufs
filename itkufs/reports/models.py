@@ -151,7 +151,7 @@ class List(models.Model):
                 accounts, key=lambda a: a.last_30_days_usage(), reverse=True
             )
         else:
-            return sorted(accounts, key=lambda a: a.short_name)
+            return sorted(accounts, key=lambda a: a.short_name.lower())
 
 
 class ListColumn(models.Model):
