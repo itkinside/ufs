@@ -826,7 +826,8 @@ class TransactionEntry(models.Model):
             subject = "Svartelistet i µFS"
             msg = (
                 f"Dette er en automatisk melding om at du har blitt "
-                f"svartelistet i {self.account.group.name} sin µFS"
+                f"svartelistet i {self.account.group.name} sin µFS. "
+                f"Din saldo er nå {new_balance}."
             )
             to_address = ["%s@samfundet.no" % self.account.owner]
             send_mail(
