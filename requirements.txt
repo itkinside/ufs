@@ -14,5 +14,5 @@ psycopg2==2.9.3
     # via -r requirements.in
 pytz==2019.3
     # via django
-reportlab==3.6.9
+reportlab==3.6.10
     # via -r requirements.in
