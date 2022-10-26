@@ -10,7 +10,7 @@ pillow==9.1.1
     # via
     #   -r requirements.in
     #   reportlab
-psycopg2==2.9.3
+psycopg2==2.9.5
     # via -r requirements.in
 pytz==2019.3
     # via django
