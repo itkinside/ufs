@@ -10,8 +10,13 @@ from itkufs.common.utils import verify_account_number
 from itkufs.accounting.models import Group, Account, RoleAccount
 
 
+class UsernameField(forms.CharField):
+    def to_python(self, value):
+        return value.lower()
+
+
 class AccountForm(ModelForm):
-    owner = forms.CharField(required=False)
+    owner = UsernameField(required=False)
 
     class Meta:
         model = Account
