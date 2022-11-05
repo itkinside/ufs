@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.timezone import now
 
 
 class Group(models.Model):
@@ -547,6 +548,7 @@ class Transaction(models.Model):
     )
     date = models.DateField(
         _("date"),
+        default=now,
         help_text=_("May be used for date of the transaction if not today."),
     )
     last_modified = models.DateTimeField(_("Last modified"), auto_now_add=True)
