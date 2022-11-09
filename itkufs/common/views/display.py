@@ -1,11 +1,79 @@
 from operator import itemgetter
+import csv
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render
+from django.http import HttpResponse
 
-from itkufs.common.decorators import limit_to_group, limit_to_owner
-from itkufs.accounting.models import Account, Group
+from itkufs.common.decorators import (
+    limit_to_group,
+    limit_to_owner,
+    limit_to_admin,
+)
+
+from itkufs.common.forms import ExportTransactionsForm
+from itkufs.accounting.models import (
+    Account,
+    Group,
+)
+
+
+@login_required
+@limit_to_admin
+def export_transactions(request, group: Group, is_admin=False):
+
+    form = ExportTransactionsForm(data=request.GET)
+    filename = f"{group.slug}-transactions.csv"
+
+    if form.is_valid():
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = f'attachment; filename="{filename}"'
+
+        # Get dates from form
+        from_date = form.cleaned_data["from_date"]
+        to_date = form.cleaned_data["to_date"]
+
+        # Generate CSV with headers
+        writer = csv.writer(response)
+        writer.writerow(
+            [
+                "Transaction ID",
+                "Date",
+                "Debit",
+                "Credit",
+                "Account name",
+                "Short name",
+                "Owner",
+            ]
+        )
+
+        # Find all entries for this group in the given time period
+        entries = group.get_all_entries(from_date, to_date)
+        for e in entries:
+            writer.writerow(
+                [
+                    e.transaction.id,
+                    e.transaction.date,
+                    e.debit,
+                    e.credit,
+                    e.account.name,
+                    e.account.short_name,
+                    e.account.slug,
+                ]
+            )
+        return response
+    else:
+        return render(
+            request,
+            "reports/transaction_export.html",
+            {
+                "is_admin": is_admin,
+                "all": "all" in request.GET,
+                "group": Group.objects.select_related().get(id=group.id),
+                "form": form,
+            },
+        )
 
 
 @login_required

@@ -63,6 +63,9 @@
 <ul>
     <li><a href="{% url "balance" group.slug %}">{% trans "Balance statement" %}</a></li>
     <li><a href="{% url "income" group.slug %}">{% trans "Income statement" %}</a></li>
+    {% if is_admin %}
+    <li><a href="{% url "export-transactions" group.slug %}">{% trans "Export transactions" %}</a></li>
+    {% endif %}
 </ul>
 </div>
 
