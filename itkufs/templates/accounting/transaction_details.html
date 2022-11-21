@@ -32,6 +32,10 @@
         <td class="{{ transaction.css_class }} state">{{ transaction.get_state_display }}</th>
     </tr>
     <tr>
+        <th>{% trans "Date" %}</th>
+        <td>{{ transaction.date }}</th>
+    </tr>
+    <tr>
         <th>{% trans "Last modified" %}</th>
         <td>{{ transaction.last_modified|date }} {{ transaction.last_modified|time }}</th>
     </tr>
