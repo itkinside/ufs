@@ -852,27 +852,27 @@ msgstr "Avvis"
 #: itkufs/templates/accounting/settlement_details.html:7
 #: itkufs/templates/accounting/transaction_details.html:20
 msgid "Settlement"
-msgstr "oppgjør"
+msgstr "Oppgjør"
 
 #: itkufs/templates/accounting/settlement_details.html:15
 msgid "Settlement ID"
-msgstr "oppgjørs-id"
+msgstr "Oppgjørs-ID"
 
 #: itkufs/templates/accounting/settlement_details.html:19
 #: itkufs/templates/accounting/settlement_list.html:41
 #: itkufs/templates/billing/bill_list.html:13
 msgid "Date"
-msgstr "dato"
+msgstr "Dato"
 
 #: itkufs/templates/accounting/settlement_details.html:23
 #: itkufs/templates/accounting/settlement_list.html:42
 msgid "Comment"
-msgstr "kommentar"
+msgstr "Kommentar"
 
 #: itkufs/templates/accounting/settlement_details.html:27
 #: itkufs/templates/accounting/settlement_list.html:43
 msgid "Closed"
-msgstr "lukket"
+msgstr "Lukket"
 
 #: itkufs/templates/accounting/settlement_details.html:28
 #: itkufs/templates/accounting/settlement_list.html:50
