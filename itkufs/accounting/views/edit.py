@@ -346,6 +346,7 @@ def new_edit_transaction(request, group, transaction=None, is_admin=False):
     elif transaction.id:
         data = {}
         # Load "fake" post data if we are editing a transaction
+        data["settlement-date"] = transaction.date
         for e in transaction.entry_set.all():
             if e.debit > 0:
                 data["%d-debit" % e.account.id] = e.debit
