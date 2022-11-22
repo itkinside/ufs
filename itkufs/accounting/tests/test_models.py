@@ -557,6 +557,12 @@ class TransactionTestCase(unittest.TestCase):
                 message="Reason for rejecting", user=self.user
             )
 
+    def testDefaultDate(self):
+        """Checks that the default date is the current date"""
+
+        transaction = self.transaction
+        assert transaction.date == datetime.date.today()
+
 
 class LogTestCase(unittest.TestCase):
     def setUp(self):

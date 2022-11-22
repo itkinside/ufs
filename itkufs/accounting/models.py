@@ -547,6 +547,7 @@ class Transaction(models.Model):
     )
     date = models.DateField(
         _("date"),
+        default=datetime.date.today,
         help_text=_("May be used for date of the transaction if not today."),
     )
     last_modified = models.DateTimeField(_("Last modified"), auto_now_add=True)

@@ -4,6 +4,7 @@
 <table class="tablelist">
     <tr>
         <th>{% trans "ID" %}</th>
+        <th>{% trans "Date" %}</th>
         <th>{% trans "Account" %}</th>
         <th>{% trans "Debit" %}</th>
         <th>{% trans "Credit" %}</th>
@@ -16,6 +17,9 @@
                 {% if forloop.first %}
                     <td rowspan="{{ entry_list|length }}">
                         <a href="{{ t.get_absolute_url }}">{{ t.id }}</a>
+                    </td>
+                    <td rowspan="{{ entry_list|length }}">
+                        {{ t.date }}
                     </td>
                 {% else %}
                     <tr>

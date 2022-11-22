@@ -37,7 +37,7 @@ class TransactionSettlementForm(ModelForm):
 
     class Meta:
         model = Transaction
-        fields = ("settlement",)
+        fields = ("settlement", "date")
 
 
 class ChangeTransactionForm(forms.Form):
