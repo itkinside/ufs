@@ -194,7 +194,7 @@ class RoleAccountForm(Form):
 
 class ExportTransactionsForm(forms.Form):
     from_date = forms.DateField(
-        label=_("To date"),
+        label=_("From date"),
         required=True,
     )
     to_date = forms.DateField(
