@@ -190,3 +190,14 @@ class RoleAccountForm(Form):
                 )
         else:
             raise Exception("Please supply a group kwarg for RoleAccountForm")
+
+
+class ExportTransactionsForm(forms.Form):
+    from_date = forms.DateField(
+        label=_("From date"),
+        required=True,
+    )
+    to_date = forms.DateField(
+        label=_("To date"),
+        required=True,
+    )

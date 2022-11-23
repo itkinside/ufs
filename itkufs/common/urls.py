@@ -5,6 +5,7 @@ from itkufs.common.views.display import (
     account_summary,
     group_summary,
     group_balance_graph,
+    export_transactions,
 )
 from itkufs.common.views.edit import (
     activate_account,
@@ -20,6 +21,11 @@ urlpatterns = [
     url(r"^switch-group/$", switch_group, name="switch-group"),
     # --- Groups
     url(r"^(?P<group>[0-9a-z_-]+)/$", group_summary, name="group-summary"),
+    url(
+        r"^(?P<group>[0-9a-z_-]+)/export$",
+        export_transactions,
+        name="export-transactions",
+    ),
     url(r"^(?P<group>[0-9a-z_-]+)/edit/$", edit_group, name="edit-group"),
     url(
         r"^(?P<group>[0-9a-z_-]+)/assign-role-accounts/$",

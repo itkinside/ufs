@@ -157,6 +157,22 @@ class Group(models.Model):
 
     balance_history_set = property(get_balance_history_set, None, None)
 
+    def get_all_entries(self, from_date: str, to_date: str):
+        """
+        Returns entries for committed transactions for this group, in the
+        range [from_date, to_date] (inclusive).
+        """
+        return (
+            TransactionEntry.objects.filter(transaction__group__id=self.id)
+            .select_related()
+            .filter(
+                transaction__date__gte=from_date,
+                transaction__date__lte=to_date,
+                transaction__state=Transaction.COMMITTED_STATE,
+            )
+            .order_by("transaction__date")
+        )
+
 
 CONFIRMED_BALANCE_SQL = """
 SELECT sum(debit) - sum(credit)
