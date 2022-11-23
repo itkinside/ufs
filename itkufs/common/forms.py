@@ -196,8 +196,10 @@ class ExportTransactionsForm(forms.Form):
     from_date = forms.DateField(
         label=_("From date"),
         required=True,
+        error_messages={"required": _("Please enter a date")},
     )
     to_date = forms.DateField(
         label=_("To date"),
         required=True,
+        error_messages={"required": _("Please enter a date")},
     )
