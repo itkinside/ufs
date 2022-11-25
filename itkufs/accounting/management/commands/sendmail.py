@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _, activate
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMessage, SMTPConnection
 
-from itkufs.accounting.models import Group
+from itkufs.accounting.models import Group, Account
 
 
 class Command(BaseCommand):
@@ -76,21 +76,21 @@ class Command(BaseCommand):
                 connection = SMTPConnection()
                 connection.send_messages(emails)
 
-    def _set_language(self, lang):
+    def _set_language(self, lang: str):
         activate(lang)
 
-    def _get_group(self, group_slug):
+    def _get_group(self, group_slug: str):
         try:
             return Group.objects.get(slug=group_slug)
         except Group.DoesNotExist:
             self.logger.error('Group "%s" does not exist', group_slug)
             sys.exit(1)
 
-    def _get_accounts(self, group):
+    def _get_accounts(self, group: Group):
         accounts = group.account_set.filter(owner__isnull=False)
         return accounts.select_related("group", "owner")
 
-    def _build_emails(self, accounts):
+    def _build_emails(self, accounts: list[Account]):
         emails = []
 
         for account in accounts:
@@ -105,7 +105,7 @@ class Command(BaseCommand):
 
         return emails
 
-    def _send_warning_mail(self, account):
+    def _send_warning_mail(self, account: Account):
         to_email = account.owner.email
         subject = WARNING_SUBJECT % {"group": account.group}
         message = WARNING_MESSAGE % {
@@ -124,7 +124,7 @@ class Command(BaseCommand):
             subject, message, FROM_EMAIL, [to_email], headers=headers
         )
 
-    def _send_blocked_mail(self, account):
+    def _send_blocked_mail(self, account: Account):
         to_email = account.owner.email
         subject = BLOCK_SUBJECT % {"group": account.group}
         message = BLOCK_MESSAGE % {
@@ -143,7 +143,7 @@ class Command(BaseCommand):
             subject, message, FROM_EMAIL, [to_email], headers=headers
         )
 
-    def _print_debug(self, emails):
+    def _print_debug(self, emails: list[str]):
         for email in emails:
             print("From: %s" % email.from_email)
             print("To: %s" % ";".join(email.to))

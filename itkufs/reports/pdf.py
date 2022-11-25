@@ -10,6 +10,9 @@ from reportlab.lib.pagesizes import A4
 
 from django.utils.translation import ugettext as _
 
+from itkufs.accounting.models import Group
+from itkufs.reports.models import List
+
 
 BORDER_COLOR = HexColor("#555753")
 BLACKLISTED_COLOR = HexColor("#000000")
@@ -20,7 +23,7 @@ FAINT_COLOR = HexColor("#BABDB6")
 ALTERNATE_COLORS = [HexColor("#FFFFFF"), HexColor("#F5F5F5")]
 
 
-def pdf(group, username, list, show_header=True, show_footer=True):
+def pdf(group: Group, username: str, list: List, show_header=True, show_footer=True):
     """PDF version of list"""
 
     content = BytesIO()

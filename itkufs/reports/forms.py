@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 
 from itkufs.reports.models import List, ListColumn
-from itkufs.accounting.models import Account, TransactionEntry
+from itkufs.accounting.models import Account, TransactionEntry, Group
 
 
 class ListTransactionForm(forms.Form):
@@ -119,7 +119,7 @@ class ListForm(forms.ModelForm):
             )
         return self.cleaned_data
 
-    def save(self, group=None, **kwargs):
+    def save(self, group: Group = None, **kwargs):
         original_commit = kwargs.pop("commit", True)
 
         kwargs["commit"] = False

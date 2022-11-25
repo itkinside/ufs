@@ -19,6 +19,8 @@ from django.utils.html import escape
 from django.template.defaultfilters import slugify
 
 from itkufs.reports.pdf import ALTERNATE_COLORS, BORDER_COLOR
+from itkufs.accounting.models import Group
+from itkufs.billing.models import Bill
 
 styles = getSampleStyleSheet()
 styles["Normal"].spaceAfter = 5
@@ -39,7 +41,7 @@ table_style = TableStyle(
 )
 
 
-def pdf(group, bill):
+def pdf(group: Group, bill: Bill):
     """PDF version of bill"""
 
     width, height = A4

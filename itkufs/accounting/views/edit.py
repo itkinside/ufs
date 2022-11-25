@@ -1,7 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction as db_transaction
-from django.http import HttpResponseForbidden, HttpResponseRedirect, Http404
+from django.http import (
+    HttpRequest,
+    HttpResponseForbidden,
+    HttpResponseRedirect,
+    Http404,
+)
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
@@ -10,8 +15,10 @@ from itkufs.common.utils import callsign_sorted as ufs_sorted
 from itkufs.common.decorators import limit_to_owner, limit_to_admin
 from itkufs.accounting.models import (
     Account,
+    Group,
     RoleAccount,
     InvalidTransaction,
+    Settlement,
     Transaction,
     TransactionEntry,
 )
@@ -28,7 +35,12 @@ from itkufs.accounting.forms import (
 
 @login_required
 @limit_to_admin
-def new_edit_settlement(request, group, settlement=None, is_admin=False):
+def new_edit_settlement(
+    request: HttpRequest,
+    group: Group,
+    settlement: Settlement = None,
+    is_admin=False,
+):
     """Create new and edit existing settlements"""
 
     if settlement is not None and not settlement.is_editable():
@@ -73,10 +85,10 @@ def new_edit_settlement(request, group, settlement=None, is_admin=False):
 @limit_to_owner
 @db_transaction.atomic
 def transfer(
-    request,
-    group,
-    account=None,
-    transfer_type=None,
+    request: HttpRequest,
+    group: Group,
+    account: Transaction = None,
+    transfer_type: str = None,
     is_admin=False,
     is_owner=False,
 ):
@@ -172,7 +184,9 @@ def transfer(
 
 @login_required
 @limit_to_admin
-def approve_transactions(request, group, page="1", is_admin=False):
+def approve_transactions(
+    request: HttpRequest, group: Group, page="1", is_admin=False
+):
     """Approve transactions from members and other groups"""
 
     transactions = []
@@ -248,7 +262,12 @@ def approve_transactions(request, group, page="1", is_admin=False):
 
 @login_required
 @limit_to_owner
-def reject_transactions(request, group, transaction=None, is_admin=False):
+def reject_transactions(
+    request: HttpRequest,
+    group: Group,
+    transaction: Transaction = None,
+    is_admin=False,
+):
     """Reject transactions from members and other groups"""
 
     if request.method == "POST":
@@ -325,7 +344,12 @@ def reject_transactions(request, group, transaction=None, is_admin=False):
 @login_required
 @limit_to_admin
 @db_transaction.atomic
-def new_edit_transaction(request, group, transaction=None, is_admin=False):
+def new_edit_transaction(
+    request: HttpRequest,
+    group: Group,
+    transaction: Transaction = None,
+    is_admin=False,
+):
     """Admin view for creating transactions"""
 
     savepoint_id = db_transaction.savepoint()

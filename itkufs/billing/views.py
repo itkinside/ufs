@@ -1,12 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpRequest
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from itkufs.common.decorators import limit_to_admin
-from itkufs.accounting.models import Account, Transaction
+from itkufs.accounting.models import Account, Transaction, Group
 from itkufs.billing.models import Bill
 from itkufs.billing.pdf import pdf
 from itkufs.billing.forms import (
@@ -19,7 +19,9 @@ from itkufs.billing.forms import (
 
 @login_required
 @limit_to_admin
-def bill_new_edit(request, group, bill=None, is_admin=False):
+def bill_new_edit(
+    request: HttpRequest, group: Group, bill: Bill = None, is_admin=False
+):
     if bill is None:
         bill = Bill()
         LineFormSet = NewBillingLineFormSet
@@ -71,7 +73,9 @@ def bill_new_edit(request, group, bill=None, is_admin=False):
 
 @login_required
 @limit_to_admin
-def bill_create_transaction(request, group, bill, is_admin=False):
+def bill_create_transaction(
+    request: HttpRequest, group: Group, bill: Bill, is_admin=False
+):
     if not bill.is_editable():
         messages.info(
             request, _("This bill is already linked to a transaction.")
@@ -129,7 +133,7 @@ def bill_create_transaction(request, group, bill, is_admin=False):
 
 @login_required
 @limit_to_admin
-def bill_list(request, group, is_admin=False):
+def bill_list(request: HttpRequest, group: Group, is_admin=False):
     return render(
         request,
         "billing/bill_list.html",
@@ -139,7 +143,9 @@ def bill_list(request, group, is_admin=False):
 
 @login_required
 @limit_to_admin
-def bill_details(request, group, bill, is_admin=False):
+def bill_details(
+    request: HttpRequest, group: Group, bill: Bill, is_admin=False
+):
     return render(
         request,
         "billing/bill_details.html",
@@ -149,7 +155,7 @@ def bill_details(request, group, bill, is_admin=False):
 
 @login_required
 @limit_to_admin
-def bill_delete(request, group, bill, is_admin=False):
+def bill_delete(request: HttpRequest, group: Group, bill: Bill, is_admin=False):
     if request.method == "POST":
         messages.info(request, _("Bill #%d deleted.") % bill.id)
         bill.delete()
@@ -165,5 +171,5 @@ def bill_delete(request, group, bill, is_admin=False):
 
 @login_required
 @limit_to_admin
-def bill_pdf(request, group, bill, is_admin=False):
+def bill_pdf(request: HttpRequest, group: Group, bill: Bill, is_admin=False):
     return pdf(group, bill)

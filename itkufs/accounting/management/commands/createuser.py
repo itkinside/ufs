@@ -70,7 +70,7 @@ class Command(BaseCommand):
             user = self._create_user(options["username"])
             self._create_account(options["group_slug"], user, full_name)
 
-    def _get_full_name(self, username):
+    def _get_full_name(self, username: str):
         try:
             return getpwnam(username)[4].split(",")[0]
         except (IndexError, KeyError):
@@ -79,7 +79,7 @@ class Command(BaseCommand):
             )
             return username
 
-    def _get_confirmation(self, username, full_name):
+    def _get_confirmation(self, username: str, full_name: str):
         question = f"Add {username} ({full_name})? y/N "
         answer = input(question)
         if answer.lower() == "y":
@@ -88,7 +88,7 @@ class Command(BaseCommand):
             self.logger.info('Skipping "%s"', username)
             return False
 
-    def _create_user(self, username):
+    def _create_user(self, username: str):
         user, created = User.objects.get_or_create(
             username=username, email=f"{username}@{settings.MAIL_DOMAIN}"
         )
@@ -98,7 +98,7 @@ class Command(BaseCommand):
             self.logger.info('User "%s" already exists', user)
         return user
 
-    def _create_account(self, group_slug, user, full_name):
+    def _create_account(self, group_slug: str, user: User, full_name: str):
         group = self._get_group(group_slug)
         account, created = Account.objects.get_or_create(
             group=group,
@@ -118,7 +118,7 @@ class Command(BaseCommand):
             )
         return account
 
-    def _get_group(self, group_slug):
+    def _get_group(self, group_slug: str):
         try:
             return Group.objects.get(slug=group_slug)
         except Group.DoesNotExist:
