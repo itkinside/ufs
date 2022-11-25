@@ -23,7 +23,9 @@ FAINT_COLOR = HexColor("#BABDB6")
 ALTERNATE_COLORS = [HexColor("#FFFFFF"), HexColor("#F5F5F5")]
 
 
-def pdf(group: Group, username: str, list: List, show_header=True, show_footer=True):
+def pdf(
+    group: Group, username: str, list: List, show_header=True, show_footer=True
+):
     """PDF version of list"""
 
     content = BytesIO()
