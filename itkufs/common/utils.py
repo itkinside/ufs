@@ -1,5 +1,8 @@
 import re
 
+# This is needed for type hints in Python versions older than 3.9
+from typing import List as ListType
+
 from itkufs.accounting.models import Account
 
 CALLSIGN_RE = re.compile(r"^[A-Z]+[0-9][A-Z0-9]*[A-Z]$")
@@ -23,7 +26,7 @@ def verify_account_number(num):
     )
 
 
-def callsign_sorted(accounts: list[Account]):
+def callsign_sorted(accounts: ListType[Account]):
     """
     ARK friendly sort method that should sort in the following order:
 
