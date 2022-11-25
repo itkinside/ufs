@@ -639,7 +639,7 @@ class Transaction(models.Model):
         self.last_modified = datetime.datetime.now()
         super().save(*args, **kwargs)
 
-    def set_pending(self, user, message=""):
+    def set_pending(self, user: User, message=""):
         if self.id is None:
             self.save()
 
@@ -655,7 +655,7 @@ class Transaction(models.Model):
         else:
             raise InvalidTransaction("Could not set transaction as pending")
 
-    def set_committed(self, user, message=""):
+    def set_committed(self, user: User, message=""):
         if self.is_pending() and not self.is_committed():
             log = TransactionLog(type=self.COMMITTED_STATE, transaction=self)
             log.user = user
@@ -674,7 +674,7 @@ class Transaction(models.Model):
         else:
             raise InvalidTransaction("Could not set transaction as committed")
 
-    def set_rejected(self, user, message=""):
+    def set_rejected(self, user: User, message=""):
         if self.is_pending() and not self.is_committed():
             log = TransactionLog(type=self.REJECTED_STATE, transaction=self)
             log.user = user

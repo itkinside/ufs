@@ -4,7 +4,7 @@ import csv
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 
 from itkufs.common.decorators import (
     limit_to_group,
@@ -21,7 +21,7 @@ from itkufs.accounting.models import (
 
 @login_required
 @limit_to_admin
-def export_transactions(request, group: Group, is_admin=False):
+def export_transactions(request: HttpRequest, group: Group, is_admin=False):
 
     form = ExportTransactionsForm(data=request.GET)
     filename = f"{group.slug}-transactions.csv"
@@ -78,7 +78,7 @@ def export_transactions(request, group: Group, is_admin=False):
 
 @login_required
 @limit_to_group
-def group_summary(request, group, is_admin=False):
+def group_summary(request: HttpRequest, group: Group, is_admin=False):
     """Show group summary"""
 
     return render(
@@ -94,7 +94,13 @@ def group_summary(request, group, is_admin=False):
 
 @login_required
 @limit_to_owner
-def account_summary(request, group, account, is_admin=False, is_owner=False):
+def account_summary(
+    request: HttpRequest,
+    group: Group,
+    account: Account,
+    is_admin=False,
+    is_owner=False,
+):
     """Show account summary"""
 
     if is_owner:
@@ -134,7 +140,7 @@ def account_summary(request, group, account, is_admin=False, is_owner=False):
 
 @login_required
 @limit_to_group
-def group_balance_graph(request, group, is_admin=False):
+def group_balance_graph(request: HttpRequest, group: Group, is_admin=False):
     accounts = (
         Account.objects.all()
         .filter(group_id=group.id, active=True, group_account=False)

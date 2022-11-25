@@ -2,19 +2,19 @@ import os
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpRequest
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from itkufs.common.decorators import limit_to_admin
 from itkufs.common.forms import GroupForm, AccountForm, RoleAccountForm
-from itkufs.accounting.models import RoleAccount
+from itkufs.accounting.models import RoleAccount, Group, Account
 
 
 @login_required
 @limit_to_admin
-def edit_group(request, group, is_admin=False):
+def edit_group(request: HttpRequest, group: Group, is_admin=False):
     """Edit group properties"""
 
     if request.method == "POST":
@@ -58,7 +58,11 @@ def edit_group(request, group, is_admin=False):
 
 @login_required
 def activate_account(
-    request, group, account=None, is_admin=False, is_owner=False
+    request: HttpRequest,
+    group: Group,
+    account: Account = None,
+    is_admin=False,
+    is_owner=False,
 ):
     """Create account or edit account properties"""
 
@@ -77,7 +81,11 @@ def activate_account(
 @login_required
 @limit_to_admin
 def new_edit_account(
-    request, group, account=None, is_admin=False, is_owner=False
+    request: HttpRequest,
+    group: Group,
+    account: Account = None,
+    is_admin=False,
+    is_owner=False,
 ):
     """Create account or edit account properties"""
 
@@ -119,7 +127,7 @@ def new_edit_account(
 
 @login_required
 @limit_to_admin
-def assign_role_accounts(request, group, is_admin=False):
+def assign_role_accounts(request: HttpRequest, group: Group, is_admin=False):
     """Assign role accounts to group"""
 
     if request.method == "POST":

@@ -1,7 +1,8 @@
 from django.conf import settings
+from django.http import HttpRequest
 
 
-def debug(request):
+def debug(request: HttpRequest):
     """
     Returns context variables helpful for debugging
 

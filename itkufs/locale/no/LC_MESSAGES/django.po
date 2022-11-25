@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-24 00:30+0100\n"
+"POT-Creation-Date: 2022-11-25 18:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -27,7 +27,7 @@ msgstr "Avanserte valg"
 msgid "Details"
 msgstr "Detaljer"
 
-#: itkufs/accounting/forms.py:72 itkufs/billing/pdf.py:116
+#: itkufs/accounting/forms.py:72 itkufs/billing/pdf.py:118
 #: itkufs/templates/billing/bill_details.html:62
 #: itkufs/templates/billing/bill_form.html:16
 msgid "Amount"
@@ -365,48 +365,48 @@ msgstr ""
 "Transaksjonen kan kun sees av gruppeadministatorer eller en part i "
 "transaksjonen."
 
-#: itkufs/accounting/views/edit.py:36
+#: itkufs/accounting/views/edit.py:48
 msgid "Settlement is closed and cannot be edited."
 msgstr "Oppgjøret er avsluttet og kan ikke redigeres."
 
-#: itkufs/accounting/views/edit.py:91
+#: itkufs/accounting/views/edit.py:103
 msgid "Transfer from account"
 msgstr "Overføring fra konto"
 
-#: itkufs/accounting/views/edit.py:94
+#: itkufs/accounting/views/edit.py:106
 msgid "Deposit to account"
 msgstr "Innskudd til konto"
 
-#: itkufs/accounting/views/edit.py:97
+#: itkufs/accounting/views/edit.py:109
 msgid "Withdrawal from account"
 msgstr "Uttak fra konto"
 
-#: itkufs/accounting/views/edit.py:100 itkufs/accounting/views/edit.py:150
+#: itkufs/accounting/views/edit.py:112 itkufs/accounting/views/edit.py:162
 #: itkufs/common/decorators.py:57
 msgid "Forbidden if not group admin."
 msgstr "Bare gruppeadministratiren kan gjøre dette."
 
-#: itkufs/accounting/views/edit.py:144
+#: itkufs/accounting/views/edit.py:156
 msgid "Your transaction has been added, but your group admin has to commit it."
 msgstr ""
 "Transaksjonen er opprettet, men administrator for gruppen má godkjenne den."
 
-#: itkufs/accounting/views/edit.py:152
+#: itkufs/accounting/views/edit.py:164
 #, python-format
 msgid "Added transaction: %s"
 msgstr "La til transaksjon: %s"
 
-#: itkufs/accounting/views/edit.py:234
+#: itkufs/accounting/views/edit.py:248
 #: itkufs/templates/accounting/approve_transactions.html:28
 msgid "No pending transactions found."
 msgstr "Ingen ventende transaksjoner funnet."
 
-#: itkufs/accounting/views/edit.py:336
+#: itkufs/accounting/views/edit.py:360
 #, python-format
 msgid "Transaction %d can't be changed."
 msgstr "Transaksjon %d kan ikke endres"
 
-#: itkufs/accounting/views/edit.py:418
+#: itkufs/accounting/views/edit.py:442
 msgid "Your transaction has been added."
 msgstr "Transaksjonen er opprettet."
 
@@ -434,20 +434,20 @@ msgstr "beskrivelse"
 msgid "amount"
 msgstr "Beløp"
 
-#: itkufs/billing/pdf.py:54
+#: itkufs/billing/pdf.py:56
 msgid "bill"
 msgstr "regning"
 
-#: itkufs/billing/pdf.py:79
+#: itkufs/billing/pdf.py:81
 #, python-format
 msgid "Bill #%d"
 msgstr "Regning #%d"
 
-#: itkufs/billing/pdf.py:85
+#: itkufs/billing/pdf.py:87
 msgid "%Y-%m-%d %H:%M"
 msgstr ""
 
-#: itkufs/billing/pdf.py:116 itkufs/templates/billing/bill_delete.html:34
+#: itkufs/billing/pdf.py:118 itkufs/templates/billing/bill_delete.html:34
 #: itkufs/templates/billing/bill_details.html:33
 #: itkufs/templates/billing/bill_details.html:61
 #: itkufs/templates/billing/bill_form.html:15
@@ -455,20 +455,20 @@ msgstr ""
 msgid "Description"
 msgstr "Beskrivelse"
 
-#: itkufs/billing/views.py:30
+#: itkufs/billing/views.py:32
 msgid "This bill can no longer be edited."
 msgstr "Denne regningen kan ikke lenger redigeres."
 
-#: itkufs/billing/views.py:77
+#: itkufs/billing/views.py:81
 msgid "This bill is already linked to a transaction."
 msgstr "Denne regningen er alt knyttet til en transaksjon."
 
-#: itkufs/billing/views.py:110
+#: itkufs/billing/views.py:114
 #, python-format
 msgid "Bill #%(id)s: %(description)s"
 msgstr "Regning #%(id)s: %(description)s"
 
-#: itkufs/billing/views.py:154
+#: itkufs/billing/views.py:160
 #, python-format
 msgid "Bill #%d deleted."
 msgstr "Regning #%d ble slettet."
@@ -517,7 +517,7 @@ msgstr "Vennligst oppgi en dato"
 msgid "To date"
 msgstr "Til dato"
 
-#: itkufs/common/views/__init__.py:19
+#: itkufs/common/views/__init__.py:24
 msgid "Login failed"
 msgstr "Innlogging feilet"
 
@@ -525,15 +525,15 @@ msgstr "Innlogging feilet"
 msgid "Group successfully updated."
 msgstr "Gruppen er oppdatert."
 
-#: itkufs/common/views/edit.py:70
+#: itkufs/common/views/edit.py:74
 msgid "Account successfully activated."
 msgstr "Kontoen er ble aktivert."
 
-#: itkufs/common/views/edit.py:93
+#: itkufs/common/views/edit.py:101
 msgid "Account successfully updated."
 msgstr "Kontoen er oppdatert."
 
-#: itkufs/common/views/edit.py:96
+#: itkufs/common/views/edit.py:104
 msgid "Account successfully created."
 msgstr "Kontoen er opprettet."
 
@@ -663,34 +663,34 @@ msgstr "listeelement"
 msgid "list items"
 msgstr "listeelementer"
 
-#: itkufs/reports/pdf.py:89
+#: itkufs/reports/pdf.py:92
 msgid "Printed"
 msgstr "Skrevet ut"
 
-#: itkufs/reports/pdf.py:89
+#: itkufs/reports/pdf.py:92
 msgid "by"
 msgstr "av"
 
-#: itkufs/reports/pdf.py:106
+#: itkufs/reports/pdf.py:109
 msgid "Blacklisted accounts are marked with: "
 msgstr "Svartelistede kontoer er merket med: "
 
-#: itkufs/reports/pdf.py:115
+#: itkufs/reports/pdf.py:118
 msgid "Sorry, this list is empty."
 msgstr "Listen er tom"
 
-#: itkufs/reports/pdf.py:129
+#: itkufs/reports/pdf.py:132
 msgid "Sorry, this list isn't set up correctly, please add some columns."
 msgstr "Beklager, listen er ikke satt opp rikig, legg til noen koloner først."
 
-#: itkufs/reports/pdf.py:145 itkufs/templates/common/account_summary.html:11
+#: itkufs/reports/pdf.py:148 itkufs/templates/common/account_summary.html:11
 #: itkufs/templates/common/account_summary.html:62
 #: itkufs/templates/common/group_summary.html:11
 #: itkufs/templates/reports/list_form.html:56
 msgid "Name"
 msgstr "Navn"
 
-#: itkufs/reports/pdf.py:157
+#: itkufs/reports/pdf.py:160
 #: itkufs/templates/accounting/transaction_form.html:69
 #: itkufs/templates/common/account_summary.html:37
 #: itkufs/templates/common/group_balance_graph.html:7
@@ -699,24 +699,24 @@ msgstr "Navn"
 msgid "Balance"
 msgstr "Balanse"
 
-#: itkufs/reports/views.py:171
+#: itkufs/reports/views.py:177
 msgid "List deleted."
 msgstr "Listen ble slettet."
 
-#: itkufs/reports/views.py:202
+#: itkufs/reports/views.py:210
 #, python-format
 msgid "Created from list: %s"
 msgstr "Laget fra liste: %s"
 
-#: itkufs/reports/views.py:257
+#: itkufs/reports/views.py:265
 msgid "Positive member accounts"
 msgstr "Positive medlemskontoer"
 
-#: itkufs/reports/views.py:258
+#: itkufs/reports/views.py:266
 msgid "Negative member accounts"
 msgstr "Negative medlemskontoer"
 
-#: itkufs/reports/views.py:273
+#: itkufs/reports/views.py:281
 msgid "Current year's net income"
 msgstr "Nettoinntekt inneværende år"
 

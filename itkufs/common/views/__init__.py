@@ -1,6 +1,11 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
+from django.http import (
+    Http404,
+    HttpResponseForbidden,
+    HttpResponseRedirect,
+    HttpRequest,
+)
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
@@ -8,7 +13,7 @@ from django.utils.translation import ugettext as _
 from itkufs.accounting.models import Group, Account
 
 
-def login_user(request):
+def login_user(request: HttpRequest):
     """Login user"""
 
     if not request.user.is_authenticated:
@@ -44,7 +49,7 @@ def login_user(request):
 
 
 @login_required
-def switch_group(request, is_admin=False):
+def switch_group(request: HttpRequest, is_admin=False):
     """Switch to account summary for the selected account"""
 
     if request.method != "POST":
@@ -62,7 +67,7 @@ def switch_group(request, is_admin=False):
 
 
 @login_required
-def static_page(request, template, is_admin=False):
+def static_page(request: HttpRequest, template, is_admin=False):
     return render(
         request,
         template,

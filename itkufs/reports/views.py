@@ -5,14 +5,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction as db_transaction
 from django.forms.models import inlineformset_factory
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRequest
 from django.shortcuts import render
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from itkufs.common.decorators import limit_to_group, limit_to_admin
-from itkufs.accounting.models import Account, Transaction
+from itkufs.accounting.models import Account, Transaction, Group
 from itkufs.reports.models import List, ListColumn
 from itkufs.reports.forms import ColumnForm, ListForm, ListTransactionForm
 from itkufs.reports.pdf import pdf
@@ -20,7 +20,7 @@ from itkufs.reports.pdf import pdf
 _list = list
 
 
-def public_lists(request):
+def public_lists(request: HttpRequest):
     lists = (
         List.objects.filter(public=True)
         .select_related("group")
@@ -36,7 +36,7 @@ def public_lists(request):
 
 @login_required
 @limit_to_group
-def view_list(request, group, list, is_admin=False):
+def view_list(request: HttpRequest, group: Group, list: List, is_admin=False):
     content = pdf(group, request.user.username, list)
 
     filename = "{}-{}-{}".format(date.today(), group, list)
@@ -51,7 +51,9 @@ def view_list(request, group, list, is_admin=False):
 
 @login_required
 @limit_to_group
-def view_list_preview(request, group, list, is_admin=False):
+def view_list_preview(
+    request: HttpRequest, group: Group, list: List, is_admin=False
+):
     content = pdf(
         group, request.user.username, list, show_header=True, show_footer=True
     )
@@ -83,7 +85,9 @@ def view_list_preview(request, group, list, is_admin=False):
     return HttpResponse(stdout, content_type="image/png")
 
 
-def view_public_list(request, group, list, is_admin=False):
+def view_public_list(
+    request: HttpRequest, group: Group, list: List, is_admin=False
+):
     if not list.public:
         raise Http404
 
@@ -102,7 +106,9 @@ def view_public_list(request, group, list, is_admin=False):
 @login_required
 @limit_to_admin
 @db_transaction.atomic
-def new_edit_list(request, group, list=None, is_admin=False):
+def new_edit_list(
+    request: HttpRequest, group: Group, list: List = None, is_admin=False
+):
     """Create new or edit existing list"""
 
     if request.method == "POST":
@@ -162,7 +168,7 @@ def new_edit_list(request, group, list=None, is_admin=False):
 @login_required
 @limit_to_admin
 @db_transaction.atomic
-def delete_list(request, group, list, is_admin=False):
+def delete_list(request: HttpRequest, group: Group, list: List, is_admin=False):
     """Delete list"""
 
     if request.method == "POST":
@@ -184,7 +190,9 @@ def delete_list(request, group, list, is_admin=False):
 @login_required
 @limit_to_admin
 @db_transaction.atomic
-def transaction_from_list(request, group, list, is_admin=False):
+def transaction_from_list(
+    request: HttpRequest, group: Group, list: List, is_admin=False
+):
     """Enter list"""
 
     form = ListTransactionForm(list, request.POST or None)
@@ -218,7 +226,7 @@ def transaction_from_list(request, group, list, is_admin=False):
 
 @login_required
 @limit_to_group
-def balance(request, group, is_admin=False):
+def balance(request: HttpRequest, group: Group, is_admin=False):
     """Show balance sheet for the group"""
 
     # Balance sheet data struct
@@ -289,7 +297,7 @@ def balance(request, group, is_admin=False):
 
 @login_required
 @limit_to_group
-def income(request, group, is_admin=False):
+def income(request: HttpRequest, group: Group, is_admin=False):
     """Show income statement for group"""
 
     # Balance sheet data struct

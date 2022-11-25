@@ -1,5 +1,7 @@
 import re
 
+from itkufs.accounting.models import Account
+
 CALLSIGN_RE = re.compile(r"^[A-Z]+[0-9][A-Z0-9]*[A-Z]$")
 
 
@@ -21,7 +23,7 @@ def verify_account_number(num):
     )
 
 
-def callsign_sorted(accounts):
+def callsign_sorted(accounts: list[Account]):
     """
     ARK friendly sort method that should sort in the following order:
 
@@ -33,7 +35,7 @@ def callsign_sorted(accounts):
     return sorted(accounts, key=callsign_key)
 
 
-def callsign_key(account):
+def callsign_key(account: Account):
     is_callsign = account.short_name and CALLSIGN_RE.match(account.short_name)
     is_la = is_callsign and account.short_name.startswith("LA")
     is_lb = is_callsign and account.short_name.startswith("LB")
