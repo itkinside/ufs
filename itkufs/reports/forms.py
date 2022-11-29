@@ -6,6 +6,8 @@ from django.template.defaultfilters import slugify
 from itkufs.reports.models import List, ListColumn
 from itkufs.accounting.models import Account, TransactionEntry, Group
 
+from typing import Optional
+
 
 class ListTransactionForm(forms.Form):
     def __init__(self, list_, *args, **kwargs):
