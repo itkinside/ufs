@@ -17,6 +17,8 @@ from itkufs.reports.models import List, ListColumn
 from itkufs.reports.forms import ColumnForm, ListForm, ListTransactionForm
 from itkufs.reports.pdf import pdf
 
+from typing import Optional
+
 _list = list
 
 
@@ -107,7 +109,10 @@ def view_public_list(
 @limit_to_admin
 @db_transaction.atomic
 def new_edit_list(
-    request: HttpRequest, group: Group, list: List = None, is_admin=False
+    request: HttpRequest,
+    group: Group,
+    list: Optional[List] = None,
+    is_admin=False,
 ):
     """Create new or edit existing list"""
 
