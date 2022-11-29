@@ -111,8 +111,9 @@ How to run code linting
 To run code linting, run::
 
     python3 -m flake8
+    mypy .
 
-Ideally, this command should not print a single warning.
+Ideally, these commands should not print a single warning.
 
 ..
     vim: ft=rst tw=74 ai

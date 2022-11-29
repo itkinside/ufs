@@ -13,6 +13,7 @@ black
 
 # Code linting
 flake8
+mypy
 
 # Test runner
 pytest
