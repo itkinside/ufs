@@ -20,7 +20,7 @@ from itkufs.billing.forms import (
 @login_required
 @limit_to_admin
 def bill_new_edit(
-    request: HttpRequest, group: Group, bill: Bill = None, is_admin=False
+    request: HttpRequest, group: Group, bill: Optional[Bill] = None, is_admin=False
 ):
     if bill is None:
         bill = Bill()
