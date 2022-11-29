@@ -8,6 +8,8 @@ from django.urls import reverse
 from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _, ugettext
 
+from typing import List as ListType
+
 
 class Group(models.Model):
     name = models.CharField(_("name"), max_length=100)
@@ -94,13 +96,13 @@ class Group(models.Model):
             )
             cash_role.save()
 
-    def get_user_account_set(self):
+    def get_user_account_set(self) -> ListType["Account"]:
         """Returns all user accounts belonging to group"""
         return self.account_set.exclude(group_account=True)
 
     user_account_set = property(get_user_account_set, None, None)
 
-    def get_group_account_set(self):
+    def get_group_account_set(self) -> ListType["Account"]:
         """Returns all non-user accounts belonging to group"""
         return self.account_set.filter(group_account=True)
 
@@ -109,7 +111,7 @@ class Group(models.Model):
     # --- Transaction set methods
     # Please keep in sync with Account's set methods
 
-    def get_transaction_set_with_rejected(self):
+    def get_transaction_set_with_rejected(self) -> ListType["Transaction"]:
         """Returns all transactions connected to group, including rejected"""
         return self.real_transaction_set.exclude(
             state=Transaction.UNDEFINED_STATE
@@ -119,7 +121,7 @@ class Group(models.Model):
         get_transaction_set_with_rejected, None, None
     )
 
-    def get_transaction_set(self):
+    def get_transaction_set(self) -> ListType["Transaction"]:
         """Returns all transactions connected to group, excluding rejected"""
         return self.transaction_set_with_rejected.exclude(
             state=Transaction.REJECTED_STATE
@@ -127,13 +129,13 @@ class Group(models.Model):
 
     transaction_set = property(get_transaction_set, None, None)
 
-    def get_pending_transaction_set(self):
+    def get_pending_transaction_set(self) -> ListType["Transaction"]:
         """Returns all pending transactions connected to group"""
         return self.transaction_set.filter(state=Transaction.PENDING_STATE)
 
     pending_transaction_set = property(get_pending_transaction_set, None, None)
 
-    def get_committed_transaction_set(self):
+    def get_committed_transaction_set(self) -> ListType["Transaction"]:
         """Returns all committed transactions connected to group"""
         return self.transaction_set.filter(state=Transaction.COMMITTED_STATE)
 
@@ -141,7 +143,7 @@ class Group(models.Model):
         get_committed_transaction_set, None, None
     )
 
-    def get_rejected_transaction_set(self):
+    def get_rejected_transaction_set(self) -> ListType["Transaction"]:
         """Returns all rejected transactions connected to group"""
         return self.transaction_set_with_rejected.filter(
             state=Transaction.REJECTED_STATE
@@ -157,7 +159,9 @@ class Group(models.Model):
 
     balance_history_set = property(get_balance_history_set, None, None)
 
-    def get_all_entries(self, from_date: str, to_date: str):
+    def get_all_entries(
+        self, from_date: str, to_date: str
+    ) -> ListType["TransactionEntry"]:
         """
         Returns entries for committed transactions for this group, in the
         range [from_date, to_date] (inclusive).
@@ -313,7 +317,7 @@ class Account(models.Model):
             else:
                 return total_usage
 
-    def last_30_days_usage(self):
+    def last_30_days_usage(self) -> float:
         from_date = datetime.datetime.now() - datetime.timedelta(days=30)
         usage = (
             TransactionEntry.objects.filter(
@@ -324,7 +328,7 @@ class Account(models.Model):
         )
         return usage if usage is not None else 0
 
-    def balance(self):
+    def balance(self) -> float:
         if hasattr(self, "confirmed_balance_sql"):
             return self.confirmed_balance_sql or 0
         else:
@@ -332,7 +336,7 @@ class Account(models.Model):
                 cursor.execute(CONFIRMED_BALANCE_SQL, [self.id])
                 return cursor.fetchone()[0]
 
-    def normal_balance(self):
+    def normal_balance(self) -> float:
         """Returns account balance, but multiplies by -1 if the account is
         of type liability, equity or expense."""
 
@@ -376,7 +380,7 @@ class Account(models.Model):
     # --- Transaction set methods
     # Please keep in sync with Group's set methods
 
-    def get_transaction_set_with_rejected(self):
+    def get_transaction_set_with_rejected(self) -> ListType["Transaction"]:
         """Returns all transactions connected to account, including rejected"""
         return (
             Transaction.objects.filter(entry_set__account=self)
@@ -388,7 +392,7 @@ class Account(models.Model):
         get_transaction_set_with_rejected, None, None
     )
 
-    def get_transaction_set(self):
+    def get_transaction_set(self) -> ListType["Transaction"]:
         """Returns all transactions connected to account, excluding rejected"""
         return self.transaction_set_with_rejected.exclude(
             state=Transaction.REJECTED_STATE
@@ -396,13 +400,13 @@ class Account(models.Model):
 
     transaction_set = property(get_transaction_set, None, None)
 
-    def get_pending_transaction_set(self):
+    def get_pending_transaction_set(self) -> ListType["Transaction"]:
         """Returns all pending transactions connected to account"""
         return self.transaction_set.filter(state=Transaction.PENDING_STATE)
 
     pending_transaction_set = property(get_pending_transaction_set, None, None)
 
-    def get_committed_transaction_set(self):
+    def get_committed_transaction_set(self) -> ListType["Transaction"]:
         """Returns all committed transactions connected to account"""
         return self.transaction_set.filter(state=Transaction.COMMITTED_STATE)
 
@@ -410,7 +414,7 @@ class Account(models.Model):
         get_committed_transaction_set, None, None
     )
 
-    def get_rejected_transaction_set(self):
+    def get_rejected_transaction_set(self) -> ListType["Transaction"]:
         """Returns all rejected transactions connected to account"""
         return self.transaction_set_with_rejected.filter(
             state=Transaction.REJECTED_STATE
