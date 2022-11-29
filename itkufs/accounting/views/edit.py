@@ -38,7 +38,7 @@ from itkufs.accounting.forms import (
 def new_edit_settlement(
     request: HttpRequest,
     group: Group,
-    settlement: Settlement = None,
+    settlement: Optional[Settlement] = None,
     is_admin=False,
 ):
     """Create new and edit existing settlements"""
@@ -87,8 +87,8 @@ def new_edit_settlement(
 def transfer(
     request: HttpRequest,
     group: Group,
-    account: Transaction = None,
-    transfer_type: str = None,
+    account: Optional[Account] = None,
+    transfer_type: Optional[str] = None,
     is_admin=False,
     is_owner=False,
 ):
@@ -265,7 +265,7 @@ def approve_transactions(
 def reject_transactions(
     request: HttpRequest,
     group: Group,
-    transaction: Transaction = None,
+    transaction: Optional[Transaction] = None,
     is_admin=False,
 ):
     """Reject transactions from members and other groups"""
@@ -347,7 +347,7 @@ def reject_transactions(
 def new_edit_transaction(
     request: HttpRequest,
     group: Group,
-    transaction: Transaction = None,
+    transaction: Optional[Transaction] = None,
     is_admin=False,
 ):
     """Admin view for creating transactions"""

@@ -146,7 +146,7 @@ class Command(BaseCommand):
             subject, message, FROM_EMAIL, [to_email], headers=headers
         )
 
-    def _print_debug(self, emails: list[str]):
+    def _print_debug(self, emails: ListType[str]):
         for email in emails:
             print("From: %s" % email.from_email)
             print("To: %s" % ";".join(email.to))

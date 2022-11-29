@@ -119,7 +119,7 @@ class ListForm(forms.ModelForm):
             )
         return self.cleaned_data
 
-    def save(self, group: Group = None, **kwargs):
+    def save(self, group: Optional[Group] = None, **kwargs):
         original_commit = kwargs.pop("commit", True)
 
         kwargs["commit"] = False
