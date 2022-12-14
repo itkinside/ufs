@@ -44,7 +44,7 @@
     <tr>
         <td><em>{% trans "Total revenues and gains" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.in_sum|floatformat:2 }}</em>
+            <em>{{ account_sums.in|floatformat:2 }}</em>
         </td>
     </tr>
 </table>
@@ -68,7 +68,7 @@
     <tr>
         <td><em>{% trans "Total expenses and losses" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.ex_sum|floatformat:2 }}</em>
+            <em>{{ account_sums.ex|floatformat:2 }}</em>
         </td>
     </tr>
 

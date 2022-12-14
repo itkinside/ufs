@@ -44,7 +44,7 @@
     <tr>
         <td><em>{% trans "Total assets" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.as_sum|floatformat:2 }}</em>
+            <em>{{ account_sums.as|floatformat:2 }}</em>
         </td>
     </tr>
 </table>
@@ -80,7 +80,7 @@
     <tr>
         <td><em>&nbsp;&nbsp;{% trans "Total liabilities" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.li_sum|floatformat:2 }}</em>
+            <em>{{ account_sums.li|floatformat:2 }}</em>
         </td>
     </tr>
 
@@ -108,14 +108,14 @@
     <tr>
         <td><em>&nbsp;&nbsp;{% trans "Total equities (Net worth)" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.eq_sum|floatformat:2 }}</em>
+            <em>{{ account_sums.eq|floatformat:2 }}</em>
         </td>
     </tr>
 
     <tr>
         <td><em>{% trans "Total liabilities and equities" %}</em></td>
         <td class="align_right">
-            <em>{{ accounts.li_eq_sum|floatformat:2 }}</em>
+            <em>{{ account_sums.li_eq|floatformat:2 }}</em>
         </td>
     </tr>
 </table>
