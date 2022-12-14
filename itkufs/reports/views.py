@@ -237,25 +237,28 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
     # Balance sheet data struct
     accounts = {
         "as": [],
-        "as_sum": 0,
         "li": [],
-        "li_sum": 0,
         "eq": [],
-        "eq_sum": 0,
-        "li_eq_sum": 0,
+    }
+
+    account_sums = {
+        "as": 0,
+        "li": 0,
+        "eq": 0,
+        "li_eq": 0,
     }
 
     # Assets
     for account in group.account_set.filter(type=Account.ASSET_ACCOUNT):
         accounts["as"].append(account)
-        accounts["as_sum"] += account.normal_balance()
+        account_sums["as"] += account.normal_balance()
 
     # Liabilities
     for account in group.account_set.filter(
         type=Account.LIABILITY_ACCOUNT, group_account=True
     ):
         accounts["li"].append(account)
-        accounts["li_sum"] += account.normal_balance()
+        account_sums["li"] += account.normal_balance()
 
     # Accumulated member accounts liabilities
     member_negative_sum = 0
@@ -269,24 +272,24 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
             member_negative_sum += account.normal_balance()
     accounts["li"].append((_("Positive member accounts"), member_positive_sum))
     accounts["li"].append((_("Negative member accounts"), member_negative_sum))
-    accounts["li_sum"] += member_positive_sum
-    accounts["li_sum"] += member_negative_sum
+    account_sums["li"] += member_positive_sum
+    account_sums["li"] += member_negative_sum
 
     # Equities
     for account in group.account_set.filter(type=Account.EQUITY_ACCOUNT):
         accounts["eq"].append(account)
-        accounts["eq_sum"] += account.normal_balance()
+        account_sums["eq"] += account.normal_balance()
 
     # Total liabilities and equities
-    accounts["li_eq_sum"] = accounts["li_sum"] + accounts["eq_sum"]
+    account_sums["li_eq"] = account_sums["li"] + account_sums["eq"]
 
     # Current year's net income
-    curr_year_net_income = accounts["as_sum"] - accounts["li_eq_sum"]
+    curr_year_net_income = account_sums["as"] - account_sums["li_eq"]
     accounts["eq"].append(
         (_("Current year's net income"), curr_year_net_income)
     )
-    accounts["eq_sum"] += curr_year_net_income
-    accounts["li_eq_sum"] += curr_year_net_income
+    account_sums["eq"] += curr_year_net_income
+    account_sums["li_eq"] += curr_year_net_income
 
     return render(
         request,
@@ -296,6 +299,7 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
             "group": group,
             "today": date.today(),
             "accounts": accounts,
+            "account_sums": account_sums,
         },
     )
 
@@ -306,20 +310,26 @@ def income(request: HttpRequest, group: Group, is_admin=False):
     """Show income statement for group"""
 
     # Balance sheet data struct
-    accounts = {"in": [], "in_sum": 0, "ex": [], "ex_sum": 0, "in_ex_diff": 0}
+    accounts = {"in": [], "ex": []}
+
+    account_sums = {
+        "in": 0,
+        "ex": 0,
+        "in_ex_diff": 0,
+    }
 
     # Incomes
     for account in group.account_set.filter(type=Account.INCOME_ACCOUNT):
         accounts["in"].append(account)
-        accounts["in_sum"] += account.normal_balance()
+        account_sums["in"] += account.normal_balance()
 
     # Expenses
     for account in group.account_set.filter(type=Account.EXPENSE_ACCOUNT):
         accounts["ex"].append(account)
-        accounts["ex_sum"] += account.normal_balance()
+        account_sums["ex"] += account.normal_balance()
 
     # Net income
-    accounts["in_ex_diff"] = accounts["in_sum"] - accounts["ex_sum"]
+    account_sums["in_ex_diff"] = account_sums["in"] - account_sums["ex"]
 
     return render(
         request,
@@ -329,5 +339,6 @@ def income(request: HttpRequest, group: Group, is_admin=False):
             "group": group,
             "today": date.today(),
             "accounts": accounts,
+            "account_sums": account_sums,
         },
     )
