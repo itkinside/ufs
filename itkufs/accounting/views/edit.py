@@ -89,7 +89,7 @@ def new_edit_settlement(
 def transfer(
     request: HttpRequest,
     group: Group,
-    account: Optional[Account] = None,
+    account: Account,
     transfer_type: Optional[str] = None,
     is_admin=False,
     is_owner=False,
