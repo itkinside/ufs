@@ -62,7 +62,7 @@ def edit_group(request: HttpRequest, group: Group, is_admin=False):
 def activate_account(
     request: HttpRequest,
     group: Group,
-    account: Optional[Account] = None,
+    account: Account,
     is_admin=False,
     is_owner=False,
 ):
