@@ -14,11 +14,11 @@ from itkufs.accounting.models import Group
 from itkufs.reports.models import List
 
 
-BORDER_COLOR = HexColor("#555753")
+BORDER_COLOR = HexColor("#555555")
 BLACKLISTED_COLOR = HexColor("#000000")
 BLACKLISTED_TEXT_COLOR = HexColor("#A40000")
 WARN_TEXT_COLOR = HexColor("#F57900")
-FAINT_COLOR = HexColor("#BABDB6")
+FAINT_COLOR = HexColor("#BABABA")
 
 ALTERNATE_COLORS = [HexColor("#FFFFFF"), HexColor("#F5F5F5")]
 
