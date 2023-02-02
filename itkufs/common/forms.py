@@ -184,9 +184,9 @@ class RoleAccountForm(Form):
                     ).account.id
                 except RoleAccount.DoesNotExist:
                     intial = ""
-
+                # Populate the form options with active group accounts
                 self.fields[type] = RoleAccountModelChoiceField(
-                    group.group_account_set, initial=intial
+                    group.group_account_set.filter(active=True), initial=intial
                 )
         else:
             raise Exception("Please supply a group kwarg for RoleAccountForm")
