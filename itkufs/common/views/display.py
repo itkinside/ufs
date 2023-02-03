@@ -22,7 +22,6 @@ from itkufs.accounting.models import (
 @login_required
 @limit_to_admin
 def export_transactions(request: HttpRequest, group: Group, is_admin=False):
-
     form = ExportTransactionsForm(data=request.GET)
     filename = f"{group.slug}-transactions.csv"
 

@@ -68,7 +68,6 @@ class Group(models.Model):
 
         # Create default accounts
         if not self.account_set.count():
-
             # TODO change this into a magic loop?
             bank = Account(
                 name=ugettext("Bank"),
@@ -843,7 +842,6 @@ class TransactionEntry(models.Model):
             and old_balance > self.account.group.block_limit
             and new_balance < self.account.group.block_limit
         ):
-
             subject = "Svartelistet i µFS"
             msg = (
                 f"Dette er en automatisk melding om at du har blitt "
