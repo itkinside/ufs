@@ -134,6 +134,9 @@ class List(models.Model):
 
         accounts = []
         for a in all_accounts:
+            if a.is_blocked() and not self.ignore_blocked:
+                continue
+
             if self.add_active_accounts and a.is_user_account():
                 accounts.append(a)
             elif a.id in extra_accounts:
