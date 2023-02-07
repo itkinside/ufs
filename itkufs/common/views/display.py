@@ -48,6 +48,7 @@ def export_transactions(request: HttpRequest, group: Group, is_admin=False):
         writer = csv.writer(response)
         writer.writerow(
             [
+                "Entry ID",
                 "Transaction ID",
                 "Date",
                 "Debit",
@@ -63,6 +64,7 @@ def export_transactions(request: HttpRequest, group: Group, is_admin=False):
         for e in entries:
             writer.writerow(
                 [
+                    e.id,
                     e.transaction.id,
                     e.transaction.date,
                     e.debit,
