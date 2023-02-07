@@ -49,6 +49,7 @@ def export_transactions(request: HttpRequest, group: Group, is_admin=False):
         writer.writerow(
             [
                 "Entry ID",
+                "Account ID",
                 "Transaction ID",
                 "Date",
                 "Debit",
@@ -65,6 +66,7 @@ def export_transactions(request: HttpRequest, group: Group, is_admin=False):
             writer.writerow(
                 [
                     e.id,
+                    e.account.id,
                     e.transaction.id,
                     e.transaction.date,
                     e.debit,
