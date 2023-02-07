@@ -1,5 +1,6 @@
 from operator import itemgetter
 import csv
+import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -22,9 +23,18 @@ from itkufs.accounting.models import (
 @login_required
 @limit_to_admin
 def export_transactions(request: HttpRequest, group: Group, is_admin=False):
-
-    form = ExportTransactionsForm(data=request.GET)
     filename = f"{group.slug}-transactions.csv"
+
+    if request.GET:
+        # Get form data from request
+        form = ExportTransactionsForm(data=request.GET)
+    else:
+        # Create a new form, set default date range to the last 30 days
+        to_date = datetime.date.today()
+        from_date = to_date - datetime.timedelta(days=30)
+        form = ExportTransactionsForm(
+            initial={"from_date": from_date, "to_date": to_date}
+        )
 
     if form.is_valid():
         response = HttpResponse(content_type="text/csv")
