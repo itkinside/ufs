@@ -57,6 +57,7 @@ def export_transactions(request: HttpRequest, group: Group, is_admin=False):
                 "Account name",
                 "Short name",
                 "Owner",
+                "Is group account",
             ]
         )
 
@@ -74,6 +75,7 @@ def export_transactions(request: HttpRequest, group: Group, is_admin=False):
                     e.account.name,
                     e.account.short_name,
                     e.account.slug,
+                    e.account.group_account,
                 ]
             )
         return response
