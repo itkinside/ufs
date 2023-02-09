@@ -159,8 +159,6 @@
     {% ufs_sort group_accounts %}
     {% for account in group_accounts %}
         {% if all or account.active %}
-        {% if all or account.normal_balance %}
-        {# Django's if construct in templates is somewhat lacking, ugly work around for "complex" logic #}
         <tr class="{% cycle "evenrow" "oddrow" %}{% if not account.active %} inactive{% endif %}">
             <td{% if not account.short_name %} colspan="2"{% endif %}>
             {% if is_admin %}
@@ -174,7 +172,6 @@
             <td class="align_right">{{ account.normal_balance|stringformat:"0.2f" }}</td>
         </tr>
         {% endif %}
-        {% endif %}
     {% endfor %}
 {% endwith %}
 </table>
@@ -182,7 +179,7 @@
 
 <p class="clear">
 {% if all %}
-    <a href=".">{% trans "Hide inactive/empty accounts" %}</a>
+    <a href=".">{% trans "Hide inactive accounts" %}</a>
 {% else %}
     <a href="?all">{% trans "Show all accounts" %}</a>
 {% endif %}
