@@ -1,5 +1,6 @@
 from operator import itemgetter
 import csv
+import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -23,7 +24,19 @@ from itkufs.accounting.models import (
 @limit_to_admin
 def export_transactions(request: HttpRequest, group: Group, is_admin=False):
     form = ExportTransactionsForm(data=request.GET)
+
     filename = f"{group.slug}-transactions.csv"
+
+    if request.GET:
+        # Get form data from request
+        form = ExportTransactionsForm(data=request.GET)
+    else:
+        # Create a new form, set default date range to the last 30 days
+        to_date = datetime.date.today()
+        from_date = to_date - datetime.timedelta(days=30)
+        form = ExportTransactionsForm(
+            initial={"from_date": from_date, "to_date": to_date}
+        )
 
     if form.is_valid():
         response = HttpResponse(content_type="text/csv")
@@ -37,6 +50,8 @@ def export_transactions(request: HttpRequest, group: Group, is_admin=False):
         writer = csv.writer(response)
         writer.writerow(
             [
+                "Entry ID",
+                "Account ID",
                 "Transaction ID",
                 "Date",
                 "Debit",
@@ -44,6 +59,7 @@ def export_transactions(request: HttpRequest, group: Group, is_admin=False):
                 "Account name",
                 "Short name",
                 "Owner",
+                "Is group account",
             ]
         )
 
@@ -52,6 +68,8 @@ def export_transactions(request: HttpRequest, group: Group, is_admin=False):
         for e in entries:
             writer.writerow(
                 [
+                    e.id,
+                    e.account.id,
                     e.transaction.id,
                     e.transaction.date,
                     e.debit,
@@ -59,6 +77,7 @@ def export_transactions(request: HttpRequest, group: Group, is_admin=False):
                     e.account.name,
                     e.account.short_name,
                     e.account.slug,
+                    e.account.group_account,
                 ]
             )
         return response
