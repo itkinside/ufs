@@ -9,7 +9,6 @@ class GroupedSelect(forms.Select):
     """From http://www.djangosnippets.org/snippets/200/"""
 
     def render(self, name, value, attrs=None, choices=()):
-
         if value is None:
             value = ""
         final_attrs = self.build_attrs(attrs, name=name)
