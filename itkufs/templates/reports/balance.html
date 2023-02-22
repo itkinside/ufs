@@ -18,11 +18,25 @@
 {% block header %}
     {{ block.super }}
     &ndash; {% trans "Balance statement" %}
-    &ndash; {{ today }}
+    &ndash; {{ to_date|date:"Y-m-d" }}
 {% endblock %}
 
 
 {% block content %}
+
+<p>
+    {% trans "Select a date to see account balances at that date." %}
+</p>
+
+<form method="GET" action="#" class="plainform">
+
+{{ form.as_p }}
+
+<p>
+    <button type="submit">{% trans "Update" %}</button>
+</p>
+
+</form>
 
 <div class="float_left">
 <table class="tablelist">
@@ -33,7 +47,7 @@
     <tr>
         <td>&nbsp;&nbsp;
             {% if is_admin %}
-                <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
+                <a href="{{ account.url }}">{{ account.name }}</a>
             {% else %}
                 {{ account.name }}
             {% endif %}
@@ -63,7 +77,7 @@
     <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;
             {% if is_admin %}
-                <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
+                <a href="{{ account.url }}">{{ account.name }}</a>
             {% else %}
                 {{ account.name }}
             {% endif %}
@@ -71,10 +85,10 @@
         <td class="align_right">{{ account.normal_balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
-{% for name, balance in accounts.li|slice:"-2:" %}
+{% for account in accounts.li|slice:"-2:" %}
     <tr>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ name  }}</td>
-		<td class="align_right">{{ balance }}</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ account.name  }}</td>
+		<td class="align_right">{{ account.balance }}</td>
     </tr>
 {% endfor %}
     <tr>
@@ -91,7 +105,7 @@
     <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;
             {% if is_admin %}
-                <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
+                <a href="{{ account.url }}">{{ account.name }}</a>
             {% else %}
                 {{ account.name }}
             {% endif %}

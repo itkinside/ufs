@@ -1,5 +1,6 @@
 from datetime import date
 from subprocess import Popen, PIPE
+import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -12,14 +13,27 @@ from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from itkufs.common.decorators import limit_to_group, limit_to_admin
-from itkufs.accounting.models import Account, Transaction, Group
+from itkufs.accounting.models import (
+    Account,
+    Transaction,
+    Group,
+)
 from itkufs.reports.models import List, ListColumn
-from itkufs.reports.forms import ColumnForm, ListForm, ListTransactionForm
+from itkufs.reports.forms import (
+    ColumnForm,
+    ListForm,
+    ListTransactionForm,
+    BalanceStatementForm,
+    IncomeStatementForm,
+)
 from itkufs.reports.pdf import pdf
 
 from typing import Optional
 
 _list = list
+
+# Arbitrary date before the first possible transaction date
+BEGINNING_OF_TIME = datetime.date(1929, 10, 1)
 
 
 def public_lists(request: HttpRequest):
@@ -234,6 +248,18 @@ def transaction_from_list(
 def balance(request: HttpRequest, group: Group, is_admin=False):
     """Show balance sheet for the group"""
 
+    if request.GET:
+        form = BalanceStatementForm(data=request.GET)
+    else:
+        form = BalanceStatementForm(initial={"date": datetime.date.today()})
+
+    if form.is_valid():
+        to_date = form.cleaned_data["date"]
+        include_all_accounts = form.cleaned_data["accounts"] == "all"
+    else:
+        to_date = datetime.date.today()
+        include_all_accounts = False
+
     # Balance sheet data struct
     accounts = {
         "as": [],
@@ -248,37 +274,37 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
         "li_eq": 0,
     }
 
-    # Assets
-    for account in group.account_set.filter(type=Account.ASSET_ACCOUNT):
-        accounts["as"].append(account)
-        account_sums["as"] += account.normal_balance()
+    # Get balance change for all accounts
+    account_balances = group.get_balance_change(
+        BEGINNING_OF_TIME, to_date, include_all_accounts
+    )
 
-    # Liabilities
-    for account in group.account_set.filter(
-        type=Account.LIABILITY_ACCOUNT, group_account=True
-    ):
-        accounts["li"].append(account)
-        account_sums["li"] += account.normal_balance()
-
-    # Accumulated member accounts liabilities
+    # Aggregate member account liabilities
     member_negative_sum = 0
     member_positive_sum = 0
-    for account in group.account_set.filter(
-        type=Account.LIABILITY_ACCOUNT, group_account=False
-    ):
-        if account.normal_balance() > 0:
-            member_positive_sum += account.normal_balance()
+
+    for account in account_balances.values():
+        if account["type"] in (Account.INCOME_ACCOUNT, Account.EXPENSE_ACCOUNT):
+            continue
+
+        if account["is_group_account"]:
+            accounts[account["type"].lower()].append(account)
+            account_sums[account["type"].lower()] += account["normal_balance"]
         else:
-            member_negative_sum += account.normal_balance()
-    accounts["li"].append((_("Positive member accounts"), member_positive_sum))
-    accounts["li"].append((_("Negative member accounts"), member_negative_sum))
+            if account["normal_balance"] > 0:
+                member_positive_sum += account["normal_balance"]
+            else:
+                member_negative_sum += account["normal_balance"]
+
+    # Accumulated member accounts liabilities
+    accounts["li"].append(
+        {"name": _("Positive member accounts"), "balance": member_positive_sum}
+    )
+    accounts["li"].append(
+        {"name": _("Negative member accounts"), "balance": member_negative_sum}
+    )
     account_sums["li"] += member_positive_sum
     account_sums["li"] += member_negative_sum
-
-    # Equities
-    for account in group.account_set.filter(type=Account.EQUITY_ACCOUNT):
-        accounts["eq"].append(account)
-        account_sums["eq"] += account.normal_balance()
 
     # Total liabilities and equities
     account_sums["li_eq"] = account_sums["li"] + account_sums["eq"]
@@ -297,9 +323,10 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
         {
             "is_admin": is_admin,
             "group": group,
-            "today": date.today(),
+            "to_date": to_date,
             "accounts": accounts,
             "account_sums": account_sums,
+            "form": form,
         },
     )
 
@@ -308,6 +335,23 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
 @limit_to_group
 def income(request: HttpRequest, group: Group, is_admin=False):
     """Show income statement for group"""
+
+    if request.GET:
+        form = IncomeStatementForm(data=request.GET)
+    else:
+        form = IncomeStatementForm(
+            initial={
+                "from_date": BEGINNING_OF_TIME,
+                "to_date": datetime.date.today(),
+            }
+        )
+
+    if form.is_valid():
+        from_date = form.cleaned_data["from_date"]
+        to_date = form.cleaned_data["to_date"]
+    else:
+        from_date = BEGINNING_OF_TIME
+        to_date = datetime.date.today()
 
     # Balance sheet data struct
     accounts = {"in": [], "ex": []}
@@ -318,18 +362,28 @@ def income(request: HttpRequest, group: Group, is_admin=False):
         "in_ex_diff": 0,
     }
 
-    # Incomes
-    for account in group.account_set.filter(type=Account.INCOME_ACCOUNT):
-        accounts["in"].append(account)
-        account_sums["in"] += account.normal_balance()
+    # Get balance change for all accounts
+    account_balances = group.get_balance_change(from_date, to_date, True)
 
-    # Expenses
-    for account in group.account_set.filter(type=Account.EXPENSE_ACCOUNT):
-        accounts["ex"].append(account)
-        account_sums["ex"] += account.normal_balance()
+    for account in account_balances.values():
+        if account["type"] == Account.INCOME_ACCOUNT:
+            accounts["in"].append(account)
+            account_sums["in"] += account["normal_balance"]
+
+        elif account["type"] == Account.EXPENSE_ACCOUNT:
+            accounts["ex"].append(account)
+            account_sums["ex"] += account["normal_balance"]
 
     # Net income
     account_sums["in_ex_diff"] = account_sums["in"] - account_sums["ex"]
+
+    # Workaround to fix rounding error, makes Decimal(-0.00) display as "0.00"
+    for key in account_sums:
+        account_sums[key] += 0
+    for account in accounts["in"]:
+        account["normal_balance"] += 0
+    for account in accounts["ex"]:
+        account["normal_balance"] += 0
 
     return render(
         request,
@@ -337,7 +391,9 @@ def income(request: HttpRequest, group: Group, is_admin=False):
         {
             "is_admin": is_admin,
             "group": group,
-            "today": date.today(),
+            "form": form,
+            "from_date": from_date,
+            "to_date": to_date,
             "accounts": accounts,
             "account_sums": account_sums,
         },
