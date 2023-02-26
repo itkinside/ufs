@@ -163,17 +163,18 @@ class ColumnForm(forms.ModelForm):
 class BalanceStatementForm(forms.Form):
     date = forms.DateField(
         label=_("Date"),
-        required=True,
+        required=False,
         error_messages={"required": _("Please enter a date")},
     )
-    accounts = forms.ChoiceField(
-        label=_("Accounts"),
-        choices=[
-            ("active", _("Hide inactive accounts")),
-            ("all", _("Show all accounts")),
-        ],
-        initial="active",
-        widget=forms.Select,
+    hide_empty_active = forms.BooleanField(
+        label=_("Hide empty active accounts"),
+        initial=False,
+        required=False,
+    )
+    hide_empty_inactive = forms.BooleanField(
+        label=_("Hide empty inactive accounts"),
+        initial=True,
+        required=False,
     )
 
 
@@ -188,12 +189,13 @@ class IncomeStatementForm(forms.Form):
         required=True,
         error_messages={"required": _("Please enter a date")},
     )
-    accounts = forms.ChoiceField(
-        label=_("Accounts"),
-        choices=[
-            ("active", _("Hide inactive accounts")),
-            ("all", _("Show all accounts")),
-        ],
-        initial="active",
-        widget=forms.Select,
+    hide_empty_active = forms.BooleanField(
+        label=_("Hide empty active accounts"),
+        initial=False,
+        required=False,
+    )
+    hide_empty_inactive = forms.BooleanField(
+        label=_("Hide empty inactive accounts"),
+        initial=True,
+        required=False,
     )

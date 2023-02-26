@@ -5,7 +5,7 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction as db_transaction
-from django.db.models import F, Subquery, OuterRef, DecimalField
+from django.db.models import Q, F, Subquery, OuterRef, DecimalField
 from django.forms.models import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRequest
 from django.shortcuts import render
@@ -253,16 +253,27 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
 
     if form.is_valid():
         date = form.cleaned_data["date"]
-        include_all_accounts = form.cleaned_data["accounts"] == "all"
+        hide_empty_active = form.cleaned_data["hide_empty_active"]
+        hide_empty_inactive = form.cleaned_data["hide_empty_inactive"]
     else:
         date = datetime.date.today()
-        include_all_accounts = False
+        hide_empty_active = form.fields["hide_empty_active"].initial
+        hide_empty_inactive = form.fields["hide_empty_inactive"].initial
 
-    account_balances = (
+    # Get account balances at the given date for relevant accounts
+    balances = (
         Account.objects.with_historical_balance(date)
         .filter(group=group)
+        .exclude(type=Account.INCOME_ACCOUNT)
+        .exclude(type=Account.EXPENSE_ACCOUNT)
         .prefetch_related("group")
     )
+
+    if hide_empty_active:
+        balances = balances.exclude(Q(active=True) & Q(normal_balance=0))
+
+    if hide_empty_inactive:
+        balances = balances.exclude(Q(active=False) & Q(normal_balance=0))
 
     # Balance sheet data struct
     accounts = {
@@ -282,14 +293,7 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
     member_negative_sum = 0
     member_positive_sum = 0
 
-    for account in account_balances:
-        if not account.active and account.normal_balance == 0:
-            if not include_all_accounts:
-                continue
-
-        if account.type in (Account.INCOME_ACCOUNT, Account.EXPENSE_ACCOUNT):
-            continue
-
+    for account in balances:
         if account.group_account:
             accounts[account.type.lower()].append(account)
             account_sums[account.type.lower()] += account.normal_balance
@@ -355,14 +359,21 @@ def income(request: HttpRequest, group: Group, is_admin=False):
     if form.is_valid():
         from_date = form.cleaned_data["from_date"]
         to_date = form.cleaned_data["to_date"]
+        hide_empty_active = form.cleaned_data["hide_empty_active"]
+        hide_empty_inactive = form.cleaned_data["hide_empty_inactive"]
     else:
         from_date = BEGINNING_OF_TIME
         to_date = datetime.date.today()
+        hide_empty_active = form.fields["hide_empty_active"].initial
+        hide_empty_inactive = form.fields["hide_empty_inactive"].initial
 
     # Find the balance for each account at the start of the period
     starting_balances = (
         Account.objects.with_historical_balance(from_date)
         .filter(group=group)
+        .filter(
+            Q(type=Account.INCOME_ACCOUNT) | Q(type=Account.EXPENSE_ACCOUNT)
+        )
         .prefetch_related("group")
     )
 
@@ -370,6 +381,9 @@ def income(request: HttpRequest, group: Group, is_admin=False):
     current_balances = (
         Account.objects.with_historical_balance(to_date)
         .filter(group=group)
+        .filter(
+            Q(type=Account.INCOME_ACCOUNT) | Q(type=Account.EXPENSE_ACCOUNT)
+        )
         .annotate(
             balance_change=F("normal_balance")
             - Subquery(
@@ -381,6 +395,16 @@ def income(request: HttpRequest, group: Group, is_admin=False):
         )
         .prefetch_related("group")
     )
+
+    if hide_empty_active:
+        current_balances = current_balances.exclude(
+            Q(active=True) & Q(balance_change=0)
+        )
+
+    if hide_empty_inactive:
+        current_balances = current_balances.exclude(
+            Q(active=False) & Q(balance_change=0)
+        )
 
     # Balance sheet data struct
     accounts = {"in": [], "ex": []}
