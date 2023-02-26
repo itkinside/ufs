@@ -70,24 +70,6 @@ class Group(models.Model):
         n = self.account_number
         return ".".join([n[:4], n[4:6], n[6:]])
 
-    def get_all_entries(
-        self, from_date: str, to_date: str
-    ) -> ListType["TransactionEntry"]:
-        """
-        Returns entries for committed transactions for this group, in the
-        range [from_date, to_date] (inclusive).
-        """
-        return (
-            TransactionEntry.objects.filter(transaction__group__id=self.id)
-            .select_related()
-            .filter(
-                transaction__date__gte=from_date,
-                transaction__date__lte=to_date,
-                transaction__state=Transaction.COMMITTED_STATE,
-            )
-            .order_by("transaction__date")
-        )
-
     def save(self, *args, **kwargs):
         if not len(self.slug):
             raise ValueError("Slug cannot be empty.")
