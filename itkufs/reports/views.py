@@ -5,6 +5,7 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction as db_transaction
+from django.db.models import F, Subquery, OuterRef, DecimalField
 from django.forms.models import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRequest
 from django.shortcuts import render
@@ -31,9 +32,6 @@ from itkufs.reports.pdf import pdf
 from typing import Optional
 
 _list = list
-
-# Arbitrary date before the first possible transaction date
-BEGINNING_OF_TIME = datetime.date(1929, 10, 1)
 
 
 def public_lists(request: HttpRequest):
@@ -254,11 +252,17 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
         form = BalanceStatementForm(initial={"date": datetime.date.today()})
 
     if form.is_valid():
-        to_date = form.cleaned_data["date"]
+        date = form.cleaned_data["date"]
         include_all_accounts = form.cleaned_data["accounts"] == "all"
     else:
-        to_date = datetime.date.today()
+        date = datetime.date.today()
         include_all_accounts = False
+
+    account_balances = (
+        Account.objects.with_historical_balance(date)
+        .filter(group=group)
+        .prefetch_related("group")
+    )
 
     # Balance sheet data struct
     accounts = {
@@ -274,27 +278,26 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
         "li_eq": 0,
     }
 
-    # Get balance change for all accounts
-    account_balances = group.get_balance_change(
-        BEGINNING_OF_TIME, to_date, include_all_accounts
-    )
-
     # Aggregate member account liabilities
     member_negative_sum = 0
     member_positive_sum = 0
 
-    for account in account_balances.values():
-        if account["type"] in (Account.INCOME_ACCOUNT, Account.EXPENSE_ACCOUNT):
+    for account in account_balances:
+        if not account.active and account.normal_balance == 0:
+            if not include_all_accounts:
+                continue
+
+        if account.type in (Account.INCOME_ACCOUNT, Account.EXPENSE_ACCOUNT):
             continue
 
-        if account["is_group_account"]:
-            accounts[account["type"].lower()].append(account)
-            account_sums[account["type"].lower()] += account["normal_balance"]
+        if account.group_account:
+            accounts[account.type.lower()].append(account)
+            account_sums[account.type.lower()] += account.normal_balance
         else:
-            if account["normal_balance"] > 0:
-                member_positive_sum += account["normal_balance"]
+            if account.normal_balance > 0:
+                member_positive_sum += account.normal_balance
             else:
-                member_negative_sum += account["normal_balance"]
+                member_negative_sum += account.normal_balance
 
     # Accumulated member accounts liabilities
     accounts["li"].append(
@@ -323,7 +326,7 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
         {
             "is_admin": is_admin,
             "group": group,
-            "to_date": to_date,
+            "to_date": date,
             "accounts": accounts,
             "account_sums": account_sums,
             "form": form,
@@ -335,6 +338,9 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
 @limit_to_group
 def income(request: HttpRequest, group: Group, is_admin=False):
     """Show income statement for group"""
+
+    # Arbitrary date before the first possible transaction date
+    BEGINNING_OF_TIME = datetime.date(1929, 10, 1)
 
     if request.GET:
         form = IncomeStatementForm(data=request.GET)
@@ -353,6 +359,29 @@ def income(request: HttpRequest, group: Group, is_admin=False):
         from_date = BEGINNING_OF_TIME
         to_date = datetime.date.today()
 
+    # Find the balance for each account at the start of the period
+    starting_balances = (
+        Account.objects.with_historical_balance(from_date)
+        .filter(group=group)
+        .prefetch_related("group")
+    )
+
+    # Find the change in balance for each account at the end of the period
+    current_balances = (
+        Account.objects.with_historical_balance(to_date)
+        .filter(group=group)
+        .annotate(
+            balance_change=F("normal_balance")
+            - Subquery(
+                starting_balances.filter(slug=OuterRef("slug")).values(
+                    "normal_balance"
+                )[:1],
+                output_field=DecimalField(),
+            ),
+        )
+        .prefetch_related("group")
+    )
+
     # Balance sheet data struct
     accounts = {"in": [], "ex": []}
 
@@ -363,27 +392,17 @@ def income(request: HttpRequest, group: Group, is_admin=False):
     }
 
     # Get balance change for all accounts
-    account_balances = group.get_balance_change(from_date, to_date, True)
-
-    for account in account_balances.values():
-        if account["type"] == Account.INCOME_ACCOUNT:
+    for account in current_balances:
+        if account.type == Account.INCOME_ACCOUNT:
             accounts["in"].append(account)
-            account_sums["in"] += account["normal_balance"]
+            account_sums["in"] += account.balance_change
 
-        elif account["type"] == Account.EXPENSE_ACCOUNT:
+        elif account.type == Account.EXPENSE_ACCOUNT:
             accounts["ex"].append(account)
-            account_sums["ex"] += account["normal_balance"]
+            account_sums["ex"] += account.balance_change
 
     # Net income
     account_sums["in_ex_diff"] = account_sums["in"] - account_sums["ex"]
-
-    # Workaround to fix rounding error, makes Decimal(-0.00) display as "0.00"
-    for key in account_sums:
-        account_sums[key] += 0
-    for account in accounts["in"]:
-        account["normal_balance"] += 0
-    for account in accounts["ex"]:
-        account["normal_balance"] += 0
 
     return render(
         request,

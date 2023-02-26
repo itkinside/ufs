@@ -3,7 +3,15 @@ import datetime
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db import connection, models, transaction as db_transaction
-from django.db.models import Q
+from django.db.models import (
+    Q,
+    Sum,
+    When,
+    Case,
+    Value,
+    F,
+    ExpressionWrapper,
+)
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.encoding import smart_text
@@ -79,78 +87,6 @@ class Group(models.Model):
             )
             .order_by("transaction__date")
         )
-
-    def get_balance_change(
-        self,
-        from_date: str,
-        to_date: str,
-        include_all_accounts: bool,
-    ):
-        """
-        Returns the change in balance for each account in the group, i.e.
-        the sum of committed transactions in the specified range.
-
-        If include_all_accounts is False, inactive accounts with no
-        balance change are not included.
-        """
-        # Create a dict of all accounts in this group
-        accounts = {
-            a.id: {
-                "id": a.id,
-                "name": a.name,
-                "type": a.type,
-                "is_group_account": a.group_account,
-                "is_active": a.active,
-                "normal_balance": 0,
-            }
-            for a in Account.objects.filter(group=self)
-        }
-
-        for a in self.group_account_set:
-            accounts[a.id]["url"] = a.get_absolute_url()
-
-        # Sum up transactions for all accounts with transactions in the range
-        transaction_filters = (
-            Q(transactionentry__transaction__state=Transaction.COMMITTED_STATE)
-            & Q(transactionentry__transaction__date__gte=from_date)
-            & Q(transactionentry__transaction__date__lte=to_date)
-            & Q(transactionentry__transaction__group=self)
-        )
-        balances = (
-            Account.objects.select_related("transactionentry")
-            .filter(transaction_filters)
-            .annotate(
-                balance=models.Sum("transactionentry__debit")
-                - models.Sum("transactionentry__credit"),
-            )
-            .values(
-                "id",
-                "name",
-                "owner",
-                "short_name",
-                "type",
-                "group_account",
-                "balance",
-            )
-        )
-
-        # Make credit balance positive for liabilities, income and equity
-        for a in balances:
-            if a["type"] in (Account.ASSET_ACCOUNT, Account.EXPENSE_ACCOUNT):
-                accounts[a["id"]]["normal_balance"] = a["balance"]
-            else:
-                accounts[a["id"]]["normal_balance"] = a["balance"] * -1
-
-        if not include_all_accounts:
-            # Filter out inactive accounts with no transactions
-            accounts = {
-                a: accounts[a]
-                for a in accounts
-                if accounts[a]["normal_balance"] != 0
-                or accounts[a]["is_active"]
-            }
-
-        return accounts
 
     def save(self, *args, **kwargs):
         if not len(self.slug):
@@ -308,6 +244,59 @@ class AccountManager(models.Manager):
                     "group_block_limit_sql": GROUP_BLOCK_LIMIT_SQL,
                 }
             )
+        )
+
+    def with_historical_balance(self, at_date):
+        """
+        Returns a queryset of accounts with their normalized balance as of the
+        given date.
+
+        A normalized balance means that equity, liability, and income accounts
+        will have a positive balance if their credit amount is greater than
+        their debit amount.
+        """
+        committed_transactions_at_date = Q(
+            transactionentry__transaction__state=Transaction.COMMITTED_STATE
+        ) & Q(transactionentry__transaction__date__lte=at_date)
+
+        return self.annotate(
+            total_credit=Sum(
+                Case(
+                    When(
+                        committed_transactions_at_date,
+                        then="transactionentry__credit",
+                    ),
+                    default=Value(0),
+                    output_field=models.DecimalField(),
+                )
+            ),
+            total_debit=Sum(
+                Case(
+                    When(
+                        committed_transactions_at_date,
+                        then="transactionentry__debit",
+                    ),
+                    default=Value(0),
+                    output_field=models.DecimalField(),
+                )
+            ),
+        ).annotate(
+            raw_balance=ExpressionWrapper(
+                F("total_debit") - F("total_credit"),
+                output_field=models.DecimalField(),
+            ),
+            normal_balance=Case(
+                When(raw_balance__isnull=True, then=Value(0)),
+                When(
+                    type__in=[
+                        Account.ASSET_ACCOUNT,
+                        Account.EXPENSE_ACCOUNT,
+                    ],
+                    then="raw_balance",
+                ),
+                default=F("raw_balance") * -1,
+                output_field=models.DecimalField(),
+            ),
         )
 
 

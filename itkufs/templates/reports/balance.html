@@ -44,7 +44,7 @@
     <tr>
         <td>&nbsp;&nbsp;
             {% if is_admin %}
-                <a href="{{ account.url }}">{{ account.name }}</a>
+                <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
             {% else %}
                 {{ account.name }}
             {% endif %}
@@ -74,7 +74,7 @@
     <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;
             {% if is_admin %}
-                <a href="{{ account.url }}">{{ account.name }}</a>
+                <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
             {% else %}
                 {{ account.name }}
             {% endif %}
@@ -85,7 +85,7 @@
 {% for account in accounts.li|slice:"-2:" %}
     <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ account.name  }}</td>
-		<td class="align_right">{{ account.balance }}</td>
+		<td class="align_right">{{ account.balance|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
@@ -102,7 +102,7 @@
     <tr>
         <td>&nbsp;&nbsp;&nbsp;&nbsp;
             {% if is_admin %}
-                <a href="{{ account.url }}">{{ account.name }}</a>
+                <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
             {% else %}
                 {{ account.name }}
             {% endif %}

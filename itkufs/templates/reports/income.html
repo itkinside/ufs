@@ -42,12 +42,12 @@
     <tr>
         <td>&nbsp;&nbsp;
             {% if is_admin %}
-                <a href="{{ account.url }}">{{ account.name }}</a>
+                <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
             {% else %}
                 {{ account.name }}
             {% endif %}
         </td>
-        <td class="align_right">{{ account.normal_balance|floatformat:2 }}</td>
+        <td class="align_right">{{ account.balance_change|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
@@ -66,12 +66,12 @@
     <tr>
         <td>&nbsp;&nbsp;
             {% if is_admin %}
-                <a href="{{ account.url }}">{{ account.name }}</a>
+                <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
             {% else %}
                 {{ account.name }}
             {% endif %}
         </td>
-        <td class="align_right">{{ account.normal_balance|floatformat:2 }}</td>
+        <td class="align_right">{{ account.balance_change|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
