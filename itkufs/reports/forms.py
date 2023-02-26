@@ -168,12 +168,10 @@ class BalanceStatementForm(forms.Form):
     )
     hide_empty_active = forms.BooleanField(
         label=_("Hide empty active accounts"),
-        initial=False,
         required=False,
     )
     hide_empty_inactive = forms.BooleanField(
         label=_("Hide empty inactive accounts"),
-        initial=True,
         required=False,
     )
 
@@ -191,11 +189,9 @@ class IncomeStatementForm(forms.Form):
     )
     hide_empty_active = forms.BooleanField(
         label=_("Hide empty active accounts"),
-        initial=False,
         required=False,
     )
     hide_empty_inactive = forms.BooleanField(
         label=_("Hide empty inactive accounts"),
-        initial=True,
         required=False,
     )

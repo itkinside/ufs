@@ -247,18 +247,20 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
     """Show balance sheet for the group"""
 
     if request.GET:
-        form = BalanceStatementForm(data=request.GET)
+        # Get data from user
+        data = request.GET
     else:
-        form = BalanceStatementForm(initial={"date": datetime.date.today()})
+        # Set default values
+        data = {"date": datetime.date.today(), "hide_empty_inactive": True}
+
+    form = BalanceStatementForm(data)
 
     if form.is_valid():
         date = form.cleaned_data["date"]
         hide_empty_active = form.cleaned_data["hide_empty_active"]
         hide_empty_inactive = form.cleaned_data["hide_empty_inactive"]
     else:
-        date = datetime.date.today()
-        hide_empty_active = form.fields["hide_empty_active"].initial
-        hide_empty_inactive = form.fields["hide_empty_inactive"].initial
+        raise ValueError("Invalid form data.")
 
     # Get account balances at the given date for relevant accounts
     balances = (
@@ -343,18 +345,18 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
 def income(request: HttpRequest, group: Group, is_admin=False):
     """Show income statement for group"""
 
-    # Arbitrary date before the first possible transaction date
-    BEGINNING_OF_TIME = datetime.date(1929, 10, 1)
-
     if request.GET:
-        form = IncomeStatementForm(data=request.GET)
+        # Get data from user
+        data = request.GET
     else:
-        form = IncomeStatementForm(
-            initial={
-                "from_date": BEGINNING_OF_TIME,
-                "to_date": datetime.date.today(),
-            }
-        )
+        # Set default values
+        data = {
+            "from_date": datetime.date(1929, 10, 1),
+            "to_date": datetime.date.today(),
+            "hide_empty_inactive": True,
+        }
+
+    form = IncomeStatementForm(data)
 
     if form.is_valid():
         from_date = form.cleaned_data["from_date"]
@@ -362,10 +364,7 @@ def income(request: HttpRequest, group: Group, is_admin=False):
         hide_empty_active = form.cleaned_data["hide_empty_active"]
         hide_empty_inactive = form.cleaned_data["hide_empty_inactive"]
     else:
-        from_date = BEGINNING_OF_TIME
-        to_date = datetime.date.today()
-        hide_empty_active = form.fields["hide_empty_active"].initial
-        hide_empty_inactive = form.fields["hide_empty_inactive"].initial
+        raise ValueError("Invalid form data.")
 
     # Find the balance for each account at the start of the period
     starting_balances = (
