@@ -1,9 +1,11 @@
 from datetime import date
 from subprocess import Popen, PIPE
+import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction as db_transaction
+from django.db.models import Q, F, Subquery, OuterRef, DecimalField
 from django.forms.models import inlineformset_factory
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRequest
 from django.shortcuts import render
@@ -12,9 +14,19 @@ from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from itkufs.common.decorators import limit_to_group, limit_to_admin
-from itkufs.accounting.models import Account, Transaction, Group
+from itkufs.accounting.models import (
+    Account,
+    Transaction,
+    Group,
+)
 from itkufs.reports.models import List, ListColumn
-from itkufs.reports.forms import ColumnForm, ListForm, ListTransactionForm
+from itkufs.reports.forms import (
+    ColumnForm,
+    ListForm,
+    ListTransactionForm,
+    BalanceStatementForm,
+    IncomeStatementForm,
+)
 from itkufs.reports.pdf import pdf
 
 from typing import Optional
@@ -234,6 +246,37 @@ def transaction_from_list(
 def balance(request: HttpRequest, group: Group, is_admin=False):
     """Show balance sheet for the group"""
 
+    if request.GET:
+        # Get data from user
+        data = request.GET
+    else:
+        # Set default values
+        data = {"date": datetime.date.today(), "hide_empty_inactive": True}
+
+    form = BalanceStatementForm(data)
+
+    if form.is_valid():
+        date = form.cleaned_data["date"]
+        hide_empty_active = form.cleaned_data["hide_empty_active"]
+        hide_empty_inactive = form.cleaned_data["hide_empty_inactive"]
+    else:
+        raise ValueError("Invalid form data.")
+
+    # Get account balances at the given date for relevant accounts
+    balances = (
+        Account.objects.with_historical_balance(date)
+        .filter(group=group)
+        .exclude(type=Account.INCOME_ACCOUNT)
+        .exclude(type=Account.EXPENSE_ACCOUNT)
+        .prefetch_related("group")
+    )
+
+    if hide_empty_active:
+        balances = balances.exclude(Q(active=True) & Q(normal_balance=0))
+
+    if hide_empty_inactive:
+        balances = balances.exclude(Q(active=False) & Q(normal_balance=0))
+
     # Balance sheet data struct
     accounts = {
         "as": [],
@@ -248,37 +291,29 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
         "li_eq": 0,
     }
 
-    # Assets
-    for account in group.account_set.filter(type=Account.ASSET_ACCOUNT):
-        accounts["as"].append(account)
-        account_sums["as"] += account.normal_balance()
-
-    # Liabilities
-    for account in group.account_set.filter(
-        type=Account.LIABILITY_ACCOUNT, group_account=True
-    ):
-        accounts["li"].append(account)
-        account_sums["li"] += account.normal_balance()
-
-    # Accumulated member accounts liabilities
+    # Aggregate member account liabilities
     member_negative_sum = 0
     member_positive_sum = 0
-    for account in group.account_set.filter(
-        type=Account.LIABILITY_ACCOUNT, group_account=False
-    ):
-        if account.normal_balance() > 0:
-            member_positive_sum += account.normal_balance()
+
+    for account in balances:
+        if account.group_account:
+            accounts[account.type.lower()].append(account)
+            account_sums[account.type.lower()] += account.normal_balance
         else:
-            member_negative_sum += account.normal_balance()
-    accounts["li"].append((_("Positive member accounts"), member_positive_sum))
-    accounts["li"].append((_("Negative member accounts"), member_negative_sum))
+            if account.normal_balance > 0:
+                member_positive_sum += account.normal_balance
+            else:
+                member_negative_sum += account.normal_balance
+
+    # Accumulated member accounts liabilities
+    accounts["li"].append(
+        {"name": _("Positive member accounts"), "balance": member_positive_sum}
+    )
+    accounts["li"].append(
+        {"name": _("Negative member accounts"), "balance": member_negative_sum}
+    )
     account_sums["li"] += member_positive_sum
     account_sums["li"] += member_negative_sum
-
-    # Equities
-    for account in group.account_set.filter(type=Account.EQUITY_ACCOUNT):
-        accounts["eq"].append(account)
-        account_sums["eq"] += account.normal_balance()
 
     # Total liabilities and equities
     account_sums["li_eq"] = account_sums["li"] + account_sums["eq"]
@@ -297,9 +332,10 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
         {
             "is_admin": is_admin,
             "group": group,
-            "today": date.today(),
+            "to_date": date,
             "accounts": accounts,
             "account_sums": account_sums,
+            "form": form,
         },
     )
 
@@ -308,6 +344,66 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
 @limit_to_group
 def income(request: HttpRequest, group: Group, is_admin=False):
     """Show income statement for group"""
+
+    if request.GET:
+        # Get data from user
+        data = request.GET
+    else:
+        # Set default values
+        data = {
+            "from_date": datetime.date(1929, 10, 1),
+            "to_date": datetime.date.today(),
+            "hide_empty_inactive": True,
+        }
+
+    form = IncomeStatementForm(data)
+
+    if form.is_valid():
+        from_date = form.cleaned_data["from_date"]
+        to_date = form.cleaned_data["to_date"]
+        hide_empty_active = form.cleaned_data["hide_empty_active"]
+        hide_empty_inactive = form.cleaned_data["hide_empty_inactive"]
+    else:
+        raise ValueError("Invalid form data.")
+
+    # Find the balance for each account at the start of the period
+    starting_balances = (
+        Account.objects.with_historical_balance(from_date)
+        .filter(group=group)
+        .filter(
+            Q(type=Account.INCOME_ACCOUNT) | Q(type=Account.EXPENSE_ACCOUNT)
+        )
+        .prefetch_related("group")
+    )
+
+    # Find the change in balance for each account at the end of the period
+    current_balances = (
+        Account.objects.with_historical_balance(to_date)
+        .filter(group=group)
+        .filter(
+            Q(type=Account.INCOME_ACCOUNT) | Q(type=Account.EXPENSE_ACCOUNT)
+        )
+        .annotate(
+            balance_change=F("normal_balance")
+            - Subquery(
+                starting_balances.filter(slug=OuterRef("slug")).values(
+                    "normal_balance"
+                )[:1],
+                output_field=DecimalField(),
+            ),
+        )
+        .prefetch_related("group")
+    )
+
+    if hide_empty_active:
+        current_balances = current_balances.exclude(
+            Q(active=True) & Q(balance_change=0)
+        )
+
+    if hide_empty_inactive:
+        current_balances = current_balances.exclude(
+            Q(active=False) & Q(balance_change=0)
+        )
 
     # Balance sheet data struct
     accounts = {"in": [], "ex": []}
@@ -318,15 +414,15 @@ def income(request: HttpRequest, group: Group, is_admin=False):
         "in_ex_diff": 0,
     }
 
-    # Incomes
-    for account in group.account_set.filter(type=Account.INCOME_ACCOUNT):
-        accounts["in"].append(account)
-        account_sums["in"] += account.normal_balance()
+    # Get balance change for all accounts
+    for account in current_balances:
+        if account.type == Account.INCOME_ACCOUNT:
+            accounts["in"].append(account)
+            account_sums["in"] += account.balance_change
 
-    # Expenses
-    for account in group.account_set.filter(type=Account.EXPENSE_ACCOUNT):
-        accounts["ex"].append(account)
-        account_sums["ex"] += account.normal_balance()
+        elif account.type == Account.EXPENSE_ACCOUNT:
+            accounts["ex"].append(account)
+            account_sums["ex"] += account.balance_change
 
     # Net income
     account_sums["in_ex_diff"] = account_sums["in"] - account_sums["ex"]
@@ -337,7 +433,9 @@ def income(request: HttpRequest, group: Group, is_admin=False):
         {
             "is_admin": is_admin,
             "group": group,
-            "today": date.today(),
+            "form": form,
+            "from_date": from_date,
+            "to_date": to_date,
             "accounts": accounts,
             "account_sums": account_sums,
         },
