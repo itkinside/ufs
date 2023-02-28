@@ -17,8 +17,6 @@ from itkufs.common.forms import ExportTransactionsForm
 from itkufs.accounting.models import (
     Account,
     Group,
-    Transaction,
-    TransactionEntry,
 )
 
 
@@ -66,17 +64,7 @@ def export_transactions(request: HttpRequest, group: Group, is_admin=False):
         )
 
         # Find all entries for this group in the given time period
-        entries = (
-            TransactionEntry.objects.filter(transaction__group__id=group.id)
-            .select_related()
-            .filter(
-                transaction__date__gte=from_date,
-                transaction__date__lte=to_date,
-                transaction__state=Transaction.COMMITTED_STATE,
-            )
-            .order_by("transaction__date")
-        )
-
+        entries = group.get_all_entries(from_date, to_date)
         for e in entries:
             writer.writerow(
                 [
