@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
+from django.views.generic.detail import SingleObjectMixin
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, View
+from django.forms.models import model_to_dict
 
 from itkufs.common.decorators import limit_to_group
 from itkufs.accounting.models import (
@@ -139,3 +141,19 @@ class TransactionDetails(DetailView):
         context["is_admin"] = self.is_admin
         context["group"] = self.group
         return context
+
+
+class APIAccountDetails(SingleObjectMixin, View):
+
+    @method_decorator(login_required)
+    @method_decorator(limit_to_group)
+    def get(self, request, *args, **kwargs):
+        accs = Account.objects.filter(group=kwargs["group"])
+        data = {}
+        i = 0
+        for a in accs:
+            temp = model_to_dict(a)
+            temp['balance'] = a.normal_balance()
+            data[i]=temp
+            i += 1
+        return JsonResponse(data)
