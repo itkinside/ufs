@@ -148,12 +148,11 @@ class APIAccountDetails(SingleObjectMixin, View):
     @method_decorator(login_required)
     @method_decorator(limit_to_group)
     def get(self, request, *args, **kwargs):
-        accs = Account.objects.filter(group=kwargs["group"])
+        accounts = Account.objects.filter(group=kwargs["group"])
         data = {}
-        i = 0
-        for a in accs:
+        for a in accounts:
             temp = model_to_dict(a)
             temp['balance'] = a.normal_balance()
-            data[i]=temp
+            data[i.id]=temp
             i += 1
         return JsonResponse(data)
