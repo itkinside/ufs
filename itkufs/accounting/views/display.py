@@ -153,6 +153,5 @@ class APIAccountDetails(SingleObjectMixin, View):
         for a in accounts:
             temp = model_to_dict(a)
             temp['balance'] = a.normal_balance()
-            data[i.id]=temp
-            i += 1
+            data[a.id] = temp
         return JsonResponse(data)
