@@ -175,7 +175,8 @@ class Command(BaseCommand):
     ):
         """
         Create transaction entries for a transaction.
-        Debits or credits a group account and randomly credits or debits user accounts.
+        Debits or credits a group account and randomly credits or debits
+        user accounts.
         """
         total = 0
         users = random.sample(population=user_accounts, k=count - 1)
