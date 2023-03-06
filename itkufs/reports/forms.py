@@ -158,3 +158,40 @@ class ColumnForm(forms.ModelForm):
     class Meta:
         model = ListColumn
         fields = ("name", "width")
+
+
+class BalanceStatementForm(forms.Form):
+    date = forms.DateField(
+        label=_("Date"),
+        required=False,
+        error_messages={"required": _("Please enter a date")},
+    )
+    hide_empty_active = forms.BooleanField(
+        label=_("Hide empty active accounts"),
+        required=False,
+    )
+    hide_empty_inactive = forms.BooleanField(
+        label=_("Hide empty inactive accounts"),
+        required=False,
+    )
+
+
+class IncomeStatementForm(forms.Form):
+    from_date = forms.DateField(
+        label=_("From date"),
+        required=True,
+        error_messages={"required": _("Please enter a date")},
+    )
+    to_date = forms.DateField(
+        label=_("To date"),
+        required=True,
+        error_messages={"required": _("Please enter a date")},
+    )
+    hide_empty_active = forms.BooleanField(
+        label=_("Hide empty active accounts"),
+        required=False,
+    )
+    hide_empty_inactive = forms.BooleanField(
+        label=_("Hide empty inactive accounts"),
+        required=False,
+    )
