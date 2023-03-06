@@ -3,6 +3,15 @@ import datetime
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db import connection, models, transaction as db_transaction
+from django.db.models import (
+    Q,
+    Sum,
+    When,
+    Case,
+    Value,
+    F,
+    ExpressionWrapper,
+)
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.encoding import smart_text
@@ -220,6 +229,46 @@ class AccountManager(models.Manager):
         )
 
 
+class HistoricalAccountManager(models.Manager):
+    def with_balance_change(self, from_date: str, to_date: str):
+        """
+        Returns a queryset of accounts with their change in normalized balance
+        between the given dates.
+
+        A normalized balance means that equity, liability, and income accounts
+        will have a positive balance if their credit amount is greater than
+        their debit amount, and vice versa for expense and asset accounts.
+        """
+        # Find entries from committed transactions in the period
+        filters = (
+            Q(transactionentry__transaction__state=Transaction.COMMITTED_STATE)
+            & Q(transactionentry__transaction__date__gte=from_date)
+            & Q(transactionentry__transaction__date__lte=to_date)
+        )
+
+        # Get changes in balance for accounts with transactions in the period
+        return self.filter(filters).annotate(
+            sum_debit=Sum("transactionentry__debit"),
+            sum_credit=Sum("transactionentry__credit"),
+            difference=ExpressionWrapper(
+                F("sum_debit") - F("sum_credit"),
+                output_field=models.DecimalField(),
+            ),
+            normal_balance=Case(
+                When(difference__isnull=True, then=Value(0)),
+                When(
+                    type__in=[
+                        Account.ASSET_ACCOUNT,
+                        Account.EXPENSE_ACCOUNT,
+                    ],
+                    then="difference",
+                ),
+                default=F("difference") * -1,
+                output_field=models.DecimalField(),
+            ),
+        )
+
+
 class Account(models.Model):
     ASSET_ACCOUNT = "As"  # Eiendeler/aktiva
     LIABILITY_ACCOUNT = "Li"  # Gjeld/passiva
@@ -235,6 +284,7 @@ class Account(models.Model):
     )
 
     objects = AccountManager()
+    historical_objects = HistoricalAccountManager()
 
     name = models.CharField(_("name"), max_length=100)
     short_name = models.CharField(_("short name"), max_length=100, blank=True)
