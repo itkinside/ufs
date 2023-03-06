@@ -17,13 +17,22 @@
 {% block header %}
     {{ block.super }}
     &ndash; {% trans "Income statement" %}
-    &ndash; {% trans "up to" %} {{ today }}
+    &ndash; {{ from_date|date:"Y-m-d" }}/{{ to_date|date:"Y-m-d" }}
 {% endblock %}
 
 
 {% block content %}
 
-{# <p>FIXME: Delimit income statement to time interval.</p> #}
+<p>
+    {% trans "Specify a date range to see incomes and expenses for that period." %}
+</p>
+
+<form method="GET" action="#" class="plainform">
+{{ form.as_p }}
+<p>
+    <button type="submit">{% trans "Update" %}</button>
+</p>
+</form>
 
 <table class="tablelist float_left">
     <tr>
@@ -33,12 +42,12 @@
     <tr>
         <td>&nbsp;&nbsp;
             {% if is_admin %}
-                <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
+                <a href="{{ account.url }}">{{ account.name }}</a>
             {% else %}
                 {{ account.name }}
             {% endif %}
         </td>
-        <td class="align_right">{{ account.normal_balance|floatformat:2 }}</td>
+        <td class="align_right">{{ account.balance_change|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
@@ -57,12 +66,12 @@
     <tr>
         <td>&nbsp;&nbsp;
             {% if is_admin %}
-                <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
+                <a href="{{ account.url }}">{{ account.name }}</a>
             {% else %}
                 {{ account.name }}
             {% endif %}
         </td>
-        <td class="align_right">{{ account.normal_balance|floatformat:2 }}</td>
+        <td class="align_right">{{ account.balance_change|floatformat:2 }}</td>
     </tr>
 {% endfor %}
     <tr>
