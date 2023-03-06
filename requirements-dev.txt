@@ -23,3 +23,7 @@ tox
 
 # Dependency management tools
 pip-tools
+
+# Data generation
+factory_boy
+tqdm
