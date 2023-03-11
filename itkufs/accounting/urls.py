@@ -12,6 +12,7 @@ from itkufs.accounting.views.display import (
     SettlementList,
     TransactionDetails,
     TransactionList,
+    APIAccountDetails,
 )
 
 urlpatterns = [
@@ -115,5 +116,9 @@ urlpatterns = [
         r"(?P<account>[0-9a-z_-]+)/transaction/p(?P<page>\d+)/$",
         TransactionList.as_view(),
         name="transaction-list-account-page",
+    ),
+    url(r"^(?P<group>[0-9a-z_-]+)/api/accounts/$",
+        APIAccountDetails.as_view(),
+        name="account-list"
     ),
 ]
