@@ -6,13 +6,21 @@
 #
 django==1.11.29
     # via -r requirements.in
+freetype-py==2.3.0
+    # via
+    #   reportlab
+    #   rlpycairo
 pillow==9.1.1
     # via
     #   -r requirements.in
     #   reportlab
 psycopg2==2.9.3
     # via -r requirements.in
+pycairo==1.23.0
+    # via rlpycairo
 pytz==2019.3
     # via django
-reportlab==3.6.10
+reportlab==4.0.0
     # via -r requirements.in
+rlpycairo==0.2.0
+    # via reportlab
