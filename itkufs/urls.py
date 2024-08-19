@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 from django.conf import settings
 from django.contrib import admin
-from django.views.i18n import javascript_catalog
+from django.views.i18n import JavaScriptCatalog
 from django.views.static import serve
 
 from itkufs import admin  # noqa: To register admin classes
@@ -19,7 +19,7 @@ urlpatterns = [
     # View for magic i18n translation of js
     url(
         r"^i18n/js/$",
-        javascript_catalog,
+        JavaScriptCatalog,
         {"packages": ["itkufs"]},
         name="jsi18n",
     ),
