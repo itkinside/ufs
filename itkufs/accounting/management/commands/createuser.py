@@ -26,31 +26,18 @@ from itkufs.accounting.models import Group, Account
 
 CONSOLE_LOG_FORMAT = "%(levelname)-8s %(message)s"
 
-
+    
 class Command(BaseCommand):
-    option_list = BaseCommand.option_list + (
-        make_option(
-            "-g",
-            "--group",
-            dest="group_slug",
-            help="Group to create new account in",
-        ),
-        make_option(
-            "-u",
-            "--user",
-            dest="username",
-            help="User to create uFS user and account for",
-        ),
-        make_option(
-            "-y",
-            "--yes",
-            action="store_const",
-            const=1,
-            dest="yes",
-            default=0,
-            help="Do not ask for confirmation",
-        ),
-    )
+    def add_arguments(self, parser):
+    	parser.add_argument('-g', '--group',
+    	    help="Group to create new account in", dest="group_slug")
+
+    	parser.add_argument('-u', '--user', 
+    	    help="User to create uFS user and account for", dest="username")
+
+    	parser.add_argument('-y', '--yes', action='store_const', const=1,
+    	    dest="yes", default=0,  
+    	    help="Do not ask for confirmation")
 
     def __init__(self):
         self.logger = self._setup_logging()

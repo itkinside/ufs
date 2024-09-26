@@ -134,7 +134,7 @@ class ListForm(forms.ModelForm):
 
         if original_commit:
             list.save()
-            list.extra_accounts = self.cleaned_data["extra_accounts"]
+            list.extra_accounts.set(self.cleaned_data["extra_accounts"])
 
         return list
 

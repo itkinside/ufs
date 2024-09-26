@@ -99,7 +99,7 @@ Element.observe(window, 'load', Transaction.init);
 
 var Multiselect = {
   init: function() {
-    $$('select[multiple=multiple]').each( // Use css selector to get right nodes.
+    $$('select[multiple]').each( // Use css selector to get right nodes.
       function(selected) {
         // Create sibling select
         var available = new Element('select', {

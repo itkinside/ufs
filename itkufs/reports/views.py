@@ -5,7 +5,7 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction as db_transaction
-from django.db.models import Q, Sum, Case, When
+from django.db.models import Q, Sum, Case, When, DecimalField
 from django.db.models.functions import Coalesce
 from django.forms.models import inlineformset_factory, model_to_dict
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRequest
@@ -339,17 +339,21 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
                 Sum(
                     Case(
                         When(normal_balance__gt=0, then="normal_balance"),
+                        output_field=DecimalField() 
                     )
                 ),
                 0,
+                output_field=DecimalField()
             ),
             negative_sum=Coalesce(
                 Sum(
                     Case(
                         When(normal_balance__lt=0, then="normal_balance"),
+                        output_field=DecimalField() 
                     )
                 ),
                 0,
+                output_field=DecimalField()
             ),
         )
     )

@@ -11,6 +11,7 @@ from django.db.models import (
     Value,
     F,
     ExpressionWrapper,
+    IntegerField,
 )
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -913,7 +914,14 @@ class TransactionEntry(models.Model):
         unique_together = (("transaction", "account"),)
         verbose_name = _("transaction entry")
         verbose_name_plural = _("transaction entries")
-        ordering = ("credit", "debit")
+        ordering = (
+            Case(
+                When(credit__gt=0, then=Value(1)),
+                When(debit__gt=0, then=Value(0)),
+                output_field=IntegerField(),
+            ),
+            "account__name",
+        )
 
     def __str__(self):
         return _("%(account)s: debit %(debit)s, credit %(credit)s") % {
