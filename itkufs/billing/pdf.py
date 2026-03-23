@@ -13,7 +13,7 @@ from reportlab.platypus.flowables import Image
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import cm
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.http import HttpResponse
 from django.utils.html import escape
 from django.template.defaultfilters import slugify

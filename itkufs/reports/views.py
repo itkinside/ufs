@@ -12,7 +12,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRequest
 from django.shortcuts import render
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from itkufs.common.decorators import limit_to_group, limit_to_admin
 from itkufs.accounting.models import (

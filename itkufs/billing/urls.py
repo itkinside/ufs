@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.urls import re_path
 
 from itkufs.billing.views import (
     bill_create_transaction,
@@ -10,31 +10,31 @@ from itkufs.billing.views import (
 )
 
 urlpatterns = [
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/billing/new/$", bill_new_edit, name="bill-new"
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/billing/(?P<bill>\d+)/edit/$",
         bill_new_edit,
         name="bill-edit",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/billing/(?P<bill>\d+)/transaction/$",
         bill_create_transaction,
         name="bill-create-transaction",
     ),
-    url(r"^(?P<group>[0-9a-z_-]+)/billing/$", bill_list, name="bill-list"),
-    url(
+    re_path(r"^(?P<group>[0-9a-z_-]+)/billing/$", bill_list, name="bill-list"),
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/billing/(?P<bill>\d+)/$",
         bill_details,
         name="bill-details",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/billing/(?P<bill>\d+)/pdf/$",
         bill_pdf,
         name="bill-pdf",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/billing/(?P<bill>\d+)/delete/$",
         bill_delete,
         name="bill-delete",

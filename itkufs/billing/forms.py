@@ -1,6 +1,6 @@
 from django import forms
 from django.forms.models import inlineformset_factory
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from itkufs.accounting.models import Account, Settlement, RoleAccount
 from itkufs.billing.models import Bill, BillingLine

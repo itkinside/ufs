@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpRequest
 from django.shortcuts import render
 from django.urls import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from itkufs.common.decorators import limit_to_admin
 from itkufs.common.forms import GroupForm, AccountForm, RoleAccountForm

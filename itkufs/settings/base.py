@@ -112,9 +112,9 @@ TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
 
 # Languages
-def ugettext(s):
+def gettext(s):
     return s
 
 
-LANGUAGES = (("en", ugettext("English")), ("no", ugettext("Norwegian")))
+LANGUAGES = (("en", gettext("English")), ("no", gettext("Norwegian")))
 LOCALE_PATHS = (PROJECT_BASE + "itkufs/locale/",)

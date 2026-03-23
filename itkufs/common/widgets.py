@@ -2,7 +2,7 @@ from django import forms
 from django.forms.util import flatatt
 from django.utils.encoding import smart_text
 from django.utils.html import escape
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 
 class GroupedSelect(forms.Select):

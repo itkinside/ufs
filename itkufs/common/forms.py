@@ -2,7 +2,7 @@ from django import forms
 from django.forms.models import ModelForm
 from django.forms.forms import Form
 from django.template.defaultfilters import slugify
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib import auth
 

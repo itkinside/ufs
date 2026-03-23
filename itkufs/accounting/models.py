@@ -15,8 +15,8 @@ from django.db.models import (
 )
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.utils.encoding import smart_text
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.encoding import smart_str
+from django.utils.translation import gettext_lazy as _, gettext
 
 from typing import List as ListType
 
@@ -80,7 +80,7 @@ class Group(models.Model):
         if not self.account_set.count():
             # TODO change this into a magic loop?
             bank = Account(
-                name=ugettext("Bank"),
+                name=gettext("Bank"),
                 slug="bank",
                 group_account=True,
                 type=Account.ASSET_ACCOUNT,
@@ -93,7 +93,7 @@ class Group(models.Model):
             bank_role.save()
 
             cash = Account(
-                name=ugettext("Cash"),
+                name=gettext("Cash"),
                 slug="cash",
                 group_account=True,
                 type=Account.ASSET_ACCOUNT,
@@ -541,7 +541,7 @@ class Settlement(models.Model):
         if self.comment is not None:
             return f"{self.date}: {self.comment}"
         else:
-            return smart_text(self.date)
+            return smart_str(self.date)
 
     def get_absolute_url(self):
         return reverse(

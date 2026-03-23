@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import BoundField
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import slugify
 
 from itkufs.reports.models import List, ListColumn
