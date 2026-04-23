@@ -114,8 +114,8 @@
 <span>&bull;</span>
 {% trans "User:" %} {{ user.username }}
 
-{% ifnotequal request.user.account_set.count 0 %}
-{% ifnotequal request.user.account_set.count 1 %}
+{% if request.user.account_set.count != 0 %}
+{% if request.user.account_set.count != 1 %}
 <span>&bull;</span>
 <form action="{% url "switch-group" %}" method="post">
 {% csrf_token %}
@@ -124,15 +124,15 @@
 <select name="group">
     {# FIXME this is missing the groups where the user is just admin #}
     {% for account in request.user.account_set.all %}
-    <option value="{{ account.group.slug }}"{% ifequal account.group.slug request.session.my_account.group.slug %} selected="selected"{% endifequal %}>
+    <option value="{{ account.group.slug }}"{% if account.group.slug == request.session.my_account.group.slug %} selected="selected"{% endif %}>
             {{ account.group }}</option>
     {% endfor %}
 </select>
 <button type="submit">{% trans "Go" %}</button>
 </div>
 </form>
-{% endifnotequal %}
-{% endifnotequal %}
+{% endif %}
+{% endif %}
 
 {% if group.email %}
 <span>&bull;</span>
@@ -153,7 +153,7 @@
 {% trans "Language:" %}
 <select name="language">
     {% for lang in LANGUAGES %}
-    <option value="{{ lang.0 }}"{% ifequal lang.0 request.LANGUAGE_CODE %} selected="selected"{% endifequal %}>
+    <option value="{{ lang.0 }}"{% if lang.0 == request.LANGUAGE_CODE %} selected="selected"{% endif %}>
             {% trans lang.1 %}</option>
     {% endfor %}
 </select>

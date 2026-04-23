@@ -15,7 +15,7 @@
             &bull;
         {% endif %}
         {% for i in paginator.page_range %}
-            {% ifequal i page_obj.number %}
+            {% if i == page_obj.number %}
                 {{ i }}
             {% else %}
                 {% if account %}
@@ -25,7 +25,7 @@
                     <a href="{% url "transaction-list-group-page" group.slug i %}">
                     {{ i }}</a>
                 {% endif %}
-            {% endifequal %}
+            {% endif %}
             {% if not forloop.last %}
                 &bull;
             {% endif %}
