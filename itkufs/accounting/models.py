@@ -638,20 +638,21 @@ class Transaction(models.Model):
         debit_accounts = []
         credit_accounts = []
 
-        for entry in self.entry_set.all():
-            if entry.debit > 0:
-                debit_sum += entry.debit
-                debit_accounts.append(entry.account)
-            elif entry.credit > 0:
-                credit_sum += entry.credit
-                credit_accounts.append(entry.account)
+        if self.pk:
+            for entry in self.entry_set.all():
+                if entry.debit > 0:
+                    debit_sum += entry.debit
+                    debit_accounts.append(entry.account)
+                elif entry.credit > 0:
+                    credit_sum += entry.credit
+                    credit_accounts.append(entry.account)
 
-        for account in debit_accounts + credit_accounts:
-            if account.group != self.group:
-                raise InvalidTransaction(
-                    "Group of transaction entry account "
-                    "does not match group of transaction."
-                )
+            for account in debit_accounts + credit_accounts:
+                if account.group != self.group:
+                    raise InvalidTransaction(
+                        "Group of transaction entry account "
+                        "does not match group of transaction."
+                    )
 
         account_intersection = set(debit_accounts).intersection(
             set(credit_accounts)
