@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.urls import re_path
 
 from itkufs.accounting.views.edit import (
     new_edit_settlement,
@@ -17,107 +17,107 @@ from itkufs.accounting.views.display import (
 
 urlpatterns = [
     # --- Settlements
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/settlement/(?P<settlement>\d+)/$",
         SettlementDetails.as_view(),
         name="settlement-details",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/new-settlement/$",
         new_edit_settlement,
         name="new-settlement",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/settlement/(?P<settlement>\d+)/edit/$",
         new_edit_settlement,
         name="edit-settlement",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/settlement/$",
         SettlementList.as_view(),
         name="settlement-list",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/settlement/p(?P<page>\d+)/$",
         SettlementList.as_view(),
         name="settlement-list-page",
     ),
     # --- Transactions
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/$",
         TransactionDetails.as_view(),
         name="transaction-details",
     ),
     # Admin transaction actions
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/transaction/new/$",
         new_edit_transaction,
         name="new-transaction",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/edit/$",
         new_edit_transaction,
         name="edit-transaction",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/approve-transaction/$",
         approve_transactions,
         name="approve-transactions",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/reject-transaction/$",
         reject_transactions,
         name="reject-transactions",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/transaction/(?P<transaction>\d+)/reject/$",
         reject_transactions,
         name="reject-transaction",
     ),
     # User transaction actions
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/deposit/$",
         transfer,
         {"transfer_type": "deposit"},
         name="account-deposit",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/withdraw/$",
         transfer,
         {"transfer_type": "withdraw"},
         name="account-withdraw",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/account/(?P<account>[0-9a-z_-]+)/transfer/$",
         transfer,
         {"transfer_type": "transfer"},
         name="account-transfer",
     ),
     # Group transaction lists
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/transaction/$",
         TransactionList.as_view(),
         name="transaction-list-group",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/transaction/p(?P<page>\d+)/$",
         TransactionList.as_view(),
         name="transaction-list-group-page",
     ),
     # Account transaction lists
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/account/"
         r"(?P<account>[0-9a-z_-]+)/transaction/$",
         TransactionList.as_view(),
         name="transaction-list-account",
     ),
-    url(
+    re_path(
         r"^(?P<group>[0-9a-z_-]+)/account/"
         r"(?P<account>[0-9a-z_-]+)/transaction/p(?P<page>\d+)/$",
         TransactionList.as_view(),
         name="transaction-list-account-page",
     ),
-    url(r"^(?P<group>[0-9a-z_-]+)/api/accounts/$",
+    re_path(r"^(?P<group>[0-9a-z_-]+)/api/accounts/$",
         APIAccountDetails.as_view(),
         name="account-list"
     ),

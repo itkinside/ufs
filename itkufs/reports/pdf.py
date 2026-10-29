@@ -8,7 +8,7 @@ from reportlab.lib.units import cm
 from reportlab.lib.colors import HexColor
 from reportlab.lib.pagesizes import A4
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from itkufs.accounting.models import Group
 from itkufs.reports.models import List

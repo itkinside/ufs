@@ -15,8 +15,8 @@ from django.db.models import (
 )
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.utils.encoding import smart_text
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.encoding import smart_str
+from django.utils.translation import gettext_lazy as _, gettext
 
 from typing import List as ListType
 
@@ -80,7 +80,7 @@ class Group(models.Model):
         if not self.account_set.count():
             # TODO change this into a magic loop?
             bank = Account(
-                name=ugettext("Bank"),
+                name=gettext("Bank"),
                 slug="bank",
                 group_account=True,
                 type=Account.ASSET_ACCOUNT,
@@ -93,7 +93,7 @@ class Group(models.Model):
             bank_role.save()
 
             cash = Account(
-                name=ugettext("Cash"),
+                name=gettext("Cash"),
                 slug="cash",
                 group_account=True,
                 type=Account.ASSET_ACCOUNT,
@@ -541,7 +541,7 @@ class Settlement(models.Model):
         if self.comment is not None:
             return f"{self.date}: {self.comment}"
         else:
-            return smart_text(self.date)
+            return smart_str(self.date)
 
     def get_absolute_url(self):
         return reverse(
@@ -638,20 +638,21 @@ class Transaction(models.Model):
         debit_accounts = []
         credit_accounts = []
 
-        for entry in self.entry_set.all():
-            if entry.debit > 0:
-                debit_sum += entry.debit
-                debit_accounts.append(entry.account)
-            elif entry.credit > 0:
-                credit_sum += entry.credit
-                credit_accounts.append(entry.account)
+        if self.pk:
+            for entry in self.entry_set.all():
+                if entry.debit > 0:
+                    debit_sum += entry.debit
+                    debit_accounts.append(entry.account)
+                elif entry.credit > 0:
+                    credit_sum += entry.credit
+                    credit_accounts.append(entry.account)
 
-        for account in debit_accounts + credit_accounts:
-            if account.group != self.group:
-                raise InvalidTransaction(
-                    "Group of transaction entry account "
-                    "does not match group of transaction."
-                )
+            for account in debit_accounts + credit_accounts:
+                if account.group != self.group:
+                    raise InvalidTransaction(
+                        "Group of transaction entry account "
+                        "does not match group of transaction."
+                    )
 
         account_intersection = set(debit_accounts).intersection(
             set(credit_accounts)

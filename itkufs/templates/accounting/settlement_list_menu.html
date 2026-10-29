@@ -10,12 +10,12 @@
         &bull;
     {% endif %}
     {% for i in paginator.page_range %}
-        {% ifequal i page_obj.number %}
+        {% if i == page_obj.number %}
             {{ i }}
         {% else %}
             <a href="{% url "settlement-list-page" group.slug i %}">
             {{ i }}</a>
-        {% endifequal %}
+        {% endif %}
         {% if not forloop.last %}
             &bull;
         {% endif %}

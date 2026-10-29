@@ -161,10 +161,14 @@ var Multiselect = {
     // Add global submit handler.
     document.observe('submit',
       function() {
-        $$('select[multiple=multiple] option').each(
-          function(option) {
-    	    option.selected = 'selected';
-          }
+        $$('select[multiple]').each(
+					function(select){
+						select.select('option').each(
+							function(option) {
+								option.selected = 'selected';
+							}
+						);
+					}
         )
       }
     );

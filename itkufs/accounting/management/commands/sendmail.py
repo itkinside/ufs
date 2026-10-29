@@ -10,7 +10,7 @@ from optparse import make_option
 # This is needed for type hints in Python versions older than 3.9
 from typing import List as ListType
 
-from django.utils.translation import ugettext_lazy as _, activate
+from django.utils.translation import gettext_lazy as _, activate
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMessage, SMTPConnection
 
