@@ -339,21 +339,21 @@ def balance(request: HttpRequest, group: Group, is_admin=False):
                 Sum(
                     Case(
                         When(normal_balance__gt=0, then="normal_balance"),
-                        output_field=DecimalField() 
+                        output_field=DecimalField(),
                     )
                 ),
                 0,
-                output_field=DecimalField()
+                output_field=DecimalField(),
             ),
             negative_sum=Coalesce(
                 Sum(
                     Case(
                         When(normal_balance__lt=0, then="normal_balance"),
-                        output_field=DecimalField() 
+                        output_field=DecimalField(),
                     )
                 ),
                 0,
-                output_field=DecimalField()
+                output_field=DecimalField(),
             ),
         )
     )

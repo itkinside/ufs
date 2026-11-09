@@ -152,7 +152,7 @@ class APIAccountDetails(SingleObjectMixin, View):
         data = {}
         for a in accounts:
             temp = model_to_dict(a)
-            temp['balance'] = a.normal_balance()
-            temp['is_blocked'] = a.is_blocked()
+            temp["balance"] = a.normal_balance()
+            temp["is_blocked"] = a.is_blocked()
             data[a.id] = temp
         return JsonResponse(data)

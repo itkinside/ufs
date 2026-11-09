@@ -2,7 +2,6 @@
 Usage: ./manage.py sendmail -g GROUP
 """
 
-
 import sys
 import logging
 from optparse import make_option

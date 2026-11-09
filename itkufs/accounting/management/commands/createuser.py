@@ -13,7 +13,6 @@ Example:
 """
 
 import logging
-from optparse import make_option
 from pwd import getpwnam
 import sys
 
@@ -26,18 +25,32 @@ from itkufs.accounting.models import Group, Account
 
 CONSOLE_LOG_FORMAT = "%(levelname)-8s %(message)s"
 
-    
+
 class Command(BaseCommand):
     def add_arguments(self, parser):
-    	parser.add_argument('-g', '--group',
-    	    help="Group to create new account in", dest="group_slug")
+        parser.add_argument(
+            "-g",
+            "--group",
+            help="Group to create new account in",
+            dest="group_slug",
+        )
 
-    	parser.add_argument('-u', '--user', 
-    	    help="User to create uFS user and account for", dest="username")
+        parser.add_argument(
+            "-u",
+            "--user",
+            help="User to create uFS user and account for",
+            dest="username",
+        )
 
-    	parser.add_argument('-y', '--yes', action='store_const', const=1,
-    	    dest="yes", default=0,  
-    	    help="Do not ask for confirmation")
+        parser.add_argument(
+            "-y",
+            "--yes",
+            action="store_const",
+            const=1,
+            dest="yes",
+            default=0,
+            help="Do not ask for confirmation",
+        )
 
     def __init__(self):
         self.logger = self._setup_logging()

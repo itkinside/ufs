@@ -20,7 +20,7 @@ urlpatterns = [
     # View for magic i18n translation of js
     re_path(
         r"^i18n/js/$",
-        JavaScriptCatalog.as_view(packages=['itkufs']),
+        JavaScriptCatalog.as_view(packages=["itkufs"]),
         name="jsi18n",
     ),
     re_path(r"^i18n/", include("django.conf.urls.i18n")),

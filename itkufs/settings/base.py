@@ -92,7 +92,7 @@ INSTALLED_APPS = [
     "itkufs.accounting",
     "itkufs.reports",
     "itkufs.billing",
-    "itkufs", #Added for internationalisation in Urls.py  
+    "itkufs",  # Added for internationalisation in Urls.py
 ]
 
 # Session
