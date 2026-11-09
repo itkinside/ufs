@@ -56,7 +56,8 @@ class Command(BaseCommand):
             help="How many entries will be created per transaction",
         )
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.log = self._setup_logging()
         self.style = color_style()
 
