@@ -52,7 +52,8 @@ class Command(BaseCommand):
             help="Do not ask for confirmation",
         )
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.logger = self._setup_logging()
         self.style = color_style()
 
