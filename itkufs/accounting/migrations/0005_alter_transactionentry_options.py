@@ -6,12 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounting', '0004_auto_20221123_1607'),
+        ("accounting", "0004_auto_20221123_1607"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='transactionentry',
-            options={'ordering': (models.Case(models.When(credit__gt=0, then=models.Value(1)), models.When(debit__gt=0, then=models.Value(0)), output_field=models.IntegerField()), 'account__name'), 'verbose_name': 'transaction entry', 'verbose_name_plural': 'transaction entries'},
+            name="transactionentry",
+            options={
+                "ordering": (
+                    models.Case(
+                        models.When(credit__gt=0, then=models.Value(1)),
+                        models.When(debit__gt=0, then=models.Value(0)),
+                        output_field=models.IntegerField(),
+                    ),
+                    "account__name",
+                ),
+                "verbose_name": "transaction entry",
+                "verbose_name_plural": "transaction entries",
+            },
         ),
     ]

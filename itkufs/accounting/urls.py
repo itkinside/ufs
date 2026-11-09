@@ -117,8 +117,9 @@ urlpatterns = [
         TransactionList.as_view(),
         name="transaction-list-account-page",
     ),
-    re_path(r"^(?P<group>[0-9a-z_-]+)/api/accounts/$",
+    re_path(
+        r"^(?P<group>[0-9a-z_-]+)/api/accounts/$",
         APIAccountDetails.as_view(),
-        name="account-list"
+        name="account-list",
     ),
 ]

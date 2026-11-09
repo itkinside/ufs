@@ -14,7 +14,9 @@ class CreateTransactionForm(forms.Form):
         ACCOUNT_ROLE_DICT[RoleAccount.CASH_ACCOUNT],
     )
 
-    settlement = forms.ModelChoiceField(Settlement.objects.all(), required=False)
+    settlement = forms.ModelChoiceField(
+        Settlement.objects.all(), required=False
+    )
     charge_to = forms.ModelChoiceField(Account.objects.all())
     pay_to = forms.ChoiceField(choices=PAY_TO_CHOICES)
 

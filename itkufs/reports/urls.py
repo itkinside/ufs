@@ -12,7 +12,9 @@ from itkufs.reports.views import (
 
 urlpatterns = [
     # --- Lists
-    re_path(r"^(?P<group>[0-9a-z_-]+)/list/new/$", new_edit_list, name="new-list"),
+    re_path(
+        r"^(?P<group>[0-9a-z_-]+)/list/new/$", new_edit_list, name="new-list"
+    ),
     re_path(
         r"^(?P<group>[0-9a-z_-]+)/list/(?P<list>[0-9a-z_-]+)/$",
         view_list,
