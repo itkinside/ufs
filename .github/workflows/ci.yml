@@ -28,3 +28,23 @@ jobs:
         run: python3 manage.py makemigrations --check --dry-run
       - name: Run tests
         run: python3 -m pytest --cov=itkufs --cov-report=term-missing
+
+  lint:
+    name: "Lint: Debian trixie"
+    runs-on: ubuntu-latest
+    container: debian:trixie
+
+    steps:
+      - name: Install Debian packages
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            black \
+            ca-certificates \
+            flake8 \
+            git
+      - uses: actions/checkout@v7
+      - name: Check formatting
+        run: black --check itkufs
+      - name: Lint
+        run: flake8 --show-source --statistics itkufs
