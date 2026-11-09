@@ -7,7 +7,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }} &raquo;
-    {% if type == "register" %}
+    {% if type != "register" %}
         {{ title }}
     {% else %}
         {% trans "Register transaction" %}
@@ -17,7 +17,7 @@
 
 {% block header %}
     {{ block.super }} &ndash;
-    {% if type == "register" %}
+    {% if type != "register" %}
         {{ title }}
     {% else %}
         {% trans "Register transaction" %}
