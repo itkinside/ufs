@@ -84,7 +84,7 @@ def pdf(group: Group, bill: Bill):
         canvas.drawString(
             margin,
             height - margin - 2 * font_size,
-            bill.created.strftime(_("%Y-%m-%d %H:%M").encode("utf-8")),
+            bill.created.strftime(_("%Y-%m-%d %H:%M")),
         )
 
     frames = [
