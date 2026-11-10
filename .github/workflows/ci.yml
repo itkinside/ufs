@@ -18,6 +18,7 @@ jobs:
             python3 \
             python3-django \
             python3-pil \
+            python3-psycopg2 \
             python3-pytest \
             python3-pytest-cov \
             python3-pytest-django \
