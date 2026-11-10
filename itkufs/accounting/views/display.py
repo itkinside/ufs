@@ -148,7 +148,8 @@ class APIAccountDetails(SingleObjectMixin, View):
     @method_decorator(login_required)
     @method_decorator(limit_to_group)
     def get(self, request, *args, **kwargs):
-        accounts = Account.objects.filter(group=kwargs["group"])
+        group = kwargs["group"]
+        accounts = Account.objects.filter(group=group).select_related("group")
         data = {}
         for a in accounts:
             temp = model_to_dict(a)
