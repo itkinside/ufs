@@ -29,6 +29,8 @@ LANGUAGE_CODE = "en-us"
 
 SITE_ID = 1
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 AUTHENTICATION_BACKENDS = [
     "itkufs.common.kerberos.KerberosBackend",
     "django.contrib.auth.backends.ModelBackend",
