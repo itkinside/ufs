@@ -100,16 +100,13 @@ To run the unit tests while measuring code coverage, run::
 
     python3 -m pytest --cov=itkufs --cov-report=term-missing
 
-Alternatively, use ``tox`` to run all tests and linters::
-
-    tox
-
 
 How to run code linting
 -----------------------
 
-To run code linting, run::
+To check formatting and run code linting, run::
 
+    black --check itkufs
     python3 -m flake8
     mypy .
 
