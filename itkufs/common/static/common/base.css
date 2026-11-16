@@ -255,6 +255,11 @@ ul.admin {
 #transactions, #accounts, #accounts .comment, #transactions table, #activate {
         clear: both;
 }
+#adminnote {
+        clear: both;
+        max-width: 40em;
+        overflow-wrap: anywhere;
+}
 /* New list page */
 #listcolumns input {
         background: transparent;

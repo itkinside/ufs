@@ -215,6 +215,14 @@ msgstr "Gruppekonto"
 msgid "Does this account belong to the group?"
 msgstr "Hører denne kontoen til gruppen?"
 
+#: itkufs/accounting/models.py:323
+msgid "admin note"
+msgstr "Administratornotat"
+
+#: itkufs/accounting/models.py:325
+msgid "Visible to group admins only."
+msgstr "Bare synlig for gruppeadministratorer."
+
 #: itkufs/accounting/models.py:325 itkufs/accounting/models.py:480
 #: itkufs/accounting/models.py:857
 msgid "account"
@@ -1247,6 +1255,10 @@ msgstr "Aktiv"
 #: itkufs/templates/common/account_summary.html:52
 msgid "Group account"
 msgstr "Gruppekonto"
+
+#: itkufs/templates/common/account_summary.html:135
+msgid "Admin note"
+msgstr "Administratornotat"
 
 #: itkufs/templates/common/account_summary.html:59
 #: itkufs/templates/common/group_summary.html:8
