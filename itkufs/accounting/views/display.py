@@ -152,7 +152,7 @@ class APIAccountDetails(SingleObjectMixin, View):
         accounts = Account.objects.filter(group=group).select_related("group")
         data = {}
         for a in accounts:
-            temp = model_to_dict(a)
+            temp = model_to_dict(a, exclude=["admin_note"])
             temp["balance"] = a.normal_balance()
             temp["is_blocked"] = a.is_blocked()
             data[a.id] = temp

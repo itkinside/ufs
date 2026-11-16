@@ -130,6 +130,13 @@
     <a href="{% url "group-balance-graph" group.slug %}">{% trans "Group balance" %}</a>
 </div>
 
+{% if is_admin and account.admin_note %}
+<div id="adminnote">
+    <h3>{% trans "Admin note" %}</h3>
+    {{ account.admin_note|linebreaks }}
+</div>
+{% endif %}
+
 
 
 {% if not account.active %}

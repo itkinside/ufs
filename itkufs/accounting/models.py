@@ -319,6 +319,11 @@ class Account(models.Model):
         default=False,
         help_text=_("Does this account belong to the group?"),
     )
+    admin_note = models.TextField(
+        _("admin note"),
+        blank=True,
+        help_text=_("Visible to group admins only."),
+    )
 
     class Meta:
         ordering = ("group", "name")
