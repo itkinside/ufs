@@ -322,7 +322,7 @@ class Account(models.Model):
     admin_note = models.TextField(
         _("admin note"),
         blank=True,
-        help_text=_("Visible to group admins only."),
+        help_text=_("Only visible to group admins."),
     )
 
     class Meta:
