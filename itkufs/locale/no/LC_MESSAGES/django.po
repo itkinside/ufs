@@ -220,7 +220,7 @@ msgid "admin note"
 msgstr "Administratornotat"
 
 #: itkufs/accounting/models.py:325
-msgid "Visible to group admins only."
+msgid "Only visible to group admins."
 msgstr "Bare synlig for gruppeadministratorer."
 
 #: itkufs/accounting/models.py:325 itkufs/accounting/models.py:480

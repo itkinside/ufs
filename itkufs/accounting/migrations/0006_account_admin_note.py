@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name="admin_note",
             field=models.TextField(
                 blank=True,
-                help_text="Visible to group admins only.",
+                help_text="Only visible to group admins.",
                 verbose_name="admin note",
             ),
         ),
