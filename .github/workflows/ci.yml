@@ -25,6 +25,8 @@ jobs:
             python3-reportlab
       - uses: actions/checkout@v7
       - run: cp itkufs/settings/local.py.template itkufs/settings/local.py
+      - name: Run system checks
+        run: python3 manage.py check --fail-level WARNING
       - name: Check for missing migrations
         run: python3 manage.py makemigrations --check --dry-run
       - name: Run tests
