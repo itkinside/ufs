@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-06 13:24+0100\n"
+"POT-Creation-Date: 2026-11-17 06:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -45,12 +45,12 @@ msgstr "Til"
 msgid "Reason"
 msgstr "Årsak"
 
-#: itkufs/accounting/management/commands/sendmail.py:161
+#: itkufs/accounting/management/commands/sendmail.py:160
 #, python-format
 msgid "Warning limit passed in %(group)s"
 msgstr "Advarselgrensen i gruppen %(group)s er passert"
 
-#: itkufs/accounting/management/commands/sendmail.py:163
+#: itkufs/accounting/management/commands/sendmail.py:162
 #, python-format
 msgid ""
 "\n"
@@ -66,12 +66,12 @@ msgstr ""
 "Sett inn mer penger eller ta kontakt med ansvarlig for gruppen for å fikse\n"
 "dette.\n"
 
-#: itkufs/accounting/management/commands/sendmail.py:172
+#: itkufs/accounting/management/commands/sendmail.py:171
 #, python-format
 msgid "Block limit passed in %(group)s"
 msgstr "Blokkeringgrensen i gruppen %(group)s er passert"
 
-#: itkufs/accounting/management/commands/sendmail.py:174
+#: itkufs/accounting/management/commands/sendmail.py:173
 #, python-format
 msgid ""
 "\n"
@@ -87,131 +87,131 @@ msgstr ""
 "Sett inn mer penger eller ta kontakt med ansvarlig for gruppen for å fikse\n"
 "dette.\n"
 
-#: itkufs/accounting/models.py:24 itkufs/accounting/models.py:289
+#: itkufs/accounting/models.py:25 itkufs/accounting/models.py:290
 #: itkufs/reports/models.py:52 itkufs/reports/models.py:161
 msgid "name"
 msgstr "navn"
 
-#: itkufs/accounting/models.py:26 itkufs/accounting/models.py:292
+#: itkufs/accounting/models.py:27 itkufs/accounting/models.py:293
 #: itkufs/reports/models.py:53
 msgid "slug"
 msgstr "slug"
 
-#: itkufs/accounting/models.py:26
+#: itkufs/accounting/models.py:27
 msgid "A shortname used in URLs."
 msgstr "Et kortnavn brukt i URL-er."
 
-#: itkufs/accounting/models.py:28
+#: itkufs/accounting/models.py:29
 msgid "admins"
 msgstr "administratorer"
 
-#: itkufs/accounting/models.py:30
+#: itkufs/accounting/models.py:31
 msgid "warn limit"
 msgstr "advarselgrense"
 
-#: itkufs/accounting/models.py:34
+#: itkufs/accounting/models.py:35
 msgid "Warn user of low balance at this limit, leave blank for no limit."
 msgstr "Advar brukere om lav balanse ved denne grensen. Ingen grense hvis tom."
 
-#: itkufs/accounting/models.py:39
+#: itkufs/accounting/models.py:40
 msgid "block limit"
 msgstr "blokkeringsgrense"
 
-#: itkufs/accounting/models.py:42
+#: itkufs/accounting/models.py:43
 msgid "Limit for blacklisting user, leave blank for no limit."
 msgstr "Grense for svartelisting av bruker, tom for ingen grense."
 
-#: itkufs/accounting/models.py:47
+#: itkufs/accounting/models.py:48
 msgid "A small image that will be added to lists."
 msgstr "Lite bilde som vises på lister"
 
-#: itkufs/accounting/models.py:51
+#: itkufs/accounting/models.py:52
 msgid "Contact address for group."
 msgstr "Kontaktadresse for gruppen."
 
-#: itkufs/accounting/models.py:55
+#: itkufs/accounting/models.py:56
 msgid "Bank account for group."
 msgstr "Bankkonto for gruppen."
 
-#: itkufs/accounting/models.py:60 itkufs/accounting/models.py:295
-#: itkufs/accounting/models.py:476 itkufs/accounting/models.py:521
-#: itkufs/accounting/models.py:589 itkufs/reports/models.py:67
+#: itkufs/accounting/models.py:61 itkufs/accounting/models.py:296
+#: itkufs/accounting/models.py:482 itkufs/accounting/models.py:527
+#: itkufs/accounting/models.py:595 itkufs/reports/models.py:67
 msgid "group"
 msgstr "gruppe"
 
-#: itkufs/accounting/models.py:61
+#: itkufs/accounting/models.py:62
 msgid "groups"
 msgstr "grupper"
 
-#: itkufs/accounting/models.py:82
+#: itkufs/accounting/models.py:83
 msgid "Bank"
 msgstr "Bank"
 
-#: itkufs/accounting/models.py:95
+#: itkufs/accounting/models.py:96
 msgid "Cash"
 msgstr "Kontanter"
 
-#: itkufs/accounting/models.py:279
+#: itkufs/accounting/models.py:280
 msgid "Asset"
 msgstr "Eiendel/aktiva"
 
-#: itkufs/accounting/models.py:280
+#: itkufs/accounting/models.py:281
 msgid "Liability"
 msgstr "Gjeld/passiva"
 
-#: itkufs/accounting/models.py:281
+#: itkufs/accounting/models.py:282
 msgid "Equity"
 msgstr "Egenkapital"
 
-#: itkufs/accounting/models.py:282
+#: itkufs/accounting/models.py:283
 msgid "Income"
 msgstr "Inntekt"
 
-#: itkufs/accounting/models.py:283
+#: itkufs/accounting/models.py:284
 msgid "Expense"
 msgstr "Utgift"
 
-#: itkufs/accounting/models.py:290
+#: itkufs/accounting/models.py:291
 msgid "short name"
 msgstr "Kortnavn"
 
-#: itkufs/accounting/models.py:292
+#: itkufs/accounting/models.py:293
 msgid "A shortname used in URLs etc."
 msgstr "Et kortnavn brukt i URL-er o.l."
 
-#: itkufs/accounting/models.py:298 itkufs/accounting/models.py:799
+#: itkufs/accounting/models.py:299 itkufs/accounting/models.py:806
 msgid "type"
 msgstr "type"
 
-#: itkufs/accounting/models.py:305
+#: itkufs/accounting/models.py:306
 msgid "owner"
 msgstr "eier"
 
-#: itkufs/accounting/models.py:307
+#: itkufs/accounting/models.py:308
 msgid "active"
 msgstr "aktiv"
 
-#: itkufs/accounting/models.py:309
+#: itkufs/accounting/models.py:310
 msgid "ignore block limit"
 msgstr "ignorer blokkeringsgrense"
 
-#: itkufs/accounting/models.py:311
+#: itkufs/accounting/models.py:312
 msgid "Never block account automatically"
 msgstr "Ikke merk konto som svartelistet automagisk"
 
-#: itkufs/accounting/models.py:314
+#: itkufs/accounting/models.py:315
 msgid "blocked"
 msgstr "svartelistet"
 
-#: itkufs/accounting/models.py:314
+#: itkufs/accounting/models.py:315
 msgid "Block account manually"
 msgstr "Merk konto som svartelistet"
 
-#: itkufs/accounting/models.py:317
+#: itkufs/accounting/models.py:318
 msgid "group account"
 msgstr "Gruppekonto"
 
-#: itkufs/accounting/models.py:319
+#: itkufs/accounting/models.py:320
 msgid "Does this account belong to the group?"
 msgstr "Hører denne kontoen til gruppen?"
 
@@ -223,149 +223,149 @@ msgstr "Administratornotat"
 msgid "Only visible to group admins."
 msgstr "Bare synlig for gruppeadministratorer."
 
-#: itkufs/accounting/models.py:325 itkufs/accounting/models.py:480
-#: itkufs/accounting/models.py:857
+#: itkufs/accounting/models.py:331 itkufs/accounting/models.py:486
+#: itkufs/accounting/models.py:864
 msgid "account"
 msgstr "konto"
 
-#: itkufs/accounting/models.py:326
+#: itkufs/accounting/models.py:332
 msgid "accounts"
 msgstr "kontoer"
 
-#: itkufs/accounting/models.py:470
+#: itkufs/accounting/models.py:476
 msgid "Bank account"
 msgstr "Bankkonto"
 
-#: itkufs/accounting/models.py:471
+#: itkufs/accounting/models.py:477
 msgid "Cash account"
 msgstr "Kontantkonto"
 
-#: itkufs/accounting/models.py:472
+#: itkufs/accounting/models.py:478
 msgid "Sale account"
 msgstr "Salgskonto"
 
-#: itkufs/accounting/models.py:478
+#: itkufs/accounting/models.py:484
 msgid "role"
 msgstr "rolle"
 
-#: itkufs/accounting/models.py:487
+#: itkufs/accounting/models.py:493
 msgid "role account"
 msgstr "rollekonto"
 
-#: itkufs/accounting/models.py:488
+#: itkufs/accounting/models.py:494
 msgid "role accounts"
 msgstr "rollekontoer"
 
-#: itkufs/accounting/models.py:491
+#: itkufs/accounting/models.py:497
 #, python-format
 msgid "%(account)s is %(role)s for %(group)s"
 msgstr "%(account)s er %(role)s for %(group)s"
 
-#: itkufs/accounting/models.py:523 itkufs/accounting/models.py:600
+#: itkufs/accounting/models.py:529 itkufs/accounting/models.py:606
 msgid "date"
 msgstr "dato"
 
-#: itkufs/accounting/models.py:524 itkufs/reports/models.py:96
+#: itkufs/accounting/models.py:530 itkufs/reports/models.py:96
 msgid "comment"
 msgstr "kommentar"
 
-#: itkufs/accounting/models.py:528
+#: itkufs/accounting/models.py:534
 msgid "Mark as closed when done adding transactions to the settlement."
 msgstr "Sett som avsluttet når du er ferdig med å legge til transaksjoner."
 
-#: itkufs/accounting/models.py:534 itkufs/accounting/models.py:595
+#: itkufs/accounting/models.py:540 itkufs/accounting/models.py:601
 msgid "settlement"
 msgstr "oppgjør"
 
-#: itkufs/accounting/models.py:535
+#: itkufs/accounting/models.py:541
 msgid "settlements"
 msgstr "oppgjør"
 
-#: itkufs/accounting/models.py:579 itkufs/billing/models.py:25
+#: itkufs/accounting/models.py:585 itkufs/billing/models.py:25
 msgid "Pending"
 msgstr "Avventer"
 
-#: itkufs/accounting/models.py:580 itkufs/billing/models.py:27
+#: itkufs/accounting/models.py:586 itkufs/billing/models.py:27
 msgid "Committed"
 msgstr "Godkjent"
 
-#: itkufs/accounting/models.py:581
+#: itkufs/accounting/models.py:587
 msgid "Rejected"
 msgstr "Avvist"
 
-#: itkufs/accounting/models.py:602
+#: itkufs/accounting/models.py:608
 msgid "May be used for date of the transaction if not today."
 msgstr "Kan brukes for transaksjonsdato, hvis ikke i dag."
 
-#: itkufs/accounting/models.py:604
+#: itkufs/accounting/models.py:610
 #: itkufs/templates/accounting/transaction_details.html:39
 msgid "Last modified"
 msgstr "Sist endret"
 
-#: itkufs/accounting/models.py:606
+#: itkufs/accounting/models.py:612
 msgid "state"
 msgstr "tilstand"
 
-#: itkufs/accounting/models.py:611 itkufs/accounting/models.py:795
-#: itkufs/accounting/models.py:853
+#: itkufs/accounting/models.py:617 itkufs/accounting/models.py:802
+#: itkufs/accounting/models.py:860
 msgid "transaction"
 msgstr "transaksjon"
 
-#: itkufs/accounting/models.py:612
+#: itkufs/accounting/models.py:618
 msgid "transactions"
 msgstr "transaksjoner"
 
-#: itkufs/accounting/models.py:801
+#: itkufs/accounting/models.py:808
 msgid "timestamp"
 msgstr "tidsstempel"
 
-#: itkufs/accounting/models.py:803
+#: itkufs/accounting/models.py:810
 msgid "user"
 msgstr "bruker"
 
-#: itkufs/accounting/models.py:805
+#: itkufs/accounting/models.py:812
 msgid "message"
 msgstr "melding"
 
-#: itkufs/accounting/models.py:825
+#: itkufs/accounting/models.py:832
 msgid "transaction log entry"
 msgstr "transaksjonslogginnslag"
 
-#: itkufs/accounting/models.py:826
+#: itkufs/accounting/models.py:833
 msgid "transaction log entries"
 msgstr "transaksjonlogginnslag"
 
-#: itkufs/accounting/models.py:838
+#: itkufs/accounting/models.py:845
 #, python-format
 msgid "%(type)s at %(timestamp)s by %(user)s: %(message)s"
 msgstr "%(type)s ved %(timestamp)s av %(user)s: %(message)s"
 
-#: itkufs/accounting/models.py:860
+#: itkufs/accounting/models.py:867
 msgid "debit amount"
 msgstr "debetbeløp"
 
-#: itkufs/accounting/models.py:863
+#: itkufs/accounting/models.py:870
 msgid "credit amount"
 msgstr "kreditbeløp"
 
-#: itkufs/accounting/models.py:914
+#: itkufs/accounting/models.py:921
 msgid "transaction entry"
 msgstr "transaksjonsinnslag"
 
-#: itkufs/accounting/models.py:915
+#: itkufs/accounting/models.py:922
 msgid "transaction entries"
 msgstr "transaksjonsinnslag"
 
-#: itkufs/accounting/models.py:919
+#: itkufs/accounting/models.py:933
 #, python-format
 msgid "%(account)s: debit %(debit)s, credit %(credit)s"
 msgstr "%(account)s: debet %(debit)s, kredit %(credit)s"
 
-#: itkufs/accounting/views/display.py:76 itkufs/common/decorators.py:43
+#: itkufs/accounting/views/display.py:78 itkufs/common/decorators.py:43
 msgid "Forbidden if not account owner or group admin."
 msgstr "Bare eieren av kontoen eller en gruppeadministrator kan gjøre dette."
 
-#: itkufs/accounting/views/display.py:127
+#: itkufs/accounting/views/display.py:129
 msgid ""
 "The transaction may only be viewed by group admins or a party of the "
 "transaction."
@@ -418,15 +418,15 @@ msgstr "Transaksjon %d kan ikke endres"
 msgid "Your transaction has been added."
 msgstr "Transaksjonen er opprettet."
 
-#: itkufs/billing/forms.py:35
+#: itkufs/billing/forms.py:37
 msgid "Invalid bill"
 msgstr "Ugyldig regning"
 
-#: itkufs/billing/forms.py:69
+#: itkufs/billing/forms.py:71
 msgid "Description missing"
 msgstr "Beskrivelse mangler"
 
-#: itkufs/billing/forms.py:77
+#: itkufs/billing/forms.py:79
 msgid "Amount missing"
 msgstr "Beløp mangler"
 
@@ -727,32 +727,32 @@ msgstr "Navn"
 msgid "Balance"
 msgstr "Balanse"
 
-#: itkufs/reports/views.py:194
+#: itkufs/reports/views.py:195
 msgid "List deleted."
 msgstr "Listen ble slettet."
 
-#: itkufs/reports/views.py:227
+#: itkufs/reports/views.py:228
 #, python-format
 msgid "Created from list: %s"
 msgstr "Laget fra liste: %s"
 
-#: itkufs/reports/views.py:353
+#: itkufs/reports/views.py:364
 msgid "Positive member accounts"
 msgstr "Positive medlemskontoer"
 
-#: itkufs/reports/views.py:359
+#: itkufs/reports/views.py:370
 msgid "Negative member accounts"
 msgstr "Negative medlemskontoer"
 
-#: itkufs/reports/views.py:372
+#: itkufs/reports/views.py:383
 msgid "Current year's net income"
 msgstr "Nettoinntekt inneværende år"
 
-#: itkufs/settings/base.py:118
+#: itkufs/settings/base.py:119
 msgid "English"
 msgstr "Engelsk"
 
-#: itkufs/settings/base.py:118
+#: itkufs/settings/base.py:119
 msgid "Norwegian"
 msgstr "Norsk"
 
@@ -847,6 +847,13 @@ msgstr "Ukjent"
 #: itkufs/templates/accounting/transaction_form.html:55
 msgid "No transaction log message"
 msgstr "Ingen melding i transaksjonsloggen"
+
+#: itkufs/templates/accounting/approve_transactions.html:89
+#: itkufs/templates/accounting/transaction_details.html:52
+#: itkufs/templates/accounting/transaction_form.html:7
+#: itkufs/templates/accounting/transaction_form.html:20
+msgid "Edit transaction"
+msgstr "Rediger transaksjon"
 
 #: itkufs/templates/accounting/approve_transactions.html:107
 #: itkufs/templates/reports/balance.html:34
@@ -1009,12 +1016,6 @@ msgstr "Ingen"
 msgid "State"
 msgstr "Tilstand"
 
-#: itkufs/templates/accounting/transaction_details.html:52
-#: itkufs/templates/accounting/transaction_form.html:7
-#: itkufs/templates/accounting/transaction_form.html:20
-msgid "Edit transaction"
-msgstr "Rediger transaksjon"
-
 #: itkufs/templates/accounting/transaction_details.html:55
 msgid "Reject transaction"
 msgstr "Avvis transaksjoner"
@@ -1054,6 +1055,10 @@ msgstr "auto"
 msgid "New transaction"
 msgstr "Ny transaksjon"
 
+#: itkufs/templates/accounting/transaction_form.html:49
+msgid "Transaction log:"
+msgstr "Transaksjonslogg:"
+
 #: itkufs/templates/accounting/transaction_form.html:63
 msgid "Account:"
 msgstr "Konto:"
@@ -1068,11 +1073,6 @@ msgstr "Type"
 #: itkufs/templates/accounting/transaction_form.html:102
 msgid "Save transaction"
 msgstr "Lagre transaksjon"
-
-#: itkufs/templates/accounting/transfer.html:13
-#: itkufs/templates/accounting/transfer.html:23
-msgid "Register transaction"
-msgstr "Registrer transaksjon"
 
 #: itkufs/templates/admin/base_site.html:11
 msgid "&micro;FS administration"
@@ -1256,10 +1256,6 @@ msgstr "Aktiv"
 msgid "Group account"
 msgstr "Gruppekonto"
 
-#: itkufs/templates/common/account_summary.html:135
-msgid "Admin note"
-msgstr "Administratornotat"
-
 #: itkufs/templates/common/account_summary.html:59
 #: itkufs/templates/common/group_summary.html:8
 msgid "Group info"
@@ -1300,8 +1296,12 @@ msgstr "Grafer"
 msgid "Group balance"
 msgstr "Gruppebalanse"
 
-#: itkufs/templates/common/account_summary.html:138
-#: itkufs/templates/common/account_summary.html:141
+#: itkufs/templates/common/account_summary.html:135
+msgid "Admin note"
+msgstr "Administratornotat"
+
+#: itkufs/templates/common/account_summary.html:145
+#: itkufs/templates/common/account_summary.html:148
 msgid "Activate account"
 msgstr "Aktiver konto"
 
@@ -1540,14 +1540,21 @@ msgstr "Krediter listen til"
 msgid "Public lists"
 msgstr "Offentlige lister"
 
+#: itkufs/templates/reports/public_lists.html:18
+msgid "Front page"
+msgstr "Forside"
+
 #: itkufs/templates/reports/transaction_export.html:26
 msgid ""
 "Exports details for committed transactions in the specified range to a .csv "
 "file."
 msgstr ""
-"Eksporter detaljer om gjennomførte transaksjoner i angitt periode til en ."
-"csv-fil."
+"Eksporter detaljer om gjennomførte transaksjoner i angitt periode til "
+"en .csv-fil."
 
 #: itkufs/templates/reports/transaction_export.html:34
 msgid "Download"
 msgstr "Last ned"
+
+#~ msgid "Register transaction"
+#~ msgstr "Registrer transaksjon"

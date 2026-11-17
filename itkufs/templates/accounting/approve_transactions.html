@@ -86,7 +86,7 @@
         <td rowspan="{{ t.entry_set.all.count }}">
             {{ f.as_p }}
             <a href="{% url "edit-transaction" group.slug t.id %}">
-                Edit transaction
+                {% trans "Edit transaction" %}
             </a>
         </td>
         {% endif %}

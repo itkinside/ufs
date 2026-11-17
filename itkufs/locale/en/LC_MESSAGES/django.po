@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-15 14:35+0200\n"
+"POT-Creation-Date: 2026-11-17 06:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stein Magnus Jodal <jodal@samfundet.no>\n"
 "Language-Team: The uFS Developers <itk-ufs@samfundet.no>\n"
@@ -22,12 +22,12 @@ msgid "Advanced options"
 msgstr ""
 
 #: itkufs/accounting/forms.py:22 itkufs/accounting/forms.py:79
-#: itkufs/templates/accounting/approve_transactions.html:49
+#: itkufs/templates/accounting/approve_transactions.html:48
 #: itkufs/templates/accounting/settlement_list.html:52
 msgid "Details"
 msgstr ""
 
-#: itkufs/accounting/forms.py:72 itkufs/billing/pdf.py:116
+#: itkufs/accounting/forms.py:72 itkufs/billing/pdf.py:118
 #: itkufs/templates/billing/bill_details.html:62
 #: itkufs/templates/billing/bill_form.html:16
 msgid "Amount"
@@ -45,12 +45,12 @@ msgstr ""
 msgid "Reason"
 msgstr ""
 
-#: itkufs/accounting/management/commands/sendmail.py:158
+#: itkufs/accounting/management/commands/sendmail.py:160
 #, python-format
 msgid "Warning limit passed in %(group)s"
 msgstr ""
 
-#: itkufs/accounting/management/commands/sendmail.py:160
+#: itkufs/accounting/management/commands/sendmail.py:162
 #, python-format
 msgid ""
 "\n"
@@ -61,12 +61,12 @@ msgid ""
 "administrators.\n"
 msgstr ""
 
-#: itkufs/accounting/management/commands/sendmail.py:169
+#: itkufs/accounting/management/commands/sendmail.py:171
 #, python-format
 msgid "Block limit passed in %(group)s"
 msgstr ""
 
-#: itkufs/accounting/management/commands/sendmail.py:171
+#: itkufs/accounting/management/commands/sendmail.py:173
 #, python-format
 msgid ""
 "\n"
@@ -77,131 +77,131 @@ msgid ""
 "administrators.\n"
 msgstr ""
 
-#: itkufs/accounting/models.py:13 itkufs/accounting/models.py:238
-#: itkufs/reports/models.py:52 itkufs/reports/models.py:158
+#: itkufs/accounting/models.py:25 itkufs/accounting/models.py:290
+#: itkufs/reports/models.py:52 itkufs/reports/models.py:161
 msgid "name"
 msgstr ""
 
-#: itkufs/accounting/models.py:15 itkufs/accounting/models.py:241
+#: itkufs/accounting/models.py:27 itkufs/accounting/models.py:293
 #: itkufs/reports/models.py:53
 msgid "slug"
 msgstr ""
 
-#: itkufs/accounting/models.py:15
+#: itkufs/accounting/models.py:27
 msgid "A shortname used in URLs."
 msgstr ""
 
-#: itkufs/accounting/models.py:17
+#: itkufs/accounting/models.py:29
 msgid "admins"
 msgstr ""
 
-#: itkufs/accounting/models.py:19
+#: itkufs/accounting/models.py:31
 msgid "warn limit"
 msgstr ""
 
-#: itkufs/accounting/models.py:23
+#: itkufs/accounting/models.py:35
 msgid "Warn user of low balance at this limit, leave blank for no limit."
 msgstr ""
 
-#: itkufs/accounting/models.py:28
+#: itkufs/accounting/models.py:40
 msgid "block limit"
 msgstr ""
 
-#: itkufs/accounting/models.py:31
+#: itkufs/accounting/models.py:43
 msgid "Limit for blacklisting user, leave blank for no limit."
 msgstr ""
 
-#: itkufs/accounting/models.py:36
+#: itkufs/accounting/models.py:48
 msgid "A small image that will be added to lists."
 msgstr ""
 
-#: itkufs/accounting/models.py:40
+#: itkufs/accounting/models.py:52
 msgid "Contact address for group."
 msgstr ""
 
-#: itkufs/accounting/models.py:44
+#: itkufs/accounting/models.py:56
 msgid "Bank account for group."
 msgstr ""
 
-#: itkufs/accounting/models.py:49 itkufs/accounting/models.py:244
-#: itkufs/accounting/models.py:425 itkufs/accounting/models.py:470
-#: itkufs/accounting/models.py:538 itkufs/reports/models.py:67
+#: itkufs/accounting/models.py:61 itkufs/accounting/models.py:296
+#: itkufs/accounting/models.py:482 itkufs/accounting/models.py:527
+#: itkufs/accounting/models.py:595 itkufs/reports/models.py:67
 msgid "group"
 msgstr ""
 
-#: itkufs/accounting/models.py:50
+#: itkufs/accounting/models.py:62
 msgid "groups"
 msgstr ""
 
-#: itkufs/accounting/models.py:72
+#: itkufs/accounting/models.py:83
 msgid "Bank"
 msgstr ""
 
-#: itkufs/accounting/models.py:85
+#: itkufs/accounting/models.py:96
 msgid "Cash"
 msgstr ""
 
-#: itkufs/accounting/models.py:229
+#: itkufs/accounting/models.py:280
 msgid "Asset"
 msgstr ""
 
-#: itkufs/accounting/models.py:230
+#: itkufs/accounting/models.py:281
 msgid "Liability"
 msgstr ""
 
-#: itkufs/accounting/models.py:231
+#: itkufs/accounting/models.py:282
 msgid "Equity"
 msgstr ""
 
-#: itkufs/accounting/models.py:232
+#: itkufs/accounting/models.py:283
 msgid "Income"
 msgstr ""
 
-#: itkufs/accounting/models.py:233
+#: itkufs/accounting/models.py:284
 msgid "Expense"
 msgstr ""
 
-#: itkufs/accounting/models.py:239
+#: itkufs/accounting/models.py:291
 msgid "short name"
 msgstr ""
 
-#: itkufs/accounting/models.py:241
+#: itkufs/accounting/models.py:293
 msgid "A shortname used in URLs etc."
 msgstr ""
 
-#: itkufs/accounting/models.py:247 itkufs/accounting/models.py:747
+#: itkufs/accounting/models.py:299 itkufs/accounting/models.py:806
 msgid "type"
 msgstr ""
 
-#: itkufs/accounting/models.py:254
+#: itkufs/accounting/models.py:306
 msgid "owner"
 msgstr ""
 
-#: itkufs/accounting/models.py:256
+#: itkufs/accounting/models.py:308
 msgid "active"
 msgstr ""
 
-#: itkufs/accounting/models.py:258
+#: itkufs/accounting/models.py:310
 msgid "ignore block limit"
 msgstr ""
 
-#: itkufs/accounting/models.py:260
+#: itkufs/accounting/models.py:312
 msgid "Never block account automatically"
 msgstr ""
 
-#: itkufs/accounting/models.py:263
+#: itkufs/accounting/models.py:315
 msgid "blocked"
 msgstr ""
 
-#: itkufs/accounting/models.py:263
+#: itkufs/accounting/models.py:315
 msgid "Block account manually"
 msgstr ""
 
-#: itkufs/accounting/models.py:266
+#: itkufs/accounting/models.py:318
 msgid "group account"
 msgstr ""
 
-#: itkufs/accounting/models.py:268
+#: itkufs/accounting/models.py:320
 msgid "Does this account belong to the group?"
 msgstr ""
 
@@ -213,207 +213,207 @@ msgstr ""
 msgid "Only visible to group admins."
 msgstr ""
 
-#: itkufs/accounting/models.py:274 itkufs/accounting/models.py:429
-#: itkufs/accounting/models.py:805
+#: itkufs/accounting/models.py:331 itkufs/accounting/models.py:486
+#: itkufs/accounting/models.py:864
 msgid "account"
 msgstr ""
 
-#: itkufs/accounting/models.py:275
+#: itkufs/accounting/models.py:332
 msgid "accounts"
 msgstr ""
 
-#: itkufs/accounting/models.py:419
+#: itkufs/accounting/models.py:476
 msgid "Bank account"
 msgstr ""
 
-#: itkufs/accounting/models.py:420
+#: itkufs/accounting/models.py:477
 msgid "Cash account"
 msgstr ""
 
-#: itkufs/accounting/models.py:421
+#: itkufs/accounting/models.py:478
 msgid "Sale account"
 msgstr ""
 
-#: itkufs/accounting/models.py:427
+#: itkufs/accounting/models.py:484
 msgid "role"
 msgstr ""
 
-#: itkufs/accounting/models.py:436
+#: itkufs/accounting/models.py:493
 msgid "role account"
 msgstr ""
 
-#: itkufs/accounting/models.py:437
+#: itkufs/accounting/models.py:494
 msgid "role accounts"
 msgstr ""
 
-#: itkufs/accounting/models.py:440
+#: itkufs/accounting/models.py:497
 #, python-format
 msgid "%(account)s is %(role)s for %(group)s"
 msgstr ""
 
-#: itkufs/accounting/models.py:472 itkufs/accounting/models.py:549
+#: itkufs/accounting/models.py:529 itkufs/accounting/models.py:606
 msgid "date"
 msgstr ""
 
-#: itkufs/accounting/models.py:473 itkufs/reports/models.py:96
+#: itkufs/accounting/models.py:530 itkufs/reports/models.py:96
 msgid "comment"
 msgstr ""
 
-#: itkufs/accounting/models.py:477
+#: itkufs/accounting/models.py:534
 msgid "Mark as closed when done adding transactions to the settlement."
 msgstr ""
 
-#: itkufs/accounting/models.py:483 itkufs/accounting/models.py:544
+#: itkufs/accounting/models.py:540 itkufs/accounting/models.py:601
 msgid "settlement"
 msgstr ""
 
-#: itkufs/accounting/models.py:484
+#: itkufs/accounting/models.py:541
 msgid "settlements"
 msgstr ""
 
-#: itkufs/accounting/models.py:528 itkufs/billing/models.py:25
+#: itkufs/accounting/models.py:585 itkufs/billing/models.py:25
 msgid "Pending"
 msgstr ""
 
-#: itkufs/accounting/models.py:529 itkufs/billing/models.py:27
+#: itkufs/accounting/models.py:586 itkufs/billing/models.py:27
 msgid "Committed"
 msgstr ""
 
-#: itkufs/accounting/models.py:530
+#: itkufs/accounting/models.py:587
 msgid "Rejected"
 msgstr ""
 
-#: itkufs/accounting/models.py:550
+#: itkufs/accounting/models.py:608
 msgid "May be used for date of the transaction if not today."
 msgstr ""
 
-#: itkufs/accounting/models.py:552
-#: itkufs/templates/accounting/transaction_details.html:35
+#: itkufs/accounting/models.py:610
+#: itkufs/templates/accounting/transaction_details.html:39
 msgid "Last modified"
 msgstr ""
 
-#: itkufs/accounting/models.py:554
+#: itkufs/accounting/models.py:612
 msgid "state"
 msgstr ""
 
-#: itkufs/accounting/models.py:559 itkufs/accounting/models.py:743
-#: itkufs/accounting/models.py:801
+#: itkufs/accounting/models.py:617 itkufs/accounting/models.py:802
+#: itkufs/accounting/models.py:860
 msgid "transaction"
 msgstr ""
 
-#: itkufs/accounting/models.py:560
+#: itkufs/accounting/models.py:618
 msgid "transactions"
 msgstr ""
 
-#: itkufs/accounting/models.py:749
+#: itkufs/accounting/models.py:808
 msgid "timestamp"
 msgstr ""
 
-#: itkufs/accounting/models.py:751
+#: itkufs/accounting/models.py:810
 msgid "user"
 msgstr ""
 
-#: itkufs/accounting/models.py:753
+#: itkufs/accounting/models.py:812
 msgid "message"
 msgstr ""
 
-#: itkufs/accounting/models.py:773
+#: itkufs/accounting/models.py:832
 msgid "transaction log entry"
 msgstr ""
 
-#: itkufs/accounting/models.py:774
+#: itkufs/accounting/models.py:833
 msgid "transaction log entries"
 msgstr ""
 
-#: itkufs/accounting/models.py:786
+#: itkufs/accounting/models.py:845
 #, python-format
 msgid "%(type)s at %(timestamp)s by %(user)s: %(message)s"
 msgstr ""
 
-#: itkufs/accounting/models.py:808
+#: itkufs/accounting/models.py:867
 msgid "debit amount"
 msgstr ""
 
-#: itkufs/accounting/models.py:811
+#: itkufs/accounting/models.py:870
 msgid "credit amount"
 msgstr ""
 
-#: itkufs/accounting/models.py:862
+#: itkufs/accounting/models.py:921
 msgid "transaction entry"
 msgstr ""
 
-#: itkufs/accounting/models.py:863
+#: itkufs/accounting/models.py:922
 msgid "transaction entries"
 msgstr ""
 
-#: itkufs/accounting/models.py:867
+#: itkufs/accounting/models.py:933
 #, python-format
 msgid "%(account)s: debit %(debit)s, credit %(credit)s"
 msgstr ""
 
-#: itkufs/accounting/views/display.py:76 itkufs/common/decorators.py:43
+#: itkufs/accounting/views/display.py:78 itkufs/common/decorators.py:43
 msgid "Forbidden if not account owner or group admin."
 msgstr ""
 
-#: itkufs/accounting/views/display.py:127
+#: itkufs/accounting/views/display.py:129
 msgid ""
 "The transaction may only be viewed by group admins or a party of the "
 "transaction."
 msgstr ""
 
-#: itkufs/accounting/views/edit.py:36
+#: itkufs/accounting/views/edit.py:50
 msgid "Settlement is closed and cannot be edited."
 msgstr ""
 
-#: itkufs/accounting/views/edit.py:91
+#: itkufs/accounting/views/edit.py:105
 msgid "Transfer from account"
 msgstr ""
 
-#: itkufs/accounting/views/edit.py:94
+#: itkufs/accounting/views/edit.py:108
 msgid "Deposit to account"
 msgstr ""
 
-#: itkufs/accounting/views/edit.py:97
+#: itkufs/accounting/views/edit.py:111
 msgid "Withdrawal from account"
 msgstr ""
 
-#: itkufs/accounting/views/edit.py:100 itkufs/accounting/views/edit.py:150
+#: itkufs/accounting/views/edit.py:114 itkufs/accounting/views/edit.py:164
 #: itkufs/common/decorators.py:57
 msgid "Forbidden if not group admin."
 msgstr ""
 
-#: itkufs/accounting/views/edit.py:144
+#: itkufs/accounting/views/edit.py:158
 msgid "Your transaction has been added, but your group admin has to commit it."
 msgstr ""
 
-#: itkufs/accounting/views/edit.py:152
+#: itkufs/accounting/views/edit.py:166
 #, python-format
 msgid "Added transaction: %s"
 msgstr ""
 
-#: itkufs/accounting/views/edit.py:234
-#: itkufs/templates/accounting/approve_transactions.html:29
+#: itkufs/accounting/views/edit.py:250
+#: itkufs/templates/accounting/approve_transactions.html:28
 msgid "No pending transactions found."
 msgstr ""
 
-#: itkufs/accounting/views/edit.py:336
+#: itkufs/accounting/views/edit.py:362
 #, python-format
 msgid "Transaction %d can't be changed."
 msgstr ""
 
-#: itkufs/accounting/views/edit.py:417
+#: itkufs/accounting/views/edit.py:444
 msgid "Your transaction has been added."
 msgstr ""
 
-#: itkufs/billing/forms.py:35
+#: itkufs/billing/forms.py:37
 msgid "Invalid bill"
 msgstr ""
 
-#: itkufs/billing/forms.py:69
+#: itkufs/billing/forms.py:71
 msgid "Description missing"
 msgstr ""
 
-#: itkufs/billing/forms.py:77
+#: itkufs/billing/forms.py:79
 msgid "Amount missing"
 msgstr ""
 
@@ -429,20 +429,20 @@ msgstr ""
 msgid "amount"
 msgstr ""
 
-#: itkufs/billing/pdf.py:54
+#: itkufs/billing/pdf.py:56
 msgid "bill"
 msgstr ""
 
-#: itkufs/billing/pdf.py:79
+#: itkufs/billing/pdf.py:81
 #, python-format
 msgid "Bill #%d"
 msgstr ""
 
-#: itkufs/billing/pdf.py:85
+#: itkufs/billing/pdf.py:87
 msgid "%Y-%m-%d %H:%M"
 msgstr ""
 
-#: itkufs/billing/pdf.py:116 itkufs/templates/billing/bill_delete.html:34
+#: itkufs/billing/pdf.py:118 itkufs/templates/billing/bill_delete.html:34
 #: itkufs/templates/billing/bill_details.html:33
 #: itkufs/templates/billing/bill_details.html:61
 #: itkufs/templates/billing/bill_form.html:15
@@ -450,20 +450,20 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: itkufs/billing/views.py:30
+#: itkufs/billing/views.py:37
 msgid "This bill can no longer be edited."
 msgstr ""
 
-#: itkufs/billing/views.py:77
+#: itkufs/billing/views.py:86
 msgid "This bill is already linked to a transaction."
 msgstr ""
 
-#: itkufs/billing/views.py:110
+#: itkufs/billing/views.py:119
 #, python-format
 msgid "Bill #%(id)s: %(description)s"
 msgstr ""
 
-#: itkufs/billing/views.py:154
+#: itkufs/billing/views.py:165
 #, python-format
 msgid "Bill #%d deleted."
 msgstr ""
@@ -472,73 +472,105 @@ msgstr ""
 msgid "Forbidden if not member of the group or group admin."
 msgstr ""
 
-#: itkufs/common/forms.py:45
+#: itkufs/common/forms.py:50
 msgid "An account with this name allready exists"
 msgstr ""
 
-#: itkufs/common/forms.py:67
+#: itkufs/common/forms.py:72
 msgid "Username does not exist"
 msgstr ""
 
-#: itkufs/common/forms.py:79
+#: itkufs/common/forms.py:84
 msgid "Users may only have one account per group"
 msgstr ""
 
-#: itkufs/common/forms.py:89
+#: itkufs/common/forms.py:94
 msgid "Group accounts can not have owners."
 msgstr ""
 
-#: itkufs/common/forms.py:135
+#: itkufs/common/forms.py:140
 msgid "The group must have at least one admin"
 msgstr ""
 
-#: itkufs/common/forms.py:139
+#: itkufs/common/forms.py:144
 msgid "You are not allowed to remove your own admin privileges"
 msgstr ""
 
-#: itkufs/common/forms.py:149
+#: itkufs/common/forms.py:154
 msgid "Incorrect account number."
 msgstr ""
 
-#: itkufs/common/views/__init__.py:19
+#: itkufs/common/forms.py:197 itkufs/reports/forms.py:181
+msgid "From date"
+msgstr ""
+
+#: itkufs/common/forms.py:199 itkufs/common/forms.py:204
+#: itkufs/reports/forms.py:167 itkufs/reports/forms.py:183
+#: itkufs/reports/forms.py:188
+msgid "Please enter a date"
+msgstr ""
+
+#: itkufs/common/forms.py:202 itkufs/reports/forms.py:186
+msgid "To date"
+msgstr ""
+
+#: itkufs/common/views/__init__.py:24
 msgid "Login failed"
 msgstr ""
 
-#: itkufs/common/views/edit.py:44
+#: itkufs/common/views/edit.py:46
 msgid "Group successfully updated."
 msgstr ""
 
-#: itkufs/common/views/edit.py:70
+#: itkufs/common/views/edit.py:76
 msgid "Account successfully activated."
 msgstr ""
 
-#: itkufs/common/views/edit.py:93
+#: itkufs/common/views/edit.py:103
 msgid "Account successfully updated."
 msgstr ""
 
-#: itkufs/common/views/edit.py:96
+#: itkufs/common/views/edit.py:106
 msgid "Account successfully created."
 msgstr ""
 
-#: itkufs/common/widgets.py:78
+#: itkufs/common/widgets.py:77
 msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 
-#: itkufs/reports/forms.py:64
+#: itkufs/reports/forms.py:66
 msgid "Please fill in at least one account entry."
 msgstr ""
 
-#: itkufs/reports/forms.py:117
+#: itkufs/reports/forms.py:119
 #, python-format
 msgid "\"%(field1)s\" or \"%(field2)s\" must be greater than zero"
 msgstr ""
 
-#: itkufs/reports/forms.py:150
+#: itkufs/reports/forms.py:152
 msgid "Name missing"
 msgstr ""
 
-#: itkufs/reports/forms.py:152
+#: itkufs/reports/forms.py:154
 msgid "Width missing"
+msgstr ""
+
+#: itkufs/reports/forms.py:165
+#: itkufs/templates/accounting/approve_transactions.html:44
+#: itkufs/templates/accounting/settlement_details.html:19
+#: itkufs/templates/accounting/settlement_list.html:41
+#: itkufs/templates/accounting/transaction_details.html:35
+#: itkufs/templates/accounting/transaction_list_table.html:7
+#: itkufs/templates/billing/bill_list.html:13
+msgid "Date"
+msgstr ""
+
+#: itkufs/reports/forms.py:170 itkufs/reports/forms.py:191
+msgid "Hide empty active accounts"
+msgstr ""
+
+#: itkufs/reports/forms.py:174 itkufs/reports/forms.py:195
+msgid "Hide empty inactive accounts"
 msgstr ""
 
 #: itkufs/reports/models.py:37
@@ -626,7 +658,7 @@ msgstr ""
 msgid "Don't exclude blocked accounts"
 msgstr ""
 
-#: itkufs/reports/models.py:112 itkufs/reports/models.py:163
+#: itkufs/reports/models.py:112 itkufs/reports/models.py:166
 msgid "list"
 msgstr ""
 
@@ -634,80 +666,80 @@ msgstr ""
 msgid "lists"
 msgstr ""
 
-#: itkufs/reports/models.py:159
+#: itkufs/reports/models.py:162
 msgid "width"
 msgstr ""
 
-#: itkufs/reports/models.py:170
+#: itkufs/reports/models.py:173
 msgid "list item"
 msgstr ""
 
-#: itkufs/reports/models.py:171
+#: itkufs/reports/models.py:174
 msgid "list items"
 msgstr ""
 
-#: itkufs/reports/pdf.py:89
+#: itkufs/reports/pdf.py:94
 msgid "Printed"
 msgstr ""
 
-#: itkufs/reports/pdf.py:89
+#: itkufs/reports/pdf.py:94
 msgid "by"
 msgstr ""
 
-#: itkufs/reports/pdf.py:106
+#: itkufs/reports/pdf.py:111
 msgid "Blacklisted accounts are marked with: "
 msgstr ""
 
-#: itkufs/reports/pdf.py:115
+#: itkufs/reports/pdf.py:120
 msgid "Sorry, this list is empty."
 msgstr ""
 
-#: itkufs/reports/pdf.py:129
+#: itkufs/reports/pdf.py:134
 msgid "Sorry, this list isn't set up correctly, please add some columns."
 msgstr ""
 
-#: itkufs/reports/pdf.py:145 itkufs/templates/common/account_summary.html:11
+#: itkufs/reports/pdf.py:150 itkufs/templates/common/account_summary.html:11
 #: itkufs/templates/common/account_summary.html:62
 #: itkufs/templates/common/group_summary.html:11
 #: itkufs/templates/reports/list_form.html:56
 msgid "Name"
 msgstr ""
 
-#: itkufs/reports/pdf.py:157
+#: itkufs/reports/pdf.py:162
 #: itkufs/templates/accounting/transaction_form.html:69
 #: itkufs/templates/common/account_summary.html:37
 #: itkufs/templates/common/group_balance_graph.html:7
-#: itkufs/templates/common/group_summary.html:122
-#: itkufs/templates/common/group_summary.html:153
+#: itkufs/templates/common/group_summary.html:125
+#: itkufs/templates/common/group_summary.html:156
 msgid "Balance"
 msgstr ""
 
-#: itkufs/reports/views.py:171
+#: itkufs/reports/views.py:195
 msgid "List deleted."
 msgstr ""
 
-#: itkufs/reports/views.py:202
+#: itkufs/reports/views.py:228
 #, python-format
 msgid "Created from list: %s"
 msgstr ""
 
-#: itkufs/reports/views.py:257
+#: itkufs/reports/views.py:364
 msgid "Positive member accounts"
 msgstr ""
 
-#: itkufs/reports/views.py:258
+#: itkufs/reports/views.py:370
 msgid "Negative member accounts"
 msgstr ""
 
-#: itkufs/reports/views.py:273
+#: itkufs/reports/views.py:383
 msgid "Current year's net income"
 msgstr ""
 
-#: itkufs/settings/base.py:118
+#: itkufs/settings/base.py:119
 msgid "English"
 msgstr ""
 
-#: itkufs/settings/base.py:118
+#: itkufs/settings/base.py:119
 msgid "Norwegian"
 msgstr ""
 
@@ -731,76 +763,85 @@ msgid ""
 msgstr ""
 
 #: itkufs/templates/accounting/approve_transactions.html:6
-#: itkufs/templates/accounting/approve_transactions.html:23
-#: itkufs/templates/accounting/transaction_details.html:45
+#: itkufs/templates/accounting/approve_transactions.html:22
+#: itkufs/templates/accounting/transaction_details.html:49
 #: itkufs/templates/common/group_action.html:11
 msgid "Approve transactions"
 msgstr ""
 
-#: itkufs/templates/accounting/approve_transactions.html:16
+#: itkufs/templates/accounting/approve_transactions.html:15
 #: itkufs/templates/accounting/reject_transactions.html:16
 #: itkufs/templates/accounting/settlement_list.html:16
 #: itkufs/templates/accounting/transaction_list.html:19
 msgid "Page"
 msgstr ""
 
-#: itkufs/templates/accounting/approve_transactions.html:16
+#: itkufs/templates/accounting/approve_transactions.html:15
 #: itkufs/templates/accounting/reject_transactions.html:16
 #: itkufs/templates/accounting/settlement_list.html:16
 #: itkufs/templates/accounting/transaction_list.html:19
 msgid "of"
 msgstr ""
 
-#: itkufs/templates/accounting/approve_transactions.html:38
+#: itkufs/templates/accounting/approve_transactions.html:36
 #: itkufs/templates/accounting/settlement_details.html:45
 #: itkufs/templates/accounting/transaction_list.html:31
 msgid "No transactions found."
 msgstr ""
 
-#: itkufs/templates/accounting/approve_transactions.html:45
+#: itkufs/templates/accounting/approve_transactions.html:43
 #: itkufs/templates/accounting/transaction_list_table.html:6
 msgid "ID"
 msgstr ""
 
-#: itkufs/templates/accounting/approve_transactions.html:46
-#: itkufs/templates/accounting/transaction_details.html:65
+#: itkufs/templates/accounting/approve_transactions.html:45
+#: itkufs/templates/accounting/transaction_details.html:69
 #: itkufs/templates/accounting/transaction_form.html:67
-#: itkufs/templates/accounting/transaction_list_table.html:7
-#: itkufs/templates/common/group_summary.html:120
-#: itkufs/templates/common/group_summary.html:151
+#: itkufs/templates/accounting/transaction_list_table.html:8
+#: itkufs/templates/common/group_summary.html:123
+#: itkufs/templates/common/group_summary.html:154
 msgid "Account"
 msgstr ""
 
-#: itkufs/templates/accounting/approve_transactions.html:47
-#: itkufs/templates/accounting/transaction_details.html:66
+#: itkufs/templates/accounting/approve_transactions.html:46
+#: itkufs/templates/accounting/transaction_details.html:70
 #: itkufs/templates/accounting/transaction_form.html:70
-#: itkufs/templates/accounting/transaction_list_table.html:8
+#: itkufs/templates/accounting/transaction_list_table.html:9
 msgid "Debit"
 msgstr ""
 
-#: itkufs/templates/accounting/approve_transactions.html:48
-#: itkufs/templates/accounting/transaction_details.html:67
+#: itkufs/templates/accounting/approve_transactions.html:47
+#: itkufs/templates/accounting/transaction_details.html:71
 #: itkufs/templates/accounting/transaction_form.html:71
-#: itkufs/templates/accounting/transaction_list_table.html:9
+#: itkufs/templates/accounting/transaction_list_table.html:10
 msgid "Credit"
 msgstr ""
 
-#: itkufs/templates/accounting/approve_transactions.html:50
+#: itkufs/templates/accounting/approve_transactions.html:49
 msgid "Change to"
 msgstr ""
 
-#: itkufs/templates/accounting/approve_transactions.html:78
+#: itkufs/templates/accounting/approve_transactions.html:80
 #: itkufs/templates/accounting/transaction_form.html:54
 msgid "Unknown"
 msgstr ""
 
-#: itkufs/templates/accounting/approve_transactions.html:79
-#: itkufs/templates/accounting/transaction_details.html:106
+#: itkufs/templates/accounting/approve_transactions.html:81
+#: itkufs/templates/accounting/transaction_details.html:110
 #: itkufs/templates/accounting/transaction_form.html:55
 msgid "No transaction log message"
 msgstr ""
 
-#: itkufs/templates/accounting/approve_transactions.html:105
+#: itkufs/templates/accounting/approve_transactions.html:89
+#: itkufs/templates/accounting/transaction_details.html:52
+#: itkufs/templates/accounting/transaction_form.html:7
+#: itkufs/templates/accounting/transaction_form.html:20
+msgid "Edit transaction"
+msgstr ""
+
+#: itkufs/templates/accounting/approve_transactions.html:107
+#: itkufs/templates/reports/balance.html:34
+#: itkufs/templates/reports/income.html:33
 msgid "Update"
 msgstr ""
 
@@ -847,12 +888,6 @@ msgstr ""
 msgid "Settlement ID"
 msgstr ""
 
-#: itkufs/templates/accounting/settlement_details.html:19
-#: itkufs/templates/accounting/settlement_list.html:41
-#: itkufs/templates/billing/bill_list.html:13
-msgid "Date"
-msgstr ""
-
 #: itkufs/templates/accounting/settlement_details.html:23
 #: itkufs/templates/accounting/settlement_list.html:42
 msgid "Comment"
@@ -872,7 +907,7 @@ msgstr ""
 
 #: itkufs/templates/accounting/settlement_details.html:32
 #: itkufs/templates/accounting/settlement_list.html:44
-#: itkufs/templates/accounting/transaction_details.html:40
+#: itkufs/templates/accounting/transaction_details.html:44
 #: itkufs/templates/common/account_summary.html:96
 #: itkufs/templates/common/group_summary.html:44
 msgid "Actions"
@@ -957,46 +992,40 @@ msgid "None"
 msgstr ""
 
 #: itkufs/templates/accounting/transaction_details.html:31
-#: itkufs/templates/accounting/transaction_details.html:95
-#: itkufs/templates/accounting/transaction_list_table.html:10
+#: itkufs/templates/accounting/transaction_details.html:99
+#: itkufs/templates/accounting/transaction_list_table.html:11
 msgid "State"
 msgstr ""
 
-#: itkufs/templates/accounting/transaction_details.html:48
-#: itkufs/templates/accounting/transaction_form.html:7
-#: itkufs/templates/accounting/transaction_form.html:20
-msgid "Edit transaction"
-msgstr ""
-
-#: itkufs/templates/accounting/transaction_details.html:51
+#: itkufs/templates/accounting/transaction_details.html:55
 msgid "Reject transaction"
 msgstr ""
 
-#: itkufs/templates/accounting/transaction_details.html:53
+#: itkufs/templates/accounting/transaction_details.html:57
 msgid "No available actions."
 msgstr ""
 
-#: itkufs/templates/accounting/transaction_details.html:61
+#: itkufs/templates/accounting/transaction_details.html:65
 msgid "Entries"
 msgstr ""
 
-#: itkufs/templates/accounting/transaction_details.html:91
+#: itkufs/templates/accounting/transaction_details.html:95
 msgid "Log"
 msgstr ""
 
-#: itkufs/templates/accounting/transaction_details.html:96
+#: itkufs/templates/accounting/transaction_details.html:100
 msgid "When"
 msgstr ""
 
-#: itkufs/templates/accounting/transaction_details.html:97
+#: itkufs/templates/accounting/transaction_details.html:101
 msgid "Who"
 msgstr ""
 
-#: itkufs/templates/accounting/transaction_details.html:98
+#: itkufs/templates/accounting/transaction_details.html:102
 msgid "Message"
 msgstr ""
 
-#: itkufs/templates/accounting/transaction_details.html:105
+#: itkufs/templates/accounting/transaction_details.html:109
 msgid "auto"
 msgstr ""
 
@@ -1007,24 +1036,23 @@ msgstr ""
 msgid "New transaction"
 msgstr ""
 
+#: itkufs/templates/accounting/transaction_form.html:49
+msgid "Transaction log:"
+msgstr ""
+
 #: itkufs/templates/accounting/transaction_form.html:63
 msgid "Account:"
 msgstr ""
 
 #: itkufs/templates/accounting/transaction_form.html:68
 #: itkufs/templates/common/account_summary.html:31
-#: itkufs/templates/common/group_summary.html:121
-#: itkufs/templates/common/group_summary.html:152
+#: itkufs/templates/common/group_summary.html:124
+#: itkufs/templates/common/group_summary.html:155
 msgid "Type"
 msgstr ""
 
 #: itkufs/templates/accounting/transaction_form.html:102
 msgid "Save transaction"
-msgstr ""
-
-#: itkufs/templates/accounting/transfer.html:13
-#: itkufs/templates/accounting/transfer.html:23
-msgid "Register transaction"
 msgstr ""
 
 #: itkufs/templates/admin/base_site.html:11
@@ -1072,12 +1100,12 @@ msgid "Billing"
 msgstr ""
 
 #: itkufs/templates/billing/base.html:22
-#: itkufs/templates/common/group_summary.html:98
+#: itkufs/templates/common/group_summary.html:101
 msgid "New bill"
 msgstr ""
 
 #: itkufs/templates/billing/base.html:24
-#: itkufs/templates/common/group_summary.html:96
+#: itkufs/templates/common/group_summary.html:99
 msgid "View bills"
 msgstr ""
 
@@ -1091,7 +1119,7 @@ msgstr ""
 
 #: itkufs/templates/billing/bill_create_transaction.html:14
 #: itkufs/templates/billing/bill_details.html:48
-#: itkufs/templates/common/group_summary.html:77
+#: itkufs/templates/common/group_summary.html:80
 #: itkufs/templates/reports/list_transaction_form.html:52
 msgid "Create transaction"
 msgstr ""
@@ -1142,7 +1170,7 @@ msgid "Save bill"
 msgstr ""
 
 #: itkufs/templates/billing/bill_list.html:5
-#: itkufs/templates/common/group_summary.html:93
+#: itkufs/templates/common/group_summary.html:96
 msgid "Bills"
 msgstr ""
 
@@ -1209,10 +1237,6 @@ msgstr ""
 msgid "Group account"
 msgstr ""
 
-#: itkufs/templates/common/account_summary.html:135
-msgid "Admin note"
-msgstr ""
-
 #: itkufs/templates/common/account_summary.html:59
 #: itkufs/templates/common/group_summary.html:8
 msgid "Group info"
@@ -1234,7 +1258,7 @@ msgid "Account number"
 msgstr ""
 
 #: itkufs/templates/common/account_summary.html:109
-#: itkufs/templates/common/group_summary.html:70
+#: itkufs/templates/common/group_summary.html:73
 msgid "Lists"
 msgstr ""
 
@@ -1244,17 +1268,21 @@ msgid "No lists found"
 msgstr ""
 
 #: itkufs/templates/common/account_summary.html:129
-#: itkufs/templates/common/group_summary.html:104
+#: itkufs/templates/common/group_summary.html:107
 msgid "Graphs"
 msgstr ""
 
 #: itkufs/templates/common/account_summary.html:130
-#: itkufs/templates/common/group_summary.html:105
+#: itkufs/templates/common/group_summary.html:108
 msgid "Group balance"
 msgstr ""
 
-#: itkufs/templates/common/account_summary.html:138
-#: itkufs/templates/common/account_summary.html:141
+#: itkufs/templates/common/account_summary.html:135
+msgid "Admin note"
+msgstr ""
+
+#: itkufs/templates/common/account_summary.html:145
+#: itkufs/templates/common/account_summary.html:148
 msgid "Activate account"
 msgstr ""
 
@@ -1303,10 +1331,17 @@ msgstr ""
 #: itkufs/templates/reports/income.html:5
 #: itkufs/templates/reports/income.html:13
 #: itkufs/templates/reports/income.html:19
+#: itkufs/templates/reports/transaction_export.html:13
 msgid "Income statement"
 msgstr ""
 
-#: itkufs/templates/common/group_summary.html:78
+#: itkufs/templates/common/group_summary.html:67
+#: itkufs/templates/reports/transaction_export.html:5
+#: itkufs/templates/reports/transaction_export.html:19
+msgid "Export transactions"
+msgstr ""
+
+#: itkufs/templates/common/group_summary.html:81
 #: itkufs/templates/reports/list_delete.html:14
 #: itkufs/templates/reports/list_form.html:6
 #: itkufs/templates/reports/list_form.html:19
@@ -1314,7 +1349,7 @@ msgstr ""
 msgid "Edit list"
 msgstr ""
 
-#: itkufs/templates/common/group_summary.html:79
+#: itkufs/templates/common/group_summary.html:82
 #: itkufs/templates/reports/list_confirm_delete.html:6
 #: itkufs/templates/reports/list_confirm_delete.html:14
 #: itkufs/templates/reports/list_confirm_delete.html:20
@@ -1323,33 +1358,33 @@ msgstr ""
 msgid "Delete list"
 msgstr ""
 
-#: itkufs/templates/common/group_summary.html:86
+#: itkufs/templates/common/group_summary.html:89
 #: itkufs/templates/reports/list_form.html:8
 #: itkufs/templates/reports/list_form.html:22
 #: itkufs/templates/reports/list_form.html:31
 msgid "New list"
 msgstr ""
 
-#: itkufs/templates/common/group_summary.html:110
-#: itkufs/templates/common/group_summary.html:114
+#: itkufs/templates/common/group_summary.html:113
+#: itkufs/templates/common/group_summary.html:117
 #: itkufs/templates/reports/list_transaction_form.html:31
 msgid "Accounts"
 msgstr ""
 
-#: itkufs/templates/common/group_summary.html:111
+#: itkufs/templates/common/group_summary.html:114
 msgid "No accounts found."
 msgstr ""
 
-#: itkufs/templates/common/group_summary.html:118
+#: itkufs/templates/common/group_summary.html:121
 msgid "User accounts"
 msgstr ""
 
-#: itkufs/templates/common/group_summary.html:149
+#: itkufs/templates/common/group_summary.html:152
 msgid "Group accounts"
 msgstr ""
 
 #: itkufs/templates/common/group_summary.html:182
-msgid "Hide inactive/empty accounts"
+msgid "Hide inactive accounts"
 msgstr ""
 
 #: itkufs/templates/common/group_summary.html:184
@@ -1377,35 +1412,39 @@ msgstr ""
 msgid "Save role accounts"
 msgstr ""
 
-#: itkufs/templates/reports/balance.html:30
+#: itkufs/templates/reports/balance.html:28
+msgid "Select a date to see account balances at that date."
+msgstr ""
+
+#: itkufs/templates/reports/balance.html:41
 msgid "Assets"
 msgstr ""
 
-#: itkufs/templates/reports/balance.html:45
+#: itkufs/templates/reports/balance.html:56
 msgid "Total assets"
 msgstr ""
 
-#: itkufs/templates/reports/balance.html:56
+#: itkufs/templates/reports/balance.html:67
 msgid "Liabilities and equities"
 msgstr ""
 
-#: itkufs/templates/reports/balance.html:60
+#: itkufs/templates/reports/balance.html:71
 msgid "Liabilities"
 msgstr ""
 
-#: itkufs/templates/reports/balance.html:81
+#: itkufs/templates/reports/balance.html:92
 msgid "Total liabilities"
 msgstr ""
 
-#: itkufs/templates/reports/balance.html:88
+#: itkufs/templates/reports/balance.html:99
 msgid "Equities"
 msgstr ""
 
-#: itkufs/templates/reports/balance.html:109
+#: itkufs/templates/reports/balance.html:120
 msgid "Total equities (Net worth)"
 msgstr ""
 
-#: itkufs/templates/reports/balance.html:116
+#: itkufs/templates/reports/balance.html:127
 msgid "Total liabilities and equities"
 msgstr ""
 
@@ -1413,27 +1452,27 @@ msgstr ""
 msgid "Reports"
 msgstr ""
 
-#: itkufs/templates/reports/income.html:20
-msgid "up to"
+#: itkufs/templates/reports/income.html:27
+msgid "Specify a date range to see incomes and expenses for that period."
 msgstr ""
 
-#: itkufs/templates/reports/income.html:30
+#: itkufs/templates/reports/income.html:39
 msgid "Revenues and gains"
 msgstr ""
 
-#: itkufs/templates/reports/income.html:45
+#: itkufs/templates/reports/income.html:54
 msgid "Total revenues and gains"
 msgstr ""
 
-#: itkufs/templates/reports/income.html:54
+#: itkufs/templates/reports/income.html:63
 msgid "Expenses and losses"
 msgstr ""
 
-#: itkufs/templates/reports/income.html:69
+#: itkufs/templates/reports/income.html:78
 msgid "Total expenses and losses"
 msgstr ""
 
-#: itkufs/templates/reports/income.html:76
+#: itkufs/templates/reports/income.html:85
 msgid "Net income"
 msgstr ""
 
@@ -1474,4 +1513,18 @@ msgstr ""
 #: itkufs/templates/reports/public_lists.html:9
 #: itkufs/templates/reports/public_lists.html:13
 msgid "Public lists"
+msgstr ""
+
+#: itkufs/templates/reports/public_lists.html:18
+msgid "Front page"
+msgstr ""
+
+#: itkufs/templates/reports/transaction_export.html:26
+msgid ""
+"Exports details for committed transactions in the specified range to a .csv "
+"file."
+msgstr ""
+
+#: itkufs/templates/reports/transaction_export.html:34
+msgid "Download"
 msgstr ""
