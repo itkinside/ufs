@@ -46,7 +46,7 @@
     {% endif %}
 
     {% if transaction.pk and transaction.log_set.all %}
-    <p><label>Transactionlog:</label></p>
+    <p><label>{% trans "Transaction log:" %}</label></p>
     <dl>
         {% for l in transaction.log_set.all %}
         <dt>{{ l.timestamp|date }} {{ l.timestamp|time }}</dt>
