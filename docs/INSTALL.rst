@@ -54,7 +54,10 @@ This is a rather rough guide on how to install µFS.
 #. Either:
 
    - In production, setup your web server to run the WSGI app at
-     ``itkufs.wsgi:application``.
+     ``itkufs.wsgi:application``, and to serve the ``static/`` directory
+     at ``/static/``. Copy the static files there using::
+
+      python3 manage.py collectstatic
 
    - Or, in development, use Django's builtin development web server,
      which also use the above WSGI application.
@@ -87,6 +90,36 @@ After the installation is completed, do the following:
 
 Additional groups must be added from the Django admin, just like the first
 one. All other operations should be possible to do from the µFS interface.
+
+
+How to update
+-------------
+
+To deploy a new version in production:
+
+#. Get the latest source::
+
+    git pull
+
+#. Apply new database migrations::
+
+    python3 manage.py migrate
+
+#. Compile translation files. The compiled ``.mo`` files are not in git, so
+   changes to the ``.po`` files only take effect after this::
+
+    python3 manage.py compilemessages
+
+#. Copy static files (CSS, JavaScript, images) to ``static/``, where the web
+   server serves them from::
+
+    python3 manage.py collectstatic --noinput
+
+#. Restart the WSGI app (e.g. uWSGI), so it loads the new code and
+   translations.
+
+Each step is safe to run when nothing has changed, so run all of them on
+every update.
 
 
 How to run tests
