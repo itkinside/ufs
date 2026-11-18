@@ -54,10 +54,8 @@ This is a rather rough guide on how to install µFS.
 #. Either:
 
    - In production, setup your web server to run the WSGI app at
-     ``itkufs.wsgi:application``, and to serve the ``static/`` directory
-     at ``/static/``. Copy the static files there using::
-
-      python3 manage.py collectstatic
+     ``itkufs.wsgi:application``. µFS doesn't serve its static files
+     (``/static/``) in production, so the web server must serve them.
 
    - Or, in development, use Django's builtin development web server,
      which also use the above WSGI application.
@@ -110,8 +108,9 @@ To deploy a new version in production:
 
     python3 manage.py compilemessages
 
-#. Copy static files (CSS, JavaScript, images) to ``static/``, where the web
-   server serves them from::
+#. Make sure the web server serves the updated static files (CSS,
+   JavaScript, images). If it serves them from ``STATIC_ROOT``, copy them
+   there using::
 
     python3 manage.py collectstatic --noinput
 
