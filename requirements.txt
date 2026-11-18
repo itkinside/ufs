@@ -10,7 +10,7 @@ pillow==11.1.0
     #   reportlab
 psycopg2==2.9.10
     # via -r requirements.in
-reportlab==4.3.1
+reportlab==5.1.0
     # via -r requirements.in
 sqlparse==0.5.3
     # via django
