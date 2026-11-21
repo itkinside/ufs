@@ -1,5 +1,5 @@
 # Web framework
-Django >= 4.2, < 5.0
+Django >= 6.1.3, < 7.0
 
 # Database adapter
 psycopg2
